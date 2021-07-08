@@ -1,6 +1,10 @@
 #服务器配置
 server:
-  port: 8080
   servlet:
     #访问路径设置
     context-path: /
+
+spring:
+  profiles:
+    #配置环境文件
+    active: @profileActive@
