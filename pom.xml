@@ -9,68 +9,11 @@
 		<relativePath/>
 	</parent>
 
-	<properties>
-		<java.version>1.8</java.version>
-		<project-version>1.0.0</project-version>
-	</properties>
-
 	<groupId>com.www</groupId>
 	<artifactId>myblog</artifactId>
 	<version>1.0.0</version>
 	<packaging>pom</packaging>
 	<name>MyBlog</name>
 	<description>我的博客</description>
-
-	<!-- 子模块信息 -->
-	<modules>
-		<module>blog-controller</module>
-		<module>blog-service</module>
-		<module>blog-data</module>
-		<module>blog-web</module>
-	</modules>
-
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-
-	<!--配置环境的profile-->
-	<profiles>
-		<!--dev默认激活，使用idea Spring Boot 配置启动工程，需要dev的配置-->
-		<profile>
-			<id>dev</id>
-			<properties>
-				<profileActive>dev</profileActive>
-			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-		</profile>
-		<profile>
-			<id>prod</id>
-			<properties>
-				<profileActive>prod</profileActive>
-			</properties>
-		</profile>
-	</profiles>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<mainClass>com.www.MyBlogApplication</mainClass>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 
 </project>

@@ -1,5 +1,3 @@
 #我的博客
-##blog-controller：控制层
-##blog-service：服务层
-##blog-data：数据层
-##blog-web：配置信息
+##admin：博客后台管理服务
+##blog：博客服务
