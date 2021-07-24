@@ -10,10 +10,10 @@
 	</parent>
 
 	<groupId>com.www</groupId>
-	<artifactId>myblog</artifactId>
+	<artifactId>my-blog</artifactId>
 	<version>1.0.0</version>
 	<packaging>pom</packaging>
-	<name>MyBlog</name>
+	<name>my-blog</name>
 	<description>我的博客</description>
 
 </project>
