@@ -12,7 +12,7 @@
 
     <groupId>com.www</groupId>
     <artifactId>admin</artifactId>
-    <version>${project-version}</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
     <name>admin</name>
     <description>博客后台管理系统</description>
@@ -62,7 +62,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.www.BlogApplication</mainClass>
+                    <mainClass>com.www.AdminApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
