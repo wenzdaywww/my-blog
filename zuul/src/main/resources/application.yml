@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: zuul-server
+  profiles:
+    active: @profileActive@
+#zuul路由网关配置
+zuul:
+  routes:
+    #设置cloud-provider服务路径
+    provider.serviceId: my-blog-admin
+    provider.path: /admin/**
+  ignored-services: "*" #设置不能使用spring.application.name访问

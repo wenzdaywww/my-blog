@@ -13,6 +13,9 @@
     <groupId>com.www</groupId>
     <artifactId>admin-web</artifactId>
     <version>${project-version}</version>
+    <packaging>jar</packaging>
+    <name>admin-web</name>
+    <description>admin配置</description>
 
     <dependencies>
         <dependency>

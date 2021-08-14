@@ -13,6 +13,9 @@
     <groupId>com.www</groupId>
     <artifactId>admin-controller</artifactId>
     <version>${project-version}</version>
+    <packaging>jar</packaging>
+    <name>admin-controller</name>
+    <description>admin控制层</description>
 
     <dependencies>
         <dependency>

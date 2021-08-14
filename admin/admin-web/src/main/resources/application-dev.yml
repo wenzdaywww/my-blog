@@ -2,3 +2,15 @@
 #服务器配置
 server:
   port: 8070
+#eureka配置
+eureka:
+  client:
+    service-url:
+      #配置eureka集群地址
+      defaultZone : http://www:www362412@localhost:7001/eureka/ #注册中心地址
+  instance:
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port} #该实例注册到服务中心的唯一ID
+    prefer-ip-address: true #该实例，相较于hostname是否优先使用IP
+#配置eureka注册中心服务的status信息
+info:
+  name: my blog administrator server

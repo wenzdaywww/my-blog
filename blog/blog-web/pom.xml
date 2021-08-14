@@ -13,6 +13,9 @@
     <groupId>com.www</groupId>
     <artifactId>blog-web</artifactId>
     <version>${project-version}</version>
+    <packaging>jar</packaging>
+    <name>blog-web</name>
+    <description>blog配置</description>
 
     <dependencies>
         <dependency>

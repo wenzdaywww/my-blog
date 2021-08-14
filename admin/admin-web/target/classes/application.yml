@@ -2,9 +2,11 @@
 server:
   servlet:
     #访问路径设置
-    context-path: /
+    context-path: /admin
 
 spring:
   profiles:
     #配置环境文件
     active: dev
+  application:
+    name: my-blog-admin

@@ -13,5 +13,8 @@
     <groupId>com.www</groupId>
     <artifactId>admin-data</artifactId>
     <version>${project-version}</version>
+    <packaging>jar</packaging>
+    <name>admin-data</name>
+    <description>admin数据持久层</description>
 
 </project>
