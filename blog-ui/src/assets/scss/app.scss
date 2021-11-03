@@ -1,0 +1,92 @@
+/*
+Template Name: Nazox - Responsive Bootstrap 4 Admin Dashboard
+Author: Themesdesign
+Contact: themesdesign.in@gmail.com
+File: Main Css File
+*/
+
+//Fonts
+@import "src/assets/scss/custom/fonts/fonts";
+
+//Core files
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "variables";
+@import "~bootstrap/scss/mixins";
+@import '~bootstrap/scss/bootstrap';
+@import 'bootstrap';
+@import '~bootstrap-vue/src/index.scss';
+
+// Structure
+@import "src/assets/scss/custom/structure/general";
+@import "src/assets/scss/custom/structure/topbar";
+@import "src/assets/scss/custom/structure/page-head";
+@import "src/assets/scss/custom/structure/footer";
+@import "src/assets/scss/custom/structure/right-sidebar";
+@import "src/assets/scss/custom/structure/vertical";
+@import "src/assets/scss/custom/structure/horizontal-nav";
+@import "src/assets/scss/custom/structure/layouts";
+
+// Components
+@import "src/assets/scss/custom/components/waves";
+@import "src/assets/scss/custom/components/avatar";
+@import "src/assets/scss/custom/components/accordion";
+@import "src/assets/scss/custom/components/helper";
+@import "src/assets/scss/custom/components/preloader";
+@import "src/assets/scss/custom/components/forms";
+@import "src/assets/scss/custom/components/widgets";
+@import "src/assets/scss/custom/components/demos";
+@import "src/assets/scss/custom/components/print";
+
+// Plugins
+@import "src/assets/scss/custom/plugins/custom-scrollbar";
+@import "src/assets/scss/custom/plugins/calendar";
+@import "src/assets/scss/custom/plugins/session-timeout";
+@import "src/assets/scss/custom/plugins/round-slider";
+@import "src/assets/scss/custom/plugins/range-slider";
+@import "src/assets/scss/custom/plugins/sweatalert2";
+@import "src/assets/scss/custom/plugins/rating";
+@import "src/assets/scss/custom/plugins/toastr";
+@import "src/assets/scss/custom/plugins/parsley";
+@import "src/assets/scss/custom/plugins/select2";
+@import "src/assets/scss/custom/plugins/switch";
+@import "src/assets/scss/custom/plugins/datepicker";
+@import "src/assets/scss/custom/plugins/datatable";
+@import "src/assets/scss/custom/plugins/form-editors";
+@import "src/assets/scss/custom/plugins/form-upload";
+@import "src/assets/scss/custom/plugins/form-wizard";
+@import "src/assets/scss/custom/plugins/responsive-table";
+@import "src/assets/scss/custom/plugins/table-editable";
+@import "src/assets/scss/custom/plugins/apexcharts";
+@import "src/assets/scss/custom/plugins/flot";
+@import "src/assets/scss/custom/plugins/sparkline-chart";
+@import "src/assets/scss/custom/plugins/google-map";
+@import "src/assets/scss/custom/plugins/vector-maps";
+@import "src/assets/scss/custom/plugins/chartist";
+
+// Pages
+@import "src/assets/scss/custom/pages/authentication";
+@import "src/assets/scss/custom/pages/ecommerce";
+@import "src/assets/scss/custom/pages/email";
+@import "src/assets/scss/custom/pages/chat";
+@import "src/assets/scss/custom/pages/kanbanboard";
+@import "src/assets/scss/custom/pages/coming-soon";
+@import "src/assets/scss/custom/pages/timeline";
+@import "src/assets/scss/custom/pages/extras-pages";
+
+
+// icons
+
+@import "icons";
+
+
+// RTL
+// @import "custom/rtl/general-rtl";
+// @import "custom/rtl/bootstrap-rtl";
+// @import "custom/rtl/spacing-rtl";
+// @import "custom/rtl/float-rtl";
+// @import "custom/rtl/text-rtl";
+// @import "custom/rtl/structure-rtl";
+// @import "custom/rtl/plugins-rtl";
+// @import "custom/rtl/components-rtl";
+// @import "custom/rtl/pages-rtl";
