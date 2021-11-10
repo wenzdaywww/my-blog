@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.www.myblog.admin.data.mapper.SysUserRoleMapper">
+  <resultMap id="BaseResultMap" type="com.www.myblog.admin.data.entity.SysUserRoleEntity">
+    <!--@mbg.generated-->
+    <!--@Table sys_user_role-->
+    <id column="SUR_ID" property="surId" />
+    <result column="USER_ID" property="userId" />
+    <result column="ROLE_ID" property="roleId" />
+    <result column="SYS_UPDATE_TIME" property="sysUpdateTime" />
+    <result column="SYS_CREATE_TIME" property="sysCreateTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    SUR_ID, USER_ID, ROLE_ID, SYS_UPDATE_TIME, SYS_CREATE_TIME
+  </sql>
+
+  <!--  根据主键删除数据-->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from sys_user_role
+    where SUR_ID = #{surId}
+  </delete>
+
+  <!--  插入数据，包括空字段-->
+  <insert id="insert" keyColumn="SUR_ID" keyProperty="surId" parameterType="com.www.myblog.admin.data.entity.SysUserRoleEntity" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into sys_user_role (USER_ID, ROLE_ID, SYS_UPDATE_TIME, SYS_CREATE_TIME)
+    values (#{userId}, #{roleId}, #{sysUpdateTime}, #{sysCreateTime})
+  </insert>
+
+  <!--  插入数据，不包括空字段-->
+  <insert id="insertNotNull" keyColumn="SUR_ID" keyProperty="surId" parameterType="com.www.myblog.admin.data.entity.SysUserRoleEntity" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into sys_user_role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="roleId != null">
+        ROLE_ID,
+      </if>
+      <if test="sysUpdateTime != null">
+        SYS_UPDATE_TIME,
+      </if>
+      <if test="sysCreateTime != null">
+        SYS_CREATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="roleId != null">
+        #{roleId},
+      </if>
+      <if test="sysUpdateTime != null">
+        #{sysUpdateTime},
+      </if>
+      <if test="sysCreateTime != null">
+        #{sysCreateTime},
+      </if>
+    </trim>
+  </insert>
+
+  <!--  根据主键查询用户角色信息-->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from sys_user_role
+    where SUR_ID = #{surId}
+  </select>
+
+  <!--  根据主键更新用户角色信息，包括空字段-->
+  <update id="updateByPrimaryKey" parameterType="com.www.myblog.admin.data.entity.SysUserRoleEntity">
+    <!--@mbg.generated-->
+    update sys_user_role
+    set USER_ID = #{userId},
+      ROLE_ID = #{roleId},
+      SYS_UPDATE_TIME = #{sysUpdateTime},
+      SYS_CREATE_TIME = #{sysCreateTime}
+    where SUR_ID = #{surId}
+  </update>
+</mapper>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.www.myblog.blog.data.mapper.BlogArticleMapper">
+  <resultMap id="BaseResultMap" type="com.www.myblog.blog.data.entity.BlogArticleEntity">
+    <!--@mbg.generated-->
+    <!--@Table blog_article-->
+    <id column="BLOG_ID" property="blogId" />
+    <result column="USER_ID" property="userId" />
+    <result column="BLOG_THEME" property="blogTheme" />
+    <result column="BLOG_CONTENT" property="blogContent" />
+    <result column="BLOG_VIEWS" property="blogViews" />
+    <result column="BLOG_LIKE" property="blogLike" />
+    <result column="STATE_CD" property="stateCd" />
+    <result column="BLOG_COMMENT" property="blogComment" />
+    <result column="SYS_UPDATE_TIME" property="sysUpdateTime" />
+    <result column="SYS_CREATE_TIME" property="sysCreateTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    BLOG_ID, USER_ID, BLOG_THEME, BLOG_CONTENT, BLOG_VIEWS, BLOG_LIKE, STATE_CD, BLOG_COMMENT,
+    SYS_UPDATE_TIME, SYS_CREATE_TIME
+  </sql>
+
+  <!--  根据博客ID删除博客文章-->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from blog_article
+    where BLOG_ID = #{blogId}
+  </delete>
+
+  <!--  插入数据，包括空字段-->
+  <insert id="insert" keyColumn="BLOG_ID" keyProperty="blogId" parameterType="com.www.myblog.blog.data.entity.BlogArticleEntity" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into blog_article (USER_ID, BLOG_THEME, BLOG_CONTENT, BLOG_VIEWS, BLOG_LIKE, STATE_CD,
+      BLOG_COMMENT, SYS_UPDATE_TIME, SYS_CREATE_TIME)
+    values (#{userId}, #{blogTheme}, #{blogContent}, #{blogViews}, #{blogLike}, #{stateCd},
+      #{blogComment}, #{sysUpdateTime}, #{sysCreateTime})
+  </insert>
+
+  <!--  插入数据，不包括空字段-->
+  <insert id="insertNotNull" keyColumn="BLOG_ID" keyProperty="blogId" parameterType="com.www.myblog.blog.data.entity.BlogArticleEntity" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into blog_article
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="blogTheme != null">
+        BLOG_THEME,
+      </if>
+      <if test="blogContent != null">
+        BLOG_CONTENT,
+      </if>
+      <if test="blogViews != null">
+        BLOG_VIEWS,
+      </if>
+      <if test="blogLike != null">
+        BLOG_LIKE,
+      </if>
+      <if test="stateCd != null">
+        STATE_CD,
+      </if>
+      <if test="blogComment != null">
+        BLOG_COMMENT,
+      </if>
+      <if test="sysUpdateTime != null">
+        SYS_UPDATE_TIME,
+      </if>
+      <if test="sysCreateTime != null">
+        SYS_CREATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="blogTheme != null">
+        #{blogTheme},
+      </if>
+      <if test="blogContent != null">
+        #{blogContent},
+      </if>
+      <if test="blogViews != null">
+        #{blogViews},
+      </if>
+      <if test="blogLike != null">
+        #{blogLike},
+      </if>
+      <if test="stateCd != null">
+        #{stateCd},
+      </if>
+      <if test="blogComment != null">
+        #{blogComment},
+      </if>
+      <if test="sysUpdateTime != null">
+        #{sysUpdateTime},
+      </if>
+      <if test="sysCreateTime != null">
+        #{sysCreateTime},
+      </if>
+    </trim>
+  </insert>
+
+  <!--  根据博客ID查询博客信息-->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from blog_article
+    where BLOG_ID = #{blogId}
+  </select>
+
+  <!--  根据博客ID更新博客信息，包括空字段-->
+  <update id="updateByPrimaryKey" parameterType="com.www.myblog.blog.data.entity.BlogArticleEntity">
+    <!--@mbg.generated-->
+    update blog_article
+    set USER_ID = #{userId},
+      BLOG_THEME = #{blogTheme},
+      BLOG_CONTENT = #{blogContent},
+      BLOG_VIEWS = #{blogViews},
+      BLOG_LIKE = #{blogLike},
+      STATE_CD = #{stateCd},
+      BLOG_COMMENT = #{blogComment},
+      SYS_UPDATE_TIME = #{sysUpdateTime},
+      SYS_CREATE_TIME = #{sysCreateTime}
+    where BLOG_ID = #{blogId}
+  </update>
+</mapper>

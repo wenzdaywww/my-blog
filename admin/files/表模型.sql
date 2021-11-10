@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS SYS_USER (
 	PHONE_NUM VARCHAR(11) comment '手机号',
 	BIRTHDAY DATE comment '生日',
 	SEX CHAR(1) comment '性别：1男0女',
-	PHOTO VARCHAR(256) NOT NULL comment '头像',
+	PHOTO VARCHAR(256) comment '头像',
 	E_MAIL VARCHAR(100) comment '邮箱',
 	STATE_CD VARCHAR(1) NOT NULL default '1' comment '用户状态：1有效，2注销，3封号',
 	SYS_UPDATE_TIME DATETIME comment '更新时间',

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.www.myblog.blog.data.mapper.BlogClassMapper">
+  <resultMap id="BaseResultMap" type="com.www.myblog.blog.data.entity.BlogClassEntity">
+    <!--@mbg.generated-->
+    <!--@Table blog_class-->
+    <id column="BC_ID" property="bcId" />
+    <result column="BLOG_ID" property="blogId" />
+    <result column="CLASS_ID" property="classId" />
+    <result column="SYS_UPDATE_TIME" property="sysUpdateTime" />
+    <result column="SYS_CREATE_TIME" property="sysCreateTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    BC_ID, BLOG_ID, CLASS_ID, SYS_UPDATE_TIME, SYS_CREATE_TIME
+  </sql>
+
+  <!--  根据主键删除数据-->
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from blog_class
+    where BC_ID = #{bcId}
+  </delete>
+
+  <!--  插入数据，包括空字段-->
+  <insert id="insert" keyColumn="BC_ID" keyProperty="bcId" parameterType="com.www.myblog.blog.data.entity.BlogClassEntity" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into blog_class (BLOG_ID, CLASS_ID, SYS_UPDATE_TIME, SYS_CREATE_TIME)
+    values (#{blogId}, #{classId}, #{sysUpdateTime}, #{sysCreateTime})
+  </insert>
+
+  <!--  插入数据，不包括空字段-->
+  <insert id="insertNotNull" keyColumn="BC_ID" keyProperty="bcId" parameterType="com.www.myblog.blog.data.entity.BlogClassEntity" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into blog_class
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="blogId != null">
+        BLOG_ID,
+      </if>
+      <if test="classId != null">
+        CLASS_ID,
+      </if>
+      <if test="sysUpdateTime != null">
+        SYS_UPDATE_TIME,
+      </if>
+      <if test="sysCreateTime != null">
+        SYS_CREATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="blogId != null">
+        #{blogId},
+      </if>
+      <if test="classId != null">
+        #{classId},
+      </if>
+      <if test="sysUpdateTime != null">
+        #{sysUpdateTime},
+      </if>
+      <if test="sysCreateTime != null">
+        #{sysCreateTime},
+      </if>
+    </trim>
+  </insert>
+
+  <!--  根据主键查询数据-->
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from blog_class
+    where BC_ID = #{bcId}
+  </select>
+
+  <!--  根据主键更新数据，包括空字段-->
+  <update id="updateByPrimaryKey" parameterType="com.www.myblog.blog.data.entity.BlogClassEntity">
+    <!--@mbg.generated-->
+    update blog_class
+    set BLOG_ID = #{blogId},
+      CLASS_ID = #{classId},
+      SYS_UPDATE_TIME = #{sysUpdateTime},
+      SYS_CREATE_TIME = #{sysCreateTime}
+    where BC_ID = #{bcId}
+  </update>
+</mapper>
