@@ -1,29 +1,16 @@
-# Nazox- Vuejs admin template
+# 博客UI
 
-## Project setup
+## 项目设置
 ```
-yarn install
+npm install
 ```
 
-### Compiles and hot-reloads for development
+### 项目编译
 ```
 yarn run serve
 ```
 
-### Compiles and minifies for production
+### 项目启动
 ```
-yarn run build
+yarn run dev
 ```
-
-### Run your tests
-```
-yarn run test
-```
-
-### Lints and fixes files
-```
-yarn run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
