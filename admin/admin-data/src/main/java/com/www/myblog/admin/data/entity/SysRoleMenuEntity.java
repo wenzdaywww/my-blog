@@ -2,6 +2,8 @@ package com.www.myblog.admin.data.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
@@ -11,6 +13,7 @@ import lombok.Data;
  * <p>@Date 2021/11/10 22:24 </p>
  */
 @Data
+@TableName("SYS_ROLE_MENU")
 public class SysRoleMenuEntity implements Serializable {
     /**
     * 角色菜单主键

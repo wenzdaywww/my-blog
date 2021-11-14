@@ -1,7 +1,7 @@
 /**1、插入用户信息 **/
 DELETE FROM SYS_USER WHERE 1=1;
 INSERT INTO SYS_USER (USER_ID, USER_NAME, PASS_WORD,STATE_CD,SYS_UPDATE_TIME,SYS_CREATE_TIME)
-VALUES ('admin', '管理员', 'www362412','1',now(),now());
+VALUES ('admin', '管理员', '6969fc2fd7e864ca8152860ca8b38e76','1',now(),now());/**www362412**/
 
 /**2、插入角色信息 **/
 DELETE FROM SYS_ROLE WHERE 1=1;

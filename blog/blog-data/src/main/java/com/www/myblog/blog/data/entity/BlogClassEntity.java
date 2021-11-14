@@ -2,6 +2,8 @@ package com.www.myblog.blog.data.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
@@ -11,6 +13,7 @@ import lombok.Data;
  * <p>@Date 2021/11/10 23:07 </p>
  */
 @Data
+@TableName("BLOG_CLASS")
 public class BlogClassEntity implements Serializable {
     /**
     * 博客分类主键
