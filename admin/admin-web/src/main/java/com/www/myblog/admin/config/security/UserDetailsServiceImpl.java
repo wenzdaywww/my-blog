@@ -2,6 +2,7 @@ package com.www.myblog.admin.config.security;
 
 import com.www.myblog.admin.data.entity.SysUserEntity;
 import com.www.myblog.admin.service.ISysUserService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -19,7 +19,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * <p>@Description 用户详细信息服务类，用于实现spring security的登录认证 </p>
@@ -46,9 +46,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (sysUserEntity == null) {
             return null;
         }
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("admin"));
         //密码必须加密，否则无效
-        User user = new User(sysUserEntity.getUserId(), new BCryptPasswordEncoder().encode(sysUserEntity.getPassWord()),authorities);
+        User user = new User(sysUserEntity.getUserId(), sysUserEntity.getPassWord(), StringUtils.equals(sysUserEntity.getStateCd(),"1"),
+                StringUtils.equals(sysUserEntity.getNotExpired(),"1"),StringUtils.equals(sysUserEntity.getCredentialsNotExpired(),"1"),
+                StringUtils.equals(sysUserEntity.getNotLocked(),"1"),authorities);
         //获取当前session
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();

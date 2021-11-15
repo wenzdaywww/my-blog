@@ -27,7 +27,7 @@ public class LoginController {
      * @param password 密码
      * @return com.www.myblog.common.pojo.ResponseDTO<com.www.myblog.admin.data.entity.SysUserEntity>
      */
-    @GetMapping("/login/{id}/{pwd}")
+    @GetMapping("/find/{id}/{pwd}")
     public ResponseDTO<SysUserEntity> login(@PathVariable("id") String userId, @PathVariable("pwd")String password){
         return loginService.userLogin(userId,password);
     }

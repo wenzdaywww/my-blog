@@ -10,6 +10,9 @@ CREATE TABLE IF NOT EXISTS SYS_USER (
 	PHOTO VARCHAR(256) comment '头像',
 	E_MAIL VARCHAR(100) comment '邮箱',
 	STATE_CD VARCHAR(1) NOT NULL default '1' comment '用户状态：1有效，2注销，3封号',
+    NOT_EXPIRED CHAR(1) NOT NULL default '1' comment '是否未过期。默认为1未过期，0过期',
+    NOT_LOCKED CHAR(1) NOT NULL default '1' comment '账号是否未锁定。默认为1未锁定，0锁定',
+    CREDENTIALS_NOT_EXPIRED CHAR(1) NOT NULL default '1' comment '证书（密码）是否未过期。默认为1未过期，0过期',
 	SYS_UPDATE_TIME DATETIME comment '更新时间',
 	SYS_CREATE_TIME DATETIME comment '创建时间',
 	primary key(SU_ID) );

@@ -1,5 +1,8 @@
 package com.www.myblog.admin.config.security;
 
+import com.alibaba.fastjson.JSON;
+import com.www.myblog.common.pojo.ResponseDTO;
+import com.www.myblog.common.pojo.ResponseEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.*;
@@ -47,8 +50,8 @@ public class LoginFailureHandler implements AuthenticationFailureHandler  {
         } else if (exception instanceof BadCredentialsException) {
             msg = "用户名或者密码输入错误，请重新输入!";
         }
-        HttpSession session = request.getSession();
-        session.setAttribute("message",msg);
-//        new DefaultRedirectStrategy().sendRedirect(request, response, "/qadmin/index");
+        ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseEnum.FORBIDDEN,msg);
+        response.setContentType("text/json;charset=utf-8");
+        response.getWriter().write(JSON.toJSONString(responseDTO));
     }
 }

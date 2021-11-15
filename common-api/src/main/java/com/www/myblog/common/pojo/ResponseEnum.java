@@ -11,6 +11,8 @@ public enum ResponseEnum {
     SUCCESS(200, "请求成功"),
     /** 未找到 **/
     NOT_FOUND(404, "未找到"),
+    /** 禁止访问 **/
+    FORBIDDEN(403, "禁止访问"),
     /** 失败 **/
     FAIL(500, "请求失败"),
     /**  未知异常 **/

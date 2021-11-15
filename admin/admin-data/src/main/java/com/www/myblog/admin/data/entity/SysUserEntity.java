@@ -64,6 +64,18 @@ public class SysUserEntity implements Serializable {
     * 用户状态：1有效，2注销，3封号
     */
     private String stateCd;
+    /**
+    * 是否未过期。默认为1未过期，0过期
+    */
+    private String notExpired;
+    /**
+    * 账号是否未锁定。默认为1未锁定，0锁定
+    */
+    private String notLocked;
+    /**
+    * 证书（密码）是否未过期。默认为1未过期，0过期
+    */
+    private String credentialsNotExpired;
 
     /**
     * 更新时间

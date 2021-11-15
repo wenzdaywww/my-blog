@@ -7,6 +7,7 @@ import com.www.myblog.admin.service.login.ILoginService;
 import com.www.myblog.common.pojo.ResponseDTO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -31,11 +32,13 @@ public class LoginServiceImpl implements ILoginService {
     public ResponseDTO<SysUserEntity> userLogin(String userId, String password) {
         QueryWrapper<SysUserEntity> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(SysUserEntity::getUserId,userId);
-        wrapper.lambda().eq(SysUserEntity::getPassWord, DigestUtils.md5Hex(password));
         SysUserEntity userEntity = sysUserMapper.selectOne(wrapper);
         ResponseDTO<SysUserEntity> responseDTO = new ResponseDTO<>(null);
         if(userEntity != null){
-            responseDTO.setData(userEntity);
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            if(passwordEncoder.matches(password,userEntity.getPassWord())){
+                responseDTO.setData(userEntity);
+            } ;
         }
         return responseDTO;
     }
