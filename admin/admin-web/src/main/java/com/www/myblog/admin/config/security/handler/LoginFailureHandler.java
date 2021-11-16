@@ -1,4 +1,4 @@
-package com.www.myblog.admin.config.security;
+package com.www.myblog.admin.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.www.myblog.common.pojo.ResponseDTO;
@@ -7,14 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -51,7 +49,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler  {
             msg = "用户名或者密码输入错误，请重新输入!";
         }
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseEnum.FORBIDDEN,msg);
-        response.setContentType("text/json;charset=utf-8");
+        response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JSON.toJSONString(responseDTO));
     }
 }

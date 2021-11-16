@@ -1,4 +1,4 @@
-package com.www.myblog.admin.config.security;
+package com.www.myblog.admin.config.security.handler;
 
 import com.www.myblog.admin.data.entity.SysUserEntity;
 import com.www.myblog.admin.service.ISysUserService;
