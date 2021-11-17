@@ -1,4 +1,4 @@
-package com.www.myblog.admin.config.security.handler;
+package com.www.myblog.admin.config.security.impl;
 
 import com.www.myblog.admin.data.entity.SysUserEntity;
 import com.www.myblog.admin.service.ISysUserService;
@@ -13,11 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,11 +48,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = new User(sysUserEntity.getUserId(), sysUserEntity.getPassWord(), StringUtils.equals(sysUserEntity.getStateCd(),"1"),
                 StringUtils.equals(sysUserEntity.getNotExpired(),"1"),StringUtils.equals(sysUserEntity.getCredentialsNotExpired(),"1"),
                 StringUtils.equals(sysUserEntity.getNotLocked(),"1"),authorities);
-        //获取当前session
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = requestAttributes.getRequest();
-        HttpSession session = request.getSession();
-        session.setAttribute("sysUser",sysUserEntity);
         return user;
     }
 }

@@ -10,3 +10,5 @@ zuul:
     provider.serviceId: my-blog-admin
     provider.path: /admin/**
   ignored-services: "*" #设置不能使用spring.application.name访问
+  sensitive-headers:
+    - Cookie,Set-Cookie,Authorization #配置header允许转发Cookie,Set-Cookie,Authorization包括其他自定义信息

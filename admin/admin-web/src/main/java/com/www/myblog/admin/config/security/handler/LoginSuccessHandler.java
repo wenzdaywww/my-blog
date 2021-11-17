@@ -1,13 +1,15 @@
 package com.www.myblog.admin.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.www.myblog.admin.config.security.config.JwtConfig;
 import com.www.myblog.common.pojo.ResponseDTO;
 import com.www.myblog.common.pojo.ResponseEnum;
+import com.www.myblog.common.utils.RedisUtils;
 import com.www.myblog.common.utils.TokenUtilHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -30,6 +32,8 @@ import java.util.Map;
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     private static Logger LOG = LoggerFactory.getLogger(LoginSuccessHandler.class);
     private TokenUtilHandler tokenUtilHandler;
+    @Value("${spring.application.name}")
+    private String applicationName;
     /**
      * <p>@Description security登录认证成功处理 </p>
      * <p>@Author www </p>
@@ -45,13 +49,15 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         //获取登录成功后的UserDetail对象
         User user = (User)authentication.getPrincipal();
         Map<String,Object> chaims = new HashMap<>();
-        chaims.put(TokenUtilHandler.USERNAME,user.getUsername());
+        chaims.put(TokenUtilHandler.USERID,user.getUsername());
         //生成token
         Map<String,String> tokenMap = tokenUtilHandler.generateToken(chaims);
+        //将token添加到redis中
+        RedisUtils.set(applicationName + ":"+ TokenUtilHandler.TOKEN + ":" + user.getUsername(),tokenMap.get(TokenUtilHandler.TOKEN), JwtConfig.EXPIRE_TIME);
         //数据返回
-        ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseEnum.SUCCESS,tokenMap.toString());
+        ResponseDTO<Map> responseDTO = new ResponseDTO<>(ResponseEnum.SUCCESS,tokenMap);
         response.setContentType("application/json;charset=utf-8");
-        response.setHeader(TokenUtilHandler.HEADER_STRING,tokenMap.get(TokenUtilHandler.TOKEN));
+        response.setHeader(TokenUtilHandler.AUTHORIZATION,tokenMap.get(TokenUtilHandler.TOKEN));
         response.getWriter().write(JSON.toJSONString(responseDTO));
     }
 

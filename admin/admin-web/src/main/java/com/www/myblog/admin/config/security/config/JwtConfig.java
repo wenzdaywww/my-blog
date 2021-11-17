@@ -12,13 +12,14 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class JwtConfig {
-    /** 密钥 */
-    private final String secret = "A0B1C2D3E4F5G6H7I8J9KALBMCNDOEPFQ0R1S2T3U4V5W6X7Y8Z9";
+    /** 密钥(www362412) */
+    private final String secret = "6969fc2fd7e864ca8152860ca8b38e76";
     /**  过期时间（秒） */
-    private final long expire = 600L;
+    public static final long EXPIRE_TIME = 1800L;
 
     @Bean
     public TokenUtilHandler tokenUtilHandler() {
-        return new TokenUtilHandler(expire,secret);
+        return new TokenUtilHandler(EXPIRE_TIME,secret);
     }
+
 }

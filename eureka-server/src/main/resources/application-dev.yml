@@ -16,3 +16,6 @@ eureka:
   client:
     fetch-registry: false #此客户端是否获取eureka服务器注册表上的注册信息，默认为true
     register-with-eureka: false #实例是否在eureka服务器上注册自己的信息以供其他服务发现，默认为true
+    service-url:
+      #配置eureka其他集群地址（dev环境本机地址，避免控制台报错）
+      defaultZone: http://${spring.cloud.client.ip-address}:${server.port}/eureka/

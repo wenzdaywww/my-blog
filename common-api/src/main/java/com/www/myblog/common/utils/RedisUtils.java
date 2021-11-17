@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+import java.util.concurrent.TimeUnit;
+
 /**
  * <p>@Description redis工具类 </p>
  * <p>@Version 1.0 </p>
@@ -27,10 +30,20 @@ public final class RedisUtils {
      * <p>@Author www </p>
      * <p>@Date 2021/8/1 21:07 </p>
      * @param key 键值
-     * @return boolean
+     * @return boolean true存在，false不存在
      */
     public static boolean hasKey(String key){
         return redisTemplate.hasKey(key);
+    }
+    /**
+     * <p>@Description 删除key </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/11/17 20:56 </p>
+     * @param key 键
+     * @return boolean true删除成功，false失败
+     */
+    public static boolean deleteKey(String key){
+        return redisTemplate.delete(key);
     }
     /**
      * <p>@Description 保存String数据 </p>
@@ -40,9 +53,45 @@ public final class RedisUtils {
      * @param value 值
      * @return java.lang.Object
      */
-    public static Object set(String key,Object value){
+    public static String set(String key,String value){
         redisTemplate.opsForValue().set(key,value);
         return value;
+    }
+    /**
+     * <p>@Description 保存String数据,并设置超时时间 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/8/1 21:07 </p>
+     * @param key 键值
+     * @param value 值
+     * @param seconds 超时时间(秒)
+     * @return java.lang.Object
+     */
+    public static Object set(String key,Object value,long seconds){
+        redisTemplate.opsForValue().set(key,value,seconds,TimeUnit.SECONDS);
+        return value;
+    }
+    /**
+     * <p>@Description key不存在时保存String数据 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/8/1 21:07 </p>
+     * @param key 键值
+     * @param value 值
+     * @return boolean true保存成功，false保存失败
+     */
+    public static boolean setNX(String key,String value){
+        return redisTemplate.opsForValue().setIfAbsent(key,value);
+    }
+    /**
+     * <p>@Description key不存在时保存String数据，并设置超时时间 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/8/1 21:07 </p>
+     * @param key 键值
+     * @param value 值
+     * @param seconds 超时时间(秒)
+     * @return boolean true保存成功，false保存失败
+     */
+    public static boolean setNX(String key,String value,long seconds){
+        return redisTemplate.opsForValue().setIfAbsent(key,value,seconds,TimeUnit.SECONDS);
     }
     /**
      * <p>@Description 获取String数据 </p>
@@ -51,9 +100,8 @@ public final class RedisUtils {
      * @param key 键值
      * @return java.lang.Object
      */
-    public static Object get(String key){
-        Object value = redisTemplate.opsForValue().get(key);
-        return value;
+    public static String get(String key){
+        return (String) redisTemplate.opsForValue().get(key);
     }
     /**
      * <p>@Description 保存Hash数据 </p>

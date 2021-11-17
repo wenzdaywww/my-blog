@@ -27,9 +27,9 @@ public class TokenUtilHandler {
     /** 超时键值 */
     public static final String EXPIRE_TIME = "expire-time";
     /** 用户名键值 */
-    public static final String USERNAME = "id";
+    public static final String USERID = "userId";
     /** 请求头名称 */
-    public static final String HEADER_STRING = "Authorization";
+    public static final String AUTHORIZATION = "Authorization";
     /** 过期时间 */
     private Long EXPIRATION_TIME ;
     /** 私钥 */
@@ -81,13 +81,13 @@ public class TokenUtilHandler {
      * @return java.util.Map<java.lang.String, java.lang.Object>
      */
     public Map<String, Object> validateTokenAndGetClaims(HttpServletRequest request) {
-        String token = request.getHeader(HEADER_STRING);
+        String token = request.getHeader(AUTHORIZATION);
         if (token == null) {
             return null;
         }
         Map<String, Object> body = Jwts.parser()
                 .setSigningKey(SECRET)
-                .parseClaimsJws(token)
+                .parseClaimsJws(token.replace(TOKEN_PREFIX + " ",""))
                 .getBody();
         return body;
     }

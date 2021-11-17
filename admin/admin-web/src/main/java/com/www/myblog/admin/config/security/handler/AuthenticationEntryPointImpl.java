@@ -23,7 +23,15 @@ import java.io.IOException;
 @Component
 public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     private static Logger LOG = LoggerFactory.getLogger(AuthenticationEntryPointImpl.class);
-
+    /**
+     * <p>@Description 无权限访问处理 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/11/17 20:30 </p>
+     * @param httpServletRequest
+     * @param httpServletResponse
+     * @param e
+     * @return void
+     */
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         LOG.info("-----> security无权限访问处理");

@@ -13,4 +13,4 @@ eureka:
     prefer-ip-address: true #该实例，相较于hostname是否优先使用IP
 #配置eureka注册中心服务的status信息
 info:
-  name: my blog administrator server
+  name: my blog zuul server

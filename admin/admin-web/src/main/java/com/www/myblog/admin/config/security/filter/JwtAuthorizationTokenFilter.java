@@ -1,10 +1,12 @@
-package com.www.myblog.admin.config.security.handler;
+package com.www.myblog.admin.config.security.filter;
 
+import com.www.myblog.admin.config.security.impl.UserDetailsServiceImpl;
+import com.www.myblog.common.utils.RedisUtils;
 import com.www.myblog.common.utils.TokenUtilHandler;
-import org.hibernate.validator.constraints.CodePointLength;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,14 +32,27 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
     private TokenUtilHandler tokenUtilHandler;
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+    @Value("${spring.application.name}")
+    private String applicationName;
 
+    /**
+     * <p>@Description token验证 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/11/17 19:24 </p>
+     * @param httpServletRequest
+     * @param httpServletResponse
+     * @param filterChain
+     * @return void
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         LOG.info("-----> token验证");
         Map<String,Object> map = tokenUtilHandler.validateTokenAndGetClaims(httpServletRequest);
         if(map != null && map.size() > 0){
-            String userId = String.valueOf(map.get(TokenUtilHandler.USERNAME));
-            if(userId != null && SecurityContextHolder.getContext().getAuthentication() == null){
+            String userId = String.valueOf(map.get(TokenUtilHandler.USERID));
+            //判断redis中的token是否存在，存在则说明token有效
+            if(RedisUtils.hasKey(applicationName + ":"+ TokenUtilHandler.TOKEN + ":" + userId)
+                    && SecurityContextHolder.getContext().getAuthentication() == null){
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
                 if(userDetails != null){
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
