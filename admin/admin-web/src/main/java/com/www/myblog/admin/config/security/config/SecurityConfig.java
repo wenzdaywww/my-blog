@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
     @Autowired
-    private AuthenticationEntryPointImpl authenticationEntryPoint;
+    private AuthenticationEntryHandler authenticationEntryHandler;
     @Autowired
     private LoginSuccessHandler loginSuccessHandler;
     @Autowired
@@ -33,6 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private LogoutSuccessHandlerImpl logoutSuccessHandler;
     @Autowired
     private JwtAuthorizationTokenFilter jwtAuthorizationTokenFilter;
+    @Autowired
+    private SessionExpiredHandler sessionExpiredHandler;
     /**
      * <p>@Description 授权,配置如何通过拦截器保护请求 </p>
      * <p>@Author www </p>
@@ -44,10 +46,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         //关闭CSRF（防止网站攻击）
         http.csrf().disable();
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);//关闭session
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//关闭session
+            .maximumSessions(1)//单点登录
+            .expiredSessionStrategy(sessionExpiredHandler);//会话过期处理
         http.authorizeRequests().antMatchers("/test/**").permitAll()//设置允许访问的路径
             .anyRequest().hasAnyAuthority("admin");//设置运行角色的路径
-        http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);//匿名用户访问无权限资源时的异常处理
+        http.exceptionHandling().authenticationEntryPoint(authenticationEntryHandler);//匿名用户访问无权限资源时的异常处理
         http.formLogin()//登入
             .loginProcessingUrl("/login")//登录表单form中action的地址，也就是处理认证请求的路径
             .usernameParameter("id")//登录表单form中用户名输入框input的name名，不修改的话默认是username

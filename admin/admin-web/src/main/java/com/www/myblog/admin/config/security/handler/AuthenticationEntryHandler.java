@@ -21,8 +21,8 @@ import java.io.IOException;
  * <p>@Date 2021/11/15 20:39 </p>
  */
 @Component
-public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
-    private static Logger LOG = LoggerFactory.getLogger(AuthenticationEntryPointImpl.class);
+public class AuthenticationEntryHandler implements AuthenticationEntryPoint {
+    private static Logger LOG = LoggerFactory.getLogger(AuthenticationEntryHandler.class);
     /**
      * <p>@Description 无权限访问处理 </p>
      * <p>@Author www </p>

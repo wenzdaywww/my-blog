@@ -17,6 +17,7 @@ spring:
       url: jdbc:mysql://192.168.1.130:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
       username: admin
       password: www362412
+#      password: ENC(BQs0AewSwfNdxwavMUTXcMosnrxfu09I)
   #redis配置
   redis:
     password: www362412
@@ -28,3 +29,8 @@ spring:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#application加密
+jasypt:
+  encryptor:
+    password: wenzday
+    algorithm: PBEWithMD5AndDES

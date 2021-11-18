@@ -194,6 +194,12 @@
 				<artifactId>commons-codec</artifactId>
 				<version>1.11</version>
 			</dependency>
+			<!-- application加密包 -->
+			<dependency>
+				<groupId>com.github.ulisesbocchio</groupId>
+				<artifactId>jasypt-spring-boot-starter</artifactId>
+				<version>3.0.4</version>
+			</dependency>
 			<!--token生成工具-->
 			<dependency>
 				<groupId>io.jsonwebtoken</groupId>
