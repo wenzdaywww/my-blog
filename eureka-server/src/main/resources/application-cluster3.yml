@@ -7,7 +7,7 @@ spring:
   security:
     user:
       name: www
-      password: www362412
+      password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
 #eureka配置
 eureka:
   instance:

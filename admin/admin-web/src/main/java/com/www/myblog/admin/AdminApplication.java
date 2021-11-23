@@ -18,6 +18,7 @@ import org.springframework.context.annotation.ComponentScan;
 public class AdminApplication {
 
     public static void main(String[] args) {
+        System.setProperty("jasypt.encryptor.password","wenzday");
         SpringApplication.run(AdminApplication.class, args);
     }
 }

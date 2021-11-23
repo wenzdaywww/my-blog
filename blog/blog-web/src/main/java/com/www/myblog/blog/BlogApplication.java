@@ -20,6 +20,7 @@ import org.springframework.context.annotation.ComponentScans;
 @ComponentScan(basePackages = {"com.www.myblog.common","com.www.myblog.blog"})
 public class BlogApplication {
     public static void main(String[] args) {
+        System.setProperty("jasypt.encryptor.password","wenzday");
         SpringApplication.run(BlogApplication.class, args);
     }
 }

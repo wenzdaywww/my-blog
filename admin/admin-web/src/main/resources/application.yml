@@ -16,11 +16,10 @@ spring:
       db-type: mysql #数据库类型
       url: jdbc:mysql://192.168.1.130:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
       username: admin
-      password: www362412
-#      password: ENC(BQs0AewSwfNdxwavMUTXcMosnrxfu09I)
+      password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
   #redis配置
   redis:
-    password: www362412
+    password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
     #sentile配置
     sentinel:
       master: mymaster
@@ -29,8 +28,4 @@ spring:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-#application加密
-jasypt:
-  encryptor:
-    password: wenzday
-    algorithm: PBEWithMD5AndDES
+

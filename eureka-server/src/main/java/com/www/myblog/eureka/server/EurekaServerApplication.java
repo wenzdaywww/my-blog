@@ -14,6 +14,7 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 @EnableEurekaServer //开启eureka注册中心服务
 public class EurekaServerApplication {
     public static void main(String[] args) {
+        System.setProperty("jasypt.encryptor.password","wenzday");
         SpringApplication.run(EurekaServerApplication.class,args);
     }
 }

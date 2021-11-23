@@ -27,6 +27,8 @@ public class TestController {
     private static Logger logger = LoggerFactory.getLogger(TestController.class);
     @Value("${server.port}")
     private String port;
+    @Autowired
+    private StringEncryptor stringEncryptor;
     /**
      * <p>@Description 测试方法 </p>
      * <p>@Author www </p>
@@ -36,6 +38,6 @@ public class TestController {
     @GetMapping("/test/{name}")
     public ResponseDTO test(@PathVariable("name") String name){
         logger.info("访问成功！port={},name={}",port,name);
-        return new ResponseDTO<>("访问成功！port=" + port + ", name=" + name);
+        return new ResponseDTO<>("访问成功！port=" + port + ", name=" + stringEncryptor.encrypt("www362412"));
     }
 }
