@@ -51,6 +51,10 @@ public class SysMenuEntity implements Serializable {
     private Integer menuOrder;
 
     /**
+    * 菜单类型：1页面菜单，2权限菜单
+    */
+    private String menuType;
+    /**
     * 是否删除：1删除，0未删除
     */
     private String isDelete;

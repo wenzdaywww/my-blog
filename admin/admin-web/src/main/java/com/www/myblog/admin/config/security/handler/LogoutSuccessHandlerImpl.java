@@ -43,7 +43,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
      */
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-        LOG.info("-----> security退出成功");
+        LOG.info("-----> 6、security退出成功");
         Map<String,Object> map = tokenUtilHandler.validateTokenAndGetClaims(httpServletRequest);
         //获取token，删除redis中的token
         if(map != null && map.size() > 0) {

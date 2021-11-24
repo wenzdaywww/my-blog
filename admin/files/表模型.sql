@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS SYS_MENU (
 	MENU_ICON VARCHAR(256) comment '菜单图标',
 	MENU_URL VARCHAR(512) comment '菜单路径',
 	MENU_ORDER INT comment '菜单序号',
+    MENU_TYPE CHAR(1) default '1' comment '菜单类型：1页面菜单，2权限菜单',
 	IS_DELETE CHAR(1) comment '是否删除：1删除，0未删除',
 	SYS_UPDATE_TIME DATETIME comment '更新时间',
 	SYS_CREATE_TIME DATETIME comment '创建时间',

@@ -1,9 +1,12 @@
 package com.www.myblog.admin.config.security.config;
 
 import com.www.myblog.admin.config.security.filter.JwtAuthorizationTokenFilter;
+import com.www.myblog.admin.config.security.filter.SecurityAccessDecisionManager;
+import com.www.myblog.admin.config.security.filter.SecurityMetadataSource;
 import com.www.myblog.admin.config.security.handler.*;
 import com.www.myblog.admin.config.security.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -11,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -32,9 +36,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private LogoutSuccessHandlerImpl logoutSuccessHandler;
     @Autowired
-    private JwtAuthorizationTokenFilter jwtAuthorizationTokenFilter;
-    @Autowired
     private SessionExpiredHandler sessionExpiredHandler;
+    @Autowired
+    private URLAccessDeniedHandler urlAccessDeniedHandler;
+    @Autowired
+    private SecurityMetadataSource securityMetadataSource;
+    @Autowired
+    private SecurityAccessDecisionManager securityAccessDecisionManager;
+    @Autowired
+    private JwtAuthorizationTokenFilter jwtAuthorizationTokenFilter;
     /**
      * <p>@Description 授权,配置如何通过拦截器保护请求 </p>
      * <p>@Author www </p>
@@ -49,9 +59,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//关闭session
             .maximumSessions(1)//单点登录
             .expiredSessionStrategy(sessionExpiredHandler);//会话过期处理
-        http.authorizeRequests().antMatchers("/test/**").permitAll()//设置允许访问的路径
-            .anyRequest().hasAnyAuthority("admin");//设置运行角色的路径
+//        http.authorizeRequests().antMatchers("/test/**").permitAll()//设置允许访问的路径
+//            .anyRequest().hasAnyAuthority("admin");//设置运行角色的路径
+        http.authorizeRequests().anyRequest().authenticated()
+                .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
+            @Override
+            public <O extends FilterSecurityInterceptor> O postProcess(O o) {
+                o.setAccessDecisionManager(securityAccessDecisionManager);//访问权限角色验证
+                o.setSecurityMetadataSource(securityMetadataSource);//访问权限角色配置
+                return o;
+            }
+        });
         http.exceptionHandling().authenticationEntryPoint(authenticationEntryHandler);//匿名用户访问无权限资源时的异常处理
+        http.exceptionHandling().accessDeniedHandler(urlAccessDeniedHandler);//登录的用户访问无权限资源时的异常处理
         http.formLogin()//登入
             .loginProcessingUrl("/login")//登录表单form中action的地址，也就是处理认证请求的路径
             .usernameParameter("id")//登录表单form中用户名输入框input的name名，不修改的话默认是username

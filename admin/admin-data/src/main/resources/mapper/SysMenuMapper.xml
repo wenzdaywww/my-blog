@@ -11,6 +11,7 @@
     <result column="MENU_ICON" property="menuIcon" />
     <result column="MENU_URL" property="menuUrl" />
     <result column="MENU_ORDER" property="menuOrder" />
+    <result column="MENU_TYPE" property="menuType" />
     <result column="IS_DELETE" property="isDelete" />
     <result column="SYS_UPDATE_TIME" property="sysUpdateTime" />
     <result column="SYS_CREATE_TIME" property="sysCreateTime" />
@@ -18,7 +19,7 @@
 
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    MENU_ID, MENU_CODE, MENU_NAME, PARENT_ID, MENU_ICON, MENU_URL, MENU_ORDER, IS_DELETE,
+    MENU_ID, MENU_CODE, MENU_NAME, PARENT_ID, MENU_ICON, MENU_URL, MENU_ORDER, MENU_TYPE,IS_DELETE,
     SYS_UPDATE_TIME, SYS_CREATE_TIME
   </sql>
 
@@ -31,9 +32,9 @@
   <!--  插入数据，包括空字段-->
   <insert id="insert" keyColumn="MENU_ID" keyProperty="menuId" parameterType="com.www.myblog.admin.data.entity.SysMenuEntity" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into sys_menu (MENU_CODE, MENU_NAME, PARENT_ID, MENU_ICON, MENU_URL, MENU_ORDER,
+    insert into sys_menu (MENU_CODE, MENU_NAME, PARENT_ID, MENU_ICON, MENU_URL, MENU_ORDER,MENU_TYPE,
     IS_DELETE, SYS_UPDATE_TIME, SYS_CREATE_TIME)
-    values (#{menuCode}, #{menuName}, #{parentId}, #{menuIcon}, #{menuUrl}, #{menuOrder},
+    values (#{menuCode}, #{menuName}, #{parentId}, #{menuIcon}, #{menuUrl}, #{menuOrder},#{menuType},
     #{isDelete}, #{sysUpdateTime}, #{sysCreateTime})
   </insert>
 
@@ -59,6 +60,9 @@
       </if>
       <if test="menuOrder != null">
         MENU_ORDER,
+      </if>
+      <if test="menuType != null">
+        MENU_TYPE,
       </if>
       <if test="isDelete != null">
         IS_DELETE,
@@ -88,6 +92,9 @@
       </if>
       <if test="menuOrder != null">
         #{menuOrder},
+      </if>
+      <if test="menuType != null">
+        #{menuType},
       </if>
       <if test="isDelete != null">
         #{isDelete},
@@ -120,9 +127,21 @@
     MENU_ICON = #{menuIcon},
     MENU_URL = #{menuUrl},
     MENU_ORDER = #{menuOrder},
+    MENU_TYPE = #{menuType},
     IS_DELETE = #{isDelete},
     SYS_UPDATE_TIME = #{sysUpdateTime},
     SYS_CREATE_TIME = #{sysCreateTime}
     where MENU_ID = #{menuId}
   </update>
+
+  <!--  查询所以权限菜单信息-->
+  <select id="findAllSecurityMenu" resultType="com.www.myblog.admin.data.dto.SysRoleMenuDTO">
+    SELECT DISTINCT M.MENU_ID, M.MENU_CODE, M.MENU_NAME, M.PARENT_ID,
+            M.MENU_ICON, M.MENU_URL, M.MENU_ORDER, M.MENU_TYPE, M.IS_DELETE,
+            R.ROLE_ID, R.ROLE_NAME, R.DESCRIPTION, RM.SYS_CREATE_TIME, RM.SYS_UPDATE_TIME
+    FROM SYS_ROLE_MENU RM, SYS_ROLE R, SYS_MENU M
+    WHERE RM.ROLE_ID = R.ROLE_ID
+      AND RM.MENU_ID = M.MENU_ID
+      AND M.MENU_TYPE = '2'
+  </select>
 </mapper>

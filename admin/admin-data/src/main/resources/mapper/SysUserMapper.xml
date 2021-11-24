@@ -145,4 +145,10 @@
       SYS_CREATE_TIME = #{sysCreateTime}
     where SU_ID = #{suId}
   </update>
+
+  <!--  查询用户拥有的角色信息-->
+  <select id="findUserRole" resultType="com.www.myblog.admin.data.entity.SysRoleEntity">
+    SELECT R.* FROM SYS_USER_ROLE UR,SYS_ROLE R
+    WHERE UR.ROLE_ID = R.ROLE_ID AND UR.USER_ID = #{userId}
+  </select>
 </mapper>

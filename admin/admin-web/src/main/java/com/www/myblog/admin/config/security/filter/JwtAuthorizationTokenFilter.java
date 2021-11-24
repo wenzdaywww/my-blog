@@ -46,7 +46,7 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        LOG.info("-----> token验证");
+        LOG.info("-----> 1、访问token验证");
         Map<String,Object> map = tokenUtilHandler.validateTokenAndGetClaims(httpServletRequest);
         if(map != null && map.size() > 0){
             String userId = String.valueOf(map.get(TokenUtilHandler.USERID));
