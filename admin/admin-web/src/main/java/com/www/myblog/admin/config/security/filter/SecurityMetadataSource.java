@@ -3,6 +3,7 @@ package com.www.myblog.admin.config.security.filter;
 import com.www.myblog.admin.data.dto.SysRoleMenuDTO;
 import com.www.myblog.admin.service.ISysMenuService;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
         if(CollectionUtils.isNotEmpty(roleMenuList)){
             List<String> roleList = new ArrayList<>();
             for (SysRoleMenuDTO dto : roleMenuList){
-                if(antPathMatcher.match(dto.getMenuUrl(),requestURL)){
+                if(antPathMatcher.match(dto.getMenuUrl(),requestURL) && StringUtils.isNotBlank(dto.getRoleName())){
                     roleList.add(dto.getRoleName());
                 }
             }

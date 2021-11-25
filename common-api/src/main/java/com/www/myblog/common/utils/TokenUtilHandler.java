@@ -1,5 +1,6 @@
 package com.www.myblog.common.utils;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
@@ -85,10 +86,16 @@ public class TokenUtilHandler {
         if (token == null) {
             return null;
         }
-        Map<String, Object> body = Jwts.parser()
-                .setSigningKey(SECRET)
-                .parseClaimsJws(token.replace(TOKEN_PREFIX + " ",""))
-                .getBody();
+        Map<String, Object> body;
+        try {
+            body = Jwts.parser()
+                    .setSigningKey(SECRET)
+                    .parseClaimsJws(token.replace(TOKEN_PREFIX + " ",""))
+                    .getBody();
+        }catch (ExpiredJwtException e){
+            LOG.error("-----> token过期");
+            body = e.getClaims();
+        }
         return body;
     }
 }

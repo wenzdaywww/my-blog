@@ -38,6 +38,6 @@ public class TestController {
     @GetMapping("/test/{name}")
     public ResponseDTO test(@PathVariable("name") String name){
         logger.info("访问成功！port={},name={}",port,name);
-        return new ResponseDTO<>("访问成功！port=" + port + ", name=" + stringEncryptor.encrypt("www362412"));
+        return new ResponseDTO<>("访问成功！port=" + port + ", name=" + stringEncryptor.encrypt(name));
     }
 }
