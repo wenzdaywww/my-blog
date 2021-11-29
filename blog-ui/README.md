@@ -7,10 +7,10 @@ npm install
 
 ### 项目编译
 ```
-yarn run serve
+npm run serve
 ```
 
 ### 项目启动
 ```
-yarn run dev
+npm run dev
 ```

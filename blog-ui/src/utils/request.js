@@ -1,34 +1,65 @@
-import axios from 'axios';
-
-const service = axios.create({
-    // process.env.NODE_ENV === 'development' 来判断是否开发环境
-    // easy-mock服务挂了，暂时不使用了
-    // baseURL: 'https://www.easy-mock.com/mock/592501a391470c0ac1fab128',
-    timeout: 5000
-});
-
-service.interceptors.request.use(
+import axios from "axios";
+import qs from "qs";
+import { ElMessageBox } from 'element-plus';
+//请求地址
+axios.defaults.baseURL = 'http://localhost:8000'
+//post请求头
+axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded;charset=UTF-8";
+//设置超时
+axios.defaults.timeout = 10000;
+axios.interceptors.request.use(
     config => {
         return config;
     },
     error => {
-        console.log(error);
-        return Promise.reject();
+        return Promise.reject(error);
     }
 );
-
-service.interceptors.response.use(
+axios.interceptors.response.use(
     response => {
-        if (response.status === 200) {
-            return response.data;
+        if (response.status == 200) {
+            return Promise.resolve(response);
         } else {
-            Promise.reject();
+            return Promise.reject(response);
         }
     },
     error => {
-        console.log(error);
-        return Promise.reject();
+        console.log('请求异常：'+JSON.stringify(error));
+        ElMessageBox('请求失败', '请求异常', {
+            confirmButtonText: '确定',
+            callback: action => {}
+        });
     }
 );
-
-export default service;
+export default {
+    post(url, data) {
+        return new Promise((resolve, reject) => {
+            axios({
+                method: 'post',
+                url,
+                data: qs.stringify(data),
+            })
+                .then(res => {
+                    resolve(res.data)
+                })
+                .catch(err => {
+                    reject(err)
+                });
+        })
+    },
+    get(url, data) {
+        return new Promise((resolve, reject) => {
+            axios({
+                method: 'get',
+                url,
+                params: data,
+            })
+                .then(res => {
+                    resolve(res.data)
+                })
+                .catch(err => {
+                    reject(err)
+                })
+        })
+    }
+};
