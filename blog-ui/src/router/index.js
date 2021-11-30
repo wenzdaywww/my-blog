@@ -1,4 +1,4 @@
-import {createRouter, createWebHashHistory} from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
 import Home from "../views/Home.vue";
 
 const routes = [
@@ -122,22 +122,22 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(), //createWebHashHistory地址带#，createWebHistory不带#
     routes
 });
 
 router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title} | vue-manage-system`;
-    const role = localStorage.getItem('ms_username');
-    if (!role && to.path !== '/login') {
-        next('/login');
-    } else if (to.meta.permission) {
-        // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
-        role === 'admin'
-            ? next()
-            : next('/403');
-    } else {
+    document.title = 'my-blog-admin';
+    if (to.path === '/login'){
         next();
+    }else {
+        const token = localStorage.getItem('token');
+        //token失效则调整登录页面
+        if (token === null || token === undefined || token === "null" || token === ""){
+            next('/login');
+        }else {
+            next();
+        }
     }
 });
 

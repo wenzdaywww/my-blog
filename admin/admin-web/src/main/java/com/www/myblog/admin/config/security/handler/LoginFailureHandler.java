@@ -48,7 +48,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler  {
         } else if (exception instanceof BadCredentialsException) {
             msg = "用户名或者密码输入错误，请重新输入!";
         }
-        ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseEnum.FORBIDDEN,msg);
+        ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseEnum.FAIL,msg);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JSON.toJSONString(responseDTO));
     }

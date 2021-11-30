@@ -9,6 +9,10 @@ axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded
 axios.defaults.timeout = 10000;
 axios.interceptors.request.use(
     config => {
+        // 通过拦截request请求,主动为请求头,追加新属性 Authorization,等于 token 值
+        if (config.url !== "/admin/login"){
+            config.headers.Authorization = "Bearer " + localStorage.getItem('token');
+        }
         return config;
     },
     error => {
@@ -18,6 +22,10 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     response => {
         if (response.status == 200) {
+            //接口返回403则清除token
+            if(response.data.code === 403){
+                localStorage.setItem('token',"");
+            }
             return Promise.resolve(response);
         } else {
             return Promise.reject(response);

@@ -42,9 +42,10 @@
     </div>
 </template>
 <script>
-import { computed, onMounted } from "vue";
+import {computed, getCurrentInstance, onMounted} from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import {ElMessage} from "element-plus";
 export default {
     setup() {
         const username = localStorage.getItem("ms_username");
@@ -65,10 +66,20 @@ export default {
 
         // 用户名下拉菜单选择事件
         const router = useRouter();
+        const request = getCurrentInstance().appContext.config.globalProperties;
         const handleCommand = (command) => {
             if (command == "loginout") {
-                localStorage.removeItem("ms_username");
-                router.push("/login");
+                request.$http.post("/admin/logout",null).then(function (res) {
+                  if(res.code === 200){
+                    localStorage.setItem('token',"");
+                    ElMessage.success("退出成功");
+                    router.push("/login");
+                  }else {
+                    ElMessage.error(res.data);
+                  }
+                }).catch(function (res) {
+                  ElMessage.error("退出失败");
+                });
             } else if (command == "user") {
                 router.push("/user");
             }

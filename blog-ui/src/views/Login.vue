@@ -21,7 +21,7 @@
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()">登录</el-button>
                 </div>
-                <p class="login-tips">Tips : 用户名和密码随便填。</p>
+                <p class="login-tips"></p>
             </el-form>
         </div>
     </div>
@@ -37,8 +37,8 @@ export default {
     setup() {
         const router = useRouter();
         const param = reactive({
-            id: "admin",
-            pwd: "123123",
+            id: "",
+            pwd: ""
         });
         const rules = {
             id: [
@@ -56,9 +56,15 @@ export default {
         const request = getCurrentInstance().appContext.config.globalProperties;
         const submitForm = () => {
             request.$http.post("/admin/login",param).then(function (res) {
-              ElMessage.success("登录成功");
+              if(res.code === 200){
+                localStorage.setItem('token',res.data.token);
+                ElMessage.success("登录成功");
+                router.push("/");
+              }else {
+                ElMessage.error(res.data);
+              }
             }).catch(function (res) {
-              ElMessage.success("登录失败");
+              ElMessage.error("登录失败");
             });
         };
         const store = useStore();

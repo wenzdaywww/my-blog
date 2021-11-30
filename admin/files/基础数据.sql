@@ -33,9 +33,9 @@ INSERT INTO SYS_MENU (MENU_CODE,MENU_NAME,PARENT_ID,MENU_ICON,MENU_URL,MENU_ORDE
 VALUES ('userAdd','添加用户',(select a.parent_id from (select m.menu_id parent_id  from SYS_MENU m where menu_code='userManage') a),null,'',3,'0',now(),now());
 
 INSERT INTO SYS_MENU (MENU_CODE,MENU_NAME,PARENT_ID,MENU_ICON,MENU_URL,MENU_ORDER,MENU_TYPE,IS_DELETE,SYS_UPDATE_TIME,SYS_CREATE_TIME)
-VALUES ('/find/**',null,null,null,'/find/**',0,'2','0',now(),now());
+VALUES ('/test/find/**',null,null,null,'/find/**',0,'2','0',now(),now());
 INSERT INTO SYS_MENU (MENU_CODE,MENU_NAME,PARENT_ID,MENU_ICON,MENU_URL,MENU_ORDER,MENU_TYPE,IS_DELETE,SYS_UPDATE_TIME,SYS_CREATE_TIME)
-VALUES ('/test/**',null,null,null,'/test/**',0,'2','0',now(),now());
+VALUES ('/test/get/**',null,null,null,'/test/**',0,'2','0',now(),now());
 
 /**5、插入角色菜单信息 **/
 DELETE FROM SYS_ROLE_MENU WHERE 1=1;
