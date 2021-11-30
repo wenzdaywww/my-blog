@@ -55,7 +55,7 @@ export default {
                 });
         })
     },
-    get(url, data) {
+    get(url,data) {
         return new Promise((resolve, reject) => {
             axios({
                 method: 'get',

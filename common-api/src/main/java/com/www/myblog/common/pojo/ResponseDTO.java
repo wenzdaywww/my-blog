@@ -17,6 +17,12 @@ public class ResponseDTO<T> implements Serializable {
     private static final long serialVersionUID = 1L;
     /** 响应码 **/
     private Integer code;
+    /** 当前页数 **/
+    private Integer pageNum;
+    /** 页面条数 **/
+    private Integer pageSize;
+    /** 总数 **/
+    private Long totalNum;
     /** 响应消息 **/
     private String msg;
     /** 响应数据 **/

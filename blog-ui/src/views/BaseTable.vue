@@ -3,57 +3,73 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 基础表格
+                    <i class="el-icon-lx-cascades"></i> 用户信息
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
-                    <el-option key="1" label="广东省" value="广东省"></el-option>
-                    <el-option key="2" label="湖南省" value="湖南省"></el-option>
+                <el-select v-model="query.stateCd" placeholder="用户状态" class="handle-select mr10">
+                    <el-option key="1" label="有效" value="1"></el-option>
+                    <el-option key="2" label="注销" value="2"></el-option>
+                    <el-option key="3" label="封号" value="3"></el-option>
                 </el-select>
-                <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
+                <el-input v-model="query.userId" placeholder="用户ID" class="handle-input mr10"></el-input>
+                <el-input v-model="query.userName" placeholder="用户名称" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+                <el-button type="primary" icon="el-icon-refresh-left" @click="handleReset">重置</el-button>
             </div>
             <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
-                <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
-                <el-table-column prop="name" label="用户名"></el-table-column>
-                <el-table-column label="账户余额">
-                    <template #default="scope">￥{{ scope.row.money }}</template>
-                </el-table-column>
+                <el-table-column prop="suId" label="ID" width="55" align="center"></el-table-column>
+                <el-table-column prop="userId" label="用户ID"></el-table-column>
+                <el-table-column prop="userName" label="用户名称"></el-table-column>
                 <el-table-column label="头像(查看大图)" align="center">
                     <template #default="scope">
-                        <el-image class="table-td-thumb" :src="scope.row.thumb" :preview-src-list="[scope.row.thumb]">
+                        <el-image class="table-td-thumb" :src="scope.row.photo" :preview-src-list="[scope.row.photo]">
                         </el-image>
                     </template>
                 </el-table-column>
-                <el-table-column prop="address" label="地址"></el-table-column>
-                <el-table-column label="状态" align="center">
+                <el-table-column prop="phoneNum" label="手机号码"></el-table-column>
+                <el-table-column prop="email" label="邮箱"></el-table-column>
+                <el-table-column prop="birthday" label="出生日期"></el-table-column>
+                <el-table-column prop="sex" label="性别">
+                  <template #default="scope">
+                    {{ scope.row.sex === '1' ? '男' : scope.row.sex === '0' ? '女' : '未知' }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="用户状态" align="center">
                     <template #default="scope">
-                        <el-tag :type="
-                                scope.row.state === '成功'
-                                    ? 'success'
-                                    : scope.row.state === '失败'
-                                    ? 'danger'
-                                    : ''
-                            ">{{ scope.row.state }}</el-tag>
+                        {{ scope.row.stateCd === '1' ? '有效' : scope.row.stateCd === '2' ? '注销' : '封号' }}
                     </template>
                 </el-table-column>
-
-                <el-table-column prop="date" label="注册时间"></el-table-column>
+                <el-table-column label="是否过期" align="center">
+                  <template #default="scope">
+                    {{ scope.row.notExpired === '1' ? '否' : '是' }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="账号是否锁定" align="center">
+                  <template #default="scope">
+                    {{ scope.row.notLocked === '1' ? '否' : '是' }}
+                  </template>
+                </el-table-column>
+                <el-table-column label="密码是否过期" align="center">
+                  <template #default="scope">
+                    {{ scope.row.credentialsNotExpired === '1' ? '否' : '是' }}
+                  </template>
+                </el-table-column>
+                <el-table-column prop="sysCreateTime" label="注册时间"></el-table-column>
+                <el-table-column prop="sysUpdateTime" label="更新时间"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
-                    <template #default="scope">
-                        <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑
-                        </el-button>
-                        <el-button type="text" icon="el-icon-delete" class="red"
-                            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-                    </template>
+                  <template #default="scope">
+                    <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑 </el-button>
+                    <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                  </template>
                 </el-table-column>
             </el-table>
             <div class="pagination">
-                <el-pagination background layout="total, prev, pager, next" :current-page="query.pageIndex"
-                    :page-size="query.pageSize" :total="pageTotal" @current-change="handlePageChange"></el-pagination>
+                <el-pagination background layout="total, prev, pager, next" :current-page="query.pageNum"
+                    :page-size="query.pageSize" :total="pageTotal" @current-change="handlePageChange">
+                </el-pagination>
             </div>
         </div>
 
@@ -78,41 +94,49 @@
 </template>
 
 <script>
-import { ref, reactive } from "vue";
+import { ref, reactive, getCurrentInstance } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { fetchData } from "../api/index";
 
 export default {
     name: "basetable",
     setup() {
         const query = reactive({
-            address: "",
-            name: "",
-            pageIndex: 1,
+            stateCd: "",
+            userId: "",
+            userName: "",
+            pageNum: 1,
             pageSize: 10,
         });
         const tableData = ref([]);
         const pageTotal = ref(0);
+        const request = getCurrentInstance().appContext.config.globalProperties;
         // 获取表格数据
         const getData = () => {
-            fetchData(query).then((res) => {
-                tableData.value = res.list;
-                pageTotal.value = res.pageTotal || 50;
-            });
+            request.$http.get("/admin/user/all",query).then(function (res) {
+              if(res.code === 200){
+                tableData.value = res.data;
+                pageTotal.value = res.totalNum;
+              }
+            })
         };
         getData();
-
         // 查询操作
         const handleSearch = () => {
-            query.pageIndex = 1;
+            query.pageNum = 1;
             getData();
+        };
+        // 重置
+        const handleReset = () => {
+          query.stateCd = "";
+          query.userId = "";
+          query.userName = "";
+          getData();
         };
         // 分页导航
         const handlePageChange = (val) => {
-            query.pageIndex = val;
+            query.pageNum = val;
             getData();
         };
-
         // 删除操作
         const handleDelete = (index) => {
             // 二次确认删除
@@ -155,6 +179,7 @@ export default {
             editVisible,
             form,
             handleSearch,
+            handleReset,
             handlePageChange,
             handleDelete,
             handleEdit,
@@ -174,7 +199,7 @@ export default {
 }
 
 .handle-input {
-    width: 300px;
+    width: 200px;
     display: inline-block;
 }
 .table {
