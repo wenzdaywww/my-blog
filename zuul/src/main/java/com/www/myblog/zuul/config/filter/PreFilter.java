@@ -53,7 +53,6 @@ public class PreFilter extends ZuulFilter {
     public boolean shouldFilter() {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
-        LOG.info("pre过滤器当前请求方法：{}",request.getMethod());
         //只过滤OPTIONS 请求
         if(request.getMethod().equals(RequestMethod.OPTIONS.name())){
             return true;

@@ -53,7 +53,6 @@ public class PostFilter extends ZuulFilter {
     public boolean shouldFilter() {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
-        LOG.info("post过滤器当前请求方法：{}",request.getMethod());
         //过滤各种POST请求
         if(request.getMethod().equals(RequestMethod.OPTIONS.name())){
             return false;

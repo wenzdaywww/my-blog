@@ -1,9 +1,11 @@
 package com.www.myblog.admin.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.myblog.admin.data.entity.SysRoleEntity;
 import com.www.myblog.admin.data.entity.SysUserEntity;
+import com.www.myblog.admin.data.enums.CommonEnum;
 import com.www.myblog.admin.data.mapper.SysUserMapper;
 import com.www.myblog.admin.service.ISysUserService;
 import com.www.myblog.common.pojo.ResponseDTO;
@@ -24,6 +26,42 @@ import java.util.List;
 public class SysUserServiceImpl implements ISysUserService {
     @Autowired
     private SysUserMapper sysUserMapper;
+
+    /**
+     * <p>@Description 更新用户状态 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/2 20:58 </p>
+     * @param userId      用户id
+     * @param stateCd     用户状态
+     * @param notExpired  是否过期
+     * @param notLocked   账号是否锁定
+     * @param credentialsNotExpired 密码是否过期
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    @Override
+    public ResponseDTO<String> updateState(String userId, String stateCd, String notExpired, String notLocked, String credentialsNotExpired) {
+        ResponseDTO<String> responseDTO = new ResponseDTO<>();
+        if(!StringUtils.containsAny(stateCd, CommonEnum.STATE_CD_1.getCode(), CommonEnum.STATE_CD_2.getCode(), CommonEnum.STATE_CD_3.getCode())
+                || !StringUtils.containsAny(notExpired, CommonEnum.YES_1.getCode(), CommonEnum.NO_0.getCode())
+                || !StringUtils.containsAny(notLocked, CommonEnum.YES_1.getCode(), CommonEnum.NO_0.getCode())
+                || !StringUtils.containsAny(credentialsNotExpired, CommonEnum.YES_1.getCode(), CommonEnum.NO_0.getCode())){
+            responseDTO.setResponseCode(ResponseEnum.FAIL,"更新用户信息失败");
+            return responseDTO;
+        }
+        UpdateWrapper<SysUserEntity> userWrapper = new UpdateWrapper<>();
+        userWrapper.lambda().eq(SysUserEntity::getUserId,userId);
+        userWrapper.lambda().set(SysUserEntity::getStateCd,stateCd);
+        userWrapper.lambda().set(SysUserEntity::getNotExpired,notExpired);
+        userWrapper.lambda().set(SysUserEntity::getNotLocked,notLocked);
+        userWrapper.lambda().set(SysUserEntity::getCredentialsNotExpired,credentialsNotExpired);
+        int count = sysUserMapper.update(null,userWrapper);
+        if(count != 0){
+            responseDTO.setResponseCode(ResponseEnum.SUCCESS,"更新用户信息成功");
+        }else {
+            responseDTO.setResponseCode(ResponseEnum.FAIL,"更新用户信息失败");
+        }
+        return responseDTO;
+    }
 
     /**
      * <p>@Description 查询用户信息 </p>

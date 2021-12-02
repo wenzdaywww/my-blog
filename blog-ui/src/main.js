@@ -7,6 +7,7 @@ import installElementPlus from './plugins/element'
 import './assets/css/icon.css'
 const app = createApp(App);
 installElementPlus(app);
+localStorage.setItem('token',"");
 app.use(store)
     .use(router)
     .mount('#app');

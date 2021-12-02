@@ -44,7 +44,7 @@ export default {
                 title: "系统首页",
             },
             {
-                icon: "el-icon-lx-cascades",
+                icon: "el-icon-s-custom",
                 index: "/table",
                 title: "用户信息",
             },

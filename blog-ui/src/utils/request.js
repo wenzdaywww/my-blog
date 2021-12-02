@@ -25,6 +25,10 @@ axios.interceptors.response.use(
             //接口返回403则清除token
             if(response.data.code === 403){
                 localStorage.setItem('token',"");
+                ElMessageBox('请求失败', '请重新登录', {
+                    confirmButtonText: '确定',
+                    callback: action => {}
+                });
             }
             return Promise.resolve(response);
         } else {

@@ -36,4 +36,19 @@ public class UserController {
     public ResponseDTO<List<SysUserEntity>> findAllUser(String stateCd, String userId, String userName, int pageNum, int pageSize){
         return sysUserService.findAllUser(stateCd,userId,userName,pageNum,pageSize);
     }
+    /**
+     * <p>@Description 更新用户状态 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/2 20:58 </p>
+     * @param userId 用户id
+     * @param stateCd 用户状态
+     * @param expired 是否过期
+     * @param locked 账号是否锁定
+     * @param credentials 密码是否过期
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    @PostMapping("/state")
+    public ResponseDTO<String> updateState(String userId,String stateCd,String expired,String locked,String credentials){
+        return sysUserService.updateState(userId,stateCd,expired,locked,credentials);
+    }
 }

@@ -14,6 +14,18 @@ import java.util.List;
  */
 public interface ISysUserService {
     /**
+     * <p>@Description 更新用户状态 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/2 20:58 </p>
+     * @param userId 用户id
+     * @param stateCd 用户状态
+     * @param notExpired 是否过期
+     * @param notLocked 账号是否锁定
+     * @param credentialsNotExpired 密码是否过期
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    ResponseDTO<String> updateState(String userId,String stateCd,String notExpired,String notLocked,String credentialsNotExpired);
+    /**
      * <p>@Description 查询用户信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/11/30 21:10 </p>
