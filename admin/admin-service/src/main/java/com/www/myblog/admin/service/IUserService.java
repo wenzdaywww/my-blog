@@ -1,5 +1,6 @@
 package com.www.myblog.admin.service;
 
+import com.www.myblog.admin.data.dto.SysRoleDTO;
 import com.www.myblog.admin.data.entity.SysRoleEntity;
 import com.www.myblog.admin.data.entity.SysUserEntity;
 import com.www.myblog.common.pojo.ResponseDTO;
@@ -7,12 +8,19 @@ import com.www.myblog.common.pojo.ResponseDTO;
 import java.util.List;
 
 /**
- * <p>@Description 用户表service接口 </p>
+ * <p>@Description 用户信息service接口 </p>
  * <p>@Version 1.0 </p>
  * <p>@Author www </p>
  * <p>@Date 2021/11/14 15:31 </p>
  */
-public interface ISysUserService {
+public interface IUserService {
+    /**
+     * <p>@Description 查询所有角色信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/4 12:53 </p>
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.admin.data.dto.SysUserRoleDTO>>
+     */
+    ResponseDTO<List<SysRoleDTO>> findAllRole();
     /**
      * <p>@Description 更新用户状态 </p>
      * <p>@Author www </p>

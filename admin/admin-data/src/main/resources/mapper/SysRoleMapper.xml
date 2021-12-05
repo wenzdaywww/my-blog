@@ -16,70 +16,8 @@
     ROLE_ID, ROLE_NAME, DESCRIPTION, SYS_UPDATE_TIME, SYS_CREATE_TIME
   </sql>
 
-  <!--  根据角色ID删除角色信息-->
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    <!--@mbg.generated-->
-    delete from sys_role where ROLE_ID = #{roleId}
-  </delete>
-
-  <!--  插入角色信息，包括空字段-->
-  <insert id="insert" keyColumn="ROLE_ID" keyProperty="roleId" parameterType="com.www.myblog.admin.data.entity.SysRoleEntity" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into sys_role (ROLE_NAME, DESCRIPTION, SYS_UPDATE_TIME, SYS_CREATE_TIME)
-    values (#{roleName}, #{description}, #{sysUpdateTime}, #{sysCreateTime})
-  </insert>
-
-  <!--  插入角色信息，不包括空字段-->
-  <insert id="insertNotNull" keyColumn="ROLE_ID" keyProperty="roleId" parameterType="com.www.myblog.admin.data.entity.SysRoleEntity" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into sys_role
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="roleName != null">
-        ROLE_NAME,
-      </if>
-      <if test="description != null">
-        DESCRIPTION,
-      </if>
-      <if test="sysUpdateTime != null">
-        SYS_UPDATE_TIME,
-      </if>
-      <if test="sysCreateTime != null">
-        SYS_CREATE_TIME,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="roleName != null">
-        #{roleName},
-      </if>
-      <if test="description != null">
-        #{description},
-      </if>
-      <if test="sysUpdateTime != null">
-        #{sysUpdateTime},
-      </if>
-      <if test="sysCreateTime != null">
-        #{sysCreateTime},
-      </if>
-    </trim>
-  </insert>
-
-  <!--  根据角色ID查询角色信息-->
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select
-    <include refid="Base_Column_List" />
-    from sys_role
-    where ROLE_ID = #{roleId}
+  <!--  查询所有角色信息-->
+  <select id="findAllRole" resultType="com.www.myblog.admin.data.dto.SysRoleDTO">
+    SELECT  ROLE_ID, ROLE_NAME, DESCRIPTION, SYS_UPDATE_TIME, SYS_CREATE_TIME FROM SYS_ROLE
   </select>
-
-  <!--  根据角色ID更新角色信息，包括空字段-->
-  <update id="updateByPrimaryKey" parameterType="com.www.myblog.admin.data.entity.SysRoleEntity">
-    <!--@mbg.generated-->
-    update sys_role
-    set ROLE_NAME = #{roleName},
-      DESCRIPTION = #{description},
-      SYS_UPDATE_TIME = #{sysUpdateTime},
-      SYS_CREATE_TIME = #{sysCreateTime}
-    where ROLE_ID = #{roleId}
-  </update>
 </mapper>

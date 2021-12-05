@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 
 /**
  * <p>@Description post过滤器 </p>
@@ -77,6 +78,17 @@ public class PostFilter extends ZuulFilter {
         //允许继续路由
         ctx.setSendZuulResponse(true);
         ctx.setResponseStatusCode(200);
+        // 转发headers信息
+        Enumeration<String> headerNames = request.getHeaderNames();
+        if (headerNames != null) {
+            while (headerNames.hasMoreElements()) {
+                String name = headerNames.nextElement();
+                String values = request.getHeader(name);
+                ctx.addZuulRequestHeader(name, values);
+                LOG.info("post的headers => {}={}",name,values);
+//                response.setHeader(name,values);
+            }
+        }
         return null;
     }
 }

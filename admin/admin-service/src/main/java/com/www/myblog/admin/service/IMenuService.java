@@ -11,7 +11,7 @@ import java.util.Map;
  * <p>@Author www </p>
  * <p>@Date 2021/11/24 20:41 </p>
  */
-public interface ISysMenuService {
+public interface IMenuService {
     /**
      * <p>@Description 查询所以权限菜单信息 </p>
      * <p>@Author www </p>

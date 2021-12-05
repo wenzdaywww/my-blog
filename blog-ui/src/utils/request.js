@@ -59,6 +59,22 @@ export default {
                 });
         })
     },
+    upload(url, data,headers) {
+        return new Promise((resolve, reject) => {
+            axios({
+                method: 'post',
+                url,
+                data: qs.stringify(data),
+                headers : headers
+            })
+                .then(res => {
+                    resolve(res.data)
+                })
+                .catch(err => {
+                    reject(err)
+                });
+        })
+    },
     get(url,data) {
         return new Promise((resolve, reject) => {
             axios({

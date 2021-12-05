@@ -113,7 +113,7 @@
     <el-dialog title="新增用户" v-model="addVisible" width="20%">
       <el-form label-width="120px" :model="form" :rules="addRules" ref="addForm">
         <el-form-item label="头像">
-          <el-input v-model="form.photo" style="width: 250px"></el-input>
+          <el-button @click="photoVisible = true">上传</el-button>
         </el-form-item>
         <el-form-item label="用户ID" prop="userId">
           <el-input v-model="form.userId" maxlength="40" placeholder="请输入用户ID" style="width: 250px"></el-input>
@@ -152,6 +152,34 @@
         </span>
       </template>
     </el-dialog>
+    <!-- 上传头像弹窗-->
+    <el-dialog title="上传头像" v-model="photoVisible" width="300px">
+      <el-form :model="form">
+        <el-form-item ref="uploadForm">
+          <el-upload ref="upload"
+                     action="#"
+                     accept="image/png,image/gif,image/jpg,image/jpeg"
+                     list-type="picture-card"
+                     limit=1
+                     :auto-upload="false"
+                     :on-success="handleAvatarSuccess"
+                     :on-exceed="handleExceed"
+                     :before-upload="handleBeforeUpload"
+                     :on-preview="handlePictureCardPreview"
+                     :on-remove="handleRemove"
+                     :on-change="imgChange">
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <el-dialog :visible.sync="photoVisible">
+            <img width="100%" :src="form.photo" alt="">
+          </el-dialog>
+        </el-form-item>
+        <el-form-item>
+          <el-button size="small" type="primary" @click="uploadFile">立即上传</el-button>
+          <el-button size="small" @click="photoVisible = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -171,16 +199,7 @@ export default {
       pageSize: 10
     });
     // 角色列表
-    const rolesArr = reactive([
-      {
-        roleName : "admin",
-        description : "管理员"
-      },
-      {
-        roleName : "user",
-        description : "用户"
-      }
-    ]);
+    const rolesArr = ref([]);
     // 新增用户的规则校验
     const addRules = {
       userId : [
@@ -196,11 +215,34 @@ export default {
         { required: true, message: "角色不能为空", trigger: "blur" }
       ],
       phone: [
-        { min: 11, message: "手机号格式不正确", trigger: "blur" }
+        { min: 11, message: "手机号格式不正确", trigger: "blur" },
+        { type: 'number', message: '手机号格式不正确', trigger: 'blur',
+          transform (value) {
+            var phonereg = 11 && /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/
+            if (!phonereg.test(value)) {
+              return false
+            }else{
+              return Number(value)
+            }
+          }
+        }
+      ],
+      eMail: [
+        { type: 'string', message: '长度不能超过100位', trigger: 'blur', max: 100 },
+        { type: 'string', message: '邮箱格式不正确', trigger: 'blur',
+          transform (value) {
+            if (!/^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/.test(value)) {
+              return true
+            }else{
+            }
+          }
+        }
       ]
     };
     // 表单校验
     const addForm = ref(null);
+    // 文件上传
+    const upload = ref(null);
     // 表格数据
     const tableData = ref([]);
     // 页数
@@ -238,6 +280,10 @@ export default {
     const editVisible = ref(false);
     // 新增用户弹出
     const addVisible = ref(false);
+    // 上传头像窗
+    const photoVisible = ref(false);
+    // 隐藏上传标志
+    const hideUploadVisible = ref(false);
     // 表单数据
     let form = reactive({
       userId: "",
@@ -288,14 +334,14 @@ export default {
       form.photo = "";
       form.role = "";
       form.eMail = "";
-      // request.$http.post("/admin/user/role",form).then(function (res) {
-      //   if(res.code === 200){
-      //
-      //   }
-      // })
+      request.$http.get("/admin/user/role",null).then(function (res) {
+        if(res.code === 200){
+          rolesArr.value = res.data;
+        }
+      })
     };
     // 新增页面的保存按钮
-    const saveAdd = function() {
+    const saveAdd = () => {
       addForm.value.validate((valid) => {
         if (valid) {
           addVisible.value = false;
@@ -312,23 +358,50 @@ export default {
         }
       });
     };
-    return {
-      query,
-      rolesArr,
-      addRules,
-      tableData,
-      pageTotal,
-      editVisible,
-      addVisible,
-      form,
-      addForm,
-      handleSearch,
-      handleReset,
-      handlePageChange,
-      handleEdit,
-      saveEdit,
-      handleAdd,
-      saveAdd
+    // 文件超出个数限制时的钩子
+    const handleExceed = (files, fileList) => {
+      ElMessage.error('只能选择一张图片');
+    };
+    // 上传文件之前的钩子
+    const handleBeforeUpload = (file) => {
+      if (!(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpg' || file.type === 'image/jpeg')) {
+        ElMessage.error('请上传格式为image/png, image/gif, image/jpg, image/jpeg的图片');
+      }
+      let size = file.size / 1024 / 1024 / 2
+      if (size > 2) {
+        ElMessage.error('图片大小必须小于2M');
+      }
+      let fd = new FormData();//通过form数据格式来传
+      fd.append("photo", file); //传文件
+      //添加zuul解决文件上传问题
+      request.$http.upload("/zuul/admin/common/up",fd,{'Content-Type': 'multipart/form-data'}).then(function (res){
+
+      });
+    };
+    // 点击文件列表中已上传的文件时的钩子
+    const handlePictureCardPreview = (file) => {
+
+    };
+    // 文件列表移除文件时的钩子
+    const handleRemove = (file, fileList) => {
+      hideUploadVisible.value = fileList.length >= 1;
+    };
+    //图片变化
+    const imgChange = (files, fileList) =>{
+      hideUploadVisible.value = fileList.length >= 1;
+    };
+    //上传
+    const uploadFile = () => {
+      upload.value.submit();
+    };
+    // 添加成功处理
+    const handleAvatarSuccess = (res, file) => {
+      form.photo = URL.createObjectURL(file.raw);
+    };
+    return { query,rolesArr,addRules,tableData,pageTotal,editVisible,addVisible,hideUploadVisible,
+      photoVisible,form,addForm,upload,
+      handleSearch,handleReset,handlePageChange,handleEdit,saveEdit,handleAdd,saveAdd,handleExceed,
+      handleBeforeUpload,handlePictureCardPreview,handleRemove,imgChange,uploadFile,handleAvatarSuccess
     };
   }
 };
@@ -351,9 +424,6 @@ export default {
   width: 100%;
   font-size: 14px;
 }
-.red {
-  color: #ff0000;
-}
 .mr10 {
   margin-right: 10px;
 }
@@ -362,5 +432,15 @@ export default {
   margin: auto;
   width: 40px;
   height: 40px;
+}
+.el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.hideUp .el-upload--picture-card {
+  display: none;
 }
 </style>

@@ -96,6 +96,7 @@ public class TokenUtilHandler {
             LOG.error("-----> token过期");
             body = e.getClaims();
         }
+        body.put(AUTHORIZATION,token.replace(TOKEN_PREFIX + " ",""));
         return body;
     }
 }

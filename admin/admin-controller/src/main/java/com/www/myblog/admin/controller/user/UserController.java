@@ -1,12 +1,15 @@
 package com.www.myblog.admin.controller.user;
 
-import com.www.myblog.admin.data.dto.SysUserDTO;
+import com.www.myblog.admin.data.dto.SysRoleDTO;
 import com.www.myblog.admin.data.entity.SysUserEntity;
-import com.www.myblog.admin.service.ISysUserService;
+import com.www.myblog.admin.service.IUserService;
 import com.www.myblog.common.pojo.ResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -19,8 +22,7 @@ import java.util.List;
 @RequestMapping("user")
 public class UserController {
     @Autowired
-    private ISysUserService sysUserService;
-
+    private IUserService userService;
     /**
      * <p>@Description 查询用户信息 </p>
      * <p>@Author www </p>
@@ -34,7 +36,7 @@ public class UserController {
      */
     @GetMapping("/all")
     public ResponseDTO<List<SysUserEntity>> findAllUser(String stateCd, String userId, String userName, int pageNum, int pageSize){
-        return sysUserService.findAllUser(stateCd,userId,userName,pageNum,pageSize);
+        return userService.findAllUser(stateCd,userId,userName,pageNum,pageSize);
     }
     /**
      * <p>@Description 更新用户状态 </p>
@@ -49,6 +51,16 @@ public class UserController {
      */
     @PostMapping("/state")
     public ResponseDTO<String> updateState(String userId,String stateCd,String expired,String locked,String credentials){
-        return sysUserService.updateState(userId,stateCd,expired,locked,credentials);
+        return userService.updateState(userId,stateCd,expired,locked,credentials);
+    }
+    /**
+     * <p>@Description 查询所有角色信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/4 12:53 </p>
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.admin.data.dto.SysUserRoleDTO>>
+     */
+    @GetMapping("/role")
+    public ResponseDTO<List<SysRoleDTO>> findAllRole(){
+        return userService.findAllRole();
     }
 }

@@ -2,12 +2,11 @@ package com.www.myblog.admin.service.impl;
 
 import com.www.myblog.admin.data.dto.SysRoleMenuDTO;
 import com.www.myblog.admin.data.mapper.SysMenuMapper;
-import com.www.myblog.admin.service.ISysMenuService;
+import com.www.myblog.admin.service.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>@Description 角色菜单service实现类 </p>
@@ -16,7 +15,7 @@ import java.util.Map;
  * <p>@Date 2021/11/24 20:42 </p>
  */
 @Service
-public class SysMenuServiceImpl implements ISysMenuService {
+public class MenuServiceImpl implements IMenuService {
     @Autowired
     private SysMenuMapper sysMenuMapper;
 

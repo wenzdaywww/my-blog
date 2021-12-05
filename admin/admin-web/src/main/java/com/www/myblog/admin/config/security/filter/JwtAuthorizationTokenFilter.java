@@ -3,6 +3,7 @@ package com.www.myblog.admin.config.security.filter;
 import com.www.myblog.admin.config.security.impl.UserDetailsServiceImpl;
 import com.www.myblog.common.utils.RedisUtils;
 import com.www.myblog.common.utils.TokenUtilHandler;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +51,10 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
         Map<String,Object> map = tokenUtilHandler.validateTokenAndGetClaims(httpServletRequest);
         if(map != null && map.size() > 0){
             String userId = String.valueOf(map.get(TokenUtilHandler.USERID));
-            //判断redis中的token是否存在，存在则说明token有效
-            if(RedisUtils.hasKey(applicationName + ":"+ TokenUtilHandler.TOKEN + ":" + userId)
+            String tokenKey = applicationName + ":"+ TokenUtilHandler.TOKEN + ":" + userId;
+            //判断redis中的token是否存在且token值相等，存在则说明token有效
+            if(RedisUtils.hasKey(tokenKey)
+                    && StringUtils.equals((String)map.get(TokenUtilHandler.AUTHORIZATION),RedisUtils.get(tokenKey))
                     && SecurityContextHolder.getContext().getAuthentication() == null){
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
                 if(userDetails != null){

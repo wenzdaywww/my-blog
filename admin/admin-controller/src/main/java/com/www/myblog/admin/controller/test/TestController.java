@@ -1,7 +1,5 @@
 package com.www.myblog.admin.controller.test;
 
-import com.www.myblog.admin.data.entity.SysUserEntity;
-import com.www.myblog.admin.service.login.ILoginService;
 import com.www.myblog.common.pojo.ResponseDTO;
 import org.jasypt.encryption.StringEncryptor;
 import org.slf4j.Logger;
@@ -33,8 +31,6 @@ public class TestController {
     private String port;
     @Autowired
     private StringEncryptor stringEncryptor;
-    @Autowired
-    private ILoginService loginService;
     /**
      * <p>@Description 测试方法 </p>
      * <p>@Author www </p>
@@ -55,7 +51,8 @@ public class TestController {
      * @return com.www.myblog.common.pojo.ResponseDTO<com.www.myblog.admin.data.entity.SysUserEntity>
      */
     @GetMapping("/find/{id}/{pwd}")
-    public ResponseDTO<SysUserEntity> login(@PathVariable("id") String userId, @PathVariable("pwd")String password){
-        return loginService.userLogin(userId,password);
+    public ResponseDTO login(@PathVariable("id") String userId, @PathVariable("pwd")String password){
+        logger.info("访问成功！port={},name={}",port,userId);
+        return new ResponseDTO<>("访问成功！port=" + port + ", name=" + stringEncryptor.encrypt(userId));
     }
 }
