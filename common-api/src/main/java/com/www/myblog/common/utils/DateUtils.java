@@ -46,6 +46,7 @@ public class DateUtils {
         YYYY_MM_DD("yyyy-mm-dd"),
         YYYY_MM_DD_HH_MM_SS("yyyy-mm-dd HH:mm:ss"),
         YYYYMMDDHHMMSS("yyyyMMddHHmmss"),
+        YYYYMMDDHHMMSSSSS("yyyyMMddHHmmssSSS"),
         ;
         /** 格式 **/
         private String format;

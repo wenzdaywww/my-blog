@@ -71,11 +71,13 @@ public class PreFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletResponse response = ctx.getResponse();
         HttpServletRequest request = ctx.getRequest();
-        response.setHeader("Access-Control-Allow-Origin",request.getHeader("Origin"));
-        response.setHeader("Access-Control-Allow-Credentials","true");
-        response.setHeader("Access-Control-Allow-Headers","authorization, content-type");
-        response.setHeader("Access-Control-Allow-Methods","POST,GET");
+        response.setHeader("Access-Control-Allow-Origin",request.getHeader("Origin"));//根据该字段判断是否允许该请求访问。
+        response.setHeader("Access-Control-Allow-Credentials","true");//用户是否可以发送、处理 cookie；
+        response.setHeader("Access-Control-Allow-Headers","authorization, content-type");//服务器允许使用的字段
+        response.setHeader("Access-Control-Allow-Methods","POST,GET");//真实请求允许的方法
+        //可以让用户拿到的字段。有几个字段无论设置与否都可以拿到的，包括：Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma 。
         response.setHeader("Access-Control-Expose-Headers","X-forwared-port, X-forwarded-host");
+        //服务器收到请求时，需要分别对 Origin、Access-Control-Request-Method、Access-Control-Request-Headers 进行验证
         response.setHeader("Vary","Origin,Access-Control-Request-Method,Access-Control-Request-Headers");
         //不再路由
         ctx.setSendZuulResponse(false);

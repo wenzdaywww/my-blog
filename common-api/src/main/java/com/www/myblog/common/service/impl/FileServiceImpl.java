@@ -48,8 +48,8 @@ public class FileServiceImpl implements IFileService {
         //获取文件名称（不包含格式）
         String name = originalFileName.substring(0, originalFileName.lastIndexOf("."));
         //设置文件新名称: 当前时间+文件名称（不包含格式）
-        String date = DateUtils.format(DateUtils.getCurrentDate(), DateUtils.DateFormatEnum.YYYYMMDDHHMMSS);
-        String fileName = date + name + "." + type;
+        String date = DateUtils.format(DateUtils.getCurrentDate(), DateUtils.DateFormatEnum.YYYYMMDDHHMMSSSSS);
+        String fileName = date + "_" + name + "." + type;
         LOG.info("新文件名称：{}" , fileName);
         //在指定路径下创建一个文件
         File targetFile = new File(path, fileName);

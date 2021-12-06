@@ -14,3 +14,10 @@ eureka:
 #配置eureka注册中心服务的status信息
 info:
   name: my blog administrator server
+spring:
+  servlet:
+    #文件上传配置
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      location: /usr/local/docker/file/img

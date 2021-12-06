@@ -251,7 +251,7 @@ export default {
     const request = getCurrentInstance().appContext.config.globalProperties;
     // 获取表格数据
     const getData = () => {
-      request.$http.get("/admin/user/all",query).then(function (res) {
+      request.$http.get("api/admin/user/all",query).then(function (res) {
         if(res.code === 200){
           tableData.value = res.data;
           pageTotal.value = res.totalNum;
@@ -313,7 +313,7 @@ export default {
     // 编辑页面的保存按钮
     const saveEdit = () => {
       editVisible.value = false;
-      request.$http.post("/admin/user/state",form).then(function (res) {
+      request.$http.post("api/admin/user/state",form).then(function (res) {
         if(res.code === 200){
           ElMessage.success('修改成功');
           getData();
@@ -334,7 +334,7 @@ export default {
       form.photo = "";
       form.role = "";
       form.eMail = "";
-      request.$http.get("/admin/user/role",null).then(function (res) {
+      request.$http.get("api/admin/user/role",null).then(function (res) {
         if(res.code === 200){
           rolesArr.value = res.data;
         }
@@ -374,7 +374,7 @@ export default {
       let fd = new FormData();//通过form数据格式来传
       fd.append("photo", file); //传文件
       //添加zuul解决文件上传问题
-      request.$http.upload("/zuul/admin/common/up",fd,{'Content-Type': 'multipart/form-data'}).then(function (res){
+      request.$http.upload("api/zuul/admin/common/up",fd,{'Content-Type': 'multipart/form-data'}).then(function (res){
 
       });
     };

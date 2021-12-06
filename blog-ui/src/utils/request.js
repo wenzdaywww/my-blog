@@ -1,18 +1,16 @@
 import axios from "axios";
 import qs from "qs";
 import { ElMessageBox } from 'element-plus';
-//请求地址
-axios.defaults.baseURL = 'http://localhost:8000'
-//post请求头
-axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded;charset=UTF-8";
 //设置超时
 axios.defaults.timeout = 10000;
+axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded;charset=UTF-8";
 axios.interceptors.request.use(
     config => {
         // 通过拦截request请求,主动为请求头,追加新属性 Authorization,等于 token 值
-        if (config.url !== "/admin/login"){
+        if (config.url !== "api/admin/login"){
             config.headers.Authorization = "Bearer " + localStorage.getItem('token');
         }
+        config.withCredentials = true;
         return config;
     },
     error => {

@@ -69,7 +69,7 @@ export default {
         const request = getCurrentInstance().appContext.config.globalProperties;
         const handleCommand = (command) => {
             if (command == "loginout") {
-                request.$http.post("/admin/logout",null).then(function (res) {
+                request.$http.post("api/admin/logout",null).then(function (res) {
                   if(res.code === 200){
                     localStorage.setItem('token',"");
                     ElMessage.success("退出成功");

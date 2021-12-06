@@ -55,7 +55,7 @@ export default {
         const login = ref(null);
         const request = getCurrentInstance().appContext.config.globalProperties;
         const submitForm = () => {
-            request.$http.post("/admin/login",param).then(function (res) {
+            request.$http.post("api/admin/login",param).then(function (res) {
               if(res.code === 200){
                 localStorage.setItem('token',res.data.token);
                 ElMessage.success("登录成功");
