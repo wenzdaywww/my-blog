@@ -1,9 +1,11 @@
 package com.www.myblog.admin.service;
 
 import com.www.myblog.admin.data.dto.SysRoleDTO;
+import com.www.myblog.admin.data.dto.SysUserDTO;
 import com.www.myblog.admin.data.entity.SysRoleEntity;
 import com.www.myblog.admin.data.entity.SysUserEntity;
 import com.www.myblog.common.pojo.ResponseDTO;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -14,6 +16,14 @@ import java.util.List;
  * <p>@Date 2021/11/14 15:31 </p>
  */
 public interface IUserService {
+    /**
+     * <p>@Description 创建用户信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/7 21:03 </p>
+     * @param user
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    ResponseDTO<String> createUser(SysUserDTO user);
     /**
      * <p>@Description 查询所有角色信息 </p>
      * <p>@Author www </p>

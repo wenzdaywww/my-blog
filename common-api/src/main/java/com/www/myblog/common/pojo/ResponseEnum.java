@@ -16,7 +16,7 @@ public enum ResponseEnum {
     /** 失败 **/
     FAIL(500, "请求失败"),
     /**  未知异常 **/
-    UNDEFINE(-1, "未定义异常信息");
+    UNDEFINE(-1, "未知异常");
     /** 响应码 **/
     private Integer code;
     /** 响应信息 **/

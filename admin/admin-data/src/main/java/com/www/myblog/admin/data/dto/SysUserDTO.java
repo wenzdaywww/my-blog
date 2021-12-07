@@ -23,7 +23,14 @@ public class SysUserDTO implements Serializable {
     * 用户ID
     */
     private String userId;
-
+    /**
+     * 密码
+     */
+    private String passWord;
+    /**
+     * 角色昵称
+     */
+    private String roleName;
     /**
     * 用户昵称
     */
@@ -37,7 +44,7 @@ public class SysUserDTO implements Serializable {
     /**
     * 生日
     */
-    private Date birthday;
+    private String birthday;
 
     /**
     * 性别：1男0女

@@ -112,20 +112,17 @@
     <!-- 新增用户弹出框 -->
     <el-dialog title="新增用户" v-model="addVisible" width="20%">
       <el-form label-width="120px" :model="form" :rules="addRules" ref="addForm">
-        <el-form-item label="头像">
-          <el-button @click="photoVisible = true">上传</el-button>
-        </el-form-item>
         <el-form-item label="用户ID" prop="userId">
           <el-input v-model="form.userId" maxlength="40" placeholder="请输入用户ID" style="width: 250px"></el-input>
         </el-form-item>
         <el-form-item label="用户名称" prop="userName">
           <el-input v-model="form.userName" maxlength="100" placeholder="请输入用户名称" style="width: 250px"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="form.password" type="password" maxlength="20" placeholder="请输入密码" style="width: 250px"></el-input>
+        <el-form-item label="密码" prop="passWord">
+          <el-input v-model="form.passWord" type="passWord" maxlength="20" placeholder="请输入密码" style="width: 250px"></el-input>
         </el-form-item>
-        <el-form-item label="角色" prop="role">
-          <el-select v-model="form.role" placeholder="角色" class="handle-select mr10" style="width: 250px">
+        <el-form-item label="角色" prop="roleName">
+          <el-select v-model="form.roleName" placeholder="角色" class="handle-select mr10" style="width: 250px">
             <el-option v-for="item in rolesArr" :key="item.roleName" :label="item.description" :value="item.roleName"></el-option>
           </el-select>
         </el-form-item>
@@ -133,12 +130,13 @@
           <el-radio v-model="form.sex" label="1">男</el-radio>
           <el-radio v-model="form.sex" label="0">女</el-radio>
         </el-form-item>
-        <el-form-item label="手机号" prop="phone">
-          <el-input v-model="form.phone" maxlength="11" placeholder="请输入手机号码"
+        <el-form-item label="手机号" prop="phoneNum">
+          <el-input v-model="form.phoneNum" maxlength="11" placeholder="请输入手机号码"
                     οninput="value=value.replace(/[^\d]/g,'');if(value.length > 11)value = value.slice(0, 11)" style="width: 250px"></el-input>
         </el-form-item>
         <el-form-item label="生日">
-          <el-date-picker v-model="form.birth" align="right" type="date" style="width: 250px" placeholder="请选择出生日期" >
+          <el-date-picker v-model="form.birthday" type="date" style="width: 250px"
+                          value-format="YYYY-MM-DD" format="YYYY年MM月DD日" placeholder="请选择出生日期" >
           </el-date-picker>
         </el-form-item>
         <el-form-item label="邮箱" prop="eMail">
@@ -151,34 +149,6 @@
           <el-button type="primary" @click="saveAdd">确 定</el-button>
         </span>
       </template>
-    </el-dialog>
-    <!-- 上传头像弹窗-->
-    <el-dialog title="上传头像" v-model="photoVisible" width="300px">
-      <el-form :model="form">
-        <el-form-item ref="uploadForm">
-          <el-upload ref="upload"
-                     action="#"
-                     accept="image/png,image/gif,image/jpg,image/jpeg"
-                     list-type="picture-card"
-                     limit=1
-                     :auto-upload="false"
-                     :on-success="handleAvatarSuccess"
-                     :on-exceed="handleExceed"
-                     :before-upload="handleBeforeUpload"
-                     :on-preview="handlePictureCardPreview"
-                     :on-remove="handleRemove"
-                     :on-change="imgChange">
-            <i class="el-icon-plus"></i>
-          </el-upload>
-          <el-dialog :visible.sync="photoVisible">
-            <img width="100%" :src="form.photo" alt="">
-          </el-dialog>
-        </el-form-item>
-        <el-form-item>
-          <el-button size="small" type="primary" @click="uploadFile">立即上传</el-button>
-          <el-button size="small" @click="photoVisible = false">取消</el-button>
-        </el-form-item>
-      </el-form>
     </el-dialog>
   </div>
 </template>
@@ -203,26 +173,38 @@ export default {
     // 新增用户的规则校验
     const addRules = {
       userId : [
-        { required: true, message: "用户ID不能为空", trigger: "blur" }
+        { required: true, message: "用户ID不能为空", trigger: "blur" },
+        { type: 'string', message: '只能输入字母和数字', trigger: 'blur',
+          transform (value) {
+            if (value){
+              if (/[^A-Za-z0-9]/.test(value)) {
+                return true
+              }else{
+              }
+            }
+          }
+        }
       ],
       userName : [
         { required: true, message: "用户名称不能为空", trigger: "blur" }
       ],
-      password : [
+      passWord : [
         { required: true, message: "密码不能为空", trigger: "blur" }
       ],
-      role : [
+      roleName : [
         { required: true, message: "角色不能为空", trigger: "blur" }
       ],
-      phone: [
+      phoneNum: [
         { min: 11, message: "手机号格式不正确", trigger: "blur" },
         { type: 'number', message: '手机号格式不正确', trigger: 'blur',
           transform (value) {
-            var phonereg = 11 && /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/
-            if (!phonereg.test(value)) {
-              return false
-            }else{
-              return Number(value)
+            if(value){
+              var phonereg = 11 && /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/
+              if (!phonereg.test(value)) {
+                return false
+              }else{
+                return Number(value)
+              }
             }
           }
         }
@@ -231,9 +213,11 @@ export default {
         { type: 'string', message: '长度不能超过100位', trigger: 'blur', max: 100 },
         { type: 'string', message: '邮箱格式不正确', trigger: 'blur',
           transform (value) {
-            if (!/^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/.test(value)) {
-              return true
-            }else{
+            if (value){
+              if (!/^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/.test(value)) {
+                return true
+              }else{
+              }
             }
           }
         }
@@ -241,8 +225,6 @@ export default {
     };
     // 表单校验
     const addForm = ref(null);
-    // 文件上传
-    const upload = ref(null);
     // 表格数据
     const tableData = ref([]);
     // 页数
@@ -280,20 +262,16 @@ export default {
     const editVisible = ref(false);
     // 新增用户弹出
     const addVisible = ref(false);
-    // 上传头像窗
-    const photoVisible = ref(false);
-    // 隐藏上传标志
-    const hideUploadVisible = ref(false);
     // 表单数据
     let form = reactive({
       userId: "",
       userName : "",
-      password : "",
-      phone : "",
-      birth : "",
+      passWord : "",
+      phoneNum : "",
+      birthday : "",
       sex : "",
       photo : "",
-      role : "",
+      roleName : "",
       eMail : "",
       stateCd: "",
       expired : "",
@@ -312,9 +290,9 @@ export default {
     };
     // 编辑页面的保存按钮
     const saveEdit = () => {
-      editVisible.value = false;
       request.$http.post("api/admin/user/state",form).then(function (res) {
         if(res.code === 200){
+          editVisible.value = false;
           ElMessage.success('修改成功');
           getData();
         }else {
@@ -327,12 +305,12 @@ export default {
       addVisible.value = true;
       form.userId =  "";
       form.userName = "";
-      form.password = "";
-      form.phone = "";
-      form.birth = "";
+      form.passWord = "";
+      form.phoneNum = "";
+      form.birthday = "";
       form.sex = "";
       form.photo = "";
-      form.role = "";
+      form.roleName = "";
       form.eMail = "";
       request.$http.get("api/admin/user/role",null).then(function (res) {
         if(res.code === 200){
@@ -344,64 +322,22 @@ export default {
     const saveAdd = () => {
       addForm.value.validate((valid) => {
         if (valid) {
-          addVisible.value = false;
-          // request.$http.post("/admin/user/new",form).then(function (res) {
-          //   if(res.code === 200){
-          //     ElMessage.success('新增成功');
-          //     getData();
-          //   }else {
-          //     ElMessage.error('新增失败');
-          //   }
-          // })
+          request.$http.post("api/admin/user/new", form).then(function (res) {
+            if(res.code === 200){
+              addVisible.value = false;
+              ElMessage.success('新增成功');
+              getData();
+            }else {
+              ElMessage.error(res.data);
+            }
+          })
         } else {
           return false;
         }
       });
     };
-    // 文件超出个数限制时的钩子
-    const handleExceed = (files, fileList) => {
-      ElMessage.error('只能选择一张图片');
-    };
-    // 上传文件之前的钩子
-    const handleBeforeUpload = (file) => {
-      if (!(file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpg' || file.type === 'image/jpeg')) {
-        ElMessage.error('请上传格式为image/png, image/gif, image/jpg, image/jpeg的图片');
-      }
-      let size = file.size / 1024 / 1024 / 2
-      if (size > 2) {
-        ElMessage.error('图片大小必须小于2M');
-      }
-      let fd = new FormData();//通过form数据格式来传
-      fd.append("photo", file); //传文件
-      //添加zuul解决文件上传问题
-      request.$http.upload("api/zuul/admin/common/up",fd,{'Content-Type': 'multipart/form-data'}).then(function (res){
-
-      });
-    };
-    // 点击文件列表中已上传的文件时的钩子
-    const handlePictureCardPreview = (file) => {
-
-    };
-    // 文件列表移除文件时的钩子
-    const handleRemove = (file, fileList) => {
-      hideUploadVisible.value = fileList.length >= 1;
-    };
-    //图片变化
-    const imgChange = (files, fileList) =>{
-      hideUploadVisible.value = fileList.length >= 1;
-    };
-    //上传
-    const uploadFile = () => {
-      upload.value.submit();
-    };
-    // 添加成功处理
-    const handleAvatarSuccess = (res, file) => {
-      form.photo = URL.createObjectURL(file.raw);
-    };
-    return { query,rolesArr,addRules,tableData,pageTotal,editVisible,addVisible,hideUploadVisible,
-      photoVisible,form,addForm,upload,
-      handleSearch,handleReset,handlePageChange,handleEdit,saveEdit,handleAdd,saveAdd,handleExceed,
-      handleBeforeUpload,handlePictureCardPreview,handleRemove,imgChange,uploadFile,handleAvatarSuccess
+    return { query,rolesArr,addRules,tableData,pageTotal,editVisible,addVisible,form,addForm,
+      handleSearch,handleReset,handlePageChange,handleEdit,saveEdit,handleAdd,saveAdd
     };
   }
 };
@@ -432,15 +368,5 @@ export default {
   margin: auto;
   width: 40px;
   height: 40px;
-}
-.el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.hideUp .el-upload--picture-card {
-  display: none;
 }
 </style>

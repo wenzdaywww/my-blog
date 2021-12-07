@@ -1,6 +1,7 @@
 package com.www.myblog.admin.controller.user;
 
 import com.www.myblog.admin.data.dto.SysRoleDTO;
+import com.www.myblog.admin.data.dto.SysUserDTO;
 import com.www.myblog.admin.data.entity.SysUserEntity;
 import com.www.myblog.admin.service.IUserService;
 import com.www.myblog.common.pojo.ResponseDTO;
@@ -23,6 +24,19 @@ import java.util.List;
 public class UserController {
     @Autowired
     private IUserService userService;
+
+
+    /**
+     * <p>@Description 创建用户信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/7 21:20 </p>
+     * @param user 用户信息
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    @PostMapping("/new")
+    public ResponseDTO<String> createUser(SysUserDTO user){
+        return userService.createUser(user);
+    }
     /**
      * <p>@Description 查询用户信息 </p>
      * <p>@Author www </p>

@@ -7,6 +7,10 @@ package com.www.myblog.admin.data.enums;
  * <p>@Date 2021/12/2 21:04 </p>
  */
 public enum CommonEnum {
+    /** 性别：男 **/
+    SEX_1("1","男"),
+    /** 性别：女 **/
+    SEX_0("0","女"),
     /** 是标志：1 **/
     YES_1("1","是"),
     /** 否标志：0 **/

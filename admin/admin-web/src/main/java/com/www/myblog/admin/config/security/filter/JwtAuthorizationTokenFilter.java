@@ -64,14 +64,6 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
                 }
             }
         }
-        Enumeration<String> headerNames = httpServletRequest.getHeaderNames();
-        if (headerNames != null) {
-            while (headerNames.hasMoreElements()) {
-                String name = headerNames.nextElement();
-                String values = httpServletRequest.getHeader(name);
-                LOG.info("jwt的headers => {}={}",name,values);
-            }
-        }
         filterChain.doFilter(httpServletRequest,httpServletResponse);
     }
 

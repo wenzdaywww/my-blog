@@ -4,16 +4,23 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.myblog.admin.data.dto.SysRoleDTO;
+import com.www.myblog.admin.data.dto.SysUserDTO;
 import com.www.myblog.admin.data.entity.SysRoleEntity;
 import com.www.myblog.admin.data.entity.SysUserEntity;
+import com.www.myblog.admin.data.entity.SysUserRoleEntity;
 import com.www.myblog.admin.data.enums.CommonEnum;
 import com.www.myblog.admin.data.mapper.SysRoleMapper;
 import com.www.myblog.admin.data.mapper.SysUserMapper;
+import com.www.myblog.admin.data.mapper.SysUserRoleMapper;
 import com.www.myblog.admin.service.IUserService;
 import com.www.myblog.common.pojo.ResponseDTO;
 import com.www.myblog.common.pojo.ResponseEnum;
+import com.www.myblog.common.utils.DateUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,12 +33,60 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl implements IUserService {
+    private static Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
     @Autowired
     private SysUserMapper sysUserMapper;
     @Autowired
     private SysRoleMapper sysRoleMapper;
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
 
-
+    /**
+     * <p>@Description 创建用户信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/7 21:03 </p>
+     * @param user
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    @Override
+    public ResponseDTO<String> createUser(SysUserDTO user) {
+        ResponseDTO<String> responseDTO = new ResponseDTO<>();
+        if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName(),user.getPassWord(),user.getRoleName())
+            || (StringUtils.isNotBlank(user.getSex()) && !StringUtils.containsAny(user.getSex(),CommonEnum.SEX_1.getCode(),CommonEnum.SEX_0.getCode()))){
+            responseDTO.setResponseCode(ResponseEnum.FAIL,"信息不完整，创建用户失败");
+            return responseDTO;
+        }
+        QueryWrapper<SysRoleEntity> roleWrapper = new QueryWrapper<>();
+        roleWrapper.lambda().eq(SysRoleEntity::getRoleName,user.getRoleName());
+        SysRoleEntity roleEntity = sysRoleMapper.selectOne(roleWrapper);
+        if(roleEntity == null){
+            responseDTO.setResponseCode(ResponseEnum.FAIL);
+            responseDTO.setMsg("用户角色错误，创建用户失败");
+            return responseDTO;
+        }
+        //创建用户
+        user.setPassWord(new BCryptPasswordEncoder().encode(user.getPassWord()));
+        SysUserEntity userEntity = new SysUserEntity();
+        userEntity.setUserId(user.getUserId());
+        userEntity.setUserName(user.getUserName());
+        userEntity.setPassWord(user.getPassWord());
+        userEntity.setSex(user.getSex());
+        userEntity.setPhoneNum(user.getPhoneNum());
+        userEntity.setBirthday(DateUtils.parse(user.getBirthday(), DateUtils.DateFormatEnum.YYYY_MM_DD));
+        userEntity.setEMail(user.getEMail());
+        userEntity.setSysCreateTime(DateUtils.getCurrentDate());
+        userEntity.setSysUpdateTime(DateUtils.getCurrentDate());
+        sysUserMapper.insert(userEntity);
+        //创建用户角色
+        SysUserRoleEntity userRoleEntity = new SysUserRoleEntity();
+        userRoleEntity.setUserId(userEntity.getUserId());
+        userRoleEntity.setRoleId(roleEntity.getRoleId());
+        userRoleEntity.setSysCreateTime(DateUtils.getCurrentDate());
+        userRoleEntity.setSysUpdateTime(DateUtils.getCurrentDate());
+        sysUserRoleMapper.insert(userRoleEntity);
+        responseDTO.setResponseCode(ResponseEnum.SUCCESS,"创建用户成功");
+        return responseDTO;
+    }
     /**
      * <p>@Description 查询所有角色信息 </p>
      * <p>@Author www </p>

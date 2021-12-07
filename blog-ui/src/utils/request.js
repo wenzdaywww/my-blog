@@ -1,5 +1,6 @@
 import axios from "axios";
 import qs from "qs";
+import router from '../router';
 import { ElMessageBox } from 'element-plus';
 //设置超时
 axios.defaults.timeout = 10000;
@@ -23,10 +24,13 @@ axios.interceptors.response.use(
             //接口返回403则清除token
             if(response.data.code === 403){
                 localStorage.setItem('token',"");
-                ElMessageBox('请求失败', '请重新登录', {
+                ElMessageBox('请重新登录', '请重新登录', {
                     confirmButtonText: '确定',
-                    callback: action => {}
+                    callback: action  => {
+                    }
                 });
+                //调整登录页面
+                router.push("/login");
             }
             return Promise.resolve(response);
         } else {
@@ -62,7 +66,7 @@ export default {
             axios({
                 method: 'post',
                 url,
-                data: qs.stringify(data),
+                data: data,
                 headers : headers
             })
                 .then(res => {
