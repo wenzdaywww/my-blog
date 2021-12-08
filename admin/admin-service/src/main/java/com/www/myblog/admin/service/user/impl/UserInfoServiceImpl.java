@@ -1,8 +1,9 @@
-package com.www.myblog.admin.service.impl;
+package com.www.myblog.admin.service.user.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.sun.org.apache.regexp.internal.RE;
 import com.www.myblog.admin.data.dto.SysRoleDTO;
 import com.www.myblog.admin.data.dto.SysUserDTO;
 import com.www.myblog.admin.data.entity.SysRoleEntity;
@@ -12,16 +13,21 @@ import com.www.myblog.admin.data.enums.CommonEnum;
 import com.www.myblog.admin.data.mapper.SysRoleMapper;
 import com.www.myblog.admin.data.mapper.SysUserMapper;
 import com.www.myblog.admin.data.mapper.SysUserRoleMapper;
-import com.www.myblog.admin.service.IUserService;
+import com.www.myblog.admin.service.entity.ISysRoleService;
+import com.www.myblog.admin.service.entity.ISysUserService;
+import com.www.myblog.admin.service.user.IUserInfoService;
 import com.www.myblog.common.pojo.ResponseDTO;
 import com.www.myblog.common.pojo.ResponseEnum;
+import com.www.myblog.common.service.IFileService;
 import com.www.myblog.common.utils.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,14 +38,115 @@ import java.util.List;
  * <p>@Date 2021/11/14 15:32 </p>
  */
 @Service
-public class UserServiceImpl implements IUserService {
-    private static Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
+public class UserInfoServiceImpl implements IUserInfoService {
+    private static Logger LOG = LoggerFactory.getLogger(UserInfoServiceImpl.class);
     @Autowired
     private SysUserMapper sysUserMapper;
     @Autowired
     private SysRoleMapper sysRoleMapper;
     @Autowired
     private SysUserRoleMapper sysUserRoleMapper;
+    @Autowired
+    private IFileService fileService;
+    @Autowired
+    private ISysUserService sysUserService;
+    @Autowired
+    private ISysRoleService sysRoleService;
+
+    /**
+     * <p>@Description 更新用户头像 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/8 20:02 </p>
+     * @param photo  头像文件
+     * @param userId 用户ID
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    @Override
+    public ResponseDTO<String> uploadPhoto(MultipartFile photo, String userId) {
+        ResponseDTO<String> responseDTO = new ResponseDTO<>();
+        SysUserEntity userEntity = sysUserService.findUserEntityById(userId);
+        if(userEntity == null){
+            responseDTO.setResponseCode(ResponseEnum.FAIL,"查询不到该用户");
+            return responseDTO;
+        }
+        String path = fileService.uploadFileBackPath(photo);
+        UpdateWrapper<SysUserEntity> userWrapper = new UpdateWrapper<>();
+        userWrapper.lambda().eq(SysUserEntity::getUserId,userEntity.getUserId());
+        userWrapper.lambda().set(SysUserEntity::getPhoto,path);
+        int count = sysUserMapper.update(null,userWrapper);
+        if(count == 0){
+            responseDTO.setResponseCode(ResponseEnum.FAIL,"更新用户头像失败");
+        }
+        responseDTO.setResponseCode(ResponseEnum.SUCCESS,"更新用户头像成功");
+        return responseDTO;
+    }
+    /**
+     * <p>@Description 更新用户信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/8 19:58 </p>
+     * @param user 用户信息
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    @Override
+    public ResponseDTO<String> updateUserInfo(SysUserDTO user) {
+        ResponseDTO<String> responseDTO = new ResponseDTO<>();
+        if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName(),user.getPassWord())
+            || (StringUtils.isNotBlank(user.getSex()) && !StringUtils.containsAny(user.getSex(),CommonEnum.SEX_1.getCode(),CommonEnum.SEX_0.getCode()))){
+            responseDTO.setResponseCode(ResponseEnum.FAIL,"更新用户信息失败，用户信息有误");
+            return responseDTO;
+        }
+        SysUserEntity userEntity = sysUserService.findUserEntityById(user.getUserId());
+        if(userEntity == null){
+            responseDTO.setResponseCode(ResponseEnum.FAIL,"查询不到该用户");
+            return responseDTO;
+        }
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        //有输入密码则校验密码
+        if(StringUtils.isNotBlank(user.getPassWord()) && !encoder.matches(user.getPassWord(),userEntity.getPassWord())){
+            responseDTO.setResponseCode(ResponseEnum.FAIL,"密码不正确");
+            return responseDTO;
+        }
+        //更新用户信息
+        UpdateWrapper<SysUserEntity> userWrapper = new UpdateWrapper<>();
+        userWrapper.lambda().eq(SysUserEntity::getUserId,user.getUserId());
+        if (StringUtils.isNotBlank(user.getNewPassWord())){
+            userWrapper.lambda().set(SysUserEntity::getPassWord,encoder.encode(user.getNewPassWord()));
+        }
+        userWrapper.lambda().set(SysUserEntity::getUserName,user.getUserName());
+        userWrapper.lambda().set(SysUserEntity::getPhoneNum,user.getPhoneNum());
+        userWrapper.lambda().set(SysUserEntity::getBirthday,DateUtils.parse(user.getBirthday(), DateUtils.DateFormatEnum.YYYY_MM_DD));
+        userWrapper.lambda().set(SysUserEntity::getSex,user.getSex());
+        userWrapper.lambda().set(SysUserEntity::getEMail,user.getEMail());
+        userWrapper.lambda().set(SysUserEntity::getBrief,user.getBrief());
+        userWrapper.lambda().set(SysUserEntity::getSysUpdateTime,DateUtils.getCurrentDateTime());
+        int count = sysUserMapper.update(null,userWrapper);
+        if(count == 0){
+            responseDTO.setResponseCode(ResponseEnum.FAIL,"更新用户信息失败");
+        }
+        responseDTO.setResponseCode(ResponseEnum.SUCCESS,"更新用户信息成功");
+        return responseDTO;
+    }
+
+    /**
+     * <p>@Description 查询用户信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/8 19:43 </p>
+     * @param userId 用户ID
+     * @return com.www.myblog.common.pojo.ResponseDTO<com.www.myblog.admin.data.dto.SysUserDTO>
+     */
+    @Override
+    public ResponseDTO<SysUserDTO> findUser(String userId) {
+        ResponseDTO<SysUserDTO> responseDTO = new ResponseDTO<>();
+        SysUserEntity userEntity = sysUserService.findUserEntityById(userId);
+        if(userEntity != null){
+            SysUserDTO userDTO = new SysUserDTO();
+            BeanUtils.copyProperties(userEntity,userDTO);
+            responseDTO.setResponseCode(ResponseEnum.SUCCESS,userDTO);
+        }else {
+            responseDTO.setResponseCode(ResponseEnum.FAIL,null);
+        }
+        return responseDTO;
+    }
 
     /**
      * <p>@Description 创建用户信息 </p>
@@ -56,9 +163,7 @@ public class UserServiceImpl implements IUserService {
             responseDTO.setResponseCode(ResponseEnum.FAIL,"信息不完整，创建用户失败");
             return responseDTO;
         }
-        QueryWrapper<SysRoleEntity> roleWrapper = new QueryWrapper<>();
-        roleWrapper.lambda().eq(SysRoleEntity::getRoleName,user.getRoleName());
-        SysRoleEntity roleEntity = sysRoleMapper.selectOne(roleWrapper);
+        SysRoleEntity roleEntity = sysRoleService.findRoleEntityByName(user.getRoleName());
         if(roleEntity == null){
             responseDTO.setResponseCode(ResponseEnum.FAIL);
             responseDTO.setMsg("用户角色错误，创建用户失败");
@@ -74,15 +179,15 @@ public class UserServiceImpl implements IUserService {
         userEntity.setPhoneNum(user.getPhoneNum());
         userEntity.setBirthday(DateUtils.parse(user.getBirthday(), DateUtils.DateFormatEnum.YYYY_MM_DD));
         userEntity.setEMail(user.getEMail());
-        userEntity.setSysCreateTime(DateUtils.getCurrentDate());
-        userEntity.setSysUpdateTime(DateUtils.getCurrentDate());
+        userEntity.setSysCreateTime(DateUtils.getCurrentDateTime());
+        userEntity.setSysUpdateTime(DateUtils.getCurrentDateTime());
         sysUserMapper.insert(userEntity);
         //创建用户角色
         SysUserRoleEntity userRoleEntity = new SysUserRoleEntity();
         userRoleEntity.setUserId(userEntity.getUserId());
         userRoleEntity.setRoleId(roleEntity.getRoleId());
-        userRoleEntity.setSysCreateTime(DateUtils.getCurrentDate());
-        userRoleEntity.setSysUpdateTime(DateUtils.getCurrentDate());
+        userRoleEntity.setSysCreateTime(DateUtils.getCurrentDateTime());
+        userRoleEntity.setSysUpdateTime(DateUtils.getCurrentDateTime());
         sysUserRoleMapper.insert(userRoleEntity);
         responseDTO.setResponseCode(ResponseEnum.SUCCESS,"创建用户成功");
         return responseDTO;
@@ -126,6 +231,7 @@ public class UserServiceImpl implements IUserService {
         userWrapper.lambda().set(SysUserEntity::getNotExpired,notExpired);
         userWrapper.lambda().set(SysUserEntity::getNotLocked,notLocked);
         userWrapper.lambda().set(SysUserEntity::getCredentialsNotExpired,credentialsNotExpired);
+        userWrapper.lambda().set(SysUserEntity::getSysUpdateTime,DateUtils.getCurrentDateTime());
         int count = sysUserMapper.update(null,userWrapper);
         if(count != 0){
             responseDTO.setResponseCode(ResponseEnum.SUCCESS,"更新用户信息成功");
@@ -181,22 +287,5 @@ public class UserServiceImpl implements IUserService {
             return null;
         }
         return sysUserMapper.findUserRole(userId);
-    }
-
-    /**
-     * <p>@Description 根据用户ID查询用户信息 </p>
-     * <p>@Author www </p>
-     * <p>@Date 2021/11/14 15:32 </p>
-     * @param userId 用户ID
-     * @return com.www.myblog.admin.data.entity.SysUserEntity 用户信息
-     */
-    @Override
-    public SysUserEntity findUserById(String userId) {
-        if(StringUtils.isBlank(userId)){
-            return null;
-        }
-        QueryWrapper<SysUserEntity> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(SysUserEntity::getUserId,userId);
-        return sysUserMapper.selectOne(wrapper);
     }
 }

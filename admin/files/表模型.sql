@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS SYS_USER (
 	SEX CHAR(1) comment '性别：1男0女',
 	PHOTO VARCHAR(256) comment '头像',
 	E_MAIL VARCHAR(100) comment '邮箱',
+    BRIEF VARCHAR(256) comment '个人简介',
 	STATE_CD VARCHAR(1) NOT NULL default '1' comment '用户状态：1有效，2注销，3封号',
     NOT_EXPIRED CHAR(1) NOT NULL default '1' comment '是否未过期。默认为1未过期，0过期',
     NOT_LOCKED CHAR(1) NOT NULL default '1' comment '账号是否未锁定。默认为1未锁定，0锁定',

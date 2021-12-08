@@ -1,4 +1,4 @@
-package com.www.myblog.admin.service;
+package com.www.myblog.admin.service.user;
 
 import com.www.myblog.admin.data.dto.SysRoleMenuDTO;
 
@@ -11,7 +11,7 @@ import java.util.Map;
  * <p>@Author www </p>
  * <p>@Date 2021/11/24 20:41 </p>
  */
-public interface IMenuService {
+public interface IMenuInfoService {
     /**
      * <p>@Description 查询所以权限菜单信息 </p>
      * <p>@Author www </p>

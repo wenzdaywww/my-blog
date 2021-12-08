@@ -18,4 +18,12 @@ public interface IFileService {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
     ResponseDTO<String> uploadFile(MultipartFile file);
+    /**
+     * <p>@Description 上传文件并返回地址 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/4 15:03 </p>
+     * @param file 文件
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    String uploadFileBackPath(MultipartFile file);
 }

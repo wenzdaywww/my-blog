@@ -33,6 +33,19 @@ public class FileServiceImpl implements IFileService {
      */
     @Override
     public ResponseDTO<String> uploadFile(MultipartFile file) {
+        String path = this.uploadFileBackPath(file);
+        return new ResponseDTO<>(ResponseEnum.SUCCESS,path);
+    }
+
+    /**
+     * <p>@Description 上传文件并返回地址 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/4 15:03 </p>
+     * @param file 文件
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    @Override
+    public String uploadFileBackPath(MultipartFile file) {
         File filePath = new File(path);
         LOG.info("文件的保存路径：{}", path);
         if (!filePath.exists() && !filePath.isDirectory()) {
@@ -48,7 +61,7 @@ public class FileServiceImpl implements IFileService {
         //获取文件名称（不包含格式）
         String name = originalFileName.substring(0, originalFileName.lastIndexOf("."));
         //设置文件新名称: 当前时间+文件名称（不包含格式）
-        String date = DateUtils.format(DateUtils.getCurrentDate(), DateUtils.DateFormatEnum.YYYYMMDDHHMMSSSSS);
+        String date = DateUtils.format(DateUtils.getCurrentDateTime(), DateUtils.DateFormatEnum.YYYYMMDDHHMMSSSSS);
         String fileName = date + "_" + name + "." + type;
         LOG.info("新文件名称：{}" , fileName);
         //在指定路径下创建一个文件
@@ -61,6 +74,6 @@ public class FileServiceImpl implements IFileService {
         } catch (IOException e) {
             LOG.info("上传失败,失败信息：{}",e.getMessage());
         }
-        return new ResponseDTO<>(ResponseEnum.SUCCESS,targetFile.getAbsolutePath());
+        return targetFile.getAbsolutePath();
     }
 }

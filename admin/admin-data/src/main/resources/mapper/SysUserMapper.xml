@@ -13,6 +13,7 @@
     <result column="SEX" property="sex" />
     <result column="PHOTO" property="photo" />
     <result column="E_MAIL" property="eMail" />
+    <result column="BRIEF" property="brief" />
     <result column="STATE_CD" property="stateCd" />
     <result column="NOT_EXPIRED" property="notExpired" />
     <result column="NOT_LOCKED" property="notLocked" />
@@ -23,7 +24,7 @@
 
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    SU_ID, USER_ID, USER_NAME, PASS_WORD, PHONE_NUM, BIRTHDAY, SEX, PHOTO, E_MAIL, STATE_CD,
+    SU_ID, USER_ID, USER_NAME, PASS_WORD, PHONE_NUM, BIRTHDAY, SEX, PHOTO, E_MAIL,BRIEF, STATE_CD,
     SYS_UPDATE_TIME, SYS_CREATE_TIME
   </sql>
 

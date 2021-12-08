@@ -24,6 +24,10 @@ public class SysUserDTO implements Serializable {
     */
     private String userId;
     /**
+     * 新密码
+     */
+    private String newPassWord;
+    /**
      * 密码
      */
     private String passWord;
@@ -60,7 +64,10 @@ public class SysUserDTO implements Serializable {
     * 邮箱
     */
     private String eMail;
-
+    /**
+     * 个人简介
+     */
+    private String brief;
     /**
     * 用户状态：1有效，2注销，3封号
     */

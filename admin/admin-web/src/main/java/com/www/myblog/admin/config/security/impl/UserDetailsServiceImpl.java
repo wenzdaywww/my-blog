@@ -2,7 +2,8 @@ package com.www.myblog.admin.config.security.impl;
 
 import com.www.myblog.admin.data.entity.SysRoleEntity;
 import com.www.myblog.admin.data.entity.SysUserEntity;
-import com.www.myblog.admin.service.IUserService;
+import com.www.myblog.admin.service.entity.ISysUserService;
+import com.www.myblog.admin.service.user.IUserInfoService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -29,7 +30,9 @@ import java.util.List;
 public class UserDetailsServiceImpl implements UserDetailsService {
     private static Logger LOG = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
     @Autowired
-    private IUserService userService;
+    private IUserInfoService userInfoService;
+    @Autowired
+    private ISysUserService sysUserService;
     /**
      * <p>@Description 加载用户信息 </p>
      * <p>@Author www </p>
@@ -40,13 +43,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         LOG.info("-----> 2、登录加载{}用户信息",userId);
-        SysUserEntity sysUserEntity = userService.findUserById(userId);
+        SysUserEntity sysUserEntity = sysUserService.findUserEntityById(userId);
         if (sysUserEntity == null) {
             return null;
         }
         //查询用户的角色
         List<GrantedAuthority> authorities = new ArrayList<>();
-        List<SysRoleEntity> roleList = userService.findUserRole(userId);
+        List<SysRoleEntity> roleList = userInfoService.findUserRole(userId);
         if(CollectionUtils.isNotEmpty(roleList)){
             for (SysRoleEntity entity : roleList){
                 authorities.add(new SimpleGrantedAuthority(entity.getRoleName()));

@@ -59,6 +59,10 @@ public class SysUserEntity implements Serializable {
     * 邮箱
     */
     private String eMail;
+    /**
+    * 个人简介
+    */
+    private String brief;
 
     /**
     * 用户状态：1有效，2注销，3封号

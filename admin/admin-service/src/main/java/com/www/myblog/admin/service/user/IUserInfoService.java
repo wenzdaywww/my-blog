@@ -1,11 +1,11 @@
-package com.www.myblog.admin.service;
+package com.www.myblog.admin.service.user;
 
 import com.www.myblog.admin.data.dto.SysRoleDTO;
 import com.www.myblog.admin.data.dto.SysUserDTO;
 import com.www.myblog.admin.data.entity.SysRoleEntity;
 import com.www.myblog.admin.data.entity.SysUserEntity;
 import com.www.myblog.common.pojo.ResponseDTO;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,7 +15,32 @@ import java.util.List;
  * <p>@Author www </p>
  * <p>@Date 2021/11/14 15:31 </p>
  */
-public interface IUserService {
+public interface IUserInfoService {
+    /**
+     * <p>@Description 更新用户头像 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/8 20:02 </p>
+     * @param photo 头像文件
+     * @param userId 用户ID
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    ResponseDTO<String> uploadPhoto(MultipartFile photo, String userId);
+    /**
+     * <p>@Description 更新用户信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/8 19:58 </p>
+     * @param user 用户信息
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    ResponseDTO<String> updateUserInfo(SysUserDTO user);
+    /**
+     * <p>@Description 查询用户信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/8 19:43 </p>
+     * @param userId 用户ID
+     * @return com.www.myblog.common.pojo.ResponseDTO<com.www.myblog.admin.data.dto.SysUserDTO>
+     */
+    ResponseDTO<SysUserDTO> findUser(String userId);
     /**
      * <p>@Description 创建用户信息 </p>
      * <p>@Author www </p>
@@ -63,12 +88,4 @@ public interface IUserService {
      * @return java.util.List<com.www.myblog.admin.data.entity.SysRoleEntity> 角色信息
      */
     List<SysRoleEntity> findUserRole(String userId);
-    /**
-     * <p>@Description 根据用户ID查询用户信息 </p>
-     * <p>@Author www </p>
-     * <p>@Date 2021/11/14 15:32 </p>
-     * @param userId 用户ID
-     * @return com.www.myblog.admin.data.entity.SysUserEntity 用户信息
-     */
-    SysUserEntity findUserById(String userId);
 }

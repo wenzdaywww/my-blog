@@ -15,12 +15,12 @@ import java.util.Date;
  */
 public class DateUtils {
     /**
-     * <p>@Description 获取当前系统日期 </p>
+     * <p>@Description 获取当前系统日期时间 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/4 15:10 </p>
      * @return java.util.Date
      */
-    public static Date getCurrentDate(){
+    public static Date getCurrentDateTime(){
         return new Date();
     }
     /**

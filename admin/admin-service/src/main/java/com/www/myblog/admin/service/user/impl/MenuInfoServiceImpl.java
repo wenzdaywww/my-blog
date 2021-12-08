@@ -1,8 +1,8 @@
-package com.www.myblog.admin.service.impl;
+package com.www.myblog.admin.service.user.impl;
 
 import com.www.myblog.admin.data.dto.SysRoleMenuDTO;
 import com.www.myblog.admin.data.mapper.SysMenuMapper;
-import com.www.myblog.admin.service.IMenuService;
+import com.www.myblog.admin.service.user.IMenuInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * <p>@Date 2021/11/24 20:42 </p>
  */
 @Service
-public class MenuServiceImpl implements IMenuService {
+public class MenuInfoServiceImpl implements IMenuInfoService {
     @Autowired
     private SysMenuMapper sysMenuMapper;
 

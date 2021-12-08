@@ -1,7 +1,7 @@
 package com.www.myblog.admin.config.security.filter;
 
 import com.www.myblog.admin.data.dto.SysRoleMenuDTO;
-import com.www.myblog.admin.service.IMenuService;
+import com.www.myblog.admin.service.user.IMenuInfoService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ import java.util.List;
 public class SecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
     private static Logger LOG = LoggerFactory.getLogger(SecurityMetadataSource.class);
     @Autowired
-    private IMenuService sysMenuService;
+    private IMenuInfoService menuInfoService;
 
     AntPathMatcher antPathMatcher = new AntPathMatcher();
     /**
@@ -42,7 +42,7 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
         LOG.info("-----> 3、访问权限角色配置");
         String requestURL = ((FilterInvocation)o).getRequestUrl();
-        List<SysRoleMenuDTO> roleMenuList = sysMenuService.findAllSecurityMenu();
+        List<SysRoleMenuDTO> roleMenuList = menuInfoService.findAllSecurityMenu();
         if(CollectionUtils.isNotEmpty(roleMenuList)){
             List<String> roleList = new ArrayList<>();
             for (SysRoleMenuDTO dto : roleMenuList){
