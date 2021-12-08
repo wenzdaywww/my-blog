@@ -1,6 +1,6 @@
 #端口配置
 server:
-  port: 8001
+  port: 8002
 #spring配置
 spring:
   #安全认证配置
