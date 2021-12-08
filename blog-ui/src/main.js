@@ -1,10 +1,10 @@
-import {createApp} from 'vue'
-import App from './App.vue'
-import router from './router'
-import store from './store'
-import axios from './utils/request'
-import installElementPlus from './plugins/element'
-import './assets/css/icon.css'
+import {createApp} from 'vue';
+import App from './App.vue';
+import router from './router';
+import store from './store';
+import axios from './utils/request';
+import installElementPlus from './plugins/element';
+import './assets/css/icon.css';
 const app = createApp(App);
 installElementPlus(app);
 localStorage.setItem('token',"");

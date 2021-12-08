@@ -40,7 +40,7 @@ export default {
         const items = [
             {
                 icon: "el-icon-lx-home",
-                index: "/dashboard",
+                index: "/home",
                 title: "系统首页",
             },
             {

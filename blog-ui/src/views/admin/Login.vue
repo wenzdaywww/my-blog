@@ -59,7 +59,7 @@ export default {
               if(res.code === 200){
                 localStorage.setItem('token',res.data.token);
                 ElMessage.success("登录成功");
-                router.push("/");
+                router.push("/home");
               }else {
                 ElMessage.error(res.data);
               }
@@ -84,7 +84,7 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
-    background-image: url(../assets/img/login-bg.jpg);
+    background-image: url(src/assets/img/login-bg.jpg);
     background-size: 100%;
 }
 .ms-title {
