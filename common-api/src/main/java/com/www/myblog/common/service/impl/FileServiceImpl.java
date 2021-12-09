@@ -34,6 +34,9 @@ public class FileServiceImpl implements IFileService {
     @Override
     public ResponseDTO<String> uploadFile(MultipartFile file) {
         String path = this.uploadFileBackPath(file);
+        if(path == null){
+            return new ResponseDTO<>(ResponseEnum.FAIL,"上传文件失败");
+        }
         return new ResponseDTO<>(ResponseEnum.SUCCESS,path);
     }
 
@@ -46,6 +49,9 @@ public class FileServiceImpl implements IFileService {
      */
     @Override
     public String uploadFileBackPath(MultipartFile file) {
+        if(file == null){
+            return null;
+        }
         File filePath = new File(path);
         LOG.info("文件的保存路径：{}", path);
         if (!filePath.exists() && !filePath.isDirectory()) {

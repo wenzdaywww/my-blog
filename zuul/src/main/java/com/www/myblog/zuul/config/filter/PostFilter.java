@@ -87,8 +87,7 @@ public class PostFilter extends ZuulFilter {
                 String name = headerNames.nextElement();
                 String values = request.getHeader(name);
                 ctx.addZuulRequestHeader(name, values);
-                LOG.info("post的headers => {}={}",name,values);
-//                response.setHeader(name,values);
+//                LOG.info("post的headers => {}={}",name,values);
             }
         }
         return null;

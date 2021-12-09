@@ -24,6 +24,7 @@ axios.interceptors.response.use(
             //接口返回403则清除token
             if(response.data.code === 403){
                 localStorage.setItem('token',"");
+                localStorage.setItem('userId',"");
                 ElMessageBox('请重新登录', '请重新登录', {
                     confirmButtonText: '确定',
                     callback: action  => {

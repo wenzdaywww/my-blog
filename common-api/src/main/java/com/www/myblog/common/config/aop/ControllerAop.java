@@ -3,6 +3,7 @@ package com.www.myblog.common.config.aop;
 import com.alibaba.fastjson.JSON;
 import com.www.myblog.common.pojo.ResponseDTO;
 import com.www.myblog.common.pojo.ResponseEnum;
+import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -11,6 +12,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -45,15 +47,22 @@ public class ControllerAop {
         String controllerMethod = pjd.getSignature().toString();//获取方法全量名
         Method targetMethod = ((MethodSignature) (pjd.getSignature())).getMethod();
         Parameter[] paramName = targetMethod.getParameters();//获取方法参数名称
+        Class<?>[] paramType = targetMethod.getParameterTypes();
         Logger log = LoggerFactory.getLogger(pjd.getSignature().getClass().getName());// 初始化日志打印
         Object[] paramValue = pjd.getArgs();// 获取方法参数值
         //获取请求参数集合并进行遍历拼接
         String requestText = "{";
-        for (int i = 0; i < paramName.length && i < paramValue.length; i++) {
-            if(i != paramName.length -1){
-                requestText += paramName[i].getName() + "=" + JSON.toJSONString(paramValue[i]) + ",";
+        for (int i = 0; i < paramName.length && i < paramValue.length && i < paramType.length;  i++) {
+            String value = "";
+            if(StringUtils.equals(paramType[i].getName(),"org.springframework.web.multipart.MultipartFile")){
+                value = paramValue[i] != null ? paramValue[i].toString() : "";
             }else {
-                requestText += paramName[i].getName() + "=" + JSON.toJSONString(paramValue[i]) ;
+                value = JSON.toJSONString(paramValue[i]);
+            }
+            if(i != paramName.length -1){
+                requestText += paramName[i].getName() + "=" + value + ",";
+            }else {
+                requestText += paramName[i].getName() + "=" + value ;
             }
         }
         requestText += "}";

@@ -89,7 +89,7 @@ public class PreFilter extends ZuulFilter {
                 String name = headerNames.nextElement();
                 String values = request.getHeader(name);
                 ctx.addZuulRequestHeader(name, values);
-                LOG.info("pre的headers => {}={}",name,values);
+//                LOG.info("pre的headers => {}={}",name,values);
                 response.setHeader(name,values);
             }
         }

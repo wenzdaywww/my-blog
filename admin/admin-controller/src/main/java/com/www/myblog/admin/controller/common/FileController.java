@@ -21,14 +21,14 @@ public class FileController {
     private IFileService fileService;
 
     /**
-     * <p>@Description 上传用户头像 </p>
+     * <p>@Description 上传文件 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/4 15:03 </p>
-     * @param photo 头像
+     * @param file 文件
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
     @PostMapping(value = "/up")
-    public ResponseDTO<String> uploadPhoto(MultipartFile photo){
-        return fileService.uploadFile(photo);
+    public ResponseDTO<String> uploadPhoto(MultipartFile file){
+        return fileService.uploadFile(file);
     }
 }

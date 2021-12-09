@@ -141,6 +141,8 @@ public class UserInfoServiceImpl implements IUserInfoService {
         if(userEntity != null){
             SysUserDTO userDTO = new SysUserDTO();
             BeanUtils.copyProperties(userEntity,userDTO);
+            userDTO.setBirthday(DateUtils.format(userEntity.getBirthday(), DateUtils.DateFormatEnum.YYYY_MM_DD));
+            userDTO.setPassWord(null);
             responseDTO.setResponseCode(ResponseEnum.SUCCESS,userDTO);
         }else {
             responseDTO.setResponseCode(ResponseEnum.FAIL,null);
