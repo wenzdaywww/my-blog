@@ -33,4 +33,21 @@
     LEFT JOIN SYS_ROLE R ON RM.ROLE_ID = R.ROLE_ID
     WHERE  M.MENU_TYPE = '2'
   </select>
+  <!--  查询用户菜单列表-->
+  <select id="findUserMenu" resultType="com.www.myblog.admin.data.dto.SysMenuDTO">
+    SELECT  m.MENU_ID,
+            m.PARENT_ID,
+            m.MENU_ORDER,
+            m.MENU_ICON,
+            m.MENU_URL,
+            m.MENU_NAME
+    FROM    sys_menu m,
+            sys_user_role ur,
+            sys_role_menu rm
+    WHERE m.IS_DELETE = '0' and m.MENU_TYPE='1'
+      AND m.MENU_ID = rm.MENU_ID
+      AND ur.ROLE_ID = rm.ROLE_ID
+      AND ur.USER_ID = #{userId}
+      ORDER BY M.MENU_ORDER
+  </select>
 </mapper>

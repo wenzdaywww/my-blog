@@ -4,12 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.sun.org.apache.regexp.internal.RE;
+import com.www.myblog.admin.data.dto.SysMenuDTO;
 import com.www.myblog.admin.data.dto.SysRoleDTO;
 import com.www.myblog.admin.data.dto.SysUserDTO;
 import com.www.myblog.admin.data.entity.SysRoleEntity;
 import com.www.myblog.admin.data.entity.SysUserEntity;
 import com.www.myblog.admin.data.entity.SysUserRoleEntity;
 import com.www.myblog.admin.data.enums.CommonEnum;
+import com.www.myblog.admin.data.mapper.SysMenuMapper;
 import com.www.myblog.admin.data.mapper.SysRoleMapper;
 import com.www.myblog.admin.data.mapper.SysUserMapper;
 import com.www.myblog.admin.data.mapper.SysUserRoleMapper;
@@ -20,6 +22,7 @@ import com.www.myblog.common.pojo.ResponseDTO;
 import com.www.myblog.common.pojo.ResponseEnum;
 import com.www.myblog.common.service.IFileService;
 import com.www.myblog.common.utils.DateUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +32,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,6 +49,8 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Autowired
     private SysRoleMapper sysRoleMapper;
     @Autowired
+    private SysMenuMapper sysMenuMapper;
+    @Autowired
     private SysUserRoleMapper sysUserRoleMapper;
     @Autowired
     private IFileService fileService;
@@ -52,6 +58,23 @@ public class UserInfoServiceImpl implements IUserInfoService {
     private ISysUserService sysUserService;
     @Autowired
     private ISysRoleService sysRoleService;
+
+    /**
+     * <p>@Description 查询用户菜单列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/11 00:22 </p>
+     * @param userId 用户ID
+     * @return com.www.myblog.common.pojo.ResponseDTO
+     */
+    @Override
+    public ResponseDTO<List<SysMenuDTO>> findUserMenu(String userId) {
+        List<SysMenuDTO> resultList = new ArrayList<>();
+        List<SysMenuDTO> menuList = sysMenuMapper.findUserMenu(userId);
+        if(CollectionUtils.isNotEmpty(menuList)){
+            resultList = menuList;
+        }
+        return new ResponseDTO(ResponseEnum.SUCCESS,resultList);
+    }
 
     /**
      * <p>@Description 更新用户头像 </p>

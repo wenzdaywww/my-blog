@@ -27,7 +27,7 @@
         <el-table-column prop="userName" label="用户名称"></el-table-column>
         <el-table-column label="头像(查看大图)" align="center">
           <template #default="scope">
-            <el-image class="table-td-thumb" :src="scope.row.photo" :preview-src-list="[scope.row.photo]">
+            <el-image class="table-td-thumb" :src="'api/admin'+ scope.row.photo" :preview-src-list="[scope.row.photo]">
             </el-image>
           </template>
         </el-table-column>

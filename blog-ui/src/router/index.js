@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from "vue-router";
-import Home from "../views/admin/Home.vue";
+import Home from "../views/Home.vue";
 
 const routes = [
     {
@@ -16,42 +16,42 @@ const routes = [
                 meta: {
                     title: "系统首页"
                 },
-                component: () => import ( /* webpackChunkName: "dashboard" */ "../views/admin/Dashboard.vue")
+                component: () => import ( /* webpackChunkName: "dashboard" */ "../views/Dashboard.vue")
             }, {
                 path: "/table",
-                name: "basetable",
+                name: "userList",
                 meta: {
                     title: "用户信息"
                 },
-                component: () => import ( /* webpackChunkName: "table" */ "../views/admin/BaseTable.vue")
+                component: () => import ( /* webpackChunkName: "table" */ "../views/admin/UserList.vue")
             }, {
                 path: "/charts",
                 name: "basecharts",
                 meta: {
                     title: "图表"
                 },
-                component: () => import ( /* webpackChunkName: "charts" */ "../views/admin/BaseCharts.vue")
+                component: () => import ( /* webpackChunkName: "charts" */ "../views/BaseCharts.vue")
             }, {
                 path: "/form",
                 name: "baseform",
                 meta: {
                     title: "表单"
                 },
-                component: () => import ( /* webpackChunkName: "form" */ "../views/admin/BaseForm.vue")
+                component: () => import ( /* webpackChunkName: "form" */ "../views/BaseForm.vue")
             }, {
                 path: "/tabs",
                 name: "tabs",
                 meta: {
                     title: "tab标签"
                 },
-                component: () => import ( /* webpackChunkName: "tabs" */ "../views/admin/Tabs.vue")
+                component: () => import ( /* webpackChunkName: "tabs" */ "../views/Tabs.vue")
             }, {
                 path: "/donate",
                 name: "donate",
                 meta: {
                     title: "鼓励作者"
                 },
-                component: () => import ( /* webpackChunkName: "donate" */ "../views/admin/Donate.vue")
+                component: () => import ( /* webpackChunkName: "donate" */ "../views/Donate.vue")
             }, {
                 path: "/permission",
                 name: "permission",
@@ -59,28 +59,28 @@ const routes = [
                     title: "权限管理",
                     permission: true
                 },
-                component: () => import ( /* webpackChunkName: "permission" */ "../views/admin/Permission.vue")
+                component: () => import ( /* webpackChunkName: "permission" */ "../views/Permission.vue")
             }, {
                 path: "/i18n",
                 name: "i18n",
                 meta: {
                     title: "国际化语言"
                 },
-                component: () => import ( /* webpackChunkName: "i18n" */ "../views/admin/I18n.vue")
+                component: () => import ( /* webpackChunkName: "i18n" */ "../views/I18n.vue")
             }, {
                 path: "/upload",
                 name: "upload",
                 meta: {
                     title: "上传插件"
                 },
-                component: () => import ( /* webpackChunkName: "upload" */ "../views/admin/Upload.vue")
+                component: () => import ( /* webpackChunkName: "upload" */ "../views/Upload.vue")
             }, {
                 path: "/icon",
                 name: "icon",
                 meta: {
                     title: "自定义图标"
                 },
-                component: () => import ( /* webpackChunkName: "icon" */ "../views/admin/Icon.vue")
+                component: () => import ( /* webpackChunkName: "icon" */ "../views/Icon.vue")
             }, {
                 path: "/404",
                 name: "404",
@@ -108,7 +108,7 @@ const routes = [
                 meta: {
                     title: "富文本编辑器"
                 },
-                component: () => import (/* webpackChunkName: "editor" */ "../views/admin/Editor.vue")
+                component: () => import (/* webpackChunkName: "editor" */ "../views/Editor.vue")
             }
         ]
     }, {

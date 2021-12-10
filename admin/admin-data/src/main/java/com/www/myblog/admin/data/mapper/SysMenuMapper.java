@@ -1,9 +1,11 @@
 package com.www.myblog.admin.data.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.www.myblog.admin.data.dto.SysMenuDTO;
 import com.www.myblog.admin.data.dto.SysRoleMenuDTO;
 import com.www.myblog.admin.data.entity.SysMenuEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,6 +17,14 @@ import java.util.List;
  */
 @Mapper
 public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
+    /**
+     * <p>@Description 查询用户菜单列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/11 00:22 </p>
+     * @param userId 用户ID
+     * @return 菜单信息
+     */
+    List<SysMenuDTO> findUserMenu(@Param("userId") String userId);
     /**
      * <p>@Description 查询所有权限菜单信息 </p>
      * <p>@Author www </p>

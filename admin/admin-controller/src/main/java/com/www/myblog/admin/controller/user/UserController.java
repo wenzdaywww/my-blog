@@ -1,7 +1,9 @@
 package com.www.myblog.admin.controller.user;
 
+import com.www.myblog.admin.data.dto.SysMenuDTO;
 import com.www.myblog.admin.data.dto.SysRoleDTO;
 import com.www.myblog.admin.data.dto.SysUserDTO;
+import com.www.myblog.admin.data.entity.SysMenuEntity;
 import com.www.myblog.admin.data.entity.SysUserEntity;
 import com.www.myblog.admin.service.user.IUserInfoService;
 import com.www.myblog.common.pojo.ResponseDTO;
@@ -22,7 +24,17 @@ import java.util.List;
 public class UserController {
     @Autowired
     private IUserInfoService userInfoService;
-
+    /**
+     * <p>@Description 查询用户菜单列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/11 00:22 </p>
+     * @param userId 用户ID
+     * @return com.www.myblog.common.pojo.ResponseDTO
+     */
+    @GetMapping("/menu")
+    public ResponseDTO<List<SysMenuDTO>> findUserMenu(String userId){
+        return userInfoService.findUserMenu(userId);
+    }
     /**
      * <p>@Description 更新用户头像 </p>
      * <p>@Author www </p>
