@@ -1,7 +1,7 @@
 import axios from "axios";
 import qs from "qs";
 import router from '../router';
-import { ElMessageBox } from 'element-plus';
+import {ElMessage, ElMessageBox} from 'element-plus';
 //设置超时
 axios.defaults.timeout = 10000;
 axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded;charset=UTF-8";
@@ -25,11 +25,7 @@ axios.interceptors.response.use(
             if(response.data.code === 403){
                 localStorage.setItem('token',"");
                 localStorage.setItem('userId',"");
-                ElMessageBox('请重新登录', '请重新登录', {
-                    confirmButtonText: '确定',
-                    callback: action  => {
-                    }
-                });
+                ElMessage.info("请重新登录");
                 //调整登录页面
                 router.push("/login");
             }
@@ -39,11 +35,7 @@ axios.interceptors.response.use(
         }
     },
     error => {
-        console.log('请求异常：'+JSON.stringify(error));
-        ElMessageBox('请求失败', '请求异常', {
-            confirmButtonText: '确定',
-            callback: action => {}
-        });
+        ElMessage.error("请求失败");
     }
 );
 export default {

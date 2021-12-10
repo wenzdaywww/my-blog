@@ -157,7 +157,9 @@ export default {
           form.phoneNum = res.data.phoneNum;
           form.birthday = res.data.birthday;
           form.sex = res.data.sex;
-          form.photo = res.data.photo;
+          if(res.data.photo){
+             defaultImg.value = "api/admin" + res.data.photo;
+          }
           form.eMail = res.data.email;
           form.brief = res.data.brief;
         }
@@ -193,7 +195,7 @@ export default {
     const cropper = ref(null);
     //选中的图片文件
     let file = reactive({
-      name : "1.jpg"
+      name : form.userId + ".jpg"
     });
     //打开图片上传弹窗
     const showDialog = () => {
@@ -207,7 +209,6 @@ export default {
       if (!file.type.includes("image/")) {
         return;
       }
-      //转化为blob
       const reader = new FileReader();
       reader.onload = (event) => {
         dialogVisible.value = true;
@@ -225,10 +226,11 @@ export default {
     const uploadImg = () => {
       //添加zuul解决文件上传问题
       let fd = new FormData();//通过form数据格式来传
-      fd.append("file", base64ToFile(cropImg.value,file.name)); //传文件
-      request.$http.upload("api/zuul/admin/common/up",fd,{'Content-Type': 'multipart/form-data'}).then(function (res){
+      fd.append("photo", base64ToFile(cropImg.value,file.name)); //传文件
+      fd.append("userId", form.userId);
+      request.$http.upload("api/zuul/admin/user/photo",fd,{'Content-Type': 'multipart/form-data'}).then(function (res){
         if(res.code === 200){
-          defaultImg.value = cropImg.value;
+          defaultImg.value = "api/admin" + res.data;
           dialogVisible.value = false;
           ElMessage.success('上传成功');
         }else {
@@ -263,11 +265,11 @@ export default {
 .info-image {
   position: relative;
   margin: auto;
-  width: 100px;
-  height: 100px;
+  width: 180px;
+  height: 180px;
   background: #f8f8f8;
   border: 1px solid #eee;
-  border-radius: 50px;
+  border-radius: 90px;
   overflow: hidden;
 }
 .info-image img {

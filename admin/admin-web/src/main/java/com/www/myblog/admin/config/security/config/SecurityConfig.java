@@ -59,8 +59,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//关闭session
             .maximumSessions(1)//单点登录
             .expiredSessionStrategy(sessionExpiredHandler);//会话过期处理
-//        http.authorizeRequests().antMatchers("/test/**").permitAll()//设置允许访问的路径
-//            .anyRequest().hasAnyAuthority("admin");//设置运行角色的路径
         http.authorizeRequests().anyRequest().authenticated()
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
             @Override

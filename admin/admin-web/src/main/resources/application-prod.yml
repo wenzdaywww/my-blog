@@ -2,6 +2,12 @@
 #服务器配置
 server:
   port: 8070
+#配置文件路径
+file:
+  imgUrlPath: /imgs/** #配置访问图片的相对路径
+  imgSavePath : /usr/local/docker/file/img/ #图片保存的绝对路径，window的路径必须是\且路径最后也需要\
+  otherUrlPath: /file/** #配置访问图片外其他文件的相对路径
+  otherSavePath : /usr/local/docker/file/other/ #图片外其他文件保存的绝对路径，window的路径必须是\且路径最后也需要\
 #eureka配置
 eureka:
   client:
@@ -20,4 +26,3 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
-      location: /usr/local/docker/file/img

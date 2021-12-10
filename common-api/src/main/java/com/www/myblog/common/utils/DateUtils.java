@@ -68,6 +68,7 @@ public class DateUtils {
      * <p>@Date 2021/12/4 15:22 </p>
      */
     public enum DateFormatEnum{
+        YYYYMMDD("yyyyMMdd"),
         YYYY_MM_DD("yyyy-MM-dd"),
         YYYY_MM_DD_HH_MM_SS("yyyy-MM-dd HH:mm:ss"),
         YYYYMMDDHHMMSS("yyyyMMddHHmmss"),

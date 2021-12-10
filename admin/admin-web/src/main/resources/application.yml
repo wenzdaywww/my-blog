@@ -3,7 +3,6 @@ server:
   servlet:
     #访问路径设置
     context-path: /
-
 spring:
   profiles:
     #配置环境文件

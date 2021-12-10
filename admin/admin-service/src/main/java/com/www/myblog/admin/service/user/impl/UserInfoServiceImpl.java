@@ -69,7 +69,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
             responseDTO.setResponseCode(ResponseEnum.FAIL,"查询不到该用户");
             return responseDTO;
         }
-        String path = fileService.uploadFileBackPath(photo);
+        String path = fileService.uploadFileBackPath(photo,userId);
         UpdateWrapper<SysUserEntity> userWrapper = new UpdateWrapper<>();
         userWrapper.lambda().eq(SysUserEntity::getUserId,userEntity.getUserId());
         userWrapper.lambda().set(SysUserEntity::getPhoto,path);
@@ -77,7 +77,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
         if(count == 0){
             responseDTO.setResponseCode(ResponseEnum.FAIL,"更新用户头像失败");
         }
-        responseDTO.setResponseCode(ResponseEnum.SUCCESS,"更新用户头像成功");
+        responseDTO.setResponseCode(ResponseEnum.SUCCESS,path);
         return responseDTO;
     }
     /**
