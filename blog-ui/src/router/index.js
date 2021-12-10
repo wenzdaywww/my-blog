@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from "vue-router";
-import Home from "../views/Home.vue";
+import Home from "../views/admin/Home.vue";
 
 const routes = [
     {
@@ -12,11 +12,11 @@ const routes = [
         children: [
             {
                 path: "/home",
-                name: "dashboard",
+                name: "index",
                 meta: {
-                    title: "系统首页"
+                    title: "首页"
                 },
-                component: () => import ( /* webpackChunkName: "dashboard" */ "../views/Dashboard.vue")
+                component: () => import ( /* webpackChunkName: "dashboard" */ "../views/admin/Index.vue")
             }, {
                 path: "/table",
                 name: "userList",
@@ -42,9 +42,9 @@ const routes = [
                 path: "/tabs",
                 name: "tabs",
                 meta: {
-                    title: "tab标签"
+                    title: "消息中心"
                 },
-                component: () => import ( /* webpackChunkName: "tabs" */ "../views/Tabs.vue")
+                component: () => import ( /* webpackChunkName: "tabs" */ "../views/admin/News.vue")
             }, {
                 path: "/donate",
                 name: "donate",
@@ -87,14 +87,14 @@ const routes = [
                 meta: {
                     title: "找不到页面"
                 },
-                component: () => import (/* webpackChunkName: "404" */ "../views/admin/404.vue")
+                component: () => import (/* webpackChunkName: "404" */ "../views/404.vue")
             }, {
                 path: "/403",
                 name: "403",
                 meta: {
                     title: "没有权限"
                 },
-                component: () => import (/* webpackChunkName: "403" */ "../views/admin/403.vue")
+                component: () => import (/* webpackChunkName: "403" */ "../views/403.vue")
             }, {
                 path: "/user",
                 name: "user",
