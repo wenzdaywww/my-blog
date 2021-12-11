@@ -94,31 +94,65 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         }else {
             sysMenuMapper.insert(menuEntity);
         }
-        if(CollectionUtils.isNotEmpty(roleList)){
-            // 查询是否已经存在该菜单的角色菜单配置信息
-            List<Long> rmIdList = roleList.stream().map(SysRoleEntity::getRoleId).collect(Collectors.toList());
-            QueryWrapper<SysRoleMenuEntity> rmWrapper = new QueryWrapper<>();
-            rmWrapper.lambda().eq(SysRoleMenuEntity::getMenuId,menuEntity.getMenuId());
-            rmWrapper.lambda().in(SysRoleMenuEntity::getRoleId,rmIdList);
-            List<SysRoleMenuEntity> roleMenuList = sysRoleMenuMapper.selectList(rmWrapper);
-            // 不存在该菜单的角色菜单配置信息
-            rmIdList = new ArrayList<>();
-            if(CollectionUtils.isNotEmpty(roleMenuList)){
-                rmIdList = roleMenuList.stream().map(SysRoleMenuEntity::getRoleId).collect(Collectors.toList());
-            }
-            roleMenuList = new ArrayList<>();
-            for (SysRoleEntity roleEntity : roleList){
-                if(rmIdList.contains(roleEntity.getRoleId())){
-                    continue;
+        // 查询是否已经存在该菜单的角色菜单配置信息
+        QueryWrapper<SysRoleMenuEntity> rmWrapper = new QueryWrapper<>();
+        rmWrapper.lambda().eq(SysRoleMenuEntity::getMenuId,menuEntity.getMenuId());
+        List<SysRoleMenuEntity> roleMenuList = sysRoleMenuMapper.selectList(rmWrapper);
+        // 待插入的角色菜单数据
+        List<SysRoleMenuEntity> rmAddList = new ArrayList<>();
+        // 待删除的角色菜单ID
+        List<Long> deleteIdList = new ArrayList<>();
+        // 不存在角色菜单数据
+        if(CollectionUtils.isEmpty(roleMenuList)){
+            // 不存在角色菜单数据且有新加角色，则需要新增角色菜单数据
+            if(CollectionUtils.isNotEmpty(roleList)){
+                for (SysRoleEntity roleEntity : roleList){
+                    SysRoleMenuEntity roleMenuEntity = new SysRoleMenuEntity();
+                    roleMenuEntity.setRoleId(roleEntity.getRoleId());
+                    roleMenuEntity.setMenuId(menuEntity.getMenuId());
+                    roleMenuEntity.setSysCreateTime(DateUtils.getCurrentDateTime());
+                    roleMenuEntity.setSysUpdateTime(DateUtils.getCurrentDateTime());
+                    rmAddList.add(roleMenuEntity);
                 }
-                SysRoleMenuEntity roleMenuEntity = new SysRoleMenuEntity();
-                roleMenuEntity.setRoleId(roleEntity.getRoleId());
-                roleMenuEntity.setMenuId(menuEntity.getMenuId());
-                roleMenuEntity.setSysCreateTime(DateUtils.getCurrentDateTime());
-                roleMenuEntity.setSysUpdateTime(DateUtils.getCurrentDateTime());
-                roleMenuList.add(roleMenuEntity);
             }
-            sysRoleMenuService.saveBatch(roleMenuList);
+        }else {// 存在角色菜单数据
+            // 存在角色菜单数据且有新加角色，则需要判断是新增还是删除角色菜单数据
+            if(CollectionUtils.isNotEmpty(roleList)){
+                // 存在角色菜单数据的角色ID集合
+                List<Long> exitRoleIdList = roleMenuList.stream().map(SysRoleMenuEntity::getRoleId).collect(Collectors.toList());
+                // 判断需要新增的数据
+                for (SysRoleEntity roleEntity : roleList){
+                    if(exitRoleIdList.contains(roleEntity.getRoleId())){
+                        continue;
+                    }
+                    SysRoleMenuEntity roleMenuEntity = new SysRoleMenuEntity();
+                    roleMenuEntity.setRoleId(roleEntity.getRoleId());
+                    roleMenuEntity.setMenuId(menuEntity.getMenuId());
+                    roleMenuEntity.setSysCreateTime(DateUtils.getCurrentDateTime());
+                    roleMenuEntity.setSysUpdateTime(DateUtils.getCurrentDateTime());
+                    rmAddList.add(roleMenuEntity);
+                }
+                //待保存角色菜单数据的角色ID
+                List<Long> saveIdList = roleList.stream().map(SysRoleEntity::getRoleId).collect(Collectors.toList());
+                // 判断需要删除的数据
+                for (SysRoleMenuEntity roleMenuEntity : roleMenuList){
+                    if(!saveIdList.contains(roleMenuEntity.getRoleId())){
+                        deleteIdList.add(roleMenuEntity.getSrmId());
+                    }
+                }
+            }else {// 存在角色菜单数据且没有新加角色，则需要删除角色菜单数据
+                deleteIdList = roleMenuList.stream().map(SysRoleMenuEntity::getSrmId).collect(Collectors.toList());
+            }
+        }
+        // 新增角色菜单数据
+        if(CollectionUtils.isNotEmpty(rmAddList)){
+            sysRoleMenuService.saveBatch(rmAddList);
+        }
+        // 删除角色菜单数据
+        if(CollectionUtils.isNotEmpty(deleteIdList)){
+            QueryWrapper<SysRoleMenuEntity> delWrapper = new QueryWrapper<>();
+            delWrapper.lambda().in(SysRoleMenuEntity::getSrmId,deleteIdList);
+            sysRoleMenuMapper.delete(delWrapper);
         }
         responseDTO.setResponseCode(ResponseEnum.SUCCESS,"更新菜单成功");
         return responseDTO;

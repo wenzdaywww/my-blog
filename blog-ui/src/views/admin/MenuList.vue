@@ -267,6 +267,7 @@ export default {
     const saveSure = () => {
       editForm.value.validate((valid) => {
         if (valid) {
+          form.roleName = "";
           form.roleArr.forEach (temp => {
             form.roleName += temp + ",";
           });

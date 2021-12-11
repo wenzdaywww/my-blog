@@ -34,13 +34,13 @@ INSERT INTO SYS_MENU (MENU_CODE,MENU_NAME,PARENT_ID,MENU_ICON,MENU_URL,MENU_ORDE
 VALUES ('menuManage','菜单管理',null,'el-icon-menu','/menu',3,now(),now());
 /**请求路径**/
 INSERT INTO SYS_MENU (MENU_CODE,MENU_NAME,PARENT_ID,MENU_ICON,MENU_URL,MENU_ORDER,MENU_TYPE,SYS_UPDATE_TIME,SYS_CREATE_TIME)
-VALUES ('/test/**',null,null,null,'/test/**',0,'2',now(),now());
+VALUES ('/test/**',null,null,null,'/test/**',null,'2',now(),now());
 INSERT INTO SYS_MENU (MENU_CODE,MENU_NAME,PARENT_ID,MENU_ICON,MENU_URL,MENU_ORDER,MENU_TYPE,SYS_UPDATE_TIME,SYS_CREATE_TIME)
-VALUES ('/user/**',null,null,null,'/user/**',0,'2',now(),now());
+VALUES ('/user/**',null,null,null,'/user/**',null,'2',now(),now());
 INSERT INTO SYS_MENU (MENU_CODE,MENU_NAME,PARENT_ID,MENU_ICON,MENU_URL,MENU_ORDER,MENU_TYPE,SYS_UPDATE_TIME,SYS_CREATE_TIME)
-VALUES ('/common/**',null,null,null,'/common/**',0,'2',now(),now());
+VALUES ('/common/**',null,null,null,'/common/**',null,'2',now(),now());
 INSERT INTO SYS_MENU (MENU_CODE,MENU_NAME,PARENT_ID,MENU_ICON,MENU_URL,MENU_ORDER,MENU_TYPE,SYS_UPDATE_TIME,SYS_CREATE_TIME)
-VALUES ('/menu/**',null,null,null,'/menu/**',0,'2',now(),now());
+VALUES ('/menu/**',null,null,null,'/menu/**',null,'2',now(),now());
 
 /**5、插入角色菜单信息 **/
 DELETE FROM SYS_ROLE_MENU WHERE 1=1;
