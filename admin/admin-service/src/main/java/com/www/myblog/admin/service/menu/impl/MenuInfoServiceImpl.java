@@ -92,6 +92,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         if(isUpdate){
             sysMenuMapper.updateById(menuEntity);
         }else {
+            menuEntity.setIsDelete(CommonEnum.NO_0.getCode());
             sysMenuMapper.insert(menuEntity);
         }
         // 查询是否已经存在该菜单的角色菜单配置信息
