@@ -11,7 +11,7 @@
         <div class="tags-close-box">
             <el-dropdown @command="handleTags">
                 <el-button size="mini" type="primary">
-                    标签选项
+                    选项
                     <i class="el-icon-arrow-down el-icon--right"></i>
                 </el-button>
                 <template #dropdown>
@@ -51,7 +51,7 @@ export default {
             if (item) {
                 delItem.path === route.fullPath && router.push(item.path);
             } else {
-                router.push("/");
+                router.push("/home");
             }
         };
 
@@ -79,7 +79,7 @@ export default {
         // 关闭全部标签
         const closeAll = () => {
             store.commit("clearTags");
-            router.push("/");
+            router.push("/home");
         };
         // 关闭其他标签
         const closeOther = () => {

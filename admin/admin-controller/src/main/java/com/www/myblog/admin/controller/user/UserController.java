@@ -3,7 +3,6 @@ package com.www.myblog.admin.controller.user;
 import com.www.myblog.admin.data.dto.SysMenuDTO;
 import com.www.myblog.admin.data.dto.SysRoleDTO;
 import com.www.myblog.admin.data.dto.SysUserDTO;
-import com.www.myblog.admin.data.entity.SysMenuEntity;
 import com.www.myblog.admin.data.entity.SysUserEntity;
 import com.www.myblog.admin.service.user.IUserInfoService;
 import com.www.myblog.common.pojo.ResponseDTO;
@@ -24,6 +23,18 @@ import java.util.List;
 public class UserController {
     @Autowired
     private IUserInfoService userInfoService;
+
+    /**
+     * <p>@Description 更新用户密码 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/8 19:58 </p>
+     * @param user 用户信息
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    @PostMapping("/pwd")
+    public ResponseDTO<String> updateUserPwd(SysUserDTO user){
+        return userInfoService.updateUserPwd(user);
+    }
     /**
      * <p>@Description 查询用户菜单列表 </p>
      * <p>@Author www </p>

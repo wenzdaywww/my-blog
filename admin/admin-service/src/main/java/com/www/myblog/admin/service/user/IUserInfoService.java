@@ -6,6 +6,7 @@ import com.www.myblog.admin.data.dto.SysUserDTO;
 import com.www.myblog.admin.data.entity.SysRoleEntity;
 import com.www.myblog.admin.data.entity.SysUserEntity;
 import com.www.myblog.common.pojo.ResponseDTO;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -17,6 +18,14 @@ import java.util.List;
  * <p>@Date 2021/11/14 15:31 </p>
  */
 public interface IUserInfoService {
+    /**
+     * <p>@Description 更新用户密码 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/8 19:58 </p>
+     * @param user 用户信息
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    ResponseDTO<String> updateUserPwd(SysUserDTO user);
     /**
      * <p>@Description 查询用户菜单列表 </p>
      * <p>@Author www </p>

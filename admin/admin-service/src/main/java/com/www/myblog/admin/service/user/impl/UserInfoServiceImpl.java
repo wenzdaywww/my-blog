@@ -60,6 +60,44 @@ public class UserInfoServiceImpl implements IUserInfoService {
     private ISysRoleService sysRoleService;
 
     /**
+     * <p>@Description 更新用户密码 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/8 19:58 </p>
+     * @param user 用户信息
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    @Override
+    public ResponseDTO<String> updateUserPwd(SysUserDTO user) {
+        ResponseDTO<String> responseDTO = new ResponseDTO<>();
+        if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getPassWord(),user.getNewPassWord())){
+            responseDTO.setResponseCode(ResponseEnum.FAIL,"更新用户密码失败，密码不能为空");
+            return responseDTO;
+        }
+        SysUserEntity userEntity = sysUserService.findUserEntityById(user.getUserId());
+        if(userEntity == null){
+            responseDTO.setResponseCode(ResponseEnum.FAIL,"查询不到该用户");
+            return responseDTO;
+        }
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        //有输入密码则校验密码
+        if(!encoder.matches(user.getPassWord(),userEntity.getPassWord())){
+            responseDTO.setResponseCode(ResponseEnum.FAIL,"密码不正确");
+            return responseDTO;
+        }
+        //更新用户信息
+        UpdateWrapper<SysUserEntity> userWrapper = new UpdateWrapper<>();
+        userWrapper.lambda().eq(SysUserEntity::getUserId,user.getUserId());
+        userWrapper.lambda().set(SysUserEntity::getPassWord,encoder.encode(user.getNewPassWord()));
+        userWrapper.lambda().set(SysUserEntity::getSysUpdateTime,DateUtils.getCurrentDateTime());
+        int count = sysUserMapper.update(null,userWrapper);
+        if(count == 0){
+            responseDTO.setResponseCode(ResponseEnum.FAIL,"更新用户密码失败");
+        }
+        responseDTO.setResponseCode(ResponseEnum.SUCCESS,"更新用户密码成功");
+        return responseDTO;
+    }
+
+    /**
      * <p>@Description 查询用户菜单列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 00:22 </p>
@@ -113,7 +151,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     public ResponseDTO<String> updateUserInfo(SysUserDTO user) {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
-        if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName(),user.getPassWord())
+        if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName())
             || (StringUtils.isNotBlank(user.getSex()) && !StringUtils.containsAny(user.getSex(),CommonEnum.SEX_1.getCode(),CommonEnum.SEX_0.getCode()))){
             responseDTO.setResponseCode(ResponseEnum.FAIL,"更新用户信息失败，用户信息有误");
             return responseDTO;
@@ -123,18 +161,9 @@ public class UserInfoServiceImpl implements IUserInfoService {
             responseDTO.setResponseCode(ResponseEnum.FAIL,"查询不到该用户");
             return responseDTO;
         }
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        //有输入密码则校验密码
-        if(StringUtils.isNotBlank(user.getPassWord()) && !encoder.matches(user.getPassWord(),userEntity.getPassWord())){
-            responseDTO.setResponseCode(ResponseEnum.FAIL,"密码不正确");
-            return responseDTO;
-        }
         //更新用户信息
         UpdateWrapper<SysUserEntity> userWrapper = new UpdateWrapper<>();
         userWrapper.lambda().eq(SysUserEntity::getUserId,user.getUserId());
-        if (StringUtils.isNotBlank(user.getNewPassWord())){
-            userWrapper.lambda().set(SysUserEntity::getPassWord,encoder.encode(user.getNewPassWord()));
-        }
         userWrapper.lambda().set(SysUserEntity::getUserName,user.getUserName());
         userWrapper.lambda().set(SysUserEntity::getPhoneNum,user.getPhoneNum());
         userWrapper.lambda().set(SysUserEntity::getBirthday,DateUtils.parse(user.getBirthday(), DateUtils.DateFormatEnum.YYYY_MM_DD));

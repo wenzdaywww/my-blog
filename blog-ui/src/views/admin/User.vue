@@ -6,7 +6,7 @@
         <el-card shadow="hover">
           <template #header>
             <div class="clearfix">
-              <span>基础信息</span>
+              <span>基本信息</span>
             </div>
           </template>
           <div class="info">
@@ -26,19 +26,13 @@
         <el-card shadow="hover">
           <template #header>
             <div class="clearfix">
-              <span>账户编辑</span>
+              <span>信息修改</span>
             </div>
           </template>
           <el-form label-width="90px" :model="form" :rules="editRules" ref="editForm">
             <el-form-item label="用户ID："> {{ form.userId }} </el-form-item>
             <el-form-item label="用户名称" prop="userName">
               <el-input v-model="form.userName" maxlength="100" placeholder="请输入用户名称"></el-input>
-            </el-form-item>
-            <el-form-item label="旧密码：" prop="passWord">
-              <el-input type="password" v-model="form.passWord" maxlength="20" placeholder="请输入旧密码"></el-input>
-            </el-form-item>
-            <el-form-item label="新密码：">
-              <el-input type="password" v-model="form.newPassWord" maxlength="20" placeholder="请输入新密码"></el-input>
             </el-form-item>
             <el-form-item label="性别">
               <el-radio v-model="form.sex" label="1">男</el-radio>
@@ -67,15 +61,14 @@
     </el-row>
     <!-- 头像上传-->
     <el-dialog title="裁剪图片" v-model="dialogVisible" width="600px">
-      <vue-cropper ref="cropper" :src="imgSrc" :ready="cropImage" :zoom="cropImage" :cropmove="cropImage"
-                   style="width: 100%; height: 400px"></vue-cropper>
+      <vue-cropper ref="cropper" :src="imgSrc" :ready="cropImage" :zoom="cropImage" :cropmove="cropImage" style="width: 100%; height: 400px"></vue-cropper>
       <template #footer>
-                <span class="dialog-footer">
-                    <el-button class="crop-demo-btn" type="primary">选择图片
-                        <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage" />
-                    </el-button>
-                    <el-button type="primary" @click="uploadImg">上传并保存</el-button>
-                </span>
+         <span class="dialog-footer">
+           <el-button class="crop-demo-btn" type="primary">选择图片
+             <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage" />
+           </el-button>
+           <el-button type="primary" @click="uploadImg">上传并保存</el-button>
+         </span>
       </template>
     </el-dialog>
   </div>
@@ -99,9 +92,6 @@ export default {
     const editRules = {
       userName : [
         { required: true, message: "用户名称不能为空", trigger: "blur" }
-      ],
-      passWord : [
-        { required: true, message: "修改信息旧密码不能为空", trigger: "blur" }
       ],
       phoneNum: [
         { min: 11, message: "手机号格式不正确", trigger: "blur" },
@@ -132,14 +122,12 @@ export default {
         }
       ]
     };
-    // 表单校验
+    // 表单对象
     const editForm = ref(null);
     // 表单数据
     let form = reactive({
       userId: localStorage.getItem('userId'),
       userName : "",
-      newPassWord: "",
-      passWord : "",
       phoneNum : "",
       birthday : "",
       sex : "",
@@ -152,8 +140,6 @@ export default {
       request.$http.get("api/admin/user/info",form).then(function (res) {
         if(res.code === 200){
           form.userName = res.data.userName;
-          form.passWord = "";
-          form.newPassWord = "";
           form.phoneNum = res.data.phoneNum;
           form.birthday = res.data.birthday;
           form.sex = res.data.sex;

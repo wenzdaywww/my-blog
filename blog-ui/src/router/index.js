@@ -127,7 +127,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    document.title = "my-blog-admin";
+    document.title = "my-blog";
     if (to.path === "/login"){
         next();
     }else {
