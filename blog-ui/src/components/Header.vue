@@ -17,15 +17,12 @@
           </el-tooltip>
           <span class="btn-bell-badge" v-if="form.message"></span>
         </div>
-        <!-- 用户头像 -->
-        <div class="user-avator">
-          <img :src="form.photo"  />
-        </div>
         <!-- 用户名下拉菜单 -->
-        <el-dropdown class="user-name" trigger="click" @command="handleCommand">
-            <span class="el-dropdown-link">
-               <i class="el-icon-caret-bottom"></i>
-            </span>
+        <el-dropdown class="user-name" trigger="hover" @command="handleCommand">
+          <!-- 用户头像 -->
+          <div class="user-avator">
+            <img :src="form.photo" />
+          </div>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="user">个人中心</el-dropdown-item>
