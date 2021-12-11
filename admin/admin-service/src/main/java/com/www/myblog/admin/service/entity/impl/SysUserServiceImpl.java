@@ -1,6 +1,7 @@
 package com.www.myblog.admin.service.entity.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.www.myblog.admin.data.entity.SysUserEntity;
 import com.www.myblog.admin.data.mapper.SysUserMapper;
 import com.www.myblog.admin.service.entity.ISysUserService;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
  * <p>@Date 2021/12/8 22:11 </p>
  */
 @Service
-public class SysUserServiceImpl implements ISysUserService {
+public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity> implements ISysUserService {
     @Autowired
     private SysUserMapper sysUserMapper;
 

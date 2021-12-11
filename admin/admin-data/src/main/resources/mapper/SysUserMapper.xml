@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.www.myblog.admin.data.mapper.SysUserMapper">
   <resultMap id="BaseResultMap" type="com.www.myblog.admin.data.entity.SysUserEntity">
-    <!--@mbg.generated-->
     <!--@Table sys_user-->
     <id column="SU_ID" property="suId" />
     <result column="USER_ID" property="userId" />
@@ -21,17 +20,30 @@
     <result column="SYS_UPDATE_TIME" property="sysUpdateTime" />
     <result column="SYS_CREATE_TIME" property="sysCreateTime" />
   </resultMap>
-
+  <!--  表字段-->
   <sql id="Base_Column_List">
-    <!--@mbg.generated-->
     SU_ID, USER_ID, USER_NAME, PASS_WORD, PHONE_NUM, BIRTHDAY, SEX, PHOTO, E_MAIL,BRIEF, STATE_CD,
-    SYS_UPDATE_TIME, SYS_CREATE_TIME
+    NOT_EXPIRED,NOT_LOCKED,CREDENTIALS_NOT_EXPIRED,SYS_UPDATE_TIME, SYS_CREATE_TIME
   </sql>
-
   <!--  查询用户拥有的角色信息-->
   <select id="findUserRole" resultType="com.www.myblog.admin.data.entity.SysRoleEntity">
     SELECT R.ROLE_ID, R.ROLE_NAME, R.DESCRIPTION, R.SYS_UPDATE_TIME, R.SYS_CREATE_TIME FROM SYS_USER_ROLE UR,SYS_ROLE R
     WHERE UR.ROLE_ID = R.ROLE_ID AND UR.USER_ID = #{userId}
   </select>
-
+  <!--  查询所有用户信息-->
+  <select id="findAllUser" resultType="com.www.myblog.admin.data.dto.SysUserDTO">
+    SELECT SU_ID, USER_ID, USER_NAME, PHONE_NUM, BIRTHDAY, SEX, PHOTO, E_MAIL,BRIEF, STATE_CD,
+        NOT_EXPIRED,NOT_LOCKED,CREDENTIALS_NOT_EXPIRED,SYS_UPDATE_TIME, SYS_CREATE_TIME
+    FROM SYS_USER
+      where 1=1
+      <if test="obj.userId != null and obj.userId != ''">
+        AND USER_ID = #{obj.userId}
+      </if>
+      <if test="obj.userName != null and obj.userName != ''">
+        AND USER_NAME = #{obj.userName}
+      </if>
+      <if test="obj.stateCd != null and obj.stateCd != ''">
+        AND STATE_CD = #{obj.stateCd}
+      </if>
+  </select>
 </mapper>

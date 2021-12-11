@@ -23,7 +23,7 @@ axios.interceptors.response.use(
     response => {
         if (response.status == 200) {
             //接口返回403则清除token
-            if(response.data.code === 403){
+            if(response.data && response.data.code === 403){
                 cookies.set("token",null);
                 cookies.set("userId",null);
                 ElMessage.info("请重新登录");

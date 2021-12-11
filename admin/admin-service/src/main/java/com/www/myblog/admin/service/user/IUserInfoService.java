@@ -97,7 +97,7 @@ public interface IUserInfoService {
      * @param pageSize 页面条数
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.admin.data.dto.SysUserDTO>>
      */
-    ResponseDTO<List<SysUserEntity>> findAllUser(String stateCd, String userId,String userName, int pageNum, int pageSize);
+    ResponseDTO<List<SysUserDTO>> findAllUser(String stateCd, String userId,String userName, int pageNum, int pageSize);
     /**
      * <p>@Description 查询用户拥有的角色信息 </p>
      * <p>@Author www </p>

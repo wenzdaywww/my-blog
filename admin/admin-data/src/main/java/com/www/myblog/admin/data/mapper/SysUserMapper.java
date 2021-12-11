@@ -1,6 +1,8 @@
 package com.www.myblog.admin.data.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.www.myblog.admin.data.dto.SysUserDTO;
 import com.www.myblog.admin.data.entity.SysRoleEntity;
 import com.www.myblog.admin.data.entity.SysUserEntity;
 import org.apache.ibatis.annotations.Mapper;
@@ -16,6 +18,15 @@ import java.util.List;
  */
 @Mapper
 public interface SysUserMapper extends BaseMapper<SysUserEntity> {
+    /**
+     * <p>@Description 查询所有用户信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/11 17:42 </p>
+     * @param page 分页信息
+     * @param userDTO 查询条件
+     * @return com.baomidou.mybatisplus.extension.plugins.pagination.Page<com.www.myblog.admin.data.dto.SysUserDTO>
+     */
+    Page<SysUserDTO> findAllUser(Page<SysUserDTO> page,@Param("obj") SysUserDTO userDTO);
     /**
      * <p>@Description 查询用户拥有的角色信息 </p>
      * <p>@Author www </p>

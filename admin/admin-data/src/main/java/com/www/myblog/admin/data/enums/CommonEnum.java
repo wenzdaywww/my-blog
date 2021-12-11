@@ -7,6 +7,10 @@ package com.www.myblog.admin.data.enums;
  * <p>@Date 2021/12/2 21:04 </p>
  */
 public enum CommonEnum {
+    /** 菜单类型：页面菜单 **/
+    MENU_TYPE_1("1","页面菜单"),
+    /** 菜单类型：请求路径 **/
+    MENU_TYPE_2("2","请求路径"),
     /** 性别：男 **/
     SEX_1("1","男"),
     /** 性别：女 **/

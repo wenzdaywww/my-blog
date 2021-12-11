@@ -31,7 +31,7 @@ public class UserController {
      * @param user 用户信息
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
-    @PostMapping("/pwd")
+    @PostMapping("pwd")
     public ResponseDTO<String> updateUserPwd(SysUserDTO user){
         return userInfoService.updateUserPwd(user);
     }
@@ -42,7 +42,7 @@ public class UserController {
      * @param userId 用户ID
      * @return com.www.myblog.common.pojo.ResponseDTO
      */
-    @GetMapping("/menu")
+    @GetMapping("menu")
     public ResponseDTO<List<SysMenuDTO>> findUserMenu(String userId){
         return userInfoService.findUserMenu(userId);
     }
@@ -54,7 +54,7 @@ public class UserController {
      * @param userId 用户ID
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
-    @PostMapping("/photo")
+    @PostMapping("photo")
     public ResponseDTO<String> uploadPhoto(MultipartFile photo,String userId){
         return userInfoService.uploadPhoto(photo,userId);
     }
@@ -65,7 +65,7 @@ public class UserController {
      * @param user 用户信息
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
-    @PostMapping("/edit")
+    @PostMapping("edit")
     public ResponseDTO<String> updateUserInfo(SysUserDTO user){
         return userInfoService.updateUserInfo(user);
     }
@@ -76,7 +76,7 @@ public class UserController {
      * @param userId 用户ID
      * @return com.www.myblog.common.pojo.ResponseDTO<com.www.myblog.admin.data.dto.SysUserDTO>
      */
-    @GetMapping("/info")
+    @GetMapping("info")
     public ResponseDTO<SysUserDTO> findUser(String userId){
         return userInfoService.findUser(userId);
     }
@@ -87,7 +87,7 @@ public class UserController {
      * @param user 用户信息
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
-    @PostMapping("/new")
+    @PostMapping("new")
     public ResponseDTO<String> createUser(SysUserDTO user){
         return userInfoService.createUser(user);
     }
@@ -102,8 +102,8 @@ public class UserController {
      * @param pageSize 页面条数
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.admin.data.dto.SysUserDTO>>
      */
-    @GetMapping("/all")
-    public ResponseDTO<List<SysUserEntity>> findAllUser(String stateCd, String userId, String userName, int pageNum, int pageSize){
+    @GetMapping("all")
+    public ResponseDTO<List<SysUserDTO>> findAllUser(String stateCd, String userId, String userName, int pageNum, int pageSize){
         return userInfoService.findAllUser(stateCd,userId,userName,pageNum,pageSize);
     }
     /**
@@ -117,7 +117,7 @@ public class UserController {
      * @param credentials 密码是否过期
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
-    @PostMapping("/state")
+    @PostMapping("state")
     public ResponseDTO<String> updateState(String userId,String stateCd,String expired,String locked,String credentials){
         return userInfoService.updateState(userId,stateCd,expired,locked,credentials);
     }
@@ -127,7 +127,7 @@ public class UserController {
      * <p>@Date 2021/12/4 12:53 </p>
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.admin.data.dto.SysUserRoleDTO>>
      */
-    @GetMapping("/role")
+    @GetMapping("role")
     public ResponseDTO<List<SysRoleDTO>> findAllRole(){
         return userInfoService.findAllRole();
     }

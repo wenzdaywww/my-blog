@@ -14,6 +14,7 @@ import java.util.Date;
  */
 @Data
 public class SysRoleMenuDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * 角色主键
      */
@@ -66,7 +67,6 @@ public class SysRoleMenuDTO implements Serializable {
     * 角色菜单主键
     */
     private Long srmId;
-
     /**
     * 更新时间
     */
@@ -75,6 +75,4 @@ public class SysRoleMenuDTO implements Serializable {
     * 创建时间
     */
     private Date sysCreateTime;
-
-    private static final long serialVersionUID = 1L;
 }

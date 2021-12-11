@@ -23,18 +23,18 @@
       </div>
       <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
         <el-table-column prop="suId" label="ID" width="55" align="center"></el-table-column>
-        <el-table-column prop="userId" label="用户ID"></el-table-column>
-        <el-table-column prop="userName" label="用户名称"></el-table-column>
+        <el-table-column prop="userId" label="用户ID" align="center"></el-table-column>
+        <el-table-column prop="userName" label="用户名称" align="center"></el-table-column>
         <el-table-column label="头像(查看大图)" align="center">
           <template #default="scope">
-            <el-image class="table-td-thumb" :src=" scope.row.photo ? 'api/admin'+ scope.row.photo : ''" :preview-src-list="[scope.row.photo]">
+            <el-image class="table-td-thumb" :src=" scope.row.photo ? 'api/admin'+ scope.row.photo : 'src/assets/img/img.jpg'" :preview-src-list="[scope.row.photo]">
             </el-image>
           </template>
         </el-table-column>
-        <el-table-column prop="phoneNum" label="手机号码"></el-table-column>
-        <el-table-column prop="email" label="邮箱"></el-table-column>
-        <el-table-column prop="birthday" label="出生日期"></el-table-column>
-        <el-table-column prop="sex" label="性别">
+        <el-table-column prop="phoneNum" label="手机号码" align="center"></el-table-column>
+        <el-table-column prop="email" label="邮箱" align="center"></el-table-column>
+        <el-table-column prop="birthday" label="出生日期" align="center"></el-table-column>
+        <el-table-column prop="sex" label="性别" align="center">
           <template #default="scope">
             {{ scope.row.sex === '1' ? '男' : scope.row.sex === '0' ? '女' : '未知' }}
           </template>
@@ -59,8 +59,8 @@
             {{ scope.row.credentialsNotExpired === '1' ? '否' : '是' }}
           </template>
         </el-table-column>
-        <el-table-column prop="sysCreateTime" label="注册时间"></el-table-column>
-        <el-table-column prop="sysUpdateTime" label="更新时间"></el-table-column>
+        <el-table-column prop="sysCreateTime" label="注册时间" align="center"></el-table-column>
+        <el-table-column prop="sysUpdateTime" label="更新时间" align="center"></el-table-column>
         <el-table-column label="操作" width="180" align="center">
           <template #default="scope">
             <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑 </el-button>
@@ -158,7 +158,7 @@ import { ref, reactive, getCurrentInstance } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 
 export default {
-  name: "basetable",
+  name: "userList",
   setup() {
     // 查询条件
     const query = reactive({
@@ -235,6 +235,7 @@ export default {
     const getData = () => {
       request.$http.get("api/admin/user/all",query).then(function (res) {
         if(res.code === 200){
+          console.log(res.data);
           tableData.value = res.data;
           pageTotal.value = res.totalNum;
         }
@@ -330,7 +331,7 @@ export default {
             }else {
               ElMessage.error(res.data);
             }
-          })
+          });
         } else {
           return false;
         }

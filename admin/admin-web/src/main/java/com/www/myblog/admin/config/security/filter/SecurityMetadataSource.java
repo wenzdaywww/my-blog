@@ -1,7 +1,7 @@
 package com.www.myblog.admin.config.security.filter;
 
 import com.www.myblog.admin.data.dto.SysRoleMenuDTO;
-import com.www.myblog.admin.service.user.IMenuInfoService;
+import com.www.myblog.admin.service.menu.IMenuInfoService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

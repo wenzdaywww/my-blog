@@ -14,11 +14,11 @@ import java.util.Date;
  */
 @Data
 public class SysUserDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
     * 用户主键
     */
     private Long suId;
-
     /**
     * 用户ID
     */
@@ -39,27 +39,22 @@ public class SysUserDTO implements Serializable {
     * 用户昵称
     */
     private String userName;
-
     /**
     * 手机号
     */
     private String phoneNum;
-
     /**
     * 生日
     */
     private String birthday;
-
     /**
     * 性别：1男0女
     */
     private String sex;
-
     /**
     * 头像
     */
     private String photo;
-
     /**
     * 邮箱
     */
@@ -84,16 +79,13 @@ public class SysUserDTO implements Serializable {
     * 证书（密码）是否未过期。默认为1未过期，0过期
     */
     private String credentialsNotExpired;
-
     /**
     * 更新时间
     */
     private Date sysUpdateTime;
-
     /**
     * 创建时间
     */
     private Date sysCreateTime;
 
-    private static final long serialVersionUID = 1L;
 }

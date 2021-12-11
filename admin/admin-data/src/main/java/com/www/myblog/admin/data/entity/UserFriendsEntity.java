@@ -3,6 +3,8 @@ package com.www.myblog.admin.data.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -15,35 +17,35 @@ import lombok.Data;
 @Data
 @TableName("USER_FRIENDS")
 public class UserFriendsEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
     * 好友主键
     */
+    @TableId("SUR_ID")
     private Long friendsId;
-
     /**
     * 用户ID
     */
+    @TableField("USER_ID")
     private String userId;
-
     /**
     * 好友ID
     */
+    @TableField("FRIEND_ID")
     private String friendId;
-
     /**
     * 好友备注
     */
+    @TableField("FRIEND_NAME")
     private String friendName;
-
     /**
     * 更新时间
     */
+    @TableField("SYS_UPDATE_TIME")
     private Date sysUpdateTime;
-
     /**
     * 创建时间
     */
+    @TableField("SYS_CREATE_TIME")
     private Date sysCreateTime;
-
-    private static final long serialVersionUID = 1L;
 }

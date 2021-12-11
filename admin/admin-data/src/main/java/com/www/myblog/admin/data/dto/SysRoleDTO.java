@@ -14,30 +14,25 @@ import java.util.Date;
  */
 @Data
 public class SysRoleDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * 角色主键
      */
     private Long roleId;
-
     /**
      * 角色昵称
      */
     private String roleName;
-
     /**
      * 角色描述
      */
     private String description;
-
     /**
      * 更新时间
      */
     private Date sysUpdateTime;
-
     /**
      * 创建时间
      */
     private Date sysCreateTime;
-
-    private static final long serialVersionUID = 1L;
 }

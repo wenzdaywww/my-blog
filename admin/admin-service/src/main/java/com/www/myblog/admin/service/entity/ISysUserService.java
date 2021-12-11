@@ -1,5 +1,6 @@
 package com.www.myblog.admin.service.entity;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.www.myblog.admin.data.entity.SysUserEntity;
 
 /**
@@ -8,7 +9,7 @@ import com.www.myblog.admin.data.entity.SysUserEntity;
  * <p>@Author www </p>
  * <p>@Date 2021/12/8 22:11 </p>
  */
-public interface ISysUserService {
+public interface ISysUserService extends IService<SysUserEntity> {
     /**
      * <p>@Description 根据用户ID查询用户信息 </p>
      * <p>@Author www </p>

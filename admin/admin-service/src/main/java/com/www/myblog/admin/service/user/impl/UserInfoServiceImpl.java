@@ -307,21 +307,15 @@ public class UserInfoServiceImpl implements IUserInfoService {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.admin.data.dto.SysUserDTO>>
      */
     @Override
-    public ResponseDTO<List<SysUserEntity>> findAllUser(String stateCd, String userId,String userName, int pageNum, int pageSize) {
-        QueryWrapper<SysUserEntity> wrapper = new QueryWrapper<>();
-        if(StringUtils.isNotBlank(stateCd)){
-            wrapper.lambda().eq(SysUserEntity::getStateCd,stateCd);
-        }
-        if(StringUtils.isNotBlank(userId)){
-            wrapper.lambda().eq(SysUserEntity::getUserId,userId);
-        }
-        if(StringUtils.isNotBlank(userName)){
-            wrapper.lambda().eq(SysUserEntity::getUserName,userName);
-        }
-        Page<SysUserEntity> page = new Page<>(pageNum,pageSize);
-        page = sysUserMapper.selectPage(page,wrapper);
-        List<SysUserEntity> userList =  page.getRecords();
-        ResponseDTO<List<SysUserEntity>> responseDTO = new ResponseDTO<>(ResponseEnum.SUCCESS,userList);
+    public ResponseDTO<List<SysUserDTO>> findAllUser(String stateCd, String userId,String userName, int pageNum, int pageSize) {
+        SysUserDTO userDTO = new SysUserDTO();
+        userDTO.setUserId(userId);
+        userDTO.setUserName(userName);
+        userDTO.setStateCd(stateCd);
+        Page<SysUserDTO> page = new Page<>(pageNum,pageSize);
+        page = sysUserMapper.findAllUser(page,userDTO);
+        List<SysUserDTO> userList =  page.getRecords();
+        ResponseDTO<List<SysUserDTO>> responseDTO = new ResponseDTO<>(ResponseEnum.SUCCESS,userList);
         responseDTO.setPageNum(pageNum);
         responseDTO.setPageSize(pageSize);
         responseDTO.setTotalNum(page.getTotal());

@@ -83,7 +83,7 @@ export default {
       newPassWord: "",
       cfmPassWord: "",
       passWord : "",
-      photo : "",
+      photo : "src/assets/img/img.jpg",
       message : 0
     });
     // 修改密码的规则校验
