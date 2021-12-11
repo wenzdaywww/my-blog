@@ -45,6 +45,24 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
     @Autowired
     private ISysRoleMenuService sysRoleMenuService;
 
+
+    /**
+     * <p>@Description 删除菜单 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/11 23:57 </p>
+     * @param menuId 菜单ID
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    @Override
+    public ResponseDTO<String> deleteMenu(Long menuId) {
+        QueryWrapper<SysMenuEntity> menuWrapper = new QueryWrapper<>();
+        menuWrapper.lambda().eq(SysMenuEntity::getMenuId,menuId);
+        sysMenuMapper.delete(menuWrapper);
+        QueryWrapper<SysRoleMenuEntity> roleWrapper = new QueryWrapper<>();
+        roleWrapper.lambda().eq(SysRoleMenuEntity::getMenuId,menuId);
+        sysRoleMenuMapper.delete(roleWrapper);
+        return new ResponseDTO<>(ResponseEnum.SUCCESS,"删除菜单成功");
+    }
     /**
      * <p>@Description 修改或创建菜单 </p>
      * <p>@Author www </p>

@@ -5,7 +5,6 @@ import com.www.myblog.admin.data.dto.SysRoleMenuDTO;
 import com.www.myblog.common.pojo.ResponseDTO;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>@Description 菜单service接口 </p>
@@ -14,6 +13,14 @@ import java.util.Map;
  * <p>@Date 2021/11/24 20:41 </p>
  */
 public interface IMenuInfoService {
+    /**
+     * <p>@Description 删除菜单 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/11 23:57 </p>
+     * @param menuId 菜单ID
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    ResponseDTO<String> deleteMenu(Long menuId);
     /**
      * <p>@Description 修改或创建菜单 </p>
      * <p>@Author www </p>

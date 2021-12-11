@@ -51,6 +51,7 @@
         <el-table-column label="操作" width="180" align="center">
           <template #default="scope">
             <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑 </el-button>
+            <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.row)">删除 </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -263,6 +264,21 @@ export default {
       }
       form.isDelete = row.isDelete;
     };
+    // 删除菜单
+    const handleDelete = (row) => {
+      // 二次确认删除
+      ElMessageBox.confirm("确定要删除吗？", "提示", {type: "warning"}).then(() => {
+        form.menuId= row.menuId;
+        request.$http.post("api/admin/menu/down", form).then(function (res) {
+          if(res.code === 200){
+            ElMessage.success('删除成功');
+            getData();
+          }else {
+            ElMessage.error(res.data);
+          }
+        });
+      }).catch(() => {});
+    };
     // 保存按钮
     const saveSure = () => {
       editForm.value.validate((valid) => {
@@ -287,7 +303,7 @@ export default {
       });
     };
     return { query,tableData,editRules,form,rolesArr,editVisible,dialogVisible,editForm,
-      handleSearch,handleReset,handleEdit,handlePageChange,saveSure,handleAdd};
+      handleSearch,handleReset,handleEdit,handlePageChange,saveSure,handleAdd,handleDelete};
   }
 };
 </script>
@@ -317,5 +333,8 @@ export default {
   margin: auto;
   width: 40px;
   height: 40px;
+}
+.red {
+  color: #ff0000;
 }
 </style>

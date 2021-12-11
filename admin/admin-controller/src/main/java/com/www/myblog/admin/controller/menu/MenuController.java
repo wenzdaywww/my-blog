@@ -25,6 +25,17 @@ public class MenuController {
     private IMenuInfoService menuInfoService;
 
     /**
+     * <p>@Description 删除菜单 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/11 23:57 </p>
+     * @param menuId 菜单ID
+     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     */
+    @PostMapping("down")
+    public ResponseDTO<String> deleteMenu(Long menuId){
+        return menuInfoService.deleteMenu(menuId);
+    }
+    /**
      * <p>@Description 修改或创建菜单 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 19:58 </p>
@@ -32,7 +43,7 @@ public class MenuController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
     @PostMapping("edit")
-    public ResponseDTO<String> updateOrSave(SysMenuDTO menu){
+    public ResponseDTO<String> updateOrSaveMenu(SysMenuDTO menu){
         return menuInfoService.updateOrSave(menu);
     }
     /**
