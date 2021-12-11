@@ -30,6 +30,7 @@
 import { ref, reactive, getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
+import cookies from "vue-cookies";
 
 export default {
   setup() {
@@ -54,8 +55,8 @@ export default {
     const submitForm = () => {
       request.$http.post("api/admin/login",param).then(function (res) {
         if(res.code === 200){
-          localStorage.setItem('token',res.data.token);
-          localStorage.setItem('userId',param.id);
+          cookies.set("token",res.data.token);
+          cookies.set("userId",param.id);
           ElMessage.success("登录成功");
           router.push("/home");
         }else {

@@ -80,6 +80,8 @@ import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 import avatar from "../../assets/img/img.jpg";
 import {ElMessage} from "element-plus";
+import cookies from "vue-cookies";
+
 export default {
   name: "user",
   components: {
@@ -126,7 +128,7 @@ export default {
     const editForm = ref(null);
     // 表单数据
     let form = reactive({
-      userId: localStorage.getItem('userId'),
+      userId: cookies.get('userId'),
       userName : "",
       phoneNum : "",
       birthday : "",

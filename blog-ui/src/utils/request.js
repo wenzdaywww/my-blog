@@ -2,6 +2,7 @@ import axios from "axios";
 import qs from "qs";
 import router from '../router';
 import {ElMessage, ElMessageBox} from 'element-plus';
+import cookies from "vue-cookies";
 //设置超时
 axios.defaults.timeout = 10000;
 axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded;charset=UTF-8";
@@ -9,7 +10,7 @@ axios.interceptors.request.use(
     config => {
         // 通过拦截request请求,主动为请求头,追加新属性 Authorization,等于 token 值
         if (config.url !== "api/admin/login"){
-            config.headers.Authorization = "Bearer " + localStorage.getItem('token');
+            config.headers.Authorization = "Bearer " + cookies.get("token");
         }
         config.withCredentials = true;
         return config;
@@ -23,8 +24,8 @@ axios.interceptors.response.use(
         if (response.status == 200) {
             //接口返回403则清除token
             if(response.data.code === 403){
-                localStorage.setItem('token',"");
-                localStorage.setItem('userId',"");
+                cookies.set("token",null);
+                cookies.set("userId",null);
                 ElMessage.info("请重新登录");
                 //调整登录页面
                 router.push("/login");

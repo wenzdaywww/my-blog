@@ -1,5 +1,6 @@
 import {createRouter, createWebHistory} from "vue-router";
 import Home from "../views/admin/Home.vue";
+import cookies from "vue-cookies";
 
 const routes = [
     {
@@ -131,7 +132,7 @@ router.beforeEach((to, from, next) => {
     if (to.path === "/login"){
         next();
     }else {
-        const token = localStorage.getItem("token");
+        const token = cookies.get("token");
         //token失效则调整登录页面
         if (token === null || token === undefined || token === "null" || token === ""){
             next("/login");
