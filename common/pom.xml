@@ -11,10 +11,10 @@
     </parent>
 
     <groupId>com.www</groupId>
-    <artifactId>common-api</artifactId>
+    <artifactId>common</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <name>common-api</name>
+    <name>common</name>
     <description>公共API包</description>
 
     <dependencies>

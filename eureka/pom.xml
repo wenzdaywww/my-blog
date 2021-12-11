@@ -11,10 +11,10 @@
     </parent>
 
     <groupId>com.www</groupId>
-    <artifactId>eureka-server</artifactId>
+    <artifactId>eureka</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <name>eureka-server</name>
+    <name>eureka</name>
     <description>博客eureka注册中心</description>
 
     <dependencies>
