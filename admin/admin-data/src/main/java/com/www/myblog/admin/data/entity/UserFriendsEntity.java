@@ -3,6 +3,7 @@ package com.www.myblog.admin.data.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -21,7 +22,7 @@ public class UserFriendsEntity implements Serializable {
     /**
     * 好友主键
     */
-    @TableId("SUR_ID")
+    @TableId(value = "SUR_ID",type = IdType.AUTO)
     private Long friendsId;
     /**
     * 用户ID

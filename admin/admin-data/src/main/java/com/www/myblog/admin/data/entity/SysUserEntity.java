@@ -3,6 +3,7 @@ package com.www.myblog.admin.data.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -22,7 +23,7 @@ public class SysUserEntity implements Serializable {
     /**
     * 用户主键
     */
-    @TableId("su_Id")
+    @TableId(value = "SU_ID",type = IdType.AUTO)
     private Long suId;
     /**
     * 用户ID

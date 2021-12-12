@@ -22,7 +22,7 @@ public class SysRoleMenuEntity implements Serializable {
     /**
     * 角色菜单主键
     */
-    @TableId("SRM_ID")
+    @TableId(value = "SRM_ID",type = IdType.AUTO)
     private Long srmId;
     /**
     * 角色ID

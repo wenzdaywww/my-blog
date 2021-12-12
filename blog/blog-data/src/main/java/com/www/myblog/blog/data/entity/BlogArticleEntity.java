@@ -3,6 +3,9 @@ package com.www.myblog.blog.data.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -15,55 +18,56 @@ import lombok.Data;
 @Data
 @TableName("BLOG_ARTICLE")
 public class BlogArticleEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
     * 博客主键
     */
+    @TableId(value = "BLOG_ID",type = IdType.AUTO)
     private Long blogId;
-
     /**
     * 用户ID
     */
+    @TableField("USER_ID")
     private String userId;
-
     /**
     * 博客主题
     */
+    @TableField("BLOG_THEME")
     private String blogTheme;
-
     /**
     * 博客内容
     */
+    @TableField("BLOG_CONTENT")
     private String blogContent;
-
     /**
     * 博客浏览量
     */
+    @TableField("BLOG_VIEWS")
     private Long blogViews;
-
     /**
     * 博客点赞数
     */
+    @TableField("BLOG_LIKE")
     private Long blogLike;
-
     /**
     * 博客状态：1有效，2删除，3封号
     */
+    @TableField("STATE_CD")
     private String stateCd;
-
     /**
     * 博客评论数
     */
+    @TableField("BLOG_COMMENT")
     private Long blogComment;
-
     /**
     * 更新时间
     */
+    @TableField("SYS_UPDATE_TIME")
     private Date sysUpdateTime;
-
     /**
     * 创建时间
     */
+    @TableField("SYS_CREATE_TIME")
     private Date sysCreateTime;
 
-    private static final long serialVersionUID = 1L;
 }

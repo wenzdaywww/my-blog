@@ -3,6 +3,7 @@ package com.www.myblog.admin.data.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -21,7 +22,7 @@ public class SysRoleEntity implements Serializable {
     /**
     * 角色主键
     */
-    @TableId("ROLE_ID")
+    @TableId(value = "ROLE_ID",type = IdType.AUTO)
     private Long roleId;
     /**
     * 角色昵称

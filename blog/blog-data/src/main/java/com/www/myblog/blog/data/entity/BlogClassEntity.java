@@ -3,6 +3,9 @@ package com.www.myblog.blog.data.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -15,30 +18,31 @@ import lombok.Data;
 @Data
 @TableName("BLOG_CLASS")
 public class BlogClassEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
     * 博客分类主键
     */
+    @TableId(value = "BC_ID",type = IdType.AUTO)
     private Long bcId;
-
     /**
     * 博客ID
     */
+    @TableField("BLOG_ID")
     private Long blogId;
-
     /**
     * 分类ID
     */
+    @TableField("CLASS_ID")
     private Long classId;
-
     /**
     * 更新时间
     */
+    @TableField("SYS_UPDATE_TIME")
     private Date sysUpdateTime;
-
     /**
     * 创建时间
     */
+    @TableField("SYS_CREATE_TIME")
     private Date sysCreateTime;
 
-    private static final long serialVersionUID = 1L;
 }
