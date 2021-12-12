@@ -1,9 +1,7 @@
 package com.www.myblog.admin.service.user.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.sun.org.apache.regexp.internal.RE;
 import com.www.myblog.admin.data.dto.SysMenuDTO;
 import com.www.myblog.admin.data.dto.SysRoleDTO;
 import com.www.myblog.admin.data.dto.SysUserDTO;
@@ -26,13 +24,13 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>@Description 用户信息service实现类 </p>
@@ -328,20 +326,5 @@ public class UserInfoServiceImpl implements IUserInfoService {
         responseDTO.setPageSize(pageSize);
         responseDTO.setTotalNum(page.getTotal());
         return responseDTO;
-    }
-
-    /**
-     * <p>@Description 查询用户拥有的角色信息 </p>
-     * <p>@Author www </p>
-     * <p>@Date 2021/11/24 21:45 </p>
-     * @param userId 用户ID
-     * @return java.util.List<com.www.myblog.admin.data.entity.SysRoleEntity> 角色信息
-     */
-    @Override
-    public List<SysRoleEntity> findUserRole(String userId) {
-        if(StringUtils.isBlank(userId)){
-            return null;
-        }
-        return sysUserMapper.findUserRole(userId);
     }
 }

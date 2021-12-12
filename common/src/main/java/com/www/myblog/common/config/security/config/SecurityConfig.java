@@ -1,10 +1,10 @@
-package com.www.myblog.admin.config.security.config;
+package com.www.myblog.common.config.security.config;
 
-import com.www.myblog.admin.config.security.filter.JwtAuthorizationTokenFilter;
-import com.www.myblog.admin.config.security.filter.SecurityAccessDecisionManager;
-import com.www.myblog.admin.config.security.filter.SecurityMetadataSource;
-import com.www.myblog.admin.config.security.handler.*;
-import com.www.myblog.admin.config.security.impl.UserDetailsServiceImpl;
+import com.www.myblog.common.config.security.filter.JwtAuthorizationTokenFilter;
+import com.www.myblog.common.config.security.filter.SecurityAccessDecisionManager;
+import com.www.myblog.common.config.security.filter.SecurityMetadataSource;
+import com.www.myblog.common.config.security.handler.*;
+import com.www.myblog.common.config.security.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

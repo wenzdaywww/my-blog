@@ -1,6 +1,6 @@
 package com.www.myblog.blog.controller.test;
 
-import com.www.myblog.common.api.MyBlogAdminService;
+import com.www.myblog.common.api.MyAdminService;
 import com.www.myblog.common.pojo.ResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ public class TestController {
     @Autowired
     private RestTemplate restTemplate;
     @Autowired
-    private MyBlogAdminService myBlogAdminService;
+    private MyAdminService myAdminService;
     /**
      * <p>@Description 测试方法 </p>
      * <p>@Author www </p>
@@ -36,6 +36,6 @@ public class TestController {
      */
     @GetMapping("/test/feign/{name}")
     public ResponseDTO feign(@PathVariable("name") String name){
-        return myBlogAdminService.test(name);
+        return myAdminService.test(name);
     }
 }

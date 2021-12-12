@@ -1,7 +1,7 @@
-package com.www.myblog.admin.config.security.handler;
+package com.www.myblog.common.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.www.myblog.admin.config.security.filter.SecurityAccessDecisionManager;
+import com.www.myblog.common.config.security.filter.SecurityAccessDecisionManager;
 import com.www.myblog.common.pojo.ResponseDTO;
 import com.www.myblog.common.pojo.ResponseEnum;
 import org.slf4j.Logger;

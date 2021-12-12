@@ -19,8 +19,8 @@ import java.util.Map;
  * <p>@Author www </p>
  * <p>@Date 2021/11/16 20:43 </p>
  */
-public class TokenUtilHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(TokenUtilHandler.class);
+public class TokenUtils {
+    private static final Logger LOG = LoggerFactory.getLogger(TokenUtils.class);
     /** token键值 */
     public static final String TOKEN = "token";
     /** token-type键值 */
@@ -32,24 +32,33 @@ public class TokenUtilHandler {
     /** 请求头名称 */
     public static final String AUTHORIZATION = "Authorization";
     /** 过期时间 */
-    private Long EXPIRATION_TIME ;
+    private static Long EXPIRATION_TIME ;
     /** 私钥 */
-    private String SECRET ;
+    private static String SECRET ;
     /** token前缀 */
-    private final String TOKEN_PREFIX = "Bearer";
+    private static final String TOKEN_PREFIX = "Bearer";
 
-    private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
-     * <p>@Description 构造方法 </p>
+     * <p>@Description 设置token过期时间和密钥 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/11/16 20:49 </p>
      * @param expirationTime 过期时间
      * @param secret 密钥
      */
-    public TokenUtilHandler(Long expirationTime,String secret){
+    public static void setSecretAndExpireTime(Long expirationTime, String secret){
         EXPIRATION_TIME = expirationTime;
         SECRET = secret;
+    }
+    /**
+     * <p>@Description  获取过期时间 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/12 15:34 </p>
+     * @return java.lang.String
+     */
+    public static Long getExpirationTime() {
+        return EXPIRATION_TIME;
     }
     /**
      * <p>@Description 生成token </p>
@@ -58,7 +67,7 @@ public class TokenUtilHandler {
      * @param claims
      * @return java.util.Map<java.lang.String, java.lang.String>
      */
-    public Map<String, String> generateToken(Map<String, Object> claims) {
+    public static Map<String, String> generateToken(Map<String, Object> claims) {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         c.add(Calendar.SECOND, EXPIRATION_TIME.intValue());
@@ -81,7 +90,7 @@ public class TokenUtilHandler {
      * @param request
      * @return java.util.Map<java.lang.String, java.lang.Object>
      */
-    public Map<String, Object> validateTokenAndGetClaims(HttpServletRequest request) {
+    public static Map<String, Object> validateTokenAndGetClaims(HttpServletRequest request) {
         String token = request.getHeader(AUTHORIZATION);
         if (token == null) {
             return null;

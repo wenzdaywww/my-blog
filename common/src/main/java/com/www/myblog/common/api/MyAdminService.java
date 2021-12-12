@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
  * <p>@Date 2021/8/14 16:51 </p>
  */
 @Component
-@FeignClient(value = "my-blog-admin")
-public interface MyBlogAdminService {
+@FeignClient(value = "my-admin")
+public interface MyAdminService {
     /**
      * <p>@Description 测试 </p>
      * <p>@Author www </p>

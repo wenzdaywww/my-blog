@@ -5,10 +5,16 @@ spring:
     active: @profileActive@
 #zuul路由网关配置
 zuul:
+  host:
+    connect-timeout-millis: 3000
+    socket-timeout-millis:  3000
   routes:
-    #设置cloud-provider服务路径
-    provider.serviceId: my-blog-admin
-    provider.path: /admin/**
+    #设置my-admin服务路径
+    my-admin.serviceId: my-admin
+    my-admin.path: /admin/**
+    #设置my-blog服务路径
+    my-blog.serviceId: my-blog
+    my-blog.path: /blog/**
   ignored-services: "*" #设置不能使用spring.application.name访问
   sensitive-headers:
     - Cookie,Set-Cookie,Authorization #配置header允许转发Cookie,Set-Cookie,Authorization包括其他自定义信息

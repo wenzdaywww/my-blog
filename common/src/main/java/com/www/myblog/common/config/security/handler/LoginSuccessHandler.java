@@ -1,14 +1,12 @@
-package com.www.myblog.admin.config.security.handler;
+package com.www.myblog.common.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.www.myblog.admin.config.security.config.JwtConfig;
 import com.www.myblog.common.pojo.ResponseDTO;
 import com.www.myblog.common.pojo.ResponseEnum;
 import com.www.myblog.common.utils.RedisUtils;
-import com.www.myblog.common.utils.TokenUtilHandler;
+import com.www.myblog.common.utils.TokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -31,9 +29,8 @@ import java.util.Map;
 @Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     private static Logger LOG = LoggerFactory.getLogger(LoginSuccessHandler.class);
-    private TokenUtilHandler tokenUtilHandler;
-    @Value("${spring.application.name}")
-    private String applicationName;
+    @Value("${jwt.user-prefix}")
+    private String redisUserPrefix;
     /**
      * <p>@Description security登录认证成功处理 </p>
      * <p>@Author www </p>
@@ -49,20 +46,15 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         //获取登录成功后的UserDetail对象
         User user = (User)authentication.getPrincipal();
         Map<String,Object> chaims = new HashMap<>();
-        chaims.put(TokenUtilHandler.USERID,user.getUsername());
+        chaims.put(TokenUtils.USERID,user.getUsername());
         //生成token
-        Map<String,String> tokenMap = tokenUtilHandler.generateToken(chaims);
+        Map<String,String> tokenMap = TokenUtils.generateToken(chaims);
         //将token添加到redis中
-        RedisUtils.set(applicationName + ":"+ TokenUtilHandler.TOKEN + ":" + user.getUsername(),tokenMap.get(TokenUtilHandler.TOKEN), JwtConfig.EXPIRE_TIME);
+        RedisUtils.set(redisUserPrefix + ":" + user.getUsername(),tokenMap.get(TokenUtils.TOKEN), TokenUtils.getExpirationTime());
         //数据返回
         ResponseDTO<Map> responseDTO = new ResponseDTO<>(ResponseEnum.SUCCESS,tokenMap);
         response.setContentType("application/json;charset=utf-8");
-        response.setHeader(TokenUtilHandler.AUTHORIZATION,tokenMap.get(TokenUtilHandler.TOKEN));
+        response.setHeader(TokenUtils.AUTHORIZATION,tokenMap.get(TokenUtils.TOKEN));
         response.getWriter().write(JSON.toJSONString(responseDTO));
-    }
-
-    @Autowired
-    public void setTokenUtilHandler(TokenUtilHandler tokenUtilHandler){
-        this.tokenUtilHandler = tokenUtilHandler;
     }
 }

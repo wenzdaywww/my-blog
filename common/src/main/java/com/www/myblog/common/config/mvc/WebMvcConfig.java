@@ -1,4 +1,4 @@
-package com.www.myblog.admin.config.mvc;
+package com.www.myblog.common.config.mvc;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

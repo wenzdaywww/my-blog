@@ -1,7 +1,13 @@
 #本地开发配置
 #服务器配置
 server:
-  port: 8090
+  port: 8070
+#配置文件路径
+file:
+  imgUrlPath: /imgs/** #配置访问图片的相对路径
+  imgSavePath : D:\WorkSpaces\temp\${spring.application.name}\img\ #图片保存的绝对路径，window的路径必须是\且路径最后也需要\
+  otherUrlPath: /file/** #配置访问图片外其他文件的相对路径
+  otherSavePath : D:\WorkSpaces\temp\${spring.application.name}\file\ #图片外其他文件保存的绝对路径，window的路径必须是\且路径最后也需要\
 #eureka配置
 eureka:
   client:
@@ -14,3 +20,9 @@ eureka:
 #配置eureka注册中心服务的status信息
 info:
   name: my blog server
+spring:
+  servlet:
+    #文件上传配置
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB

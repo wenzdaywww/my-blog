@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -54,8 +55,9 @@ public class ControllerAop {
         String requestText = "{";
         for (int i = 0; i < paramName.length && i < paramValue.length && i < paramType.length;  i++) {
             String value = "";
-            if(StringUtils.equals(paramType[i].getName(),"org.springframework.web.multipart.MultipartFile")){
-                value = paramValue[i] != null ? paramValue[i].toString() : "";
+            if(paramValue[i] instanceof  MultipartFile){
+                value = paramValue[i] != null ? ((MultipartFile) paramValue[i]).getOriginalFilename() : "";
+
             }else {
                 value = JSON.toJSONString(paramValue[i]);
             }

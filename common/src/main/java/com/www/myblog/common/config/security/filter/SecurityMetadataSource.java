@@ -1,12 +1,11 @@
-package com.www.myblog.admin.config.security.filter;
+package com.www.myblog.common.config.security.filter;
 
-import com.www.myblog.admin.data.dto.SysRoleMenuDTO;
-import com.www.myblog.admin.service.menu.IMenuInfoService;
+import com.www.myblog.common.config.security.ISecurityServie;
+import com.www.myblog.common.pojo.AuthorityDTO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
@@ -14,6 +13,7 @@ import org.springframework.security.web.access.intercept.FilterInvocationSecurit
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -27,8 +27,8 @@ import java.util.List;
 @Component
 public class SecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
     private static Logger LOG = LoggerFactory.getLogger(SecurityMetadataSource.class);
-    @Autowired
-    private IMenuInfoService menuInfoService;
+    @Resource
+    private ISecurityServie securityUserServie;
 
     AntPathMatcher antPathMatcher = new AntPathMatcher();
     /**
@@ -42,12 +42,12 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
         LOG.info("-----> 3、访问权限角色配置");
         String requestURL = ((FilterInvocation)o).getRequestUrl();
-        List<SysRoleMenuDTO> roleMenuList = menuInfoService.findAllSecurityMenu();
+        List<AuthorityDTO> roleMenuList = securityUserServie.findAllAuthority();
         if(CollectionUtils.isNotEmpty(roleMenuList)){
             List<String> roleList = new ArrayList<>();
-            for (SysRoleMenuDTO dto : roleMenuList){
-                if(antPathMatcher.match(dto.getMenuUrl(),requestURL) && StringUtils.isNotBlank(dto.getRoleName())){
-                    roleList.add(dto.getRoleName());
+            for (AuthorityDTO dto : roleMenuList){
+                if(antPathMatcher.match(dto.getUrl(),requestURL) && StringUtils.isNotBlank(dto.getRole())){
+                    roleList.add(dto.getRole());
                 }
             }
             String[] roleArr = roleList.toArray(new String[roleList.size()]);

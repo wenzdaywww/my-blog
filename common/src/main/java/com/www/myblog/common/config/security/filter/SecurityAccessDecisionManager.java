@@ -1,4 +1,4 @@
-package com.www.myblog.admin.config.security.filter;
+package com.www.myblog.common.config.security.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

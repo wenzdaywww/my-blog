@@ -1,8 +1,8 @@
-package com.www.myblog.admin.config.security.filter;
+package com.www.myblog.common.config.security.filter;
 
-import com.www.myblog.admin.config.security.impl.UserDetailsServiceImpl;
+import com.www.myblog.common.config.security.impl.UserDetailsServiceImpl;
 import com.www.myblog.common.utils.RedisUtils;
-import com.www.myblog.common.utils.TokenUtilHandler;
+import com.www.myblog.common.utils.TokenUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,12 +14,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.Map;
 
 /**
@@ -31,12 +31,21 @@ import java.util.Map;
 @Component
 public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
     private static Logger LOG = LoggerFactory.getLogger(JwtAuthorizationTokenFilter.class);
-    private TokenUtilHandler tokenUtilHandler;
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
-    @Value("${spring.application.name}")
-    private String applicationName;
-
+    @Value("${jwt.user-prefix}")
+    private String redisUserPrefix;
+    /** 密钥(www362412) */
+    @Value("${jwt.secret-key}")
+    private String SECRET_KEY ;
+    /**  过期时间（秒） */
+    @Value("${jwt.expire-time-second}")
+    private long EXPIRE_TIME;
+    /** 设置token过期时间和密钥 **/
+    @PostConstruct
+    public void setSecretAndExpireTime(){
+        TokenUtils.setSecretAndExpireTime(EXPIRE_TIME,SECRET_KEY);
+    }
     /**
      * <p>@Description token验证 </p>
      * <p>@Author www </p>
@@ -49,13 +58,13 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         LOG.info("-----> 1、访问token验证");
-        Map<String,Object> map = tokenUtilHandler.validateTokenAndGetClaims(httpServletRequest);
+        Map<String,Object> map = TokenUtils.validateTokenAndGetClaims(httpServletRequest);
         if(map != null && map.size() > 0){
-            String userId = String.valueOf(map.get(TokenUtilHandler.USERID));
-            String tokenKey = applicationName + ":"+ TokenUtilHandler.TOKEN + ":" + userId;
+            String userId = String.valueOf(map.get(TokenUtils.USERID));
+            String tokenKey = redisUserPrefix + ":" + userId;
             //判断redis中的token是否存在且token值相等，存在则说明token有效
             if(RedisUtils.hasKey(tokenKey)
-                    && StringUtils.equals((String)map.get(TokenUtilHandler.AUTHORIZATION),RedisUtils.get(tokenKey))
+                    && StringUtils.equals((String)map.get(TokenUtils.AUTHORIZATION),RedisUtils.get(tokenKey))
                     && SecurityContextHolder.getContext().getAuthentication() == null){
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
                 if(userDetails != null){
@@ -65,10 +74,5 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(httpServletRequest,httpServletResponse);
-    }
-
-    @Autowired
-    public void setTokenUtilHandler(TokenUtilHandler tokenUtilHandler){
-        this.tokenUtilHandler = tokenUtilHandler;
     }
 }

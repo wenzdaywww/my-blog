@@ -1,10 +1,10 @@
-package com.www.myblog.admin.config.security.handler;
+package com.www.myblog.common.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.www.myblog.common.pojo.ResponseDTO;
 import com.www.myblog.common.pojo.ResponseEnum;
 import com.www.myblog.common.utils.RedisUtils;
-import com.www.myblog.common.utils.TokenUtilHandler;
+import com.www.myblog.common.utils.TokenUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +28,8 @@ import java.util.Map;
 @Component
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
     private static Logger LOG = LoggerFactory.getLogger(LogoutSuccessHandlerImpl.class);
-    private TokenUtilHandler tokenUtilHandler;
-    @Value("${spring.application.name}")
-    private String applicationName;
+    @Value("${jwt.user-prefix}")
+    private String redisUserPrefix;
 
     /**
      * <p>@Description 退出成功处理 </p>
@@ -44,19 +43,14 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         LOG.info("-----> 6、security退出成功");
-        Map<String,Object> map = tokenUtilHandler.validateTokenAndGetClaims(httpServletRequest);
+        Map<String,Object> map = TokenUtils.validateTokenAndGetClaims(httpServletRequest);
         //获取token，删除redis中的token
         if(map != null && map.size() > 0) {
-            String userId = String.valueOf(map.get(TokenUtilHandler.USERID));
-            RedisUtils.deleteKey(applicationName + ":"+ TokenUtilHandler.TOKEN + ":" + userId);
+            String userId = String.valueOf(map.get(TokenUtils.USERID));
+            RedisUtils.deleteKey(redisUserPrefix + ":" + userId);
         }
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseEnum.SUCCESS,"退出成功");
         httpServletResponse.setContentType("application/json;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(responseDTO));
-    }
-
-    @Autowired
-    public void setTokenUtilHandler(TokenUtilHandler tokenUtilHandler){
-        this.tokenUtilHandler = tokenUtilHandler;
     }
 }

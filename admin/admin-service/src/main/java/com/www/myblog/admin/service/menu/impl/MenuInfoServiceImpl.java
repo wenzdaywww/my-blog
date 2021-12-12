@@ -3,14 +3,11 @@ package com.www.myblog.admin.service.menu.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.myblog.admin.data.dto.SysMenuDTO;
-import com.www.myblog.admin.data.dto.SysRoleMenuDTO;
 import com.www.myblog.admin.data.entity.SysMenuEntity;
 import com.www.myblog.admin.data.entity.SysRoleEntity;
 import com.www.myblog.admin.data.entity.SysRoleMenuEntity;
-import com.www.myblog.admin.data.entity.SysUserEntity;
 import com.www.myblog.admin.data.enums.CommonEnum;
 import com.www.myblog.admin.data.mapper.SysMenuMapper;
-import com.www.myblog.admin.data.mapper.SysRoleMapper;
 import com.www.myblog.admin.data.mapper.SysRoleMenuMapper;
 import com.www.myblog.admin.service.entity.ISysRoleMenuService;
 import com.www.myblog.admin.service.entity.ISysRoleService;
@@ -199,16 +196,5 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         responseDTO.setPageSize(pageSize);
         responseDTO.setTotalNum(page.getTotal());
         return responseDTO;
-    }
-
-    /**
-     * <p>@Description 查询所有权限菜单信息 </p>
-     * <p>@Author www </p>
-     * <p>@Date 2021/11/24 20:43 </p>
-     * @return 角色菜单信息
-     */
-    @Override
-    public List<SysRoleMenuDTO> findAllSecurityMenu() {
-        return sysMenuMapper.findAllSecurityMenu();
     }
 }

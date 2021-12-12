@@ -30,13 +30,6 @@ public interface IMenuInfoService {
      */
     ResponseDTO<String> updateOrSave(SysMenuDTO menu);
     /**
-     * <p>@Description 查询所有权限菜单信息 </p>
-     * <p>@Author www </p>
-     * <p>@Date 2021/11/24 20:43 </p>
-     * @return 角色菜单信息
-     */
-    List<SysRoleMenuDTO> findAllSecurityMenu();
-    /**
      * <p>@Description 查询所有菜单 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 16:59 </p>

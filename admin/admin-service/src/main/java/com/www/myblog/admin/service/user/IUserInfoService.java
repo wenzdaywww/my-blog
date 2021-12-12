@@ -98,12 +98,4 @@ public interface IUserInfoService {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.admin.data.dto.SysUserDTO>>
      */
     ResponseDTO<List<SysUserDTO>> findAllUser(String stateCd, String userId,String userName, int pageNum, int pageSize);
-    /**
-     * <p>@Description 查询用户拥有的角色信息 </p>
-     * <p>@Author www </p>
-     * <p>@Date 2021/11/24 21:45 </p>
-     * @param userId 用户ID
-     * @return java.util.List<com.www.myblog.admin.data.entity.SysRoleEntity> 角色信息
-     */
-    List<SysRoleEntity> findUserRole(String userId);
 }
