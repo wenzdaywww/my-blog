@@ -11,11 +11,14 @@
             </template>
             <template v-for="subItem in item.subMenu">
               <el-submenu v-if="subItem.subMenu" :index="subItem.menuUrl" :key="subItem.menuUrl">
+                <i :class="subItem.menuIcon"></i>
                 <template #title>{{ subItem.menuName }}</template>
                 <el-menu-item v-for="(threeItem, i) in subItem.subMenu" :key="i" :index="threeItem.menuUrl">
                   {{ threeItem.menuName }}</el-menu-item>
               </el-submenu>
-              <el-menu-item v-else :index="subItem.menuUrl" :key="subItem.menuUrl">{{ subItem.menuName }}
+              <el-menu-item v-else :index="subItem.menuUrl" :key="subItem.menuUrl">
+                <i :class="subItem.menuIcon"></i>
+                <span>{{ subItem.menuName }}</span>
               </el-menu-item>
             </template>
           </el-submenu>
