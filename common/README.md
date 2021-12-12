@@ -8,4 +8,6 @@
 #### jwt.user-prefix #redis单点登录的token的用户key前缀
 #### jwt.secret-key #token加密密钥
 #### jwt.expire-time-second #token过期时间（秒）
+#### jwt.cookie-day #cookie免登录有效天数
 ### 2、需要实现com.www.myblog.common.config.security.ISecurityServie接口
+### 3、如果登录/login请求参数rmb=1，则token过期时间以jwt.cookie-day为准，否则以jwt.expire-time-second为准

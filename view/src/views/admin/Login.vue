@@ -17,6 +17,9 @@
             </template>
           </el-input>
         </el-form-item>
+        <el-form-item>
+          <el-checkbox v-model="rememberMe">记住我</el-checkbox>
+        </el-form-item>
         <div class="login-btn">
           <el-button type="primary" @click="submitForm()">登录</el-button>
         </div>
@@ -30,14 +33,14 @@
 import { ref, reactive, getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-import cookies from "vue-cookies";
 
 export default {
   setup() {
     const router = useRouter();
     const param = reactive({
       id: "",
-      pwd: ""
+      pwd: "",
+      rmb: "0"
     });
     const rules = {
       id: [
@@ -49,14 +52,16 @@ export default {
     };
     // 登录表单
     const login = ref(null);
+    // 记住我
+    const rememberMe = ref(false);
     // 接口请求
     const request = getCurrentInstance().appContext.config.globalProperties;
     //登录方法
     const submitForm = () => {
+      param.rmb = rememberMe.value ? "1" : "0";
       request.$http.post("api/admin/login",param).then(function (res) {
         if(res.code === 200){
-          cookies.set("token",res.data.token);
-          cookies.set("userId",param.id);
+          localStorage.setItem("userId",param.id);
           ElMessage.success("登录成功");
           router.push("/home");
         }else {
@@ -64,11 +69,7 @@ export default {
         }
       });
     };
-    return {
-      param,
-      rules,
-      login,
-      submitForm
+    return {rememberMe, param, rules, login, submitForm
     };
   },
 };

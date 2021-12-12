@@ -3,6 +3,7 @@ package com.www.myblog.common.utils;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +33,7 @@ public class TokenUtils {
     /** 请求头名称 */
     public static final String AUTHORIZATION = "Authorization";
     /** 过期时间 */
-    private static Long EXPIRATION_TIME ;
+    private static Integer EXPIRATION_TIME ;
     /** 私钥 */
     private static String SECRET ;
     /** token前缀 */
@@ -47,7 +48,7 @@ public class TokenUtils {
      * @param expirationTime 过期时间
      * @param secret 密钥
      */
-    public static void setSecretAndExpireTime(Long expirationTime, String secret){
+    public static void setSecretAndExpireTime(int expirationTime, String secret){
         EXPIRATION_TIME = expirationTime;
         SECRET = secret;
     }
@@ -57,7 +58,7 @@ public class TokenUtils {
      * <p>@Date 2021/12/12 15:34 </p>
      * @return java.lang.String
      */
-    public static Long getExpirationTime() {
+    public static Integer getExpirationTime() {
         return EXPIRATION_TIME;
     }
     /**
@@ -70,7 +71,7 @@ public class TokenUtils {
     public static Map<String, String> generateToken(Map<String, Object> claims) {
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
-        c.add(Calendar.SECOND, EXPIRATION_TIME.intValue());
+        c.add(Calendar.SECOND, EXPIRATION_TIME);
         Date d = c.getTime();
         String jwt = Jwts.builder()
                 .setClaims(claims)
@@ -87,18 +88,16 @@ public class TokenUtils {
      * <p>@Description 解析token </p>
      * <p>@Author www </p>
      * <p>@Date 2021/11/16 20:53 </p>
-     * @param request
+     * @param token 令牌
      * @return java.util.Map<java.lang.String, java.lang.Object>
      */
-    public static Map<String, Object> validateTokenAndGetClaims(HttpServletRequest request) {
-        String token = request.getHeader(AUTHORIZATION);
-        if (token == null) {
+    public static Map<String, Object> validateTokenAndGetClaims(String token) {
+        if (StringUtils.isBlank(token)) {
             return null;
         }
         Map<String, Object> body;
         try {
-            body = Jwts.parser()
-                    .setSigningKey(SECRET)
+            body = Jwts.parser().setSigningKey(SECRET)
                     .parseClaimsJws(token.replace(TOKEN_PREFIX + " ",""))
                     .getBody();
         }catch (ExpiredJwtException e){

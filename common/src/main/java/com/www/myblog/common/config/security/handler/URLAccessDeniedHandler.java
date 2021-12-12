@@ -38,6 +38,7 @@ public class URLAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
         LOG.info("-----> 5、访问权限角色验证不通过");
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseEnum.FORBIDDEN,"无权限访问");
+        httpServletResponse.setStatus(403);
         httpServletResponse.setContentType("application/json;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(responseDTO));
     }

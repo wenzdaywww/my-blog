@@ -58,7 +58,6 @@
 <script>
 import Schart from "vue-schart";
 import {getCurrentInstance, reactive} from "vue";
-import cookies from "vue-cookies";
 export default {
   name: "index",
   components: { Schart },
@@ -67,7 +66,7 @@ export default {
     const request = getCurrentInstance().appContext.config.globalProperties;
     // 用户信息
     let user = reactive({
-      userId: cookies.get('userId'),
+      userId: localStorage.getItem('userId'),
       userName : "",
       brief : "",
       photo : "src/assets/img/img.jpg",

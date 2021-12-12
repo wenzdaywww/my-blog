@@ -60,7 +60,6 @@ import {computed, getCurrentInstance, onMounted, reactive, ref} from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import {ElMessage} from "element-plus";
-import cookies from "vue-cookies";
 
 export default {
   setup() {
@@ -76,7 +75,7 @@ export default {
     const editForm = ref(null);
     // 表单数据
     let form = reactive({
-      userId: cookies.get("userId"),
+      userId: localStorage.getItem("userId"),
       newPassWord: "",
       cfmPassWord: "",
       passWord : "",
@@ -135,7 +134,7 @@ export default {
       if (command == "loginout") {
         request.$http.post("api/admin/logout",null).then(function (res) {
           if(res.code === 200){
-            cookies.set('token',null);
+            localStorage.setItem('userId',null);
             ElMessage.success("退出成功");
             router.push("/login");
           }else {

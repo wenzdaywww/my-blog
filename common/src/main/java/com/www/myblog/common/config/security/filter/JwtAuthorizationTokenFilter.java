@@ -1,6 +1,9 @@
 package com.www.myblog.common.config.security.filter;
 
+import com.alibaba.fastjson.JSON;
+import com.www.myblog.common.config.security.handler.LoginSuccessHandler;
 import com.www.myblog.common.config.security.impl.UserDetailsServiceImpl;
+import com.www.myblog.common.utils.CookisUtils;
 import com.www.myblog.common.utils.RedisUtils;
 import com.www.myblog.common.utils.TokenUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import javax.annotation.PostConstruct;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -40,7 +44,7 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
     private String SECRET_KEY ;
     /**  过期时间（秒） */
     @Value("${jwt.expire-time-second}")
-    private long EXPIRE_TIME;
+    private int EXPIRE_TIME;
     /** 设置token过期时间和密钥 **/
     @PostConstruct
     public void setSecretAndExpireTime(){
@@ -57,8 +61,9 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        LOG.info("-----> 1、访问token验证");
-        Map<String,Object> map = TokenUtils.validateTokenAndGetClaims(httpServletRequest);
+        String token = CookisUtils.getCookieValue(httpServletRequest,LoginSuccessHandler.COOKIE_TOKEN);
+        LOG.info("-----> 1、访问token验证，token={}",token);
+        Map<String,Object> map = TokenUtils.validateTokenAndGetClaims(token);
         if(map != null && map.size() > 0){
             String userId = String.valueOf(map.get(TokenUtils.USERID));
             String tokenKey = redisUserPrefix + ":" + userId;

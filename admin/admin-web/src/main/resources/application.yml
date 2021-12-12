@@ -40,3 +40,4 @@ jwt:
   user-prefix : my-blog:user:token #redis单点登录的token的用户key前缀
   secret-key : 6969fc2fd7e864ca8152860ca8b38e76 #token加密密钥
   expire-time-second : 1800 #token过期时间（秒）
+  cookie-day : 7 #cookie免登录有效天数

@@ -1,11 +1,10 @@
 import {createRouter, createWebHistory} from "vue-router";
 import Home from "../views/admin/Home.vue";
-import cookies from "vue-cookies";
 
 const routes = [
     {
         path: "/",
-        redirect: "/login"
+        redirect: "/home"
     }, {
         path: "/",
         name: "home",
@@ -75,16 +74,6 @@ const router = createRouter({
 // 路由跳转前的处理
 router.beforeEach((to, from, next) => {
     document.title = "my-blog";
-    if (to.path === "/login"){
-        next();
-    }else {
-        const token = cookies.get("token");
-        //token失效则调整登录页面
-        if (token === null || token === undefined || token === "null" || token === ""){
-            next("/login");
-        }else {
-            next();
-        }
-    }
+    next();
 });
 export default router;

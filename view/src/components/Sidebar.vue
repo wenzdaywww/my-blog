@@ -39,7 +39,6 @@
 import {computed, ref, getCurrentInstance} from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import cookies from "vue-cookies";
 export default {
   setup() {
     // 接口请求
@@ -47,7 +46,7 @@ export default {
     const items = ref([]);
     // 获取菜单
     const getData = () => {
-      request.$http.get("api/admin/user/menu", {userId:cookies.get('userId')}).then(function (res) {
+      request.$http.get("api/admin/user/menu", {userId:localStorage.getItem('userId')}).then(function (res) {
         if(res.code === 200){
           items.value = res.data;
         }

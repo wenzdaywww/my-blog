@@ -3,6 +3,7 @@ package com.www.myblog.common.config.security.handler;
 import com.alibaba.fastjson.JSON;
 import com.www.myblog.common.pojo.ResponseDTO;
 import com.www.myblog.common.pojo.ResponseEnum;
+import com.www.myblog.common.utils.CookisUtils;
 import com.www.myblog.common.utils.RedisUtils;
 import com.www.myblog.common.utils.TokenUtils;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -43,13 +45,16 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         LOG.info("-----> 6、security退出成功");
-        Map<String,Object> map = TokenUtils.validateTokenAndGetClaims(httpServletRequest);
+        String token = CookisUtils.getCookieValue(httpServletRequest,LoginSuccessHandler.COOKIE_TOKEN);
+        Map<String,Object> map = TokenUtils.validateTokenAndGetClaims(token);
         //获取token，删除redis中的token
         if(map != null && map.size() > 0) {
             String userId = String.valueOf(map.get(TokenUtils.USERID));
             RedisUtils.deleteKey(redisUserPrefix + ":" + userId);
         }
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseEnum.SUCCESS,"退出成功");
+        Cookie cookie = new Cookie(LoginSuccessHandler.COOKIE_TOKEN,null);
+        httpServletResponse.addCookie(cookie);
         httpServletResponse.setContentType("application/json;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(responseDTO));
     }
