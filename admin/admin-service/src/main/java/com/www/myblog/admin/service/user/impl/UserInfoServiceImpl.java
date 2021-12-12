@@ -32,8 +32,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>@Description 用户信息service实现类 </p>
@@ -109,11 +108,22 @@ public class UserInfoServiceImpl implements IUserInfoService {
         List<SysMenuDTO> resultList = new ArrayList<>();
         List<SysMenuDTO> menuList = sysMenuMapper.findUserMenu(userId);
         if(CollectionUtils.isNotEmpty(menuList)){
-            resultList = menuList;
+            for (SysMenuDTO treeNode : menuList) {
+                if (treeNode.getParentId() == null) {
+                    resultList.add(treeNode);
+                }
+                for (SysMenuDTO it : menuList) {
+                    if (it.getParentId() == treeNode.getMenuId()) {
+                        if (treeNode.getSubMenu() == null) {
+                            treeNode.setSubMenu(new ArrayList<SysMenuDTO>());
+                        }
+                        treeNode.getSubMenu().add(it);
+                    }
+                }
+            }
         }
         return new ResponseDTO(ResponseEnum.SUCCESS,resultList);
     }
-
     /**
      * <p>@Description 更新用户头像 </p>
      * <p>@Author www </p>
@@ -131,6 +141,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
             return responseDTO;
         }
         String path = fileService.uploadFileBackPath(photo,userId);
+        path += "?" + DateUtils.format(DateUtils.getCurrentDateTime(), DateUtils.DateFormatEnum.YYYYMMDDHHMMSSSSS);
         UpdateWrapper<SysUserEntity> userWrapper = new UpdateWrapper<>();
         userWrapper.lambda().eq(SysUserEntity::getUserId,userEntity.getUserId());
         userWrapper.lambda().set(SysUserEntity::getPhoto,path);
@@ -152,7 +163,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     public ResponseDTO<String> updateUserInfo(SysUserDTO user) {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
         if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName())
-            || (StringUtils.isNotBlank(user.getSex()) && !StringUtils.containsAny(user.getSex(),CommonEnum.SEX_1.getCode(),CommonEnum.SEX_0.getCode()))){
+                || (StringUtils.isNotBlank(user.getSex()) && !StringUtils.containsAny(user.getSex(),CommonEnum.SEX_1.getCode(),CommonEnum.SEX_0.getCode()))){
             responseDTO.setResponseCode(ResponseEnum.FAIL,"更新用户信息失败，用户信息有误");
             return responseDTO;
         }
@@ -189,16 +200,13 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     public ResponseDTO<SysUserDTO> findUser(String userId) {
         ResponseDTO<SysUserDTO> responseDTO = new ResponseDTO<>();
-        SysUserEntity userEntity = sysUserService.findUserEntityById(userId);
-        if(userEntity != null){
-            SysUserDTO userDTO = new SysUserDTO();
-            BeanUtils.copyProperties(userEntity,userDTO);
-            userDTO.setBirthday(DateUtils.format(userEntity.getBirthday(), DateUtils.DateFormatEnum.YYYY_MM_DD));
-            userDTO.setPassWord(null);
-            responseDTO.setResponseCode(ResponseEnum.SUCCESS,userDTO);
-        }else {
-            responseDTO.setResponseCode(ResponseEnum.FAIL,null);
+        SysUserDTO userDTO = sysUserMapper.findUserInfoById(userId);
+        if(userDTO == null){
+            responseDTO.setCode(ResponseEnum.FAIL.getCode());
+            responseDTO.setMsg("查询不到该用户信息");
+            return responseDTO;
         }
+        responseDTO.setResponseCode(ResponseEnum.SUCCESS,userDTO);
         return responseDTO;
     }
 
@@ -213,7 +221,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     public ResponseDTO<String> createUser(SysUserDTO user) {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
         if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName(),user.getPassWord(),user.getRoleName())
-            || (StringUtils.isNotBlank(user.getSex()) && !StringUtils.containsAny(user.getSex(),CommonEnum.SEX_1.getCode(),CommonEnum.SEX_0.getCode()))){
+                || (StringUtils.isNotBlank(user.getSex()) && !StringUtils.containsAny(user.getSex(),CommonEnum.SEX_1.getCode(),CommonEnum.SEX_0.getCode()))){
             responseDTO.setResponseCode(ResponseEnum.FAIL,"信息不完整，创建用户失败");
             return responseDTO;
         }

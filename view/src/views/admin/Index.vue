@@ -19,10 +19,10 @@
           <el-col :span="8">
             <el-card shadow="hover" :body-style="{ padding: '0px' }">
               <div class="grid-content grid-con-1">
-                <i class="el-icon-user-solid grid-con-icon"></i>
+                <i class="el-icon-user grid-con-icon"></i>
                 <div class="grid-cont-right">
-                  <div class="grid-num">1234</div>
-                  <div>用户访问量</div>
+                  <div class="grid-num">{{user.friends}}</div>
+                  <div>关注</div>
                 </div>
               </div>
             </el-card>
@@ -30,10 +30,10 @@
           <el-col :span="8">
             <el-card shadow="hover" :body-style="{ padding: '0px' }">
               <div class="grid-content grid-con-2">
-                <i class="el-icon-message-solid grid-con-icon"></i>
+                <i class="el-icon-s-custom grid-con-icon"></i>
                 <div class="grid-cont-right">
-                  <div class="grid-num">321</div>
-                  <div>系统消息</div>
+                  <div class="grid-num">{{user.fans}}</div>
+                  <div>粉丝</div>
                 </div>
               </div>
             </el-card>
@@ -41,10 +41,10 @@
           <el-col :span="8">
             <el-card shadow="hover" :body-style="{ padding: '0px' }">
               <div class="grid-content grid-con-3">
-                <i class="el-icon-s-goods grid-con-icon"></i>
+                <i class="el-icon-tickets grid-con-icon"></i>
                 <div class="grid-cont-right">
-                  <div class="grid-num">5000</div>
-                  <div>数量</div>
+                  <div class="grid-num">{{user.blogs}}</div>
+                  <div>博客</div>
                 </div>
               </div>
             </el-card>
@@ -70,7 +70,10 @@ export default {
       userId: cookies.get('userId'),
       userName : "",
       brief : "",
-      photo : "src/assets/img/img.jpg"
+      photo : "src/assets/img/img.jpg",
+      friends : 0,
+      fans : 0,
+      blogs : 0
     });
     // 获取用户数据
     const getData = () => {
@@ -81,6 +84,9 @@ export default {
           if (res.data.photo){
             user.photo = "api/admin" + res.data.photo;
           }
+          user.friends = res.data.friends;
+          user.fans = res.data.fans;
+          user.blogs = res.data.blogs;
         }
       });
     };

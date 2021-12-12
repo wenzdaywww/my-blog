@@ -11,7 +11,7 @@
           </template>
           <div class="info">
             <div class="info-image" @click="showDialog">
-              <img :src="defaultImg" />
+              <img :src="form.photo" />
               <span class="info-edit">
                   <i class="el-icon-lx-camerafill"></i>
               </span>
@@ -78,7 +78,6 @@
 import {getCurrentInstance, reactive, ref} from "vue";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
-import avatar from "../../assets/img/img.jpg";
 import {ElMessage} from "element-plus";
 import cookies from "vue-cookies";
 
@@ -133,7 +132,7 @@ export default {
       phoneNum : "",
       birthday : "",
       sex : "",
-      photo : "",
+      photo : "src/assets/img/img.jpg",
       eMail : "",
       brief : ""
     });
@@ -146,7 +145,7 @@ export default {
           form.birthday = res.data.birthday;
           form.sex = res.data.sex;
           if(res.data.photo){
-             defaultImg.value = "api/admin" + res.data.photo;
+             form.photo = "api/admin" + res.data.photo;
           }
           form.eMail = res.data.email;
           form.brief = res.data.brief;
@@ -173,8 +172,6 @@ export default {
     };
     //图片上传弹出控制位
     const dialogVisible = ref(false);
-    //默认图片
-    const defaultImg = ref(avatar);
     //选择的图片
     const imgSrc = ref("");
     //剪辑后的图片对象
@@ -188,8 +185,8 @@ export default {
     //打开图片上传弹窗
     const showDialog = () => {
       dialogVisible.value = true;
-      imgSrc.value = defaultImg.value;
-      cropImg.value = defaultImg.value;
+      imgSrc.value = form.photo;
+      cropper.value = form.photo;
     };
     //设置选中的图片
     const setImage = (e) => {
@@ -218,9 +215,9 @@ export default {
       fd.append("userId", form.userId);
       request.$http.upload("api/zuul/admin/user/photo",fd,{'Content-Type': 'multipart/form-data'}).then(function (res){
         if(res.code === 200){
-          defaultImg.value = "api/admin" + res.data;
-          dialogVisible.value = false;
           ElMessage.success('上传成功');
+          dialogVisible.value = false;
+          getData();
         }else {
           ElMessage.error("上传失败");
         }
@@ -229,6 +226,9 @@ export default {
     // 将裁剪的图片转为文件
     const base64ToFile = (urlData, fileName) =>{
       let arr = urlData.split(',');
+      if (arr.length == 1){
+        return new File(urlData, fileName);
+      }
       let mime = arr[0].match(/:(.*?);/)[1];
       let bytes = atob(arr[1]); // 解码base64
       let n = bytes.length
@@ -238,7 +238,7 @@ export default {
       }
       return new File([ia], fileName, { type: mime });
     };
-    return { editRules, editForm, form, onSubmit, cropper, defaultImg, imgSrc, cropImg,
+    return { editRules, editForm, form, onSubmit, cropper, imgSrc, cropImg,
       showDialog, dialogVisible, setImage, cropImage, uploadImg
     };
   },

@@ -46,4 +46,31 @@
         AND STATE_CD = #{obj.stateCd}
       </if>
   </select>
+  <!--  根据ID查询用户信息-->
+  <select id="findUserInfoById" resultType="com.www.myblog.admin.data.dto.SysUserDTO">
+    SELECT
+            U.SU_ID,
+            U.USER_ID,
+            U.USER_NAME,
+            U.PHONE_NUM,
+            U.BIRTHDAY,
+            IR.ROLE_NAME,
+            IFNULL(FR.FRIENDS,0) FRIENDS,
+            IFNULL(FA.FANS,0) FANS,
+            U.SEX,
+            U.PHOTO,
+            U.E_MAIL,
+            U.BRIEF,
+            U.STATE_CD,
+            U.NOT_EXPIRED,
+            U.NOT_LOCKED,
+            U.CREDENTIALS_NOT_EXPIRED,
+            U.SYS_UPDATE_TIME,
+            U.SYS_CREATE_TIME
+    FROM SYS_USER U
+                 LEFT JOIN (SELECT DISTINCT UR.USER_ID,R.ROLE_NAME FROM SYS_ROLE R,SYS_USER_ROLE UR WHERE R.ROLE_ID=UR.ROLE_ID AND UR.USER_ID = #{userId}) IR ON IR.USER_ID=U.USER_ID
+                 LEFT JOIN (SELECT UFR.USER_ID,COUNT(UFR.FRIEND_ID) FRIENDS FROM USER_FRIENDS UFR WHERE UFR.USER_ID = #{userId} GROUP BY UFR.FRIEND_ID) FR ON FR.USER_ID=U.USER_ID
+                 LEFT JOIN (SELECT UFA.FRIEND_ID,COUNT(UFA.USER_ID) FANS FROM USER_FRIENDS UFA WHERE UFA.FRIEND_ID = #{userId} GROUP BY UFA.USER_ID) FA ON FA.FRIEND_ID=U.USER_ID
+    WHERE U.USER_ID = #{userId}
+  </select>
 </mapper>

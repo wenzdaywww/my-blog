@@ -235,7 +235,6 @@ export default {
     const getData = () => {
       request.$http.get("api/admin/user/all",query).then(function (res) {
         if(res.code === 200){
-          console.log(res.data);
           tableData.value = res.data;
           pageTotal.value = res.totalNum;
         }

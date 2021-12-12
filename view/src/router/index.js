@@ -55,6 +55,16 @@ const routes = [
             title: "登录"
         },
         component: () => import ( /* webpackChunkName: "login" */ "../views/admin/Login.vue")
+    }, {
+        path: "/404",
+        name: "404",
+        meta: {
+            title: "404"
+        },
+        component: () => import ( /* webpackChunkName: "tabs" */ "../views/404.vue")
+    },{
+        path: "/:catchAll(.*)", // 页面404跳转
+        redirect: "/404"
     }
 ];
 
@@ -62,7 +72,7 @@ const router = createRouter({
     history: createWebHistory(), //createWebHashHistory地址带#，createWebHistory不带#
     routes
 });
-
+// 路由跳转前的处理
 router.beforeEach((to, from, next) => {
     document.title = "my-blog";
     if (to.path === "/login"){
@@ -77,5 +87,4 @@ router.beforeEach((to, from, next) => {
         }
     }
 });
-
 export default router;

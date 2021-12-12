@@ -19,6 +19,14 @@ import java.util.List;
 @Mapper
 public interface SysUserMapper extends BaseMapper<SysUserEntity> {
     /**
+     * <p>@Description 根据ID查询用户信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/12 13:09 </p>
+     * @param userId 用户id
+     * @return com.www.myblog.admin.data.dto.SysUserDTO
+     */
+    SysUserDTO findUserInfoById(@Param("userId") String userId);
+    /**
      * <p>@Description 查询所有用户信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 17:42 </p>

@@ -155,10 +155,30 @@ export default {
         }
       ],
       menuCode : [
-        { required: true, message: "菜单编码不能为空", trigger: "blur" }
+        { required: true, message: "菜单编码不能为空", trigger: "blur" },
+        { type: 'string', message: '只能输入字母 数字 / *', trigger: 'blur',
+          transform (value) {
+            if (value){
+              if (/[^A-Za-z0-9\/*]/.test(value)) {
+                return true
+              }else{
+              }
+            }
+          }
+        }
       ],
       menuUrl : [
-        { required: true, message: "菜单路径不能为空", trigger: "blur" }
+        { required: true, message: "菜单路径不能为空", trigger: "blur" },
+        { type: 'string', message: '只能输入字母 数字 / *', trigger: 'blur',
+          transform (value) {
+            if (value){
+              if (/[^A-Za-z0-9\/*]/.test(value)) {
+                return true
+              }else{
+              }
+            }
+          }
+        }
       ],
       menuOrder : [
         { type: 'number', message: '只能输入数字', trigger: 'blur',
