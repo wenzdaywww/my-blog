@@ -14,7 +14,8 @@
                 <i :class="subItem.menuIcon"></i>
                 <template #title>{{ subItem.menuName }}</template>
                 <el-menu-item v-for="(threeItem, i) in subItem.subMenu" :key="i" :index="threeItem.menuUrl">
-                  {{ threeItem.menuName }}</el-menu-item>
+                  {{ threeItem.menuName }}
+                </el-menu-item>
               </el-submenu>
               <el-menu-item v-else :index="subItem.menuUrl" :key="subItem.menuUrl">
                 <i :class="subItem.menuIcon"></i>
