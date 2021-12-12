@@ -23,6 +23,8 @@ public class AdminApplication {
      * @return void
      */
     public static void main(String[] args) {
+        // 设置application.yml加密数据的密钥
+        System.setProperty("jasypt.encryptor.password","wenzday");
         SpringApplication.run(AdminApplication.class, args);
     }
 }
