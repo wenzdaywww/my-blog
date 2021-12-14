@@ -62,7 +62,6 @@ export default {
       request.$http.post("api/admin/login",param).then(function (res) {
         if(res.code === 200){
           localStorage.setItem("userId",param.id);
-          ElMessage.success("登录成功");
           router.push("/home");
         }else {
           ElMessage.error(res.data);

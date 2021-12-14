@@ -61,7 +61,7 @@
     </el-row>
     <!-- 头像上传-->
     <el-dialog title="裁剪图片" v-model="dialogVisible" width="600px">
-      <vue-cropper ref="cropper" :src="imgSrc" :ready="cropImage" :zoom="cropImage" :cropmove="cropImage" style="width: 100%; height: 400px"></vue-cropper>
+      <vue-cropper ref="cropper" :src="imgSrc" :with-credentials="true" :ready="cropImage" :zoom="cropImage" :cropmove="cropImage" style="width: 100%; height: 400px"></vue-cropper>
       <template #footer>
          <span class="dialog-footer">
            <el-button class="crop-demo-btn" type="primary">选择图片
@@ -193,6 +193,10 @@ export default {
       if (!file.type.includes("image/")) {
         return;
       }
+      if(file.size > 10*1024*1024){
+        ElMessage.error("文件大小不能超过5M");
+        return;
+      }
       const reader = new FileReader();
       reader.onload = (event) => {
         dialogVisible.value = true;
@@ -208,11 +212,10 @@ export default {
     };
     // 上传图片
     const uploadImg = () => {
-      //添加zuul解决文件上传问题
       let fd = new FormData();//通过form数据格式来传
       fd.append("photo", base64ToFile(cropImg.value,file.name)); //传文件
       fd.append("userId", form.userId);
-      request.$http.upload("api/zuul/admin/user/photo",fd,{'Content-Type': 'multipart/form-data'}).then(function (res){
+      request.$http.upload("api/admin/user/photo",fd,{'Content-Type': 'multipart/form-data'}).then(function (res){
         if(res.code === 200){
           ElMessage.success('上传成功');
           dialogVisible.value = false;

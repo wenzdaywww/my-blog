@@ -139,6 +139,10 @@ public class UserInfoServiceImpl implements IUserInfoService {
             return responseDTO;
         }
         String path = fileService.uploadFileBackPath(photo,userId);
+        if(StringUtils.isBlank(path)){
+            responseDTO.setResponseCode(ResponseEnum.FAIL,"更新用户头像失败");
+            return responseDTO;
+        }
         path += "?" + DateUtils.format(DateUtils.getCurrentDateTime(), DateUtils.DateFormatEnum.YYYYMMDDHHMMSSSSS);
         UpdateWrapper<SysUserEntity> userWrapper = new UpdateWrapper<>();
         userWrapper.lambda().eq(SysUserEntity::getUserId,userEntity.getUserId());

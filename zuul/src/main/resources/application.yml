@@ -3,6 +3,11 @@ spring:
     name: zuul-server
   profiles:
     active: @profileActive@
+  servlet:
+    #文件上传配置
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 #zuul路由网关配置
 zuul:
   host:

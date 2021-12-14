@@ -72,7 +72,7 @@ public class PreFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletResponse response = ctx.getResponse();
         HttpServletRequest request = ctx.getRequest();
-        LOG.info("---> pre的cookies={}", JSON.toJSONString(request.getCookies()));
+//        LOG.info("---> pre的cookies={}", JSON.toJSONString(request.getCookies()));
         response.setHeader("Access-Control-Allow-Origin",request.getHeader("Origin"));//根据该字段判断是否允许该请求访问。
         response.setHeader("Access-Control-Allow-Credentials","true");//用户是否可以发送、处理 cookie；
         response.setHeader("Access-Control-Allow-Headers","authorization, content-type");//服务器允许使用的字段

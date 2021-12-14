@@ -124,7 +124,7 @@ public class FileServiceImpl implements IFileService {
         //判断文件夹是否存在，不存在则创建
         File filePath = new File(savePath);
         if (!filePath.exists() && !filePath.isDirectory()) {
-            filePath.mkdir();
+            filePath.mkdirs();
         }
         if(StringUtils.isBlank(fileName)){
             //设置文件新名称: 当前时间+文件名称（不包含格式）
@@ -142,6 +142,7 @@ public class FileServiceImpl implements IFileService {
             //将文件在服务器的存储路径返回
         } catch (IOException e) {
             LOG.info("上传失败,失败信息：{}",e.getMessage());
+            return null;
         }
         return urlPath.replace("**",fileName);
     }

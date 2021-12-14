@@ -72,7 +72,7 @@ public class PostFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletResponse response = ctx.getResponse();
         HttpServletRequest request = ctx.getRequest();
-        LOG.info("---> post的cookies={}", JSON.toJSONString(request.getCookies()));
+//        LOG.info("---> post的cookies={}", JSON.toJSONString(request.getCookies()));
         response.setHeader("Access-Control-Allow-Origin",request.getHeader("Origin"));//根据该字段判断是否允许该请求访问。
         response.setHeader("Access-Control-Allow-Credentials","true");//用户是否可以发送、处理 cookie；
         //可以让用户拿到的字段。有几个字段无论设置与否都可以拿到的，包括：Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma 。
