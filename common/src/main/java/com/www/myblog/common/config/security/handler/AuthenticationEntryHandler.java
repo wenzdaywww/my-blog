@@ -34,7 +34,7 @@ public class AuthenticationEntryHandler implements AuthenticationEntryPoint {
      */
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        LOG.info("-----> 5、访问无权限");
+        LOG.info("=====> 5、访问无权限");
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseEnum.FORBIDDEN,"无权限访问");
         httpServletResponse.setStatus(403);
         httpServletResponse.setContentType("application/json;charset=utf-8");

@@ -37,7 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        LOG.info("-----> 2、登录加载{}用户信息",userId);
+        LOG.info("=====> 2、登录加载{}用户信息",userId);
         UserDetailDTO userDTO = securityUserServie.findUserDetailById(userId);
         if (userDTO == null) {
             return null;

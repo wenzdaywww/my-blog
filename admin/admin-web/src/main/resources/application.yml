@@ -18,6 +18,7 @@ spring:
       password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
   #redis配置
   redis:
+    key-project-name : MY-BLOG #redis的key项目名称
     password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
     #sentile配置
     sentinel:
@@ -37,7 +38,7 @@ mybatis-plus:
       update-strategy: ignored #字段更新忽略null判断
 # jwt的配置
 jwt:
-  user-prefix : my-blog:user:token #redis单点登录的token的用户key前缀
+  user-prefix : MY-BLOG:TOKEN:USER_ID #redis单点登录的token的用户key前缀
   secret-key : 6969fc2fd7e864ca8152860ca8b38e76 #token加密密钥
   expire-time-second : 1800 #token过期时间（秒）
   cookie-day : 7 #cookie免登录有效天数

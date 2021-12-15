@@ -101,7 +101,7 @@ public class TokenUtils {
                     .parseClaimsJws(token.replace(TOKEN_PREFIX + " ",""))
                     .getBody();
         }catch (ExpiredJwtException e){
-            LOG.error("-----> token过期");
+            LOG.error("=====> token过期");
             body = e.getClaims();
         }
         body.put(AUTHORIZATION,token.replace(TOKEN_PREFIX + " ",""));

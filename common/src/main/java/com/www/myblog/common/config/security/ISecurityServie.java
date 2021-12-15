@@ -29,7 +29,7 @@ public interface ISecurityServie {
      */
     List<String> findUserRole(String userId);
     /**
-     * <p>@Description 查询所有权限 </p>
+     * <p>@Description 查询所有请求权限 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/12 15:59 </p>
      * @return java.util.List<com.www.myblog.common.pojo.AuthorityDTO> 所有权限

@@ -10,6 +10,7 @@ import lombok.Data;
  */
 @Data
 public class AuthorityDTO {
+    private static final long serialVersionUID = 1L;
     /** 请求路径 **/
     private String url;
     /** 授权角色 **/

@@ -44,7 +44,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
      */
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-        LOG.info("-----> 6、security退出成功");
+        LOG.info("=====> 6、security退出成功");
         String token = CookisUtils.getCookieValue(httpServletRequest,LoginSuccessHandler.COOKIE_TOKEN);
         Map<String,Object> map = TokenUtils.validateTokenAndGetClaims(token);
         //获取token，删除redis中的token

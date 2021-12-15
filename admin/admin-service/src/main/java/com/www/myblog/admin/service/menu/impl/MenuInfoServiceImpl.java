@@ -2,7 +2,9 @@ package com.www.myblog.admin.service.menu.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.www.myblog.admin.data.constants.RedisKeyConstant;
 import com.www.myblog.admin.data.dto.SysMenuDTO;
+import com.www.myblog.admin.data.dto.SysRoleMenuDTO;
 import com.www.myblog.admin.data.entity.SysMenuEntity;
 import com.www.myblog.admin.data.entity.SysRoleEntity;
 import com.www.myblog.admin.data.entity.SysRoleMenuEntity;
@@ -12,17 +14,22 @@ import com.www.myblog.admin.data.mapper.SysRoleMenuMapper;
 import com.www.myblog.admin.service.entity.ISysRoleMenuService;
 import com.www.myblog.admin.service.entity.ISysRoleService;
 import com.www.myblog.admin.service.menu.IMenuInfoService;
+import com.www.myblog.common.pojo.AuthorityDTO;
 import com.www.myblog.common.pojo.ResponseDTO;
 import com.www.myblog.common.pojo.ResponseEnum;
 import com.www.myblog.common.utils.DateUtils;
+import com.www.myblog.common.utils.RedisUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +40,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class MenuInfoServiceImpl implements IMenuInfoService {
+    private static Logger LOG = LoggerFactory.getLogger(MenuInfoServiceImpl.class);
     @Autowired
     private SysMenuMapper sysMenuMapper;
     @Autowired
@@ -57,8 +65,13 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         sysMenuMapper.delete(menuWrapper);
         QueryWrapper<SysRoleMenuEntity> roleWrapper = new QueryWrapper<>();
         roleWrapper.lambda().eq(SysRoleMenuEntity::getMenuId,menuId);
-        sysRoleMenuMapper.delete(roleWrapper);
-        return new ResponseDTO<>(ResponseEnum.SUCCESS,"删除菜单成功");
+        int count = sysRoleMenuMapper.delete(roleWrapper);
+        if(count != 0){
+            this.updateRedisAuthority();
+            return new ResponseDTO<>(ResponseEnum.SUCCESS,"删除菜单成功");
+        }else {
+            return new ResponseDTO<>(ResponseEnum.SUCCESS,"删除菜单失败");
+        }
     }
     /**
      * <p>@Description 修改或创建菜单 </p>
@@ -170,15 +183,51 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
             delWrapper.lambda().in(SysRoleMenuEntity::getSrmId,deleteIdList);
             sysRoleMenuMapper.delete(delWrapper);
         }
+        //编辑的菜单是权限菜单，则需要更新redis中的权限菜单信息
+        if(StringUtils.equals(menu.getMenuType(),CommonEnum.MENU_TYPE_2.getCode())){
+            this.updateRedisAuthority();
+        }
         responseDTO.setResponseCode(ResponseEnum.SUCCESS,"更新菜单成功");
         return responseDTO;
     }
-
+    /**
+     * <p>@Description 编辑的菜单是权限菜单，则需要更新redis中的权限菜单信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/15 21:07 </p>
+     * @return
+     */
+    private void updateRedisAuthority(){
+        boolean isWait = true; //是否等待获取分布式锁
+        String value = UUID.randomUUID().toString();
+        while (isWait){
+            try {
+                if(RedisUtils.lock(RedisKeyConstant.AUTHORITY_MENU_LOCK, value)){
+                    isWait = false;
+                    RedisUtils.deleteKey(RedisKeyConstant.AUTHORITY_MENU);
+                    List<SysRoleMenuDTO> menuList = sysMenuMapper.findAllSecurityMenu();
+                    if(CollectionUtils.isNotEmpty(menuList)){
+                        for (SysRoleMenuDTO menuDTO : menuList){
+                            AuthorityDTO authDTO = new AuthorityDTO();
+                            authDTO.setUrl(menuDTO.getMenuUrl());
+                            authDTO.setRole(menuDTO.getRoleName());
+                            //将所有请求权限保存到redis中
+                            RedisUtils.listSet(RedisKeyConstant.AUTHORITY_MENU,authDTO);
+                        }
+                    }
+                }
+            }catch (Exception e){
+                LOG.info("查所询有请求权限，发生异常：{}",e.getMessage());
+            }finally {
+                // 释放锁
+                RedisUtils.unlock(RedisKeyConstant.AUTHORITY_MENU_LOCK,value);
+            }
+        }
+    }
     /**
      * <p>@Description 查询所有菜单 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 16:59 </p>
-     * @param menuDTO 查询条件
+     * @param menuDTO 查询条件da
      * @param pageNum 当前页数
      * @param pageSize 页面条数
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.admin.data.dto.SysMenuDTO>>

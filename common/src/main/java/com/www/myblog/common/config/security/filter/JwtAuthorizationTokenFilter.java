@@ -62,7 +62,7 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         String token = CookisUtils.getCookieValue(httpServletRequest,LoginSuccessHandler.COOKIE_TOKEN);
-        LOG.info("-----> 1、访问token验证，token={}",token);
+        LOG.info("=====> 1、访问token验证，token={}",token);
         Map<String,Object> map = TokenUtils.validateTokenAndGetClaims(token);
         if(map != null && map.size() > 0){
             String userId = String.valueOf(map.get(TokenUtils.USERID));

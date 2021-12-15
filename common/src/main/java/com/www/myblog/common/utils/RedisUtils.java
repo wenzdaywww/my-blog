@@ -1,5 +1,6 @@
 package com.www.myblog.common.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -71,12 +72,40 @@ public final class RedisUtils {
         return value;
     }
     /**
+     * <p>@Description 获取分布式锁 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/8/1 21:07 </p>
+     * @param key 键值
+     * @param value 值
+     * @return boolean true获取锁成功，false获取锁失败
+     */
+    public static boolean lock(String key,String value){
+        return setNX(key,value);
+    }
+    /**
+     * <p>@Description 释放分布式锁 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/8/1 21:07 </p>
+     * @param key 键值
+     * @param value 值
+     * @return boolean true释放锁成功，false释放锁失败
+     */
+    public static boolean unlock(String key,String value){
+        // 判断是否是当前线程获取分布式锁，是则删除key
+        if (StringUtils.equals(value,get(key))){
+            RedisUtils.deleteKey(key);
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * <p>@Description key不存在时保存String数据 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/8/1 21:07 </p>
      * @param key 键值
      * @param value 值
-     * @return boolean true保存成功，false保存失败
+     * @return boolean true键不存在，保存成功，false键存在，保存失败
      */
     public static boolean setNX(String key,String value){
         return redisTemplate.opsForValue().setIfAbsent(key,value);
@@ -88,7 +117,7 @@ public final class RedisUtils {
      * @param key 键值
      * @param value 值
      * @param seconds 超时时间(秒)
-     * @return boolean true保存成功，false保存失败
+     * @return boolean true键不存在，保存成功，false键存在，保存失败
      */
     public static boolean setNX(String key,String value,long seconds){
         return redisTemplate.opsForValue().setIfAbsent(key,value,seconds,TimeUnit.SECONDS);

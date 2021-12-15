@@ -40,7 +40,7 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
      */
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
-        LOG.info("-----> 3、访问权限角色配置");
+        LOG.info("=====> 3、访问权限角色配置");
         String requestURL = ((FilterInvocation)o).getRequestUrl();
         List<AuthorityDTO> roleMenuList = securityUserServie.findAllAuthority();
         if(CollectionUtils.isNotEmpty(roleMenuList)){
