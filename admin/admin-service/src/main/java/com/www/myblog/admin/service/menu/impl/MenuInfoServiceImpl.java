@@ -70,7 +70,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
             this.updateRedisAuthority();
             return new ResponseDTO<>(ResponseEnum.SUCCESS,"删除菜单成功");
         }else {
-            return new ResponseDTO<>(ResponseEnum.SUCCESS,"删除菜单失败");
+            return new ResponseDTO<>(ResponseEnum.FAIL,"删除菜单失败");
         }
     }
     /**
