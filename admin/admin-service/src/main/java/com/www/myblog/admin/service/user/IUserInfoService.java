@@ -27,6 +27,14 @@ public interface IUserInfoService {
      */
     ResponseDTO<String> updateUserPwd(SysUserDTO user);
     /**
+     * <p>@Description 查询用户vue的router权限 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/11 00:22 </p>
+     * @param userId 用户ID
+     * @return com.www.myblog.common.pojo.ResponseDTO
+     */
+    ResponseDTO<List<SysMenuDTO>> findUserRouter(String userId);
+    /**
      * <p>@Description 查询用户菜单列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 00:22 </p>

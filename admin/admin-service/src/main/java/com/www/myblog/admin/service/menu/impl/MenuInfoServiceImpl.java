@@ -114,13 +114,22 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         }
         // 更新菜单信息
         menuEntity = isUpdate ? menuEntity : new SysMenuEntity();
-        BeanUtils.copyProperties(menu,menuEntity);
+        menuEntity.setMenuCode(menu.getMenuCode());
+        menuEntity.setMenuUrl(menu.getMenuUrl());
+        menuEntity.setMenuName(menu.getMenuName());
+        menuEntity.setVuePath(menu.getVuePath());
+        menuEntity.setParentId(menu.getParentId());
+        menuEntity.setMenuIcon(menu.getMenuIcon());
+        menuEntity.setMenuOrder(menu.getMenuOrder());
+        menuEntity.setMenuType(menu.getMenuType());
+        menuEntity.setModule(menu.getModule());
+        menuEntity.setIsDelete(menu.getIsDelete());
         menuEntity.setSysUpdateTime(DateUtils.getCurrentDateTime());
-        menuEntity.setSysCreateTime(isUpdate ? menuEntity.getSysCreateTime() : DateUtils.getCurrentDateTime());
         if(isUpdate){
             sysMenuMapper.updateById(menuEntity);
         }else {
             menuEntity.setIsDelete(CommonEnum.NO_0.getCode());
+            menuEntity.setSysCreateTime(isUpdate ? menuEntity.getSysCreateTime() : DateUtils.getCurrentDateTime());
             sysMenuMapper.insert(menuEntity);
         }
         // 查询是否已经存在该菜单的角色菜单配置信息
@@ -204,7 +213,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
                 if(RedisUtils.lock(RedisKeyConstant.AUTHORITY_MENU_LOCK, value)){
                     isWait = false;
                     RedisUtils.deleteKey(RedisKeyConstant.AUTHORITY_MENU);
-                    List<SysRoleMenuDTO> menuList = sysMenuMapper.findAllSecurityMenu();
+                    List<SysRoleMenuDTO> menuList = sysMenuMapper.findAllSecurityMenu("admin-security");
                     if(CollectionUtils.isNotEmpty(menuList)){
                         for (SysRoleMenuDTO menuDTO : menuList){
                             AuthorityDTO authDTO = new AuthorityDTO();

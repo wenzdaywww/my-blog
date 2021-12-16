@@ -1,79 +1,78 @@
 import {createRouter, createWebHistory} from "vue-router";
-import Home from "../views/admin/Home.vue";
+const modules = import.meta.glob("../views/**/**.vue");
 
-const routes = [
+let routes = [
     {
         path: "/",
-        redirect: "/home"
-    }, {
-        path: "/",
-        name: "home",
-        component: Home,
-        children: [
-            {
-                path: "/home",
-                name: "index",
-                meta: {
-                    title: "首页"
-                },
-                component: () => import ( /* webpackChunkName: "dashboard" */ "../views/admin/Index.vue")
-            }, {
-                path: "/user",
-                name: "user",
-                meta: {
-                    title: "个人中心"
-                },
-                component: () => import (/* webpackChunkName: "user" */ "../views/admin/User.vue")
-            }, {
-                path: "/table",
-                name: "userList",
-                meta: {
-                    title: "用户信息"
-                },
-                component: () => import ( /* webpackChunkName: "table" */ "../views/admin/UserList.vue")
-            }, {
-                path: "/tabs",
-                name: "tabs",
-                meta: {
-                    title: "消息中心"
-                },
-                component: () => import ( /* webpackChunkName: "tabs" */ "../views/admin/News.vue")
-            }, {
-                path: "/menu",
-                name: "menuList",
-                meta: {
-                    title: "菜单管理"
-                },
-                component: () => import ( /* webpackChunkName: "tabs" */ "../views/admin/MenuList.vue")
-            }
-        ]
-    }, {
+        redirect: "/login"
+    },{
         path: "/login",
         name: "login",
         meta: {
             title: "登录"
         },
-        component: () => import ( /* webpackChunkName: "login" */ "../views/admin/Login.vue")
+        component: () => import ("../views/admin/Login.vue")
     }, {
         path: "/404",
         name: "404",
         meta: {
             title: "404"
         },
-        component: () => import ( /* webpackChunkName: "tabs" */ "../views/404.vue")
+        component: () => import ("../views/404.vue")
     },{
         path: "/:catchAll(.*)", // 页面404跳转
         redirect: "/404"
     }
 ];
-
 const router = createRouter({
     history: createWebHistory(), //createWebHashHistory地址带#，createWebHistory不带#
     routes
 });
+let indexPath = null; //动态添加router后跳转的页面
+let initRouter = []; //后端查询的router数据
+// 初始化菜单路由
+export const initUserRouter = function (routerData) {
+    if(routerData){
+        indexPath = null;
+        initRouter = [];
+        hanleChilden(initRouter,routerData);
+        for (var i = 0; i < initRouter.length; i++){
+            router.addRoute(initRouter[i]);
+        }
+        router.push(indexPath);
+    }
+}
+// 递归处理子菜单
+const hanleChilden = function (parent,children) {
+    children.forEach (temp => {
+        const vuePath = '../views/'+temp.vuePath;
+        const tempRouter = {
+            path: temp.menuUrl,
+            name: temp.menuCode,
+            component: modules[vuePath],
+            children: []
+        };
+        if (temp.menuName){
+            tempRouter.meta = { title: temp.menuName };
+        }
+        parent.push(tempRouter);
+        if(temp.children){ // 有子router
+            hanleChilden(tempRouter.children,temp.children);
+        }else {
+            //获取第一个子路由路径
+            if (!indexPath){
+                indexPath = temp.menuUrl;
+            }
+        }
+    });
+}
 // 路由跳转前的处理
 router.beforeEach((to, from, next) => {
     document.title = "my-blog";
+    if (localStorage.getItem('userId') && routes.length === router.getRoutes().length){
+
+    }
     next();
 });
+
 export default router;

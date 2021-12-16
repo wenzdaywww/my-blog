@@ -36,9 +36,10 @@
 </template>
 
 <script>
-import {computed, ref, getCurrentInstance} from "vue";
+import {computed, ref, getCurrentInstance, reactive} from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
+
 export default {
   setup() {
     // 接口请求
@@ -50,13 +51,13 @@ export default {
         if(res.code === 200){
           items.value = res.data;
         }
-      })
+      });
     };
     getData();
     // 路由
-    const route = useRoute();
+    const router = useRoute();
     const onRoutes = computed(() => {
-      return route.path;
+      return router.path;
     });
     const store = useStore();
     const collapse = computed(() => store.state.collapse);

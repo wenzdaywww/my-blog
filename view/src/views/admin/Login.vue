@@ -33,6 +33,7 @@
 import { ref, reactive, getCurrentInstance } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
+import {initUserRouter} from "../../router";
 
 export default {
   setup() {
@@ -62,7 +63,11 @@ export default {
       request.$http.post("api/admin/login",param).then(function (res) {
         if(res.code === 200){
           localStorage.setItem("userId",param.id);
-          router.push("/home");
+          request.$http.get("api/admin/user/router", {userId:localStorage.getItem('userId')}).then(function (res) {
+            if(res.code === 200){
+              initUserRouter(res.data);
+            }
+          });
         }else {
           ElMessage.error(res.data);
         }

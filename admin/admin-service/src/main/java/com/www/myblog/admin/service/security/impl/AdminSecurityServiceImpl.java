@@ -99,7 +99,7 @@ public class AdminSecurityServiceImpl implements ISecurityServie {
                     if(CollectionUtils.isNotEmpty(authList)){
                         return authList;
                     }else {
-                        List<SysRoleMenuDTO> menuList = sysMenuMapper.findAllSecurityMenu();
+                        List<SysRoleMenuDTO> menuList = sysMenuMapper.findAllSecurityMenu("admin-security");
                         if(CollectionUtils.isEmpty(menuList)){
                             return null;
                         }

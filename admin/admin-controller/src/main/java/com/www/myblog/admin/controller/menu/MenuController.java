@@ -50,21 +50,25 @@ public class MenuController {
      * <p>@Description 查询所有菜单 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 16:58 </p>
+     * @param module 菜单归属模块
      * @param menuType 菜单类型
      * @param roleName 角色归属
      * @param menuCode 菜单编码
      * @param menuUrl 菜单路径
+     * @param vuePath router的path路径
      * @param pageNum 当前页数
      * @param pageSize 页面条数
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.admin.data.dto.SysMenuDTO>>
      */
     @GetMapping("all")
-    public ResponseDTO<List<SysMenuDTO>> findAllMenu(String menuType, String roleName, String menuCode, String menuUrl, int pageNum, int pageSize){
+    public ResponseDTO<List<SysMenuDTO>> findAllMenu(String module,String menuType, String roleName, String menuCode, String menuUrl,String vuePath, int pageNum, int pageSize){
         SysMenuDTO menuDTO = new SysMenuDTO();
+        menuDTO.setModule(module);
         menuDTO.setMenuType(menuType);
         menuDTO.setRoleName(roleName);
         menuDTO.setMenuCode(menuCode);
         menuDTO.setMenuUrl(menuUrl);
+        menuDTO.setVuePath(vuePath);
         return menuInfoService.findAllMenu(menuDTO,pageNum,pageSize);
     }
 }

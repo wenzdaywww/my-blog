@@ -95,6 +95,34 @@ public class UserInfoServiceImpl implements IUserInfoService {
     }
 
     /**
+     * <p>@Description 查询用户vue的router权限 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/11 00:22 </p>
+     * @param userId 用户ID
+     * @return com.www.myblog.common.pojo.ResponseDTO
+     */
+    @Override
+    public ResponseDTO<List<SysMenuDTO>> findUserRouter(String userId) {
+        List<SysMenuDTO> resultList = new ArrayList<>();
+        List<SysMenuDTO> menuList = sysMenuMapper.findUserRouter(userId,"admin-router");
+        if(CollectionUtils.isNotEmpty(menuList)){
+            for (SysMenuDTO treeNode : menuList) {
+                if (treeNode.getParentId() == null) {
+                    resultList.add(treeNode);
+                }
+                for (SysMenuDTO it : menuList) {
+                    if (it.getParentId() == treeNode.getMenuId()) {
+                        if (treeNode.getChildren() == null) {
+                            treeNode.setChildren(new ArrayList<SysMenuDTO>());
+                        }
+                        treeNode.getChildren().add(it);
+                    }
+                }
+            }
+        }
+        return new ResponseDTO(ResponseEnum.SUCCESS,resultList);
+    }
+    /**
      * <p>@Description 查询用户菜单列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 00:22 </p>
@@ -104,7 +132,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     public ResponseDTO<List<SysMenuDTO>> findUserMenu(String userId) {
         List<SysMenuDTO> resultList = new ArrayList<>();
-        List<SysMenuDTO> menuList = sysMenuMapper.findUserMenu(userId);
+        List<SysMenuDTO> menuList = sysMenuMapper.findUserMenu(userId,"admin-menu");
         if(CollectionUtils.isNotEmpty(menuList)){
             for (SysMenuDTO treeNode : menuList) {
                 if (treeNode.getParentId() == null) {
@@ -112,10 +140,10 @@ public class UserInfoServiceImpl implements IUserInfoService {
                 }
                 for (SysMenuDTO it : menuList) {
                     if (it.getParentId() == treeNode.getMenuId()) {
-                        if (treeNode.getSubMenu() == null) {
-                            treeNode.setSubMenu(new ArrayList<SysMenuDTO>());
+                        if (treeNode.getChildren() == null) {
+                            treeNode.setChildren(new ArrayList<SysMenuDTO>());
                         }
-                        treeNode.getSubMenu().add(it);
+                        treeNode.getChildren().add(it);
                     }
                 }
             }

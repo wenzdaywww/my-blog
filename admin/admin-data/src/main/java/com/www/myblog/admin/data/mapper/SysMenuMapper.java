@@ -29,18 +29,29 @@ public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
      */
     Page<SysMenuDTO> findAllMenu(Page<SysMenuDTO> page, @Param("obj") SysMenuDTO menuDTO);
     /**
-     * <p>@Description 查询用户菜单列表 </p>
+     * <p>@Description 查询用户vue的router权限 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 00:22 </p>
      * @param userId 用户ID
+     * @param module 菜单归属模块
      * @return 菜单信息
      */
-    List<SysMenuDTO> findUserMenu(@Param("userId") String userId);
+    List<SysMenuDTO> findUserRouter(@Param("userId") String userId,@Param("module") String module);
+    /**
+     * <p>@Description 查询用户目录菜单列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/11 00:22 </p>
+     * @param userId 用户ID
+     * @param module 菜单归属模块
+     * @return 菜单信息
+     */
+    List<SysMenuDTO> findUserMenu(@Param("userId") String userId,@Param("module") String module);
     /**
      * <p>@Description 查询所有权限菜单信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/11/24 20:43 </p>
+     * @param module 菜单归属模块
      * @return 角色菜单信息
      */
-    List<SysRoleMenuDTO> findAllSecurityMenu();
+    List<SysRoleMenuDTO> findAllSecurityMenu(String module);
 }

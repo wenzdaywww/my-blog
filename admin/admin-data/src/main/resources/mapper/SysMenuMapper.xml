@@ -6,64 +6,82 @@
         <!--@Table sys_menu-->
         <id column="MENU_ID" property="menuId" />
         <result column="MENU_CODE" property="menuCode" />
+        <result column="MENU_URL" property="menuUrl" />
         <result column="MENU_NAME" property="menuName" />
+        <result column="VUE_PATH" property="vuePath" />
         <result column="PARENT_ID" property="parentId" />
         <result column="MENU_ICON" property="menuIcon" />
-        <result column="MENU_URL" property="menuUrl" />
         <result column="MENU_ORDER" property="menuOrder" />
         <result column="MENU_TYPE" property="menuType" />
+        <result column="MODULE" property="module" />
         <result column="IS_DELETE" property="isDelete" />
         <result column="SYS_UPDATE_TIME" property="sysUpdateTime" />
         <result column="SYS_CREATE_TIME" property="sysCreateTime" />
     </resultMap>
-
-    <sql id="Base_Column_List">
-        <!--@mbg.generated-->
-        MENU_ID, MENU_CODE, MENU_NAME, PARENT_ID, MENU_ICON, MENU_URL, MENU_ORDER, MENU_TYPE,IS_DELETE,
-        SYS_UPDATE_TIME, SYS_CREATE_TIME
-    </sql>
-
     <!--  查询所以权限菜单信息-->
     <select id="findAllSecurityMenu" resultType="com.www.myblog.admin.data.dto.SysRoleMenuDTO">
-        SELECT DISTINCT M.MENU_ID, M.MENU_CODE, M.MENU_NAME, M.PARENT_ID,
-                        M.MENU_ICON, M.MENU_URL, M.MENU_ORDER, M.MENU_TYPE, M.IS_DELETE,
-                        R.ROLE_ID, R.ROLE_NAME, R.DESCRIPTION, RM.SYS_CREATE_TIME, RM.SYS_UPDATE_TIME
+        SELECT DISTINCT M.MENU_URL,R.ROLE_NAME
         FROM SYS_MENU M
                      LEFT JOIN SYS_ROLE_MENU RM ON RM.MENU_ID = M.MENU_ID
                      LEFT JOIN SYS_ROLE R ON RM.ROLE_ID = R.ROLE_ID
-        WHERE  M.MENU_TYPE = '2'
+        WHERE  M.MENU_TYPE = '2' AND M.MODULE = #{module}
+    </select>
+    <!--  查询用户vue的router权限-->
+    <select id="findUserRouter" resultType="com.www.myblog.admin.data.dto.SysMenuDTO">
+        SELECT  M.MENU_ID,
+                M.MENU_CODE,
+                M.MENU_URL,
+                M.MENU_NAME,
+                M.VUE_PATH,
+                M.PARENT_ID,
+                M.MENU_ORDER
+        FROM    SYS_MENU M,
+                SYS_USER_ROLE UR,
+                SYS_ROLE_MENU RM
+        WHERE M.IS_DELETE = '0'
+              AND M.MENU_TYPE = '3'
+              AND M.MODULE = #{module}
+              AND M.MENU_ID = RM.MENU_ID
+              AND UR.ROLE_ID = RM.ROLE_ID
+              AND UR.USER_ID = #{userId}
+        ORDER BY M.MENU_ID,M.PARENT_ID,M.MENU_ORDER
     </select>
     <!--  查询用户菜单列表-->
     <select id="findUserMenu" resultType="com.www.myblog.admin.data.dto.SysMenuDTO">
-        SELECT  m.MENU_ID,
-                m.PARENT_ID,
-                m.MENU_ORDER,
-                m.MENU_ICON,
-                m.MENU_URL,
-                m.MENU_NAME
-        FROM    sys_menu m,
-                sys_user_role ur,
-                sys_role_menu rm
-        WHERE m.IS_DELETE = '0' and m.MENU_TYPE='1'
-          AND m.MENU_ID = rm.MENU_ID
-          AND ur.ROLE_ID = rm.ROLE_ID
-          AND ur.USER_ID = #{userId}
+        SELECT  M.MENU_ID,
+                M.MENU_CODE,
+                M.MENU_URL,
+                M.MENU_NAME,
+                M.PARENT_ID,
+                M.MENU_ICON,
+                M.MENU_ORDER
+        FROM    SYS_MENU M,
+                SYS_USER_ROLE UR,
+                SYS_ROLE_MENU RM
+        WHERE M.IS_DELETE = '0'
+          AND M.MENU_TYPE = '1'
+          AND M.MODULE = #{module}
+          AND M.MENU_ID = RM.MENU_ID
+          AND UR.ROLE_ID = RM.ROLE_ID
+          AND UR.USER_ID = #{userId}
         ORDER BY M.MENU_ID,M.PARENT_ID,M.MENU_ORDER
     </select>
     <!--    查询所有菜单-->
     <select id="findAllMenu" resultType="com.www.myblog.admin.data.dto.SysMenuDTO">
-        SELECT RN.ROLE_NAME,
-                M.MENU_ID,
-                M.MENU_CODE,
-                M.MENU_NAME,
-                M.PARENT_ID,
-                M.MENU_ICON,
-                M.MENU_URL,
-                M.MENU_ORDER,
-                M.MENU_TYPE,
-                M.IS_DELETE,
-                M.SYS_UPDATE_TIME,
-                M.SYS_CREATE_TIME
+        SELECT  RN.ROLE_NAME,
+            M.MENU_ID,
+            M.MENU_CODE,
+            M.MENU_URL,
+            M.MENU_NAME,
+            M.VUE_PATH,
+            M.PARENT_ID,
+            M.MENU_ICON,
+            M.MENU_ORDER,
+            M.MENU_TYPE,
+            M.MODULE,
+            M.IS_DELETE,
+            M.SYS_UPDATE_TIME,
+            M.SYS_CREATE_TIME
         FROM SYS_MENU M
         <choose>
             <when test="obj.roleName != null and obj.roleName != ''">
@@ -81,6 +99,9 @@
         <if test="obj.roleName != null and obj.roleName != ''">
             AND RN.MENU_ID = M.MENU_ID
         </if>
+        <if test="obj.module != null and obj.module != ''">
+            AND M.MODULE = #{module}
+        </if>
         <if test="obj.menuType != null and obj.menuType != ''">
             AND M.MENU_TYPE = #{obj.menuType}
         </if>
@@ -89,6 +110,9 @@
         </if>
         <if test="obj.menuUrl != null and obj.menuUrl != ''">
             AND M.MENU_URL = #{obj.menuUrl}
+        </if>
+        <if test="obj.vuePath != null and obj.vuePath != ''">
+            AND M.VUE_PATH = #{vuePath}
         </if>
         ORDER BY M.MENU_ID,M.PARENT_ID,M.MENU_ORDER
     </select>

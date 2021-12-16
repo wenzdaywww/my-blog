@@ -30,10 +30,20 @@ public class SysMenuEntity implements Serializable {
     @TableField("MENU_CODE")
     private String menuCode;
     /**
+     * 菜单路径
+     */
+    @TableField("MENU_URL")
+    private String menuUrl;
+    /**
     * 菜单名称
     */
     @TableField("MENU_NAME")
     private String menuName;
+    /**
+     * router的path路径
+     */
+    @TableField("VUE_PATH")
+    private String vuePath;
     /**
     * 父级菜单ID
     */
@@ -45,20 +55,20 @@ public class SysMenuEntity implements Serializable {
     @TableField("MENU_ICON")
     private String menuIcon;
     /**
-    * 菜单路径
-    */
-    @TableField("MENU_URL")
-    private String menuUrl;
-    /**
     * 菜单序号
     */
     @TableField("MENU_ORDER")
     private Integer menuOrder;
     /**
-    * 菜单类型：1页面菜单，2权限菜单
+    * 菜单类型：1目录菜单，2权限菜单，3vue路由
     */
     @TableField("MENU_TYPE")
     private String menuType;
+    /**
+     * 菜单类型：1页面菜单，2权限菜单
+     */
+    @TableField("MODULE")
+    private String module;
     /**
     * 是否删除：1删除，0未删除
     */

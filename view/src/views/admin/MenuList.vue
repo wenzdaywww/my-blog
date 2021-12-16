@@ -92,7 +92,7 @@
           <el-radio v-model="form.menuType" label="1">页面菜单</el-radio>
           <el-radio v-model="form.menuType" label="2">请求路径</el-radio>
         </el-form-item>
-        <el-form-item label="是否有效：" :prop="editVisible ? isDelete : ''" v-show="editVisible">
+        <el-form-item label="是否有效：" prop="isDelete" v-show="editVisible">
           <el-radio v-model="form.isDelete" label="1">否</el-radio>
           <el-radio v-model="form.isDelete" label="0">是</el-radio>
         </el-form-item>

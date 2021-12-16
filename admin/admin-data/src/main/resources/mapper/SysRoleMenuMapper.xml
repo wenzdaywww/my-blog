@@ -9,9 +9,5 @@
     <result column="SYS_UPDATE_TIME" property="sysUpdateTime" />
     <result column="SYS_CREATE_TIME" property="sysCreateTime" />
   </resultMap>
-  <!--  表字段-->
-  <sql id="Base_Column_List">
-    SRM_ID, ROLE_ID, MENU_ID, SYS_UPDATE_TIME, SYS_CREATE_TIME
-  </sql>
 
 </mapper>
