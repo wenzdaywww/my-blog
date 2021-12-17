@@ -1,0 +1,14 @@
+server:
+  port: 8003
+  servlet:
+    #访问路径设置
+    context-path: /
+# 应用名称
+spring:
+  application:
+    name: authorise
+  security:
+    user:
+      name: admin
+      password: www362412
+
