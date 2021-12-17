@@ -3,9 +3,13 @@ import {createStore} from 'vuex'
 export default createStore({
     state: {
         tagsList: [],
+        routerList : [],
         collapse: false
     },
     mutations: {
+        setRouter(data){
+            this.state.routerList = data;
+        },
         delTagsItem(state, data) {
             state
                 .tagsList

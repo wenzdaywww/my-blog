@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 const modules = import.meta.glob("../views/**/**.vue");
 
+// 初始路由
 let routes = [
     {
         path: "/",
@@ -28,6 +29,7 @@ const router = createRouter({
     history: createWebHistory(), //createWebHashHistory地址带#，createWebHistory不带#
     routes
 });
+
 let indexPath = null; //动态添加router后跳转的页面
 let initRouter = []; //后端查询的router数据
 // 初始化菜单路由
@@ -36,9 +38,9 @@ export const initUserRouter = function (routerData) {
         indexPath = null;
         initRouter = [];
         hanleChilden(initRouter,routerData);
-        for (var i = 0; i < initRouter.length; i++){
-            router.addRoute(initRouter[i]);
-        }
+        initRouter.forEach (temp => {
+            router.addRoute(temp);
+        });
         router.push(indexPath);
     }
 }
@@ -49,12 +51,10 @@ const hanleChilden = function (parent,children) {
         const tempRouter = {
             path: temp.menuUrl,
             name: temp.menuCode,
+            meta : { title: temp.menuName },
             component: modules[vuePath],
             children: []
         };
-        if (temp.menuName){
-            tempRouter.meta = { title: temp.menuName };
-        }
         parent.push(tempRouter);
         if(temp.children){ // 有子router
             hanleChilden(tempRouter.children,temp.children);
@@ -70,9 +70,15 @@ const hanleChilden = function (parent,children) {
 router.beforeEach((to, from, next) => {
     document.title = "my-blog";
     if (localStorage.getItem('userId') && routes.length === router.getRoutes().length){
+        //TODO 2021/12/17 21:34 页面刷新404，待处理
 
+        // if(routerList && routerList.length > 0){
+            // data.forEach (item => {
+                // router.addRoute(item);
+            // });
+        // }
     }
     next();
 });
 
-export default router;
+export default router ;

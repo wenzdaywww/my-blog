@@ -63,7 +63,7 @@ export default {
       request.$http.post("api/admin/login",param).then(function (res) {
         if(res.code === 200){
           localStorage.setItem("userId",param.id);
-          request.$http.get("api/admin/user/router", {userId:localStorage.getItem('userId')}).then(function (res) {
+          request.$http.get("api/admin/user/router", {userId:param.id}).then(function (res) {
             if(res.code === 200){
               initUserRouter(res.data);
             }
