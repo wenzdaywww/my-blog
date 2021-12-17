@@ -100,7 +100,7 @@
             AND RN.MENU_ID = M.MENU_ID
         </if>
         <if test="obj.module != null and obj.module != ''">
-            AND M.MODULE = #{module}
+            AND M.MODULE = #{obj.module}
         </if>
         <if test="obj.menuType != null and obj.menuType != ''">
             AND M.MENU_TYPE = #{obj.menuType}
@@ -112,7 +112,7 @@
             AND M.MENU_URL = #{obj.menuUrl}
         </if>
         <if test="obj.vuePath != null and obj.vuePath != ''">
-            AND M.VUE_PATH = #{vuePath}
+            AND M.VUE_PATH = #{obj.vuePath}
         </if>
         ORDER BY M.MENU_ID,M.PARENT_ID,M.MENU_ORDER
     </select>

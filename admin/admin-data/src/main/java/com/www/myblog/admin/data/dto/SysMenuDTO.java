@@ -59,7 +59,7 @@ public class SysMenuDTO implements Serializable {
      */
     private String menuType;
     /**
-     * 菜单类型：1页面菜单，2权限菜单
+     * 菜单归属模块
      */
     private String module;
     /**

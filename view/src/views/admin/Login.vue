@@ -18,7 +18,7 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-checkbox v-model="rememberMe">记住我</el-checkbox>
+          <el-checkbox v-model="rememberMe" checked >记住我</el-checkbox>
         </el-form-item>
         <div class="login-btn">
           <el-button type="primary" @click="submitForm()">登录</el-button>
