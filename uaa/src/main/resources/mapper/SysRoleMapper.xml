@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.www.authorise.data.mapper.SysRoleMapper">
+  <resultMap id="BaseResultMap" type="com.www.authorise.data.entity.SysRoleEntity">
+    <!--@Table sys_role-->
+    <id column="ROLE_ID" property="roleId" />
+    <result column="ROLE_CODE" property="roleCode" />
+    <result column="ROLE_NAME" property="roleName" />
+    <result column="SYS_UPDATE_TIME" property="sysUpdateTime" />
+    <result column="SYS_CREATE_TIME" property="sysCreateTime" />
+  </resultMap>
+  <!--  查询用户拥有的角色信息-->
+  <select id="findUserRole" resultType="java.lang.String">
+    SELECT DISTINCT R.ROLE_CODE FROM SYS_USER_ROLE UR, SYS_ROLE R, SYS_USER U
+    WHERE UR.ROLE_ID = R.ROLE_ID AND U.SU_ID = UR.SU_ID AND U.USER_ID = #{userId}
+  </select>
+</mapper>

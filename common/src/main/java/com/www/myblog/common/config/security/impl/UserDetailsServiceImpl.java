@@ -23,7 +23,7 @@ import java.util.List;
  * <p>@Author www </p>
  * <p>@Date 2021/8/1 21:12 </p>
  */
-@Service
+//@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     private static Logger LOG = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
     @Resource

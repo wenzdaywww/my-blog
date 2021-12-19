@@ -59,7 +59,7 @@
     <profiles>
         <!--eureka开发配置-->
         <profile>
-            <id>dev</id>
+            <id>eureka-dev</id>
             <properties>
                 <profileActive>dev</profileActive>
             </properties>
@@ -69,21 +69,21 @@
         </profile>
         <!--eureka集群1配置-->
         <profile>
-            <id>cluster1</id>
+            <id>eureka-cluster1</id>
             <properties>
                 <profileActive>cluster1</profileActive>
             </properties>
         </profile>
         <!--eureka集群2配置-->
         <profile>
-            <id>cluster2</id>
+            <id>eureka-cluster2</id>
             <properties>
                 <profileActive>cluster2</profileActive>
             </properties>
         </profile>
         <!--eureka集群3配置-->
         <profile>
-            <id>cluster3</id>
+            <id>eureka-cluster3</id>
             <properties>
                 <profileActive>cluster3</profileActive>
             </properties>

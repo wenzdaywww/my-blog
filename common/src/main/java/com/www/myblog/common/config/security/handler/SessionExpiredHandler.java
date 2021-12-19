@@ -19,7 +19,7 @@ import java.io.IOException;
  * <p>@Author www </p>
  * <p>@Date 2021/11/18 21:05 </p>
  */
-@Component
+//@Component
 public class SessionExpiredHandler implements SessionInformationExpiredStrategy {
     private static Logger LOG = LoggerFactory.getLogger(SessionExpiredHandler.class);
 

@@ -21,7 +21,7 @@ import java.io.IOException;
  * <p>@Author www </p>
  * <p>@Date 2021/8/1 21:11 </p>
  */
-@Component
+//@Component
 public class LoginFailureHandler implements AuthenticationFailureHandler  {
     private static Logger LOG = LoggerFactory.getLogger(LoginFailureHandler.class);
     /**

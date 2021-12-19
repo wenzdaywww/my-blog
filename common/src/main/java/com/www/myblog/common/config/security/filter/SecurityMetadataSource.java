@@ -24,7 +24,7 @@ import java.util.List;
  * <p>@Author www </p>
  * <p>@Date 2021/11/24 18:22 </p>
  */
-@Component
+//@Component
 public class SecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
     private static Logger LOG = LoggerFactory.getLogger(SecurityMetadataSource.class);
     @Resource

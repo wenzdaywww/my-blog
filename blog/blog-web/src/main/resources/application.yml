@@ -9,20 +9,6 @@ spring:
     active: @profileActive@
   application:
     name: my-blog
-  #数据库配置
-  datasource:
-    druid:
-      db-type: mysql #数据库类型
-      url: jdbc:mysql://192.168.1.130:3306/blog?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
-      username: blog
-      password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
-  #redis配置
-  redis:
-    password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
-    #sentile配置
-    sentinel:
-      master: mymaster
-      nodes: 192.168.1.130:26379,192.168.1.131:26379,192.168.1.132:26379
   # 返回报文json配置
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss #配置返回日期格式
@@ -35,8 +21,6 @@ mybatis-plus:
   global-config:
     db-config:
       update-strategy: ignored #字段更新忽略null判断
-# jwt的配置
-jwt:
-  user-prefix : MY-BLOG:TOKEN:USER_ID #redis单点登录的token的用户key前缀
-  secret-key : 6969fc2fd7e864ca8152860ca8b38e76 #token加密密钥
-  expire-time-second : 1800 #token过期时间（秒）
+#配置eureka注册中心服务的status信息
+info:
+  name: my blog server

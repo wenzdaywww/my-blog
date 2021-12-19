@@ -32,7 +32,7 @@ import java.util.Map;
  * <p>@Author www </p>
  * <p>@Date 2021/11/16 21:06 </p>
  */
-@Component
+//@Component
 public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
     private static Logger LOG = LoggerFactory.getLogger(JwtAuthorizationTokenFilter.class);
     @Autowired

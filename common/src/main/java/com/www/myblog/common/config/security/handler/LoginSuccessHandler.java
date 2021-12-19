@@ -28,7 +28,7 @@ import java.util.Map;
  * <p>@Author www </p>
  * <p>@Date 2021/8/1 21:12 </p>
  */
-@Component
+//@Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     private static Logger LOG = LoggerFactory.getLogger(LoginSuccessHandler.class);
     @Value("${jwt.user-prefix}")

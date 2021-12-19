@@ -20,7 +20,7 @@ import java.io.IOException;
  * <p>@Author www </p>
  * <p>@Date 2021/11/15 20:39 </p>
  */
-@Component
+//@Component
 public class AuthenticationEntryHandler implements AuthenticationEntryPoint {
     private static Logger LOG = LoggerFactory.getLogger(AuthenticationEntryHandler.class);
     /**

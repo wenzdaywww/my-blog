@@ -19,7 +19,7 @@ import java.util.Iterator;
  * <p>@Author www </p>
  * <p>@Date 2021/11/24 19:22 </p>
  */
-@Component
+//@Component
 public class SecurityAccessDecisionManager implements AccessDecisionManager {
     private static Logger LOG = LoggerFactory.getLogger(SecurityAccessDecisionManager.class);
 
