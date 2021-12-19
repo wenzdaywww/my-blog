@@ -2,13 +2,11 @@ package com.www.myblog.common.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.www.myblog.common.pojo.ResponseDTO;
-import com.www.myblog.common.pojo.ResponseEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -48,7 +46,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler  {
         } else if (exception instanceof BadCredentialsException) {
             msg = "用户名或者密码输入错误，请重新输入!";
         }
-        ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseEnum.FAIL,msg);
+        ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.FAIL,msg);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JSON.toJSONString(responseDTO));
     }

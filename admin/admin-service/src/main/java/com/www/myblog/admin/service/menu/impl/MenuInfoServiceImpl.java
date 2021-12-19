@@ -16,14 +16,12 @@ import com.www.myblog.admin.service.entity.ISysRoleService;
 import com.www.myblog.admin.service.menu.IMenuInfoService;
 import com.www.myblog.common.pojo.AuthorityDTO;
 import com.www.myblog.common.pojo.ResponseDTO;
-import com.www.myblog.common.pojo.ResponseEnum;
 import com.www.myblog.common.utils.DateUtils;
 import com.www.myblog.common.utils.RedisUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,9 +66,9 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         int count = sysRoleMenuMapper.delete(roleWrapper);
         if(count != 0){
             this.updateRedisAuthority();
-            return new ResponseDTO<>(ResponseEnum.SUCCESS,"删除菜单成功");
+            return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,"删除菜单成功");
         }else {
-            return new ResponseDTO<>(ResponseEnum.FAIL,"删除菜单失败");
+            return new ResponseDTO<>(ResponseDTO.RespEnum.FAIL,"删除菜单失败");
         }
     }
     /**
@@ -85,7 +83,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
         if(menu == null || StringUtils.isAnyBlank(menu.getMenuCode(),menu.getMenuUrl(),menu.getMenuType())
             || !StringUtils.equalsAny(menu.getMenuType(), CommonEnum.MENU_TYPE_1.getCode(),CommonEnum.MENU_TYPE_2.getCode())){
-            responseDTO.setResponseCode(ResponseEnum.FAIL,"更新菜单失败，信息有误");
+            responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL,"更新菜单失败，信息有误");
             return responseDTO;
         }
         SysMenuEntity parentEntity = null;
@@ -100,7 +98,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         if(menu.getParentId() != null){
             parentEntity = sysMenuMapper.selectById(menu.getParentId());
             if(parentEntity == null){
-                responseDTO.setResponseCode(ResponseEnum.FAIL,"更新菜单失败，父级菜单不存在");
+                responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL,"更新菜单失败，父级菜单不存在");
                 return responseDTO;
             }
         }
@@ -108,7 +106,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
             String[] roleArr = menu.getRoleName().split(",");
             roleList = sysRoleService.findRoleEntityByName(roleArr);
             if(CollectionUtils.isEmpty(roleList)){
-                responseDTO.setResponseCode(ResponseEnum.FAIL,"更新菜单失败，角色不存在");
+                responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL,"更新菜单失败，角色不存在");
                 return responseDTO;
             }
         }
@@ -196,7 +194,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         if(StringUtils.equals(menu.getMenuType(),CommonEnum.MENU_TYPE_2.getCode())){
             this.updateRedisAuthority();
         }
-        responseDTO.setResponseCode(ResponseEnum.SUCCESS,"更新菜单成功");
+        responseDTO.setResponseCode(ResponseDTO.RespEnum.SUCCESS,"更新菜单成功");
         return responseDTO;
     }
     /**
@@ -249,7 +247,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         Page<SysMenuDTO> page = new Page<>(pageNum,pageSize);
         page = sysMenuMapper.findAllMenu(page,menuDTO);
         List<SysMenuDTO> userList =  page.getRecords();
-        ResponseDTO<List<SysMenuDTO>> responseDTO = new ResponseDTO<>(ResponseEnum.SUCCESS,userList);
+        ResponseDTO<List<SysMenuDTO>> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,userList);
         responseDTO.setPageNum(pageNum);
         responseDTO.setPageSize(pageSize);
         responseDTO.setTotalNum(page.getTotal());

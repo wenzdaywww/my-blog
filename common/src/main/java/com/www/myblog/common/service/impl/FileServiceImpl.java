@@ -1,8 +1,6 @@
 package com.www.myblog.common.service.impl;
 
-import com.sun.imageio.plugins.jpeg.JPEG;
 import com.www.myblog.common.pojo.ResponseDTO;
-import com.www.myblog.common.pojo.ResponseEnum;
 import com.www.myblog.common.service.IFileService;
 import com.www.myblog.common.utils.DateUtils;
 import org.apache.commons.lang.StringUtils;
@@ -52,9 +50,9 @@ public class FileServiceImpl implements IFileService {
     public ResponseDTO<String> uploadFile(MultipartFile file, String fileName) {
         String path = this.uploadFileBackPath(file,fileName);
         if(path == null){
-            return new ResponseDTO<>(ResponseEnum.FAIL,"上传文件失败");
+            return new ResponseDTO<>(ResponseDTO.RespEnum.FAIL,"上传文件失败");
         }
-        return new ResponseDTO<>(ResponseEnum.SUCCESS,path);
+        return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,path);
     }
 
     /**

@@ -2,12 +2,10 @@ package com.www.myblog.common.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.www.myblog.common.pojo.ResponseDTO;
-import com.www.myblog.common.pojo.ResponseEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.web.session.SessionInformationExpiredEvent;
 import org.springframework.security.web.session.SessionInformationExpiredStrategy;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +31,7 @@ public class SessionExpiredHandler implements SessionInformationExpiredStrategy 
     @Override
     public void onExpiredSessionDetected(SessionInformationExpiredEvent sessionInformationExpiredEvent) throws IOException, ServletException {
         LOG.info("=====> 6、security会话过期");
-        ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseEnum.SUCCESS,"账号被挤下线");
+        ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,"账号被挤下线");
         HttpServletResponse httpServletResponse = sessionInformationExpiredEvent.getResponse();
         httpServletResponse.setContentType("application/json;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(responseDTO));

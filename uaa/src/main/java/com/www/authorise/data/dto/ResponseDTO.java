@@ -1,4 +1,4 @@
-package com.www.myblog.common.pojo;
+package com.www.authorise.data.dto;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

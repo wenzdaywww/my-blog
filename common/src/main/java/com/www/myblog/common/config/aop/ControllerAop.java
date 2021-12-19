@@ -2,8 +2,6 @@ package com.www.myblog.common.config.aop;
 
 import com.alibaba.fastjson.JSON;
 import com.www.myblog.common.pojo.ResponseDTO;
-import com.www.myblog.common.pojo.ResponseEnum;
-import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -75,7 +72,7 @@ public class ControllerAop {
             return result;
         }catch (Exception e){
             log.error("=====> 请求{}方法发生异常。请求报文：{}，异常信息：", controllerMethod,requestText,e);
-            return new ResponseDTO<>(ResponseEnum.FAIL,"请求失败");
+            return new ResponseDTO<>(ResponseDTO.RespEnum.FAIL,"请求失败");
         }
     }
 }
