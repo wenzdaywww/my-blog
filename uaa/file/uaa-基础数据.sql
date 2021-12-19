@@ -25,8 +25,8 @@ DELETE FROM OAUTH_CLIENT_DETAILS WHERE 1=1;
 INSERT INTO OAUTH_CLIENT_DETAILS (CLIENT_ID, RESOURCE_IDS,CLIENT_SECRET,SCOPE,AUTHORIZED_GRANT_TYPES,
                                   WEB_SERVER_REDIRECT_URI,ACCESS_TOKEN_VALIDITY,REFRESH_TOKEN_VALIDITY,SYS_UPDATE_TIME,SYS_CREATE_TIME)
 VALUES ('blog','my-blog','$2a$10$LHRecr6QgeDNU5WAHw6QCOgXRlhpuHyx9Gczyj0vv17kMcqjVctIO','all','authorization_code,password,client_credentials,implicit,refresh_token',
-        '',3600,604800,now(),now());
+        'https://www.baidu.com',3600,604800,now(),now());
 INSERT INTO OAUTH_CLIENT_DETAILS (CLIENT_ID, RESOURCE_IDS,CLIENT_SECRET,SCOPE,AUTHORIZED_GRANT_TYPES,
                                   WEB_SERVER_REDIRECT_URI,ACCESS_TOKEN_VALIDITY,REFRESH_TOKEN_VALIDITY,SYS_UPDATE_TIME,SYS_CREATE_TIME)
 VALUES ('admin','my-admin','$2a$10$LHRecr6QgeDNU5WAHw6QCOgXRlhpuHyx9Gczyj0vv17kMcqjVctIO','all','authorization_code,password,client_credentials,implicit,refresh_token',
-        '',3600,604800,now(),now());
+        'https://www.baidu.com',3600,604800,now(),now());

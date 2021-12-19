@@ -1,6 +1,7 @@
 package com.www.myblog.common.config.oauth2;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,9 +12,11 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 /**
- * <p>@Description  </p>
+ * <p>@Description 资源服务方的认证配置 </p>
  * <p>@Version 1.0 </p>
  * <p>@Author www </p>
  * <p>@Date 2021/12/18 21:24 </p>
@@ -25,6 +28,13 @@ public class ResourceServieConfig extends ResourceServerConfigurerAdapter {
     private String resourceId;
     @Autowired
     private TokenStore tokenStore;
+    @Autowired
+    @Qualifier("anonymousAccessHandler")
+    private AuthenticationEntryPoint authenticationEntryPoint;
+    @Autowired
+    @Qualifier("unauthorizedAccessHandler")
+    private AccessDeniedHandler accessDeniedHandler;
+
     /**
      * <p>@Description 配置资源验证方式 </p>
      * <p>@Author www </p>
@@ -38,6 +48,8 @@ public class ResourceServieConfig extends ResourceServerConfigurerAdapter {
                 // .tokenServices(tokenServices()) //远程校验token时需要
                 .tokenStore(tokenStore) //jwt校验token
                 .stateless(true);
+        resources.authenticationEntryPoint(authenticationEntryPoint);//匿名用户访问无权限资源时的异常处理
+        resources.accessDeniedHandler(accessDeniedHandler);//登录的用户访问无权限资源时的异常处理
     }
     /**
      * <p>@Description 配置用户的安全拦截策略 </p>

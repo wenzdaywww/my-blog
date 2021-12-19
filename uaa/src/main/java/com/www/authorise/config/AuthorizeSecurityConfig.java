@@ -11,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * <p>@Description Security配置类 </p>
+ * <p>@Description 认证授权服务提供方的Security配置类 </p>
  * <p>@Version 1.0 </p>
  * <p>@Author www </p>
  * <p>@Date 2021/8/1 21:10 </p>
@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true,securedEnabled = true) //配置基于方法的安全认证,必要
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class AuthorizeSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * <p>@Description 配置密码加密方式 </p>
      * <p>@Author www </p>
@@ -49,10 +49,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()//关闭csrf跨域检查
-                .authorizeRequests()
-                .anyRequest().authenticated()//其他请求需要登录
-                .and()
-                .formLogin();//跳转默认登录页面
+        http.csrf().disable();//关闭csrf跨域检查
+        http.authorizeRequests().anyRequest().authenticated();//其他请求需要登录
+        http.formLogin();//跳转默认登录页面
     }
 }

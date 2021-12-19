@@ -1,4 +1,4 @@
-package com.www.myblog.common.config.oauth2;
+package com.www.authorise.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +14,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
  * <p>@Date 2021/12/18 12:21 </p>
  */
 @Configuration
-public class TokenConfig {
+public class AuthorizeTokenConfig {
     /** jwt令牌签名 **/
     @Value("${security.oauth2.authorization.jwt.key-value}")
     private String signingKey;

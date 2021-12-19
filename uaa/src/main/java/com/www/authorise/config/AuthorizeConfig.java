@@ -3,7 +3,6 @@ package com.www.authorise.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,7 +17,6 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
-import org.springframework.security.oauth2.provider.code.InMemoryAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
@@ -53,8 +51,8 @@ import java.util.Arrays;
  */
 @Configuration
 @EnableAuthorizationServer
-public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
-    private static Logger LOG = LoggerFactory.getLogger(AuthorizationConfig.class);
+public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
+    private static Logger LOG = LoggerFactory.getLogger(AuthorizeConfig.class);
     @Resource
     private DataSource dataSource;
     @Autowired
@@ -73,11 +71,16 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
     /**
      * <p>@Description 配置客户端
      * 认证范围：
-     * client_credentials 授权申请地址：/oauth/token?client_id=客户端ID &client_secret= 客户端密钥 &grant_type=client_credentials
-     * password 授权申请地址：/oauth/token?client_id=客户端ID &client_secret= 客户端密钥 &grant_type=client_credentials &username=用户名 &password=用户密码
-     * implicit 授权申请地址：/oauth/authorize?client_id=客户端ID &response_type=token&redirect_uri=回调地址
-     * authorization_code 授权申请地址：/oauth/authorize?client_id=客户端ID &response_type=code&redirect_uri=回调地址
-     * refresh_token 刷新令牌地址：/oauth/token?client_id=客户端ID &client_secret= 客户端密钥 &grant_type=refresh_token&refresh_token=需要刷新的令牌
+     * client_credentials
+     *      授权申请地址：/oauth/token?client_id=客户端ID&client_secret=客户端密钥&grant_type=client_credentials
+     * password
+     *      授权申请地址：/oauth/token?client_id=客户端ID&client_secret=客户端密钥&grant_type=client_credentials&username=用户名&password=用户密码
+     * implicit
+     *      授权申请地址：/oauth/authorize?client_id=客户端ID&response_type=token&redirect_uri=回调地址
+     * authorization_code
+     *      授权申请地址：/oauth/authorize?client_id=客户端ID&response_type=code&redirect_uri=回调地址
+     * refresh_token
+     *      刷新令牌地址：/oauth/token?client_id=客户端ID&client_secret=客户端密钥&grant_type=refresh_token&refresh_token=需要刷新的令牌
      * </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/18 12:11 </p>

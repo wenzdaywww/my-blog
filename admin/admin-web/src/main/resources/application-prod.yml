@@ -2,6 +2,28 @@
 #服务器配置
 server:
   port: 8070
+#spring配置
+spring:
+  servlet:
+    #文件上传配置
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  #数据库配置
+  datasource:
+    druid:
+      db-type: mysql #数据库类型
+      url: jdbc:mysql://192.168.1.130:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
+      username: admin
+      password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
+  #redis配置
+  redis:
+    key-project-name : MY-BLOG #redis的key项目名称
+    password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
+    #sentile配置
+    sentinel:
+      master: mymaster
+      nodes: 192.168.1.130:26379,192.168.1.131:26379,192.168.1.132:26379
 #配置文件路径
 file:
   imgUrlPath: /imgs/** #配置访问图片的相对路径
@@ -17,12 +39,9 @@ eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port} #该实例注册到服务中心的唯一ID
     prefer-ip-address: true #该实例，相较于hostname是否优先使用IP
-#配置eureka注册中心服务的status信息
-info:
-  name: my blog administrator server
-spring:
-  servlet:
-    #文件上传配置
-    multipart:
-      max-file-size: 100MB
-      max-request-size: 100MB
+#security安全配置
+security:
+  oauth2:
+    authorization:
+      jwt:
+        key-value: wenzday #oauth2的jwt签名
