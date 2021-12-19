@@ -12,7 +12,7 @@ import java.io.Serializable;
  * <p>@Date 2021/8/1 21:21 </p>
  */
 @Data
-@Accessors(chain = true)
+@Accessors(chain = true)//开启链式编程
 public class ResponseDTO<T> implements Serializable {
     private static final long serialVersionUID = 1L;
     /** 响应码 **/

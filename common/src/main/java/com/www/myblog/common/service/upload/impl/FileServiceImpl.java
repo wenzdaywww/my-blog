@@ -1,7 +1,7 @@
-package com.www.myblog.common.service.impl;
+package com.www.myblog.common.service.upload.impl;
 
 import com.www.myblog.common.pojo.ResponseDTO;
-import com.www.myblog.common.service.IFileService;
+import com.www.myblog.common.service.upload.IFileService;
 import com.www.myblog.common.utils.DateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;

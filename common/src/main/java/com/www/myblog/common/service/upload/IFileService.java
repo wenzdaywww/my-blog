@@ -1,4 +1,4 @@
-package com.www.myblog.common.service;
+package com.www.myblog.common.service.upload;
 
 import com.www.myblog.common.pojo.ResponseDTO;
 import org.springframework.web.multipart.MultipartFile;
