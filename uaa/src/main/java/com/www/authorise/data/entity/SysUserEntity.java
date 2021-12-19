@@ -62,8 +62,8 @@ public class SysUserEntity implements Serializable {
     /**
     * 邮箱
     */
-    @TableField("e_mail")
-    private String eMail;
+    @TableField("EMAIL")
+    private String email;
     /**
     * 个人简介
     */

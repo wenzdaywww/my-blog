@@ -11,7 +11,7 @@
     <result column="BIRTHDAY" property="birthday" />
     <result column="SEX" property="sex" />
     <result column="PHOTO" property="photo" />
-    <result column="E_MAIL" property="eMail" />
+    <result column="EMAIL" property="email" />
     <result column="BRIEF" property="brief" />
     <result column="STATE_CD" property="stateCd" />
     <result column="NOT_EXPIRED" property="notExpired" />

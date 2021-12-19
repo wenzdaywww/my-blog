@@ -96,7 +96,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.www.myblog.eureka.server.EurekaServerApplication</mainClass>
+                    <mainClass>com.www.myblog.eureka.server.EurekaApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
