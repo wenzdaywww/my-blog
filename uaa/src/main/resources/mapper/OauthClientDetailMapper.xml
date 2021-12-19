@@ -10,7 +10,7 @@
     <result column="SCOPE" property="scope" />
     <result column="AUTO_APPROVE" property="autoApprove" />
     <result column="REDIRECT_URI" property="redirectUri" />
-    <result column="SYS_UPDATE_TIME" property="sysUpdateTime" />
-    <result column="SYS_CREATE_TIME" property="sysCreateTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="CREATE_TIME" property="createTime" />
   </resultMap>
 </mapper>

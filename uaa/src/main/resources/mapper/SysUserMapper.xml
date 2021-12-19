@@ -17,7 +17,7 @@
     <result column="NOT_EXPIRED" property="notExpired" />
     <result column="NOT_LOCKED" property="notLocked" />
     <result column="CREDENTIALS_NOT_EXPIRED" property="credentialsNotExpired" />
-    <result column="SYS_UPDATE_TIME" property="sysUpdateTime" />
-    <result column="SYS_CREATE_TIME" property="sysCreateTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="CREATE_TIME" property="createTime" />
   </resultMap>
 </mapper>

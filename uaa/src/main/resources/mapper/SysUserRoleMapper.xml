@@ -6,7 +6,7 @@
     <id column="SUR_ID" property="surId" />
     <result column="SU_ID" property="suId" />
     <result column="ROLE_ID" property="roleId" />
-    <result column="SYS_UPDATE_TIME" property="sysUpdateTime" />
-    <result column="SYS_CREATE_TIME" property="sysCreateTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="CREATE_TIME" property="createTime" />
   </resultMap>
 </mapper>

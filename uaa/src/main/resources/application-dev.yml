@@ -7,7 +7,7 @@ spring:
   datasource:
     druid:
       db-type: mysql #数据库类型
-      url: jdbc:mysql://192.168.1.130:3306/uaa?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
+      url: jdbc:mysql://192.168.1.130:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
       username: uaa
       password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
   #redis配置

@@ -3,13 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.www</groupId>
+        <groupId>com.www.myblog</groupId>
         <artifactId>my-blog</artifactId>
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.www</groupId>
+    <groupId>com.www.myblog</groupId>
     <artifactId>uaa</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>

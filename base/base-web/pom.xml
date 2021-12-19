@@ -5,22 +5,22 @@
     <modelVersion>4.0.0</modelVersion>
     <!-- 子模块的parent要使用顶层的父模块-->
     <parent>
-        <groupId>com.www</groupId>
-        <artifactId>admin</artifactId>
+        <groupId>com.www.myblog</groupId>
+        <artifactId>base</artifactId>
         <version>1.0.0</version>
     </parent>
 
-    <groupId>com.www</groupId>
-    <artifactId>admin-service</artifactId>
+    <groupId>com.www.myblog</groupId>
+    <artifactId>base-web</artifactId>
     <version>${project-version}</version>
     <packaging>jar</packaging>
-    <name>admin-service</name>
-    <description>admin服务层</description>
+    <name>base-web</name>
+    <description>base配置</description>
 
     <dependencies>
         <dependency>
-            <groupId>com.www</groupId>
-            <artifactId>admin-data</artifactId>
+            <groupId>com.www.myblog</groupId>
+            <artifactId>base-controller</artifactId>
             <version>${project-version}</version>
         </dependency>
     </dependencies>

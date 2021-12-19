@@ -57,11 +57,11 @@ public class OauthClientDetailEntity implements Serializable {
     /**
     * 更新时间
     */
-    @TableField("SYS_UPDATE_TIME")
-    private Date sysUpdateTime;
+    @TableField("UPDATE_TIME")
+    private Date updateTime;
     /**
     * 创建时间
     */
-    @TableField("SYS_CREATE_TIME")
-    private Date sysCreateTime;
+    @TableField("CREATE_TIME")
+    private Date createTime;
 }
