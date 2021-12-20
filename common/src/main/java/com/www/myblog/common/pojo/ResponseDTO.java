@@ -106,7 +106,7 @@ public class ResponseDTO<T> implements Serializable {
         /** 未找到 **/
         NOT_FOUND(404, "未找到资源"),
         /** 禁止访问 **/
-        FORBIDDEN(403, "禁止访问"),
+        FORBIDDEN(403, "无权访问"),
         /** 失败 **/
         FAIL(500, "请求失败"),
         /**  未知异常 **/

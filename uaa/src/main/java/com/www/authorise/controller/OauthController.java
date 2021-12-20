@@ -1,13 +1,16 @@
 package com.www.authorise.controller;
 
-import com.www.authorise.data.dto.ResponseDTO;
+import com.www.myblog.common.pojo.ResponseDTO;
+import com.www.myblog.common.pojo.TokenDTO;
+import com.www.myblog.common.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.Map;
 
@@ -32,8 +35,8 @@ public class OauthController {
      * @return com.www.authorise.data.dto.ResponseDTO<java.util.Map>
      */
     @GetMapping("/token")
-    public ResponseDTO<Object> tokenGet(Principal principal, @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
-        return tokenPost(principal,parameters);
+    public ResponseDTO<TokenDTO> tokenGet(HttpServletResponse response, Principal principal, @RequestParam Map<String, String> parameters) throws Exception {
+        return tokenPost(response,principal,parameters);
     }
     /**
      * <p>@Description 重写oauth/token的post请求 </p>
@@ -44,8 +47,21 @@ public class OauthController {
      * @return com.www.authorise.data.dto.ResponseDTO<java.util.Map>
      */
     @PostMapping("/token")
-    public ResponseDTO<Object> tokenPost(Principal principal, @RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
+    public ResponseDTO<TokenDTO> tokenPost(HttpServletResponse response, Principal principal, @RequestParam Map<String, String> parameters) throws Exception  {
+        ResponseDTO<TokenDTO> responseDTO = new ResponseDTO<>();
         ResponseEntity<OAuth2AccessToken> accessToken = tokenEndpoint.postAccessToken(principal, parameters);
-        return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,accessToken);
+        TokenDTO tokenDTO = new TokenDTO();
+        tokenDTO.setAccessToken(accessToken.getBody().getValue());
+        tokenDTO.setRefreshToken(accessToken.getBody().getRefreshToken() != null ?
+                accessToken.getBody().getRefreshToken().getValue() : null);
+        tokenDTO.setTokenType(accessToken.getBody().getTokenType());
+        tokenDTO.setExpiresSeconds(accessToken.getBody().getExpiresIn());
+        tokenDTO.setScope(accessToken.getBody().getScope());
+        //将token保存到cookie中
+        Cookie cookie = new Cookie("access_token",tokenDTO.getAccessToken());
+        cookie.setMaxAge(tokenDTO.getExpiresSeconds());
+        response.addCookie(cookie);
+        responseDTO.setResponseCode(ResponseDTO.RespEnum.SUCCESS,tokenDTO);
+        return responseDTO;
     }
 }

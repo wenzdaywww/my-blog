@@ -1,4 +1,4 @@
-package com.www.authorise.config;
+package com.www.authorise.config.oauth2;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

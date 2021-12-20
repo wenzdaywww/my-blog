@@ -1,12 +1,11 @@
-package com.www.authorise.handler;
+package com.www.authorise.config.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.www.authorise.data.dto.ResponseDTO;
+import com.www.myblog.common.pojo.ResponseDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

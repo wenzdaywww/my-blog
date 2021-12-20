@@ -1,10 +1,9 @@
-package com.www.authorise.handler;
+package com.www.authorise.config.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
-import org.springframework.stereotype.Component;
 
 /**
  * <p>@Description  </p>
