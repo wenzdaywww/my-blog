@@ -1,14 +1,12 @@
 package com.www.myblog.common.config.security.filter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -19,10 +17,9 @@ import java.util.Iterator;
  * <p>@Author www </p>
  * <p>@Date 2021/11/24 19:22 </p>
  */
+@Slf4j
 //@Component
 public class SecurityAccessDecisionManager implements AccessDecisionManager {
-    private static Logger LOG = LoggerFactory.getLogger(SecurityAccessDecisionManager.class);
-
     /**
      * <p>@Description url访问校验 </p>
      * <p>@Author www </p>
@@ -34,7 +31,7 @@ public class SecurityAccessDecisionManager implements AccessDecisionManager {
      */
     @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
-        LOG.info("=====> 4、访问权限角色验证");
+        log.info("=====> 4、访问权限角色验证");
         Iterator<ConfigAttribute> iterator = collection.iterator();
         while (iterator.hasNext()) {
             ConfigAttribute ca = iterator.next();
@@ -43,12 +40,12 @@ public class SecurityAccessDecisionManager implements AccessDecisionManager {
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             for (GrantedAuthority authority : authorities) {
                 if (authority.getAuthority().equals(needRole)) {
-                    LOG.info("=====> 4.1、访问权限角色验证-权限通过");
+                    log.info("=====> 4.1、访问权限角色验证-权限通过");
                     return;
                 }
             }
         }
-        LOG.info("=====> 4.1、访问权限角色验证-无权限访问");
+        log.info("=====> 4.1、访问权限角色验证-无权限访问");
         throw new AccessDeniedException("无权限访问");
     }
 

@@ -5,14 +5,12 @@ import com.www.myblog.common.config.security.filter.SecurityAccessDecisionManage
 import com.www.myblog.common.config.security.filter.SecurityMetadataSource;
 import com.www.myblog.common.config.security.handler.*;
 import com.www.myblog.common.config.security.impl.UserDetailsServiceImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,9 +23,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * <p>@Author www </p>
  * <p>@Date 2021/8/1 21:10 </p>
  */
+@Slf4j
 //@EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private static Logger LOG = LoggerFactory.getLogger(SecurityConfig.class);
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
     @Autowired
@@ -57,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        LOG.info("=====> 配置访问的安全拦截策略");
+        log.info("=====> 配置访问的安全拦截策略");
         //关闭CSRF（防止网站攻击）
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//关闭session
@@ -95,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        LOG.info("=====> 配置认证用户信息");
+        log.info("=====> 配置认证用户信息");
         //从数据库查询用户信息
         auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());;
     }

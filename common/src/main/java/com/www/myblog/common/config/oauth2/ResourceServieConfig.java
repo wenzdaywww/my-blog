@@ -1,7 +1,6 @@
 package com.www.myblog.common.config.oauth2;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,10 +22,10 @@ import org.springframework.security.web.access.AccessDeniedHandler;
  * <p>@Author www </p>
  * <p>@Date 2021/12/18 21:24 </p>
  */
+@Slf4j
 @Configuration
 @EnableResourceServer
 public class ResourceServieConfig extends ResourceServerConfigurerAdapter {
-    private static Logger LOG = LoggerFactory.getLogger(ResourceServieConfig.class);
     @Value("${spring.application.name}")
     private String resourceId;
     @Autowired
@@ -47,7 +46,7 @@ public class ResourceServieConfig extends ResourceServerConfigurerAdapter {
      */
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        LOG.info("=====> 配置资源服务方验证方式");
+        log.info("=====> 配置资源服务方验证方式");
         resources.resourceId(resourceId) //资源ID
                 // .tokenServices(tokenServices()) //远程校验token时需要
                 .tokenStore(tokenStore) //jwt校验token
@@ -64,7 +63,7 @@ public class ResourceServieConfig extends ResourceServerConfigurerAdapter {
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        LOG.info("=====> 配置资源服务方的安全拦截策略");
+        log.info("=====> 配置资源服务方的安全拦截策略");
         http.authorizeRequests()
             .antMatchers("/**").access("#oauth2.hasScope('all')")
             .and().csrf().disable()

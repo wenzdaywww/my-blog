@@ -1,11 +1,16 @@
 package com.www.authorise.config.oauth2;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.alibaba.fastjson.JSON;
+import com.www.authorise.config.handler.ClientExceptionHandler;
+import com.www.authorise.config.handler.ResponseExceptionHandler;
+import com.www.myblog.common.pojo.ResponseDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +28,7 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.web.AuthenticationEntryPoint;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -51,8 +57,8 @@ import java.util.Arrays;
  */
 @Configuration
 @EnableAuthorizationServer
+@Slf4j
 public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
-    private static Logger LOG = LoggerFactory.getLogger(AuthorizeConfig.class);
     @Resource
     private DataSource dataSource;
     @Autowired
@@ -60,6 +66,7 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private AuthenticationManager authenticationManager; //密码模式必须配置
     @Autowired
+    @Qualifier("userDetailsServiceHandler")
     private UserDetailsService userDetailsService;
     @Autowired
     private TokenStore tokenStore;
@@ -90,7 +97,7 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        LOG.info("=====> 配置客户端");
+        log.info("=====> 配置客户端");
         clients.withClientDetails(clientDetails());
     }
     /**
@@ -102,7 +109,12 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        LOG.info("=====> 配置令牌端点的安全约束");
+        log.info("=====> 配置令牌端点的安全约束");
+//        ClientExceptionHandler clientExceptionHandler = new ClientExceptionHandler(security);
+//        clientExceptionHandler.afterPropertiesSet();
+//        clientExceptionHandler.setAuthenticationEntryPoint(authenticationEntryPoint());
+//        security.addTokenEndpointAuthenticationFilter(clientExceptionHandler);
+
         security.tokenKeyAccess("permitAll()")//oauth/token_key设置公开
                 .checkTokenAccess("permitAll()")//oauth/check_token设置公开
                 .allowFormAuthenticationForClients();//允许表单认证，申请令牌
@@ -116,12 +128,13 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        LOG.info("=====> 配置令牌端点");
+        log.info("=====> 配置令牌端点");
         endpoints.authenticationManager(authenticationManager)//密码模式需要的管理器
                 .userDetailsService(userDetailsService)//密码模式的用户信息管理
                 .authorizationCodeServices(authorizationCodeServices)//授权码需要的服务
                 .tokenServices(tokenServices())//令牌管理服务
                 .allowedTokenEndpointRequestMethods(HttpMethod.POST);
+        endpoints.exceptionTranslator(new ResponseExceptionHandler());
     }
     /**
      * <p>@Description 配置数据库方式读取client信息 </p>
@@ -167,4 +180,14 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
         //数据库存储授权码
         return new JdbcAuthorizationCodeServices(dataSource);
     }
+
+//    @Bean
+//    public AuthenticationEntryPoint authenticationEntryPoint() {
+//        return (request, response, e) -> {
+//            log.info("=====> 客户端错误");
+//            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+//            ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.UNAUTHORIZED,"客户端错误");
+//            response.getWriter().write(JSON.toJSONString(responseDTO));
+//        };
+//    }
 }

@@ -14,7 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableEurekaClient
 @ComponentScan(basePackages = {"com.www.myblog.common","com.www.myblog.admin"}) //添加扫描包的路径
-public class AdminApplication {
+public class BaseApplication {
     /**
      * <p>@Description 启动方法 </p>
      * <p>@Author www </p>
@@ -25,6 +25,6 @@ public class AdminApplication {
     public static void main(String[] args) {
         // 设置application.yml加密数据的密钥
         System.setProperty("jasypt.encryptor.password","wenzday");
-        SpringApplication.run(AdminApplication.class, args);
+        SpringApplication.run(BaseApplication.class, args);
     }
 }

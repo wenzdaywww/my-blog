@@ -1,7 +1,6 @@
 package com.www.myblog.common.config.mvc;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -14,8 +13,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * <p>@Date 2021/12/10 20:48 </p>
  */
 @Configuration
+@Slf4j
 public class WebMvcConfig implements WebMvcConfigurer {
-    private static Logger LOG = LoggerFactory.getLogger(WebMvcConfig.class);
     /** 图片访问路径 **/
     @Value("${file.imgUrlPath}")
     private String imgUrlPath;
@@ -37,7 +36,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        LOG.info("=====> 配置MVC资源拦截");
+        log.info("=====> 配置MVC资源拦截");
         //配置图片访问的相对路径
         registry.addResourceHandler(imgUrlPath).addResourceLocations("file:"+imgSavePath);
         //配置图片外其他文件访问的相对路径

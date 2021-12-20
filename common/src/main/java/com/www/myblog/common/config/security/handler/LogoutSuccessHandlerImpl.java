@@ -2,14 +2,13 @@ package com.www.myblog.common.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.www.myblog.common.pojo.ResponseDTO;
-import com.www.myblog.common.utils.CookisUtils;
 import com.www.myblog.common.utils.RedisUtils;
 import com.www.myblog.common.utils.TokenUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -24,9 +23,9 @@ import java.util.Map;
  * <p>@Author www </p>
  * <p>@Date 2021/11/15 20:51 </p>
  */
+@Slf4j
 //@Component
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
-    private static Logger LOG = LoggerFactory.getLogger(LogoutSuccessHandlerImpl.class);
     @Value("${jwt.user-prefix}")
     private String redisUserPrefix;
 
@@ -41,8 +40,9 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
      */
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-        LOG.info("=====> 6、security退出成功");
-        String token = CookisUtils.getCookieValue(httpServletRequest,LoginSuccessHandler.COOKIE_TOKEN);
+        log.info("=====> 6、security退出成功");
+        Cookie cookie = WebUtils.getCookie(httpServletRequest,LoginSuccessHandler.COOKIE_TOKEN);
+        String token = cookie != null ? cookie.getValue() : "";
         Map<String,Object> map = TokenUtils.validateTokenAndGetClaims(token);
         //获取token，删除redis中的token
         if(map != null && map.size() > 0) {
@@ -50,7 +50,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
             RedisUtils.deleteKey(redisUserPrefix + ":" + userId);
         }
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,"退出成功");
-        Cookie cookie = new Cookie(LoginSuccessHandler.COOKIE_TOKEN,null);
+        cookie = new Cookie(LoginSuccessHandler.COOKIE_TOKEN,null);
         httpServletResponse.addCookie(cookie);
         httpServletResponse.setContentType("application/json;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(responseDTO));

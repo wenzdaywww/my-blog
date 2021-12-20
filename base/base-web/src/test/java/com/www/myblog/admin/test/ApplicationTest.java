@@ -1,6 +1,6 @@
 package com.www.myblog.admin.test;
 
-import com.www.myblog.admin.AdminApplication;
+import com.www.myblog.admin.BaseApplication;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -12,6 +12,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * <p>@Date 2021/11/18 21:24 </p>
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = AdminApplication.class)
+@SpringBootTest(classes = BaseApplication.class)
 public class ApplicationTest {
 }

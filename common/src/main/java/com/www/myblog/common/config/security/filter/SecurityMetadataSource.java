@@ -2,15 +2,13 @@ package com.www.myblog.common.config.security.filter;
 
 import com.www.myblog.common.config.security.ISecurityServie;
 import com.www.myblog.common.pojo.AuthorityDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
-import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
 import javax.annotation.Resource;
@@ -24,9 +22,9 @@ import java.util.List;
  * <p>@Author www </p>
  * <p>@Date 2021/11/24 18:22 </p>
  */
+@Slf4j
 //@Component
 public class SecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
-    private static Logger LOG = LoggerFactory.getLogger(SecurityMetadataSource.class);
     @Resource
     private ISecurityServie securityUserServie;
 
@@ -40,7 +38,7 @@ public class SecurityMetadataSource implements FilterInvocationSecurityMetadataS
      */
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
-        LOG.info("=====> 3、访问权限角色配置");
+        log.info("=====> 3、访问权限角色配置");
         String requestURL = ((FilterInvocation)o).getRequestUrl();
         List<AuthorityDTO> roleMenuList = securityUserServie.findAllAuthority();
         if(CollectionUtils.isNotEmpty(roleMenuList)){

@@ -18,10 +18,9 @@ import com.www.myblog.common.pojo.AuthorityDTO;
 import com.www.myblog.common.pojo.ResponseDTO;
 import com.www.myblog.common.utils.DateUtils;
 import com.www.myblog.common.utils.RedisUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,8 +36,8 @@ import java.util.stream.Collectors;
  * <p>@Date 2021/11/24 20:42 </p>
  */
 @Service
+@Slf4j
 public class MenuInfoServiceImpl implements IMenuInfoService {
-    private static Logger LOG = LoggerFactory.getLogger(MenuInfoServiceImpl.class);
     @Autowired
     private SysMenuMapper sysMenuMapper;
     @Autowired
@@ -223,7 +222,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
                     }
                 }
             }catch (Exception e){
-                LOG.info("查所询有请求权限，发生异常：{}",e.getMessage());
+                log.info("查所询有请求权限，发生异常：{}",e.getMessage());
             }finally {
                 // 释放锁
                 RedisUtils.unlock(RedisKeyConstant.AUTHORITY_MENU_LOCK,value);

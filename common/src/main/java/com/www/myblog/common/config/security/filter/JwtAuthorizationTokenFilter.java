@@ -1,21 +1,18 @@
 package com.www.myblog.common.config.security.filter;
 
-import com.alibaba.fastjson.JSON;
 import com.www.myblog.common.config.security.handler.LoginSuccessHandler;
 import com.www.myblog.common.config.security.impl.UserDetailsServiceImpl;
-import com.www.myblog.common.utils.CookisUtils;
 import com.www.myblog.common.utils.RedisUtils;
 import com.www.myblog.common.utils.TokenUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.WebUtils;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.FilterChain;
@@ -32,9 +29,9 @@ import java.util.Map;
  * <p>@Author www </p>
  * <p>@Date 2021/11/16 21:06 </p>
  */
+@Slf4j
 //@Component
 public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
-    private static Logger LOG = LoggerFactory.getLogger(JwtAuthorizationTokenFilter.class);
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
     @Value("${jwt.user-prefix}")
@@ -61,8 +58,9 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        String token = CookisUtils.getCookieValue(httpServletRequest,LoginSuccessHandler.COOKIE_TOKEN);
-        LOG.info("=====> 1、访问token验证，token={}",token);
+        Cookie cookie = WebUtils.getCookie(httpServletRequest,LoginSuccessHandler.COOKIE_TOKEN);
+        String token = cookie != null ? cookie.getValue() : "";
+        log.info("=====> 1、访问token验证，token={}",token);
         Map<String,Object> map = TokenUtils.validateTokenAndGetClaims(token);
         if(map != null && map.size() > 0){
             String userId = String.valueOf(map.get(TokenUtils.USERID));

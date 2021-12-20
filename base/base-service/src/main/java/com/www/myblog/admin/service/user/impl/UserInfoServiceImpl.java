@@ -17,12 +17,11 @@ import com.www.myblog.admin.service.entity.ISysRoleService;
 import com.www.myblog.admin.service.entity.ISysUserService;
 import com.www.myblog.admin.service.user.IUserInfoService;
 import com.www.myblog.common.pojo.ResponseDTO;
-import com.www.myblog.common.service.IFileService;
+import com.www.myblog.common.service.upload.IFileService;
 import com.www.myblog.common.utils.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,8 +37,8 @@ import java.util.List;
  * <p>@Date 2021/11/14 15:32 </p>
  */
 @Service
+@Slf4j
 public class UserInfoServiceImpl implements IUserInfoService {
-    private static Logger LOG = LoggerFactory.getLogger(UserInfoServiceImpl.class);
     @Autowired
     private SysUserMapper sysUserMapper;
     @Autowired

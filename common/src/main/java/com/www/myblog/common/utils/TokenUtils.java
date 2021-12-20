@@ -3,11 +3,9 @@ package com.www.myblog.common.utils;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -20,8 +18,8 @@ import java.util.Map;
  * <p>@Author www </p>
  * <p>@Date 2021/11/16 20:43 </p>
  */
+@Slf4j
 public class TokenUtils {
-    private static final Logger LOG = LoggerFactory.getLogger(TokenUtils.class);
     /** token键值 */
     public static final String TOKEN = "token";
     /** token-type键值 */
@@ -101,7 +99,7 @@ public class TokenUtils {
                     .parseClaimsJws(token.replace(TOKEN_PREFIX + " ",""))
                     .getBody();
         }catch (ExpiredJwtException e){
-            LOG.error("=====> token过期");
+            log.error("=====> token过期");
             body = e.getClaims();
         }
         body.put(AUTHORIZATION,token.replace(TOKEN_PREFIX + " ",""));

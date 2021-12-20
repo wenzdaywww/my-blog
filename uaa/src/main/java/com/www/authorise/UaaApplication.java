@@ -3,6 +3,7 @@ package com.www.authorise;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * <p>@Description UAA统一认证服务启动类 </p>
@@ -12,6 +13,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
  */
 @SpringBootApplication
 @EnableEurekaClient
+@ComponentScan(basePackages = {"com.www.myblog.common.utils","com.www.myblog.common.config.redis","com.www.authorise"}) //添加扫描包的路径
 public class UaaApplication {
     /**
      * <p>@Description 启动方法 </p>

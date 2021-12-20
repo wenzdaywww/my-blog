@@ -3,9 +3,8 @@ package com.www.myblog.common.service.upload.impl;
 import com.www.myblog.common.pojo.ResponseDTO;
 import com.www.myblog.common.service.upload.IFileService;
 import com.www.myblog.common.utils.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,9 +19,9 @@ import java.util.Arrays;
  * <p>@Author www </p>
  * <p>@Date 2021/12/5 22:38 </p>
  */
+@Slf4j
 @Service
 public class FileServiceImpl implements IFileService {
-    private static Logger LOG = LoggerFactory.getLogger(FileServiceImpl.class);
     /** 图片类型  **/
     private String[] imgType = {"BMP","JPG","JPEG","PNG","GIF"};
     /** 图片访问路径 **/
@@ -136,10 +135,10 @@ public class FileServiceImpl implements IFileService {
         try {
             //将文件保存到服务器指定位置
             file.transferTo(targetFile);
-            LOG.info("上传成功,文件的保存路径：{},原始文件名称：{},文件类型：{},新文件名称：{}", imgSavePath,origFileFullName,fileType,fileName);
+            log.info("上传成功,文件的保存路径：{},原始文件名称：{},文件类型：{},新文件名称：{}", imgSavePath,origFileFullName,fileType,fileName);
             //将文件在服务器的存储路径返回
         } catch (IOException e) {
-            LOG.info("上传失败,失败信息：{}",e.getMessage());
+            log.info("上传失败,失败信息：{}",e.getMessage());
             return null;
         }
         return urlPath.replace("**",fileName);

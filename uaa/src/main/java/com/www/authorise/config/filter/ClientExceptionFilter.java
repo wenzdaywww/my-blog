@@ -1,7 +1,6 @@
 package com.www.authorise.config.filter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter;
@@ -13,8 +12,8 @@ import org.springframework.security.web.AuthenticationEntryPoint;
  * <p>@Author www </p>
  * <p>@Date 2021/12/19 22:55 </p>
  */
+@Slf4j
 public class ClientExceptionFilter extends ClientCredentialsTokenEndpointFilter{
-    private static Logger LOG = LoggerFactory.getLogger(ClientExceptionFilter.class);
 
     private AuthorizationServerSecurityConfigurer serverSecurityConfigurer;
 
@@ -35,11 +34,11 @@ public class ClientExceptionFilter extends ClientCredentialsTokenEndpointFilter{
     @Override
     public void afterPropertiesSet() {
         setAuthenticationFailureHandler((request,response,e) -> {
-            LOG.info("=====> 客户端失败");
+            log.info("=====> 客户端失败");
             entryPoint.commence(request,response,e);
         });
         setAuthenticationSuccessHandler((request,response,e) -> {
-            LOG.info("=====> 客户端成功");
+            log.info("=====> 客户端成功");
         });
     }
 

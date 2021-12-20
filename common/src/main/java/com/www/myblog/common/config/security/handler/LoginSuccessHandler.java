@@ -4,9 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.www.myblog.common.pojo.ResponseDTO;
 import com.www.myblog.common.utils.RedisUtils;
 import com.www.myblog.common.utils.TokenUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -26,9 +25,9 @@ import java.util.Map;
  * <p>@Author www </p>
  * <p>@Date 2021/8/1 21:12 </p>
  */
+@Slf4j
 //@Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
-    private static Logger LOG = LoggerFactory.getLogger(LoginSuccessHandler.class);
     @Value("${jwt.user-prefix}")
     private String redisUserPrefix;
     /**  返回客户段cookie中的token的name **/
@@ -49,7 +48,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
      */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        LOG.info("=====> 3、security登录认证成功处理");
+        log.info("=====> 3、security登录认证成功处理");
         //获取登录成功后的UserDetail对象
         User user = (User)authentication.getPrincipal();
         Map<String,Object> chaims = new HashMap<>();

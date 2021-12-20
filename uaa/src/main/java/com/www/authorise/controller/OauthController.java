@@ -2,10 +2,13 @@ package com.www.authorise.controller;
 
 import com.www.myblog.common.pojo.ResponseDTO;
 import com.www.myblog.common.pojo.TokenDTO;
+import com.www.myblog.common.utils.RedisUtils;
 import com.www.myblog.common.utils.TokenUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.util.OAuth2Utils;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +26,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("oauth")
 public class OauthController {
+    /** redis的key前缀 **/
+    private static String PREFIX = "oauth2_token";
+    /** redis的key分隔符 **/
+    private static String SEPARATOR = ":";
+    /** oauth/token请求的username **/
+    private static String USERNAME = "username";
     @Autowired
     private TokenEndpoint tokenEndpoint;
 
@@ -62,6 +71,15 @@ public class OauthController {
         cookie.setMaxAge(tokenDTO.getExpiresSeconds());
         response.addCookie(cookie);
         responseDTO.setResponseCode(ResponseDTO.RespEnum.SUCCESS,tokenDTO);
+        //将token保存到redis中
+        String key = PREFIX + SEPARATOR + parameters.get(OAuth2Utils.CLIENT_ID) + SEPARATOR + parameters.get(OAuth2Utils.GRANT_TYPE);
+        if(StringUtils.isNotBlank(parameters.get(OAuth2Utils.SCOPE))){
+            key += SEPARATOR + parameters.get(OAuth2Utils.SCOPE);
+        }
+        if(StringUtils.isNotBlank(parameters.get(USERNAME))){
+            key += SEPARATOR + parameters.get(USERNAME);
+        }
+        RedisUtils.set(key,tokenDTO.getAccessToken(),tokenDTO.getExpiresSeconds());
         return responseDTO;
     }
 }

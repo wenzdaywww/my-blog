@@ -2,8 +2,7 @@ package com.www.myblog.common.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.www.myblog.common.pojo.ResponseDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.web.session.SessionInformationExpiredEvent;
 import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 
@@ -17,10 +16,9 @@ import java.io.IOException;
  * <p>@Author www </p>
  * <p>@Date 2021/11/18 21:05 </p>
  */
+@Slf4j
 //@Component
 public class SessionExpiredHandler implements SessionInformationExpiredStrategy {
-    private static Logger LOG = LoggerFactory.getLogger(SessionExpiredHandler.class);
-
     /**
      * <p>@Description 单点登录会话过期处理 </p>
      * <p>@Author www </p>
@@ -30,7 +28,7 @@ public class SessionExpiredHandler implements SessionInformationExpiredStrategy 
      */
     @Override
     public void onExpiredSessionDetected(SessionInformationExpiredEvent sessionInformationExpiredEvent) throws IOException, ServletException {
-        LOG.info("=====> 6、security会话过期");
+        log.info("=====> 6、security会话过期");
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,"账号被挤下线");
         HttpServletResponse httpServletResponse = sessionInformationExpiredEvent.getResponse();
         httpServletResponse.setContentType("application/json;charset=utf-8");

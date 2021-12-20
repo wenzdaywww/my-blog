@@ -2,16 +2,14 @@ package com.www.myblog.common.config.security.impl;
 
 import com.www.myblog.common.config.security.ISecurityServie;
 import com.www.myblog.common.pojo.UserDetailDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -23,9 +21,9 @@ import java.util.List;
  * <p>@Author www </p>
  * <p>@Date 2021/8/1 21:12 </p>
  */
+@Slf4j
 //@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private static Logger LOG = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
     @Resource
     private ISecurityServie securityUserServie;
     /**
@@ -37,7 +35,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        LOG.info("=====> 2、登录加载{}用户信息",userId);
+        log.info("=====> 2、登录加载{}用户信息",userId);
         UserDetailDTO userDTO = securityUserServie.findUserDetailById(userId);
         if (userDTO == null) {
             return null;

@@ -2,8 +2,7 @@ package com.www.myblog.common.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.www.myblog.common.pojo.ResponseDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -19,9 +18,9 @@ import java.io.IOException;
  * <p>@Author www </p>
  * <p>@Date 2021/8/1 21:11 </p>
  */
+@Slf4j
 //@Component
 public class LoginFailureHandler implements AuthenticationFailureHandler  {
-    private static Logger LOG = LoggerFactory.getLogger(LoginFailureHandler.class);
     /**
      * <p>@Description 登录失败处理事件 </p>
      * <p>@Author www </p>
@@ -33,7 +32,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler  {
      */
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        LOG.info("=====> 3、security登录认证失败处理");
+        log.info("=====> 3、security登录认证失败处理");
         String msg = "登录认证失败";
         if (exception instanceof LockedException) {
             msg = "账户被锁定，请联系管理员!";

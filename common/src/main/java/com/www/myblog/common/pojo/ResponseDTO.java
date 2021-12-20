@@ -100,7 +100,7 @@ public class ResponseDTO<T> implements Serializable {
      * <p>@Author www </p>
      * <p>@Date 2021/8/1 21:22 </p>
      */
-    public enum RespEnum {
+    public enum RespEnum{
         /** 成功 **/
         SUCCESS(200, "请求成功"),
         /** 未找到 **/
@@ -109,6 +109,8 @@ public class ResponseDTO<T> implements Serializable {
         FORBIDDEN(403, "无权访问"),
         /** 失败 **/
         FAIL(500, "请求失败"),
+        /** 未经授权 **/
+        UNAUTHORIZED(401, "未经授权"),
         /**  未知异常 **/
         UNDEFINE(-1, "未知异常");
         /** 响应码 **/

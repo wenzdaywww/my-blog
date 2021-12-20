@@ -1,11 +1,9 @@
 package com.www.myblog.zuul.config.filter;
 
-import com.alibaba.fastjson.JSON;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,8 +16,8 @@ import java.util.Enumeration;
  * <p>@Author www </p>
  * <p>@Date 2021/11/29 21:31 </p>
  */
+@Slf4j
 public class PostFilter extends ZuulFilter {
-    private static Logger LOG = LoggerFactory.getLogger(PostFilter.class);
     /**
      * <p>@Description 设置过滤器类型
      *   pre：可以在请求被路由之前调用
@@ -72,7 +70,7 @@ public class PostFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletResponse response = ctx.getResponse();
         HttpServletRequest request = ctx.getRequest();
-//        LOG.info("---> post的cookies={}", JSON.toJSONString(request.getCookies()));
+//        log.info("---> post的cookies={}", JSON.toJSONString(request.getCookies()));
         response.setHeader("Access-Control-Allow-Origin",request.getHeader("Origin"));//根据该字段判断是否允许该请求访问。
         response.setHeader("Access-Control-Allow-Credentials","true");//用户是否可以发送、处理 cookie；
         //可以让用户拿到的字段。有几个字段无论设置与否都可以拿到的，包括：Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma 。
@@ -89,7 +87,7 @@ public class PostFilter extends ZuulFilter {
                 String name = headerNames.nextElement();
                 String values = request.getHeader(name);
                 ctx.addZuulRequestHeader(name, values);
-//                LOG.info("post的headers => {}={}",name,values);
+//                log.info("post的headers => {}={}",name,values);
             }
         }
         return null;

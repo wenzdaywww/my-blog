@@ -1,4 +1,4 @@
-package com.www.authorise.config.impl;
+package com.www.authorise.config.handler;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
@@ -7,9 +7,8 @@ import com.www.authorise.data.enums.CommonEnum;
 import com.www.authorise.data.mapper.SysRoleMapper;
 import com.www.authorise.data.mapper.SysUserMapper;
 import com.www.myblog.common.pojo.UserDetailDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,7 +16,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +27,9 @@ import java.util.List;
  * <p>@Author www </p>
  * <p>@Date 2021/8/1 21:12 </p>
  */
-@Service
-public class UserDetailsServiceImpl implements UserDetailsService {
-    private static Logger LOG = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
+@Slf4j
+@Component
+public class UserDetailsServiceHandler implements UserDetailsService {
     @Autowired
     private SysUserMapper sysUserMapper;
     @Autowired
@@ -45,7 +44,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        LOG.info("=====> 加载{}用户信息",userId);
+        log.info("=====> 加载{}用户信息",userId);
         if(StringUtils.isBlank(userId)){
             return null;
         }

@@ -2,11 +2,9 @@ package com.www.myblog.common.config.rest;
 
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.RandomRule;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,9 +14,9 @@ import org.springframework.web.client.RestTemplate;
  * <p>@Author www </p>
  * <p>@Date 2021/8/1 21:20 </p>
  */
+@Slf4j
 @Configuration
 public class RestConfig {
-    private static Logger logger = LoggerFactory.getLogger(RestConfig.class);
     /**
      * <p>@Description 注入RestTemplate </p>
      * <p>@Author www </p>
@@ -28,7 +26,7 @@ public class RestConfig {
     @Bean
     @LoadBalanced //此注解开启负载均衡
     public RestTemplate getRestTemplate(){
-        logger.info("=====> 配置注入RestTemplate");
+        log.info("=====> 配置注入RestTemplate");
         return new RestTemplate();
     }
     /**
@@ -39,7 +37,7 @@ public class RestConfig {
      */
     @Bean
     public IRule getRule(){
-        logger.info("=====> 配置全局负载均衡策略");
+        log.info("=====> 配置全局负载均衡策略");
         return new RandomRule();
     }
 }
