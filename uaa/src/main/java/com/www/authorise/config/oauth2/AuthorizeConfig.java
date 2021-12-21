@@ -109,7 +109,6 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
 //        clientExceptionHandler.afterPropertiesSet();
 //        clientExceptionHandler.setAuthenticationEntryPoint(authenticationEntryPoint());
 //        security.addTokenEndpointAuthenticationFilter(clientExceptionHandler);
-
         security.tokenKeyAccess("permitAll()")//oauth/token_key设置公开
                 .checkTokenAccess("permitAll()")//oauth/check_token设置公开
                 .allowFormAuthenticationForClients();//允许表单认证，申请令牌
@@ -129,6 +128,7 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
                 .authorizationCodeServices(authorizationCodeServices)//授权码需要的服务
                 .tokenServices(tokenServices())//令牌管理服务
                 .allowedTokenEndpointRequestMethods(HttpMethod.POST);
+        //TODO 2021/12/21 23:51 异常自定义待处理
     }
     /**
      * <p>@Description 配置数据库方式读取client信息 </p>

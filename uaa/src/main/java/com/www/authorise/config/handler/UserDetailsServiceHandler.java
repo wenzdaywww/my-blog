@@ -44,7 +44,7 @@ public class UserDetailsServiceHandler implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        log.info("=====> 加载{}用户信息",userId);
+        log.info("=====> 验证{}用户信息",userId);
         if(StringUtils.isBlank(userId)){
             return null;
         }

@@ -60,6 +60,12 @@
 				<optional>true</optional>
 				<scope>provided</scope>
 			</dependency>
+			<!-- springboot thymeleaf页面依赖 -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-thymeleaf</artifactId>
+				<version>${spring-boot-version}</version>
+			</dependency>
 			<!-- springcloud依赖 -->
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
