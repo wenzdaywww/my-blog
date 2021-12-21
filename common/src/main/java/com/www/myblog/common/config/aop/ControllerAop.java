@@ -10,6 +10,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Method;
@@ -41,7 +42,8 @@ public class ControllerAop {
      */
     @Around(value = "pointcut()")
     public Object around(ProceedingJoinPoint pjd) throws Throwable {
-        long start = System.currentTimeMillis();// 记录开始时间
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
         String controllerMethod = pjd.getSignature().toString();//获取方法全量名
         Method targetMethod = ((MethodSignature) (pjd.getSignature())).getMethod();
         Parameter[] paramName = targetMethod.getParameters();//获取方法参数名称
@@ -67,8 +69,9 @@ public class ControllerAop {
         requestText += "}";
         try {
             Object result = pjd.proceed();// 执行目标方法
-            log.info("=====> 请求{}方法执行耗时:{}毫秒。请求报文：{}，响应报文:{}",
-                    controllerMethod,(System.currentTimeMillis() - start),requestText,JSON.toJSONString(result));
+            stopWatch.stop();
+            log.info("=====> 请求{}方法执行耗时:{}秒。请求报文：{}，响应报文:{}",
+                    controllerMethod,stopWatch.getTaskCount(),requestText,JSON.toJSONString(result));
             return result;
         }catch (Exception e){
             log.error("=====> 请求{}方法发生异常。请求报文：{}，异常信息：", controllerMethod,requestText,e);

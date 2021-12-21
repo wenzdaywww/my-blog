@@ -1,16 +1,11 @@
 package com.www.authorise.config.oauth2;
 
-import com.alibaba.fastjson.JSON;
-import com.www.authorise.config.handler.ClientExceptionHandler;
-import com.www.authorise.config.handler.ResponseExceptionHandler;
-import com.www.myblog.common.pojo.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +23,6 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.web.AuthenticationEntryPoint;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -74,6 +68,7 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtAccessTokenConverter jwtAccessTokenConverter;
+
 
     /**
      * <p>@Description 配置客户端
@@ -134,7 +129,6 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
                 .authorizationCodeServices(authorizationCodeServices)//授权码需要的服务
                 .tokenServices(tokenServices())//令牌管理服务
                 .allowedTokenEndpointRequestMethods(HttpMethod.POST);
-        endpoints.exceptionTranslator(new ResponseExceptionHandler());
     }
     /**
      * <p>@Description 配置数据库方式读取client信息 </p>
@@ -180,14 +174,4 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
         //数据库存储授权码
         return new JdbcAuthorizationCodeServices(dataSource);
     }
-
-//    @Bean
-//    public AuthenticationEntryPoint authenticationEntryPoint() {
-//        return (request, response, e) -> {
-//            log.info("=====> 客户端错误");
-//            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-//            ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.UNAUTHORIZED,"客户端错误");
-//            response.getWriter().write(JSON.toJSONString(responseDTO));
-//        };
-//    }
 }
