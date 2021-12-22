@@ -45,6 +45,11 @@ public class SysMenuEntity implements Serializable {
     @TableField("VUE_PATH")
     private String vuePath;
     /**
+     * 允许的授权范围,逗号分割
+     */
+    @TableField("SCOPE")
+    private String scope;
+    /**
     * 父级菜单ID
     */
     @TableField("PARENT_ID")
@@ -77,11 +82,11 @@ public class SysMenuEntity implements Serializable {
     /**
     * 更新时间
     */
-    @TableField("SYS_UPDATE_TIME")
-    private Date sysUpdateTime;
+    @TableField("UPDATE_TIME")
+    private Date updateTime;
     /**
     * 创建时间
     */
-    @TableField("SYS_CREATE_TIME")
-    private Date sysCreateTime;
+    @TableField("CREATE_TIME")
+    private Date createTime;
 }

@@ -26,16 +26,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
      * <p>@Description 根据角色名称查询角色信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 22:13 </p>
-     * @param roleName 角色名称
+     * @param roleCode 角色名称
      * @return  角色信息
      */
     @Override
-    public List<SysRoleEntity> findRoleEntityByName(String... roleName) {
-        if(roleName == null){
+    public List<SysRoleEntity> findRoleEntityByName(String... roleCode) {
+        if(roleCode == null){
             return null;
         }
         QueryWrapper<SysRoleEntity> roleWrapper = new QueryWrapper<>();
-        roleWrapper.lambda().in(SysRoleEntity::getRoleName,roleName);
+        roleWrapper.lambda().in(SysRoleEntity::getRoleCode,roleCode);
         return sysRoleMapper.selectList(roleWrapper);
     }
 
@@ -43,16 +43,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
      * <p>@Description 根据角色名称查询角色信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 22:13 </p>
-     * @param roleName 角色名称
+     * @param roleCode 角色名称
      * @return com.www.myblog.admin.data.entity.SysUserEntity 角色信息
      */
     @Override
-    public SysRoleEntity findRoleEntityByName(String roleName) {
-        if(StringUtils.isBlank(roleName)){
+    public SysRoleEntity findRoleEntityByName(String roleCode) {
+        if(StringUtils.isBlank(roleCode)){
             return null;
         }
         QueryWrapper<SysRoleEntity> roleWrapper = new QueryWrapper<>();
-        roleWrapper.lambda().eq(SysRoleEntity::getRoleName,roleName);
+        roleWrapper.lambda().eq(SysRoleEntity::getRoleCode,roleCode);
         return sysRoleMapper.selectOne(roleWrapper);
     }
 }

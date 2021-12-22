@@ -29,7 +29,8 @@ public class ResourceSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         log.info("=====> 配置资源的安全拦截策略");
         http.csrf().disable();//关闭csrf跨域检查
-        http.authorizeRequests().antMatchers("/**").authenticated(); //必须认证通过的请求
+        //此处只配置所有请求必须认证通过，哪些请求不需要认证的需要在ResourceServieConfig.configure(HttpSecurity http)中配置
+        http.authorizeRequests().antMatchers("/**").authenticated();
         http.authorizeRequests().anyRequest().permitAll(); //其他请求
     }
 }

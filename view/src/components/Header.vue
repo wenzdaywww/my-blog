@@ -35,8 +35,8 @@
       <!-- 修改密码弹出框 -->
       <el-dialog title="修改密码" v-model="editVisible" width="20%">
         <el-form label-width="120px" :model="form" :rules="editRules" ref="editForm">
-          <el-form-item label="旧密码：" prop="passWord">
-            <el-input type="password" v-model="form.passWord" maxlength="20" placeholder="请输入旧密码"></el-input>
+          <el-form-item label="旧密码：" prop="password">
+            <el-input type="password" v-model="form.password" maxlength="20" placeholder="请输入旧密码"></el-input>
           </el-form-item>
           <el-form-item label="新密码：" prop="newPassWord">
             <el-input type="password" v-model="form.newPassWord" maxlength="20" placeholder="请输入新密码"></el-input>
@@ -78,13 +78,13 @@ export default {
       userId: localStorage.getItem("userId"),
       newPassWord: "",
       cfmPassWord: "",
-      passWord : "",
+      password : "",
       photo : "src/assets/img/img.jpg",
       message : 0
     });
     // 修改密码的规则校验
     const editRules = {
-      passWord : [
+      password : [
         { required: true, message: "旧密码不能为空", trigger: "blur" },
         { min: 6, message: "密码不能小于6位数", trigger: "blur" }
       ],
@@ -147,7 +147,7 @@ export default {
         router.push("/user");
       } else if (command == "pwd") { // 修改密码
         editVisible.value = true;
-        form.passWord = "";
+        form.password = "";
         form.newPassWord = "";
         form.cfmPassWord = "";
       }

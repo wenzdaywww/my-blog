@@ -44,12 +44,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<>();
         List<String> roleList = securityUserServie.findUserRole(userId);
         if(CollectionUtils.isNotEmpty(roleList)){
-            for (String roleName : roleList){
-                authorities.add(new SimpleGrantedAuthority(roleName));
+            for (String roleCode : roleList){
+                authorities.add(new SimpleGrantedAuthority(roleCode));
             }
         }
         //密码必须加密，否则无效
-        User user = new User(userDTO.getUserId(), userDTO.getPassWord(), userDTO.isEnabled(),
+        User user = new User(userDTO.getUserId(), userDTO.getPassword(), userDTO.isEnabled(),
                 userDTO.isAccountNonExpired(),userDTO.isCredentialsNonExpired(), userDTO.isAccountNonLocked(),authorities);
         return user;
     }

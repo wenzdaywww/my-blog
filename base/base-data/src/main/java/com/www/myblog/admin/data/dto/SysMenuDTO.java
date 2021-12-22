@@ -33,7 +33,7 @@ public class SysMenuDTO implements Serializable {
     /**
      * 菜单角色
      */
-    private String roleName;
+    private String roleCode;
     /**
      * 菜单名称
      */
@@ -69,11 +69,11 @@ public class SysMenuDTO implements Serializable {
     /**
      * 更新时间
      */
-    private Date sysUpdateTime;
+    private Date updateTime;
     /**
      * 创建时间
      */
-    private Date sysCreateTime;
+    private Date createTime;
     /**
      *  子菜单
      */

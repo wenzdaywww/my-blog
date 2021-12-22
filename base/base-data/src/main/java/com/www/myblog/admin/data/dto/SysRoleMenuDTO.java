@@ -20,13 +20,13 @@ public class SysRoleMenuDTO implements Serializable {
      */
     private Long roleId;
     /**
-     * 角色昵称
+     * 角色编码
+     */
+    private String roleCode;
+    /**
+     * 角色名称
      */
     private String roleName;
-    /**
-     * 角色描述
-     */
-    private String description;
     /**
      * 菜单主键
      */
@@ -70,9 +70,9 @@ public class SysRoleMenuDTO implements Serializable {
     /**
     * 更新时间
     */
-    private Date sysUpdateTime;
+    private Date updateTime;
     /**
     * 创建时间
     */
-    private Date sysCreateTime;
+    private Date createTime;
 }

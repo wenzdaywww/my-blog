@@ -2,12 +2,8 @@ package com.www.myblog.admin.service.entity.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.www.myblog.admin.data.entity.SysUserRoleEntity;
-import com.www.myblog.admin.data.entity.UserFriendsEntity;
 import com.www.myblog.admin.data.mapper.SysUserRoleMapper;
-import com.www.myblog.admin.data.mapper.UserFriendsMapper;
-import com.www.myblog.admin.service.entity.ISysRoleMenuService;
 import com.www.myblog.admin.service.entity.ISysUserRoleService;
-import com.www.myblog.admin.service.entity.IUserFriendsService;
 import org.springframework.stereotype.Service;
 
 /**

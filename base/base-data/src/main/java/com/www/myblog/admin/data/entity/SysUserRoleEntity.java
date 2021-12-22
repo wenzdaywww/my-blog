@@ -25,10 +25,10 @@ public class SysUserRoleEntity implements Serializable {
     @TableId(value = "SUR_ID",type = IdType.AUTO)
     private Long surId;
     /**
-    * 用户ID
+    * 用户主键ID
     */
-    @TableField("USER_ID")
-    private String userId;
+    @TableField("SU_ID")
+    private Long suId;
     /**
     * 角色ID
     */
@@ -37,11 +37,11 @@ public class SysUserRoleEntity implements Serializable {
     /**
     * 更新时间
     */
-    @TableField("SYS_UPDATE_TIME")
-    private Date sysUpdateTime;
+    @TableField("UPDATE_TIME")
+    private Date updateTime;
     /**
     * 创建时间
     */
-    @TableField("SYS_CREATE_TIME")
-    private Date sysCreateTime;
+    @TableField("CREATE_TIME")
+    private Date createTime;
 }

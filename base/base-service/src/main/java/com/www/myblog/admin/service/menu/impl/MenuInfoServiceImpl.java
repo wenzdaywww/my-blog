@@ -101,8 +101,8 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
                 return responseDTO;
             }
         }
-        if(StringUtils.isNotBlank(menu.getRoleName())){
-            String[] roleArr = menu.getRoleName().split(",");
+        if(StringUtils.isNotBlank(menu.getRoleCode())){
+            String[] roleArr = menu.getRoleCode().split(",");
             roleList = sysRoleService.findRoleEntityByName(roleArr);
             if(CollectionUtils.isEmpty(roleList)){
                 responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL,"更新菜单失败，角色不存在");
@@ -121,12 +121,12 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         menuEntity.setMenuType(menu.getMenuType());
         menuEntity.setModule(menu.getModule());
         menuEntity.setIsDelete(menu.getIsDelete());
-        menuEntity.setSysUpdateTime(DateUtils.getCurrentDateTime());
+        menuEntity.setUpdateTime(DateUtils.getCurrentDateTime());
         if(isUpdate){
             sysMenuMapper.updateById(menuEntity);
         }else {
             menuEntity.setIsDelete(CommonEnum.NO_0.getCode());
-            menuEntity.setSysCreateTime(isUpdate ? menuEntity.getSysCreateTime() : DateUtils.getCurrentDateTime());
+            menuEntity.setCreateTime(isUpdate ? menuEntity.getCreateTime() : DateUtils.getCurrentDateTime());
             sysMenuMapper.insert(menuEntity);
         }
         // 查询是否已经存在该菜单的角色菜单配置信息
@@ -145,8 +145,8 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
                     SysRoleMenuEntity roleMenuEntity = new SysRoleMenuEntity();
                     roleMenuEntity.setRoleId(roleEntity.getRoleId());
                     roleMenuEntity.setMenuId(menuEntity.getMenuId());
-                    roleMenuEntity.setSysCreateTime(DateUtils.getCurrentDateTime());
-                    roleMenuEntity.setSysUpdateTime(DateUtils.getCurrentDateTime());
+                    roleMenuEntity.setCreateTime(DateUtils.getCurrentDateTime());
+                    roleMenuEntity.setUpdateTime(DateUtils.getCurrentDateTime());
                     rmAddList.add(roleMenuEntity);
                 }
             }
@@ -163,8 +163,8 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
                     SysRoleMenuEntity roleMenuEntity = new SysRoleMenuEntity();
                     roleMenuEntity.setRoleId(roleEntity.getRoleId());
                     roleMenuEntity.setMenuId(menuEntity.getMenuId());
-                    roleMenuEntity.setSysCreateTime(DateUtils.getCurrentDateTime());
-                    roleMenuEntity.setSysUpdateTime(DateUtils.getCurrentDateTime());
+                    roleMenuEntity.setCreateTime(DateUtils.getCurrentDateTime());
+                    roleMenuEntity.setUpdateTime(DateUtils.getCurrentDateTime());
                     rmAddList.add(roleMenuEntity);
                 }
                 //待保存角色菜单数据的角色ID
@@ -215,7 +215,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
                         for (SysRoleMenuDTO menuDTO : menuList){
                             AuthorityDTO authDTO = new AuthorityDTO();
                             authDTO.setUrl(menuDTO.getMenuUrl());
-                            authDTO.setRole(menuDTO.getRoleName());
+                            authDTO.setRole(menuDTO.getRoleCode());
                             //将所有请求权限保存到redis中
                             RedisUtils.listSet(RedisKeyConstant.AUTHORITY_MENU,authDTO);
                         }

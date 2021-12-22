@@ -10,14 +10,14 @@
     <result column="LIKE_NUM" property="likeNum" />
     <result column="COMMENT" property="comment" />
     <result column="PARENT_COM_ID" property="parentComId" />
-    <result column="SYS_UPDATE_TIME" property="sysUpdateTime" />
-    <result column="SYS_CREATE_TIME" property="sysCreateTime" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="CREATE_TIME" property="createTime" />
   </resultMap>
 
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    COMMENT_ID, BLOG_ID, USER_ID, LIKE_NUM, `COMMENT`, PARENT_COM_ID, SYS_UPDATE_TIME,
-    SYS_CREATE_TIME
+    COMMENT_ID, BLOG_ID, USER_ID, LIKE_NUM, `COMMENT`, PARENT_COM_ID, UPDATE_TIME,
+    CREATE_TIME
   </sql>
 
   <!--  根据主键删除数据-->
@@ -30,10 +30,10 @@
   <!--  插入数据，包括空字段-->
   <insert id="insert" keyColumn="COMMENT_ID" keyProperty="commentId" parameterType="com.www.myblog.blog.data.entity.BlogCommentEntity" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into blog_comment (BLOG_ID, USER_ID, LIKE_NUM, `COMMENT`, PARENT_COM_ID, SYS_UPDATE_TIME,
-      SYS_CREATE_TIME)
-    values (#{blogId}, #{userId}, #{likeNum}, #{comment}, #{parentComId}, #{sysUpdateTime},
-      #{sysCreateTime})
+    insert into blog_comment (BLOG_ID, USER_ID, LIKE_NUM, `COMMENT`, PARENT_COM_ID, UPDATE_TIME,
+      CREATE_TIME)
+    values (#{blogId}, #{userId}, #{likeNum}, #{comment}, #{parentComId}, #{updateTime},
+      #{createTime})
   </insert>
 
   <!--  插入数据，不包括空字段-->
@@ -56,11 +56,11 @@
       <if test="parentComId != null">
         PARENT_COM_ID,
       </if>
-      <if test="sysUpdateTime != null">
-        SYS_UPDATE_TIME,
+      <if test="updateTime != null">
+        UPDATE_TIME,
       </if>
-      <if test="sysCreateTime != null">
-        SYS_CREATE_TIME,
+      <if test="createTime != null">
+        CREATE_TIME,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -79,11 +79,11 @@
       <if test="parentComId != null">
         #{parentComId},
       </if>
-      <if test="sysUpdateTime != null">
-        #{sysUpdateTime},
+      <if test="updateTime != null">
+        #{updateTime},
       </if>
-      <if test="sysCreateTime != null">
-        #{sysCreateTime},
+      <if test="createTime != null">
+        #{createTime},
       </if>
     </trim>
   </insert>
@@ -106,8 +106,8 @@
       LIKE_NUM = #{likeNum},
       `COMMENT` = #{comment},
       PARENT_COM_ID = #{parentComId},
-      SYS_UPDATE_TIME = #{sysUpdateTime},
-      SYS_CREATE_TIME = #{sysCreateTime}
+      UPDATE_TIME = #{updateTime},
+      CREATE_TIME = #{createTime}
     where COMMENT_ID = #{commentId}
   </update>
 </mapper>

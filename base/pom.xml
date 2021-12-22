@@ -18,10 +18,10 @@
     <description>博客后台管理系统</description>
 
     <modules>
-        <module>admin-controller</module>
-        <module>admin-service</module>
-        <module>admin-data</module>
-        <module>admin-web</module>
+        <module>base-controller</module>
+        <module>base-service</module>
+        <module>base-data</module>
+        <module>base-web</module>
     </modules>
 
     <dependencies>
@@ -30,13 +30,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <!--devtools热部署-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-            <scope>provided</scope>
         </dependency>
         <!-- eureka-client客户端依赖 -->
         <dependency>
@@ -73,7 +66,7 @@
     <profiles>
         <!--dev默认激活，使用idea Spring Boot 配置启动工程，需要dev的配置-->
         <profile>
-            <id>admin-dev</id>
+            <id>base-dev</id>
             <properties>
                 <profileActive>dev</profileActive>
             </properties>
@@ -82,7 +75,7 @@
             </activation>
         </profile>
         <profile>
-            <id>admin-prod</id>
+            <id>base-prod</id>
             <properties>
                 <profileActive>prod</profileActive>
             </properties>

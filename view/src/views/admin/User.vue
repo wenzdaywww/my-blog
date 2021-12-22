@@ -46,8 +46,8 @@
               <el-date-picker v-model="form.birthday" type="date" value-format="YYYY-MM-DD" format="YYYY年MM月DD日" placeholder="请选择出生日期" style="width: 100%">
               </el-date-picker>
             </el-form-item>
-            <el-form-item label="邮箱" prop="eMail">
-              <el-input v-model="form.eMail" maxlength="100" placeholder="请输入邮箱地址"></el-input>
+            <el-form-item label="邮箱" prop="email">
+              <el-input v-model="form.email" maxlength="100" placeholder="请输入邮箱地址"></el-input>
             </el-form-item>
             <el-form-item label="个性签名：">
               <el-input v-model="form.brief" maxlength="100" placeholder="请输入个性签名"></el-input>
@@ -108,7 +108,7 @@ export default {
           }
         }
       ],
-      eMail: [
+      email: [
         { type: 'string', message: '长度不能超过100位', trigger: 'blur', max: 100 },
         { type: 'string', message: '邮箱格式不正确', trigger: 'blur',
           transform (value) {
@@ -132,7 +132,7 @@ export default {
       birthday : "",
       sex : "",
       photo : "src/assets/img/img.jpg",
-      eMail : "",
+      email : "",
       brief : ""
     });
     // 获取用户数据
@@ -146,7 +146,7 @@ export default {
           if(res.data.photo){
              form.photo = "api/admin" + res.data.photo;
           }
-          form.eMail = res.data.email;
+          form.email = res.data.email;
           form.brief = res.data.brief;
         }
       });

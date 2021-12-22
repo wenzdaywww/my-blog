@@ -20,7 +20,7 @@ public class UserDetailDTO implements Serializable {
     /**
     * 密码
     */
-    private String passWord;
+    private String password;
     /**
     * 用户是否可用
     */

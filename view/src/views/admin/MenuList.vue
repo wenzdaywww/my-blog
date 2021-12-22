@@ -15,8 +15,8 @@
           <el-option key="2" label="请求路径" value="2"></el-option>
           <el-option key="3" label="VUE路由" value="3"></el-option>
         </el-select>
-        <el-select v-model="query.roleName" placeholder="角色名称" class="handle-select mr10">
-          <el-option v-for="item in rolesArr" :key="item.roleName" :label="item.description" :value="item.roleName"></el-option>
+        <el-select v-model="query.roleCode" placeholder="角色名称" class="handle-select mr10">
+          <el-option v-for="item in rolesArr" :key="item.roleCode" :label="item.roleName" :value="item.roleCode"></el-option>
         </el-select>
         <el-input v-model="query.menuCode" placeholder="菜单编码" class="handle-input mr10"></el-input>
         <el-input v-model="query.menuUrl" placeholder="菜单路径" class="handle-input mr10"></el-input>
@@ -45,14 +45,14 @@
           </template>
         </el-table-column>
         <el-table-column prop="module" label="菜单归属模块" align="center"></el-table-column>
-        <el-table-column prop="roleName" label="权限角色" align="center"></el-table-column>
+        <el-table-column prop="roleCode" label="权限角色" align="center"></el-table-column>
         <el-table-column prop="isDelete" label="是否有效" align="center">
           <template #default="scope">
             {{ scope.row.isDelete === '1' ? '否' : '是'}}
           </template>
         </el-table-column>
-        <el-table-column prop="sysCreateTime" label="注册时间" align="center"></el-table-column>
-        <el-table-column prop="sysUpdateTime" label="更新时间" align="center"></el-table-column>
+        <el-table-column prop="createTime" label="注册时间" align="center"></el-table-column>
+        <el-table-column prop="updateTime" label="更新时间" align="center"></el-table-column>
         <el-table-column label="操作" width="180" align="center">
           <template #default="scope">
             <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑 </el-button>
@@ -88,9 +88,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="100">
-            <el-form-item label="权限角色：" prop="roleName">
+            <el-form-item label="权限角色：" prop="roleCode">
               <el-select v-model="form.roleArr" placeholder="请选择角色" multiple class="handle-select mr10 el-input-custom">
-                <el-option v-for="item in rolesArr" :key="item.roleName" :label="item.description" :value="item.roleName"></el-option>
+                <el-option v-for="item in rolesArr" :key="item.roleCode" :label="item.roleName" :value="item.roleCode"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -168,7 +168,7 @@ export default {
     // 查询条件
     const query = reactive({
       menuType: "",
-      roleName: "",
+      roleCode: "",
       menuCode: "",
       menuUrl: "",
       module: "",
@@ -190,7 +190,7 @@ export default {
       module: "",
       vuePath: "",
       roleArr : [],
-      roleName : "",
+      roleCode : "",
       isDelete: ""
     });
     // 菜单的规则校验
@@ -301,7 +301,7 @@ export default {
     // 重置
     const handleReset = () => {
       query.menuType = "";
-      query.roleName = "";
+      query.roleCode = "";
       query.menuCode = "";
       query.menuUrl = "";
       query.module = "";
@@ -345,11 +345,11 @@ export default {
       form.module = row.module;
       form.vuePath = row.vuePath;
       form.roleArr = [];
-      if(row.roleName){
-        let roles = row.roleName.split(",");
+      if(row.roleCode){
+        let roles = row.roleCode.split(",");
         rolesArr.value.forEach (temp => {
-            if(roles.indexOf(temp.description) !== -1 ){
-              form.roleArr.push(temp.roleName);
+            if(roles.indexOf(temp.roleName) !== -1 ){
+              form.roleArr.push(temp.roleCode);
             }
         });
       }
@@ -374,11 +374,11 @@ export default {
     const saveSure = () => {
       editForm.value.validate((valid) => {
         if (valid) {
-          form.roleName = "";
+          form.roleCode = "";
           form.roleArr.forEach (temp => {
-            form.roleName += temp + ",";
+            form.roleCode += temp + ",";
           });
-          form.roleName = form.roleName ? form.roleName.substring(0,form.roleName.length-1) : "";
+          form.roleCode = form.roleCode ? form.roleCode.substring(0,form.roleCode.length-1) : "";
           request.$http.post("api/admin/menu/edit", form).then(function (res) {
             if(res.code === 200){
               dialogVisible.value = false;

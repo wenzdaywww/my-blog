@@ -59,8 +59,8 @@
             {{ scope.row.credentialsNotExpired === '1' ? '否' : '是' }}
           </template>
         </el-table-column>
-        <el-table-column prop="sysCreateTime" label="注册时间" align="center"></el-table-column>
-        <el-table-column prop="sysUpdateTime" label="更新时间" align="center"></el-table-column>
+        <el-table-column prop="createTime" label="注册时间" align="center"></el-table-column>
+        <el-table-column prop="updateTime" label="更新时间" align="center"></el-table-column>
         <el-table-column label="操作" width="180" align="center">
           <template #default="scope">
             <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑 </el-button>
@@ -118,12 +118,12 @@
         <el-form-item label="用户名称" prop="userName">
           <el-input v-model="form.userName" maxlength="100" placeholder="请输入用户名称" style="width: 250px"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="passWord">
-          <el-input v-model="form.passWord" type="passWord" maxlength="20" placeholder="请输入密码" style="width: 250px"></el-input>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="form.password" type="password" maxlength="20" placeholder="请输入密码" style="width: 250px"></el-input>
         </el-form-item>
-        <el-form-item label="角色" prop="roleName">
-          <el-select v-model="form.roleName" placeholder="角色" class="handle-select mr10" style="width: 250px">
-            <el-option v-for="item in rolesArr" :key="item.roleName" :label="item.description" :value="item.roleName"></el-option>
+        <el-form-item label="角色" prop="roleCode">
+          <el-select v-model="form.roleCode" placeholder="角色" class="handle-select mr10" style="width: 250px">
+            <el-option v-for="item in rolesArr" :key="item.roleCode" :label="item.roleName" :value="item.roleCode"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="性别">
@@ -139,8 +139,8 @@
                           value-format="YYYY-MM-DD" format="YYYY年MM月DD日" placeholder="请选择出生日期" >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="邮箱" prop="eMail">
-          <el-input v-model="form.eMail" maxlength="100" placeholder="请输入邮箱地址" style="width: 250px"></el-input>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="form.email" maxlength="100" placeholder="请输入邮箱地址" style="width: 250px"></el-input>
         </el-form-item>
       </el-form>
       <template #footer>
@@ -188,10 +188,10 @@ export default {
       userName : [
         { required: true, message: "用户名称不能为空", trigger: "blur" }
       ],
-      passWord : [
+      password : [
         { required: true, message: "密码不能为空", trigger: "blur" }
       ],
-      roleName : [
+      roleCode : [
         { required: true, message: "角色不能为空", trigger: "blur" }
       ],
       phoneNum: [
@@ -209,7 +209,7 @@ export default {
           }
         }
       ],
-      eMail: [
+      email: [
         { type: 'string', message: '长度不能超过100位', trigger: 'blur', max: 100 },
         { type: 'string', message: '邮箱格式不正确', trigger: 'blur',
           transform (value) {
@@ -266,13 +266,13 @@ export default {
     let form = reactive({
       userId: "",
       userName : "",
-      passWord : "",
+      password : "",
       phoneNum : "",
       birthday : "",
       sex : "",
       photo : "",
-      roleName : "",
-      eMail : "",
+      roleCode : "",
+      email : "",
       stateCd: "",
       expired : "",
       locked : "",
@@ -305,13 +305,13 @@ export default {
       addVisible.value = true;
       form.userId =  "";
       form.userName = "";
-      form.passWord = "";
+      form.password = "";
       form.phoneNum = "";
       form.birthday = "";
       form.sex = "";
       form.photo = "";
-      form.roleName = "";
-      form.eMail = "";
+      form.roleCode = "";
+      form.email = "";
       request.$http.get("api/admin/user/role",null).then(function (res) {
         if(res.code === 200){
           rolesArr.value = res.data;

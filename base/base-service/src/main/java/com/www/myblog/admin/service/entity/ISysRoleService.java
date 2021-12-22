@@ -16,16 +16,16 @@ public interface ISysRoleService extends IService<SysRoleEntity> {
      * <p>@Description 根据角色名称查询角色信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 22:13 </p>
-     * @param roleName 角色名称
+     * @param roleCode 角色名称
      * @return  角色信息
      */
-    List<SysRoleEntity> findRoleEntityByName(String... roleName);
+    List<SysRoleEntity> findRoleEntityByName(String... roleCode);
     /**
      * <p>@Description 根据角色名称查询角色信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 22:13 </p>
-     * @param roleName 角色名称
+     * @param roleCode 角色名称
      * @return com.www.myblog.admin.data.entity.SysUserEntity 角色信息
      */
-    SysRoleEntity findRoleEntityByName(String roleName);
+    SysRoleEntity findRoleEntityByName(String roleCode);
 }

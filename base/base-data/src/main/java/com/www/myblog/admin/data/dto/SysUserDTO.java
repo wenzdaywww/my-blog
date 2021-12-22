@@ -30,11 +30,11 @@ public class SysUserDTO implements Serializable {
     /**
      * 密码
      */
-    private String passWord;
+    private String password;
     /**
-     * 角色昵称
+     * 角色编码
      */
-    private String roleName;
+    private String roleCode;
     /**
     * 用户昵称
     */
@@ -58,7 +58,7 @@ public class SysUserDTO implements Serializable {
     /**
     * 邮箱
     */
-    private String eMail;
+    private String email;
     /**
      * 个人简介
      */
@@ -94,10 +94,10 @@ public class SysUserDTO implements Serializable {
     /**
     * 更新时间
     */
-    private Date sysUpdateTime;
+    private Date updateTime;
     /**
     * 创建时间
     */
-    private Date sysCreateTime;
+    private Date createTime;
 
 }

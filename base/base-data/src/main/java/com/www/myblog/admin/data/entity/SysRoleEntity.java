@@ -25,23 +25,23 @@ public class SysRoleEntity implements Serializable {
     @TableId(value = "ROLE_ID",type = IdType.AUTO)
     private Long roleId;
     /**
-    * 角色昵称
+    * 角色编码
+    */
+    @TableField("ROLE_CODE")
+    private String roleCode;
+    /**
+    * 角色名称
     */
     @TableField("ROLE_NAME")
     private String roleName;
     /**
-    * 角色描述
-    */
-    @TableField("DESCRIPTION")
-    private String description;
-    /**
     * 更新时间
     */
-    @TableField("SYS_UPDATE_TIME")
-    private Date sysUpdateTime;
+    @TableField("UPDATE_TIME")
+    private Date updateTime;
     /**
     * 创建时间
     */
-    @TableField("SYS_CREATE_TIME")
-    private Date sysCreateTime;
+    @TableField("CREATE_TIME")
+    private Date createTime;
 }

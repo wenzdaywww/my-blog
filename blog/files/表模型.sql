@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS BLOG_ARTICLE (
 	BLOG_LIKE BIGINT comment '博客点赞数',
 	STATE_CD CHAR comment '博客状态：1有效，2删除，3封号',
 	BLOG_COMMENT BIGINT comment '博客评论数',
-	SYS_UPDATE_TIME DATETIME comment '更新时间',
-	SYS_CREATE_TIME DATETIME comment '创建时间',
+	UPDATE_TIME DATETIME comment '更新时间',
+	CREATE_TIME DATETIME comment '创建时间',
 	primary key(BLOG_ID) );
 alter table BLOG_ARTICLE comment '博客文章';
 CREATE INDEX INDEX_USER_ID ON BLOG_ARTICLE (USER_ID);
@@ -21,8 +21,8 @@ CREATE TABLE IF NOT EXISTS BLOG_COMMENT (
 	LIKE_NUM BIGINT comment '评论点赞数',
 	COMMENT TEXT comment '评论内容',
 	PARENT_COM_ID BIGINT comment '父评论ID',
-	SYS_UPDATE_TIME DATETIME comment '更新时间',
-	SYS_CREATE_TIME DATETIME comment '创建时间',
+	UPDATE_TIME DATETIME comment '更新时间',
+	CREATE_TIME DATETIME comment '创建时间',
 	primary key(COMMENT_ID) );
 alter table BLOG_COMMENT comment '博客评论';
 CREATE INDEX INDEX_BLOG_ID ON BLOG_COMMENT (BLOG_ID);
@@ -32,8 +32,8 @@ CREATE TABLE IF NOT EXISTS CLASSIFY (
 	CLASS_ID BIGINT AUTO_INCREMENT comment '分类主键',
 	CLASS_NAME VARCHAR(100) comment '分类名称',
 	CLASS_ALIAS VARCHAR(256) comment '分类描述',
-	SYS_UPDATE_TIME DATETIME comment '更新时间',
-	SYS_CREATE_TIME DATETIME comment '创建时间',
+	UPDATE_TIME DATETIME comment '更新时间',
+	CREATE_TIME DATETIME comment '创建时间',
 	primary key(CLASS_ID) );
 alter table CLASSIFY comment '博客分类类型';
 CREATE INDEX INDEX_CLASS_NAME ON CLASSIFY (CLASS_NAME);
@@ -42,8 +42,8 @@ CREATE TABLE IF NOT EXISTS BLOG_CLASS (
 	BC_ID BIGINT AUTO_INCREMENT comment '博客分类主键',
 	BLOG_ID BIGINT comment '博客ID',
 	CLASS_ID BIGINT comment '分类ID',
-	SYS_UPDATE_TIME DATETIME comment '更新时间',
-	SYS_CREATE_TIME DATETIME comment '创建时间',
+	UPDATE_TIME DATETIME comment '更新时间',
+	CREATE_TIME DATETIME comment '创建时间',
 	primary key(BC_ID) );
 alter table BLOG_CLASS comment '博客分类信息';
 CREATE INDEX INDEX_BLOG_IDON ON BLOG_CLASS (BLOG_ID);

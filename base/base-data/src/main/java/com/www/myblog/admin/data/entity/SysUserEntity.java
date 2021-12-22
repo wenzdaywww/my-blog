@@ -38,8 +38,8 @@ public class SysUserEntity implements Serializable {
     /**
     * 密码
     */
-    @TableField("PASS_WORD")
-    private String passWord;
+    @TableField("PASSWORD")
+    private String password;
     /**
     * 手机号
     */
@@ -63,8 +63,8 @@ public class SysUserEntity implements Serializable {
     /**
     * 邮箱
     */
-    @TableField("e_mail")
-    private String eMail;
+    @TableField("EMAIL")
+    private String email;
     /**
     * 个人简介
     */
@@ -93,11 +93,11 @@ public class SysUserEntity implements Serializable {
     /**
     * 更新时间
     */
-    @TableField("SYS_UPDATE_TIME")
-    private Date sysUpdateTime;
+    @TableField("UPDATE_TIME")
+    private Date updateTime;
     /**
     * 创建时间
     */
-    @TableField("SYS_CREATE_TIME")
-    private Date sysCreateTime;
+    @TableField("CREATE_TIME")
+    private Date createTime;
 }

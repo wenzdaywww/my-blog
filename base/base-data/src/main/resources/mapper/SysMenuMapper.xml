@@ -9,18 +9,19 @@
         <result column="MENU_URL" property="menuUrl" />
         <result column="MENU_NAME" property="menuName" />
         <result column="VUE_PATH" property="vuePath" />
+        <result column="SCOPE" property="scope" />
         <result column="PARENT_ID" property="parentId" />
         <result column="MENU_ICON" property="menuIcon" />
         <result column="MENU_ORDER" property="menuOrder" />
         <result column="MENU_TYPE" property="menuType" />
         <result column="MODULE" property="module" />
         <result column="IS_DELETE" property="isDelete" />
-        <result column="SYS_UPDATE_TIME" property="sysUpdateTime" />
-        <result column="SYS_CREATE_TIME" property="sysCreateTime" />
+        <result column="UPDATE_TIME" property="updateTime" />
+        <result column="CREATE_TIME" property="createTime" />
     </resultMap>
     <!--  查询所以权限菜单信息-->
     <select id="findAllSecurityMenu" resultType="com.www.myblog.admin.data.dto.SysRoleMenuDTO">
-        SELECT DISTINCT M.MENU_URL,R.ROLE_NAME
+        SELECT DISTINCT M.MENU_URL,R.ROLE_CODE
         FROM SYS_MENU M
                      LEFT JOIN SYS_ROLE_MENU RM ON RM.MENU_ID = M.MENU_ID
                      LEFT JOIN SYS_ROLE R ON RM.ROLE_ID = R.ROLE_ID
@@ -28,7 +29,8 @@
     </select>
     <!--  查询用户vue的router权限-->
     <select id="findUserRouter" resultType="com.www.myblog.admin.data.dto.SysMenuDTO">
-        SELECT  M.MENU_ID,
+        SELECT DISTINCT
+                M.MENU_ID,
                 M.MENU_CODE,
                 M.MENU_URL,
                 M.MENU_NAME,
@@ -37,13 +39,15 @@
                 M.MENU_ORDER
         FROM    SYS_MENU M,
                 SYS_USER_ROLE UR,
-                SYS_ROLE_MENU RM
+                SYS_ROLE_MENU RM,
+                SYS_USER U
         WHERE M.IS_DELETE = '0'
-              AND M.MENU_TYPE = '3'
-              AND M.MODULE = #{module}
-              AND M.MENU_ID = RM.MENU_ID
-              AND UR.ROLE_ID = RM.ROLE_ID
-              AND UR.USER_ID = #{userId}
+          AND M.MENU_TYPE = '3'
+          AND M.MODULE = #{module}
+          AND M.MENU_ID = RM.MENU_ID
+          AND UR.ROLE_ID = RM.ROLE_ID
+          AND UR.SU_ID = U.SU_ID
+          AND U.USER_ID = #{userId}
         ORDER BY M.MENU_ID,M.PARENT_ID,M.MENU_ORDER
     </select>
     <!--  查询用户菜单列表-->
@@ -57,46 +61,48 @@
                 M.MENU_ORDER
         FROM    SYS_MENU M,
                 SYS_USER_ROLE UR,
-                SYS_ROLE_MENU RM
+                SYS_ROLE_MENU RM,
+                SYS_USER U
         WHERE M.IS_DELETE = '0'
           AND M.MENU_TYPE = '1'
           AND M.MODULE = #{module}
           AND M.MENU_ID = RM.MENU_ID
           AND UR.ROLE_ID = RM.ROLE_ID
-          AND UR.USER_ID = #{userId}
+          AND UR.SU_ID = U.SU_ID
+          AND U.USER_ID = #{userId}
         ORDER BY M.MENU_ID,M.PARENT_ID,M.MENU_ORDER
     </select>
     <!--    查询所有菜单-->
     <select id="findAllMenu" resultType="com.www.myblog.admin.data.dto.SysMenuDTO">
-        SELECT  RN.ROLE_NAME,
-            M.MENU_ID,
-            M.MENU_CODE,
-            M.MENU_URL,
-            M.MENU_NAME,
-            M.VUE_PATH,
-            M.PARENT_ID,
-            M.MENU_ICON,
-            M.MENU_ORDER,
-            M.MENU_TYPE,
-            M.MODULE,
-            M.IS_DELETE,
-            M.SYS_UPDATE_TIME,
-            M.SYS_CREATE_TIME
+        SELECT  RN.ROLE_CODE,
+        M.MENU_ID,
+        M.MENU_CODE,
+        M.MENU_URL,
+        M.MENU_NAME,
+        M.VUE_PATH,
+        M.PARENT_ID,
+        M.MENU_ICON,
+        M.MENU_ORDER,
+        M.MENU_TYPE,
+        M.MODULE,
+        M.IS_DELETE,
+        M.UPDATE_TIME,
+        M.CREATE_TIME
         FROM SYS_MENU M
         <choose>
-            <when test="obj.roleName != null and obj.roleName != ''">
-                ,(SELECT RM.MENU_ID, GROUP_CONCAT( R.DESCRIPTION SEPARATOR ',' ) ROLE_NAME
+            <when test="obj.roleCode != null and obj.roleCode != ''">
+                ,(SELECT RM.MENU_ID, GROUP_CONCAT( R.ROLE_NAME SEPARATOR ',' ) ROLE_CODE
                 FROM SYS_ROLE R, SYS_ROLE_MENU RM WHERE R.ROLE_ID = RM.ROLE_ID
-                AND R.ROLE_NAME = #{obj.roleName} GROUP BY RM.MENU_ID ) RN
+                AND R.ROLE_CODE = #{obj.roleCode} GROUP BY RM.MENU_ID ) RN
             </when>
             <otherwise>
-                LEFT JOIN ( SELECT RM.MENU_ID, GROUP_CONCAT( R.DESCRIPTION SEPARATOR ',' ) ROLE_NAME
+                LEFT JOIN ( SELECT RM.MENU_ID, GROUP_CONCAT( R.ROLE_NAME SEPARATOR ',' ) ROLE_CODE
                 FROM SYS_ROLE R, SYS_ROLE_MENU RM WHERE R.ROLE_ID = RM.ROLE_ID
                 GROUP BY RM.MENU_ID ) RN ON RN.MENU_ID = M.MENU_ID
             </otherwise>
         </choose>
         where 1=1
-        <if test="obj.roleName != null and obj.roleName != ''">
+        <if test="obj.roleCode != null and obj.roleCode != ''">
             AND RN.MENU_ID = M.MENU_ID
         </if>
         <if test="obj.module != null and obj.module != ''">

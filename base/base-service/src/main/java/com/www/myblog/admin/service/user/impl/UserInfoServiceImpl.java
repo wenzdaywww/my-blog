@@ -64,7 +64,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     public ResponseDTO<String> updateUserPwd(SysUserDTO user) {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
-        if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getPassWord(),user.getNewPassWord())){
+        if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getPassword(),user.getNewPassWord())){
             responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL,"更新用户密码失败，密码不能为空");
             return responseDTO;
         }
@@ -75,15 +75,15 @@ public class UserInfoServiceImpl implements IUserInfoService {
         }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         //有输入密码则校验密码
-        if(!encoder.matches(user.getPassWord(),userEntity.getPassWord())){
+        if(!encoder.matches(user.getPassword(),userEntity.getPassword())){
             responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL,"密码不正确");
             return responseDTO;
         }
         //更新用户信息
         UpdateWrapper<SysUserEntity> userWrapper = new UpdateWrapper<>();
         userWrapper.lambda().eq(SysUserEntity::getUserId,user.getUserId());
-        userWrapper.lambda().set(SysUserEntity::getPassWord,encoder.encode(user.getNewPassWord()));
-        userWrapper.lambda().set(SysUserEntity::getSysUpdateTime,DateUtils.getCurrentDateTime());
+        userWrapper.lambda().set(SysUserEntity::getPassword,encoder.encode(user.getNewPassWord()));
+        userWrapper.lambda().set(SysUserEntity::getUpdateTime,DateUtils.getCurrentDateTime());
         int count = sysUserMapper.update(null,userWrapper);
         if(count == 0){
             responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL,"更新用户密码失败");
@@ -207,9 +207,9 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userWrapper.lambda().set(SysUserEntity::getPhoneNum,user.getPhoneNum());
         userWrapper.lambda().set(SysUserEntity::getBirthday,DateUtils.parse(user.getBirthday(), DateUtils.DateFormatEnum.YYYY_MM_DD));
         userWrapper.lambda().set(SysUserEntity::getSex,user.getSex());
-        userWrapper.lambda().set(SysUserEntity::getEMail,user.getEMail());
+        userWrapper.lambda().set(SysUserEntity::getEmail,user.getEmail());
         userWrapper.lambda().set(SysUserEntity::getBrief,user.getBrief());
-        userWrapper.lambda().set(SysUserEntity::getSysUpdateTime,DateUtils.getCurrentDateTime());
+        userWrapper.lambda().set(SysUserEntity::getUpdateTime,DateUtils.getCurrentDateTime());
         int count = sysUserMapper.update(null,userWrapper);
         if(count == 0){
             responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL,"更新用户信息失败");
@@ -248,36 +248,36 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     public ResponseDTO<String> createUser(SysUserDTO user) {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
-        if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName(),user.getPassWord(),user.getRoleName())
+        if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName(),user.getPassword(),user.getRoleCode())
                 || (StringUtils.isNotBlank(user.getSex()) && !StringUtils.containsAny(user.getSex(),CommonEnum.SEX_1.getCode(),CommonEnum.SEX_0.getCode()))){
             responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL,"信息不完整，创建用户失败");
             return responseDTO;
         }
-        SysRoleEntity roleEntity = sysRoleService.findRoleEntityByName(user.getRoleName());
+        SysRoleEntity roleEntity = sysRoleService.findRoleEntityByName(user.getRoleCode());
         if(roleEntity == null){
             responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL);
             responseDTO.setMsg("用户角色错误，创建用户失败");
             return responseDTO;
         }
         //创建用户
-        user.setPassWord(new BCryptPasswordEncoder().encode(user.getPassWord()));
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         SysUserEntity userEntity = new SysUserEntity();
         userEntity.setUserId(user.getUserId());
         userEntity.setUserName(user.getUserName());
-        userEntity.setPassWord(user.getPassWord());
+        userEntity.setPassword(user.getPassword());
         userEntity.setSex(user.getSex());
         userEntity.setPhoneNum(user.getPhoneNum());
         userEntity.setBirthday(DateUtils.parse(user.getBirthday(), DateUtils.DateFormatEnum.YYYY_MM_DD));
-        userEntity.setEMail(user.getEMail());
-        userEntity.setSysCreateTime(DateUtils.getCurrentDateTime());
-        userEntity.setSysUpdateTime(DateUtils.getCurrentDateTime());
+        userEntity.setEmail(user.getEmail());
+        userEntity.setCreateTime(DateUtils.getCurrentDateTime());
+        userEntity.setUpdateTime(DateUtils.getCurrentDateTime());
         sysUserMapper.insert(userEntity);
         //创建用户角色
         SysUserRoleEntity userRoleEntity = new SysUserRoleEntity();
-        userRoleEntity.setUserId(userEntity.getUserId());
+        userRoleEntity.setSuId(userEntity.getSuId());
         userRoleEntity.setRoleId(roleEntity.getRoleId());
-        userRoleEntity.setSysCreateTime(DateUtils.getCurrentDateTime());
-        userRoleEntity.setSysUpdateTime(DateUtils.getCurrentDateTime());
+        userRoleEntity.setCreateTime(DateUtils.getCurrentDateTime());
+        userRoleEntity.setUpdateTime(DateUtils.getCurrentDateTime());
         sysUserRoleMapper.insert(userRoleEntity);
         responseDTO.setResponseCode(ResponseDTO.RespEnum.SUCCESS,"创建用户成功");
         return responseDTO;
@@ -321,7 +321,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userWrapper.lambda().set(SysUserEntity::getNotExpired,notExpired);
         userWrapper.lambda().set(SysUserEntity::getNotLocked,notLocked);
         userWrapper.lambda().set(SysUserEntity::getCredentialsNotExpired,credentialsNotExpired);
-        userWrapper.lambda().set(SysUserEntity::getSysUpdateTime,DateUtils.getCurrentDateTime());
+        userWrapper.lambda().set(SysUserEntity::getUpdateTime,DateUtils.getCurrentDateTime());
         int count = sysUserMapper.update(null,userWrapper);
         if(count != 0){
             responseDTO.setResponseCode(ResponseDTO.RespEnum.SUCCESS,"更新用户信息成功");
