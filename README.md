@@ -4,7 +4,7 @@
 ### base：基础服务
 ### blog：博客服务
 ### view：前端UI
-### common：公共API包
+### common：公共包
 ### eureka：eureka服务注册中心
 ### zuul：zuul路由网关
 ### uaa：统一认证授权服务
