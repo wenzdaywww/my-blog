@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
     @Autowired
-    private AuthenticationEntryHandler authenticationEntryHandler;
+    private SecurityAuthRejectHandler securityAuthRejectHandler;
     @Autowired
     private LoginSuccessHandler loginSuccessHandler;
     @Autowired
@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SessionExpiredHandler sessionExpiredHandler;
     @Autowired
-    private URLAccessDeniedHandler urlAccessDeniedHandler;
+    private SecurityUnauthHandler securityUnauthHandler;
     @Autowired
     private SecurityMetadataSource securityMetadataSource;
     @Autowired
@@ -70,8 +70,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 return o;
             }
         });
-        http.exceptionHandling().authenticationEntryPoint(authenticationEntryHandler);//匿名用户访问无权限资源时的异常处理
-        http.exceptionHandling().accessDeniedHandler(urlAccessDeniedHandler);//登录的用户访问无权限资源时的异常处理
+        http.exceptionHandling().authenticationEntryPoint(securityAuthRejectHandler);//认证失败时的异常处理
+        http.exceptionHandling().accessDeniedHandler(securityUnauthHandler);//拒绝访问异常处理
         http.formLogin()//登入
             .loginProcessingUrl("/login")//登录表单form中action的地址，也就是处理认证请求的路径
             .usernameParameter("id")//登录表单form中用户名输入框input的name名，不修改的话默认是username

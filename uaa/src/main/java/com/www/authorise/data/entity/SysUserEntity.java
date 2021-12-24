@@ -37,8 +37,8 @@ public class SysUserEntity implements Serializable {
     /**
     * 密码
     */
-    @TableField("PASS_WORD")
-    private String passWord;
+    @TableField("PASSWORD")
+    private String password;
     /**
     * 手机号
     */

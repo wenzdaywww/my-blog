@@ -6,7 +6,7 @@
     <id column="SU_ID" property="suId" />
     <result column="USER_ID" property="userId" />
     <result column="USER_NAME" property="userName" />
-    <result column="PASS_WORD" property="passWord" />
+    <result column="PASSWORD" property="password" />
     <result column="PHONE_NUM" property="phoneNum" />
     <result column="BIRTHDAY" property="birthday" />
     <result column="SEX" property="sex" />

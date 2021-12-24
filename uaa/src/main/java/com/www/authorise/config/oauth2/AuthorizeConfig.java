@@ -76,7 +76,7 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
      * client_credentials
      *      token申请地址：/oauth/token?client_id=客户端ID&client_secret=客户端密钥&grant_type=client_credentials
      * password
-     *      token申请地址：/oauth/token?client_id=客户端ID&client_secret=客户端密钥&grant_type=client_credentials&username=用户名&password=用户密码
+     *      token申请地址：/oauth/token?client_id=客户端ID&client_secret=客户端密钥&grant_type=password&username=用户名&password=用户密码
      * implicit
      *      授权申请地址：/oauth/authorize?client_id=客户端ID&response_type=token&redirect_uri=回调地址
      * authorization_code

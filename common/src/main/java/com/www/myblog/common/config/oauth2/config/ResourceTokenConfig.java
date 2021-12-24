@@ -1,4 +1,4 @@
-package com.www.myblog.common.config.oauth2;
+package com.www.myblog.common.config.oauth2.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

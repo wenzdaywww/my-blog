@@ -1,11 +1,14 @@
-package com.www.myblog.common.config.oauth2;
+package com.www.myblog.common.config.oauth2.config;
 
+import com.www.myblog.common.config.oauth2.Oauth2TokenFilter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * <p>@Description 资源服务方的Security配置类 </p>
@@ -18,6 +21,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true,securedEnabled = true) //配置基于方法的安全认证,必要
 public class ResourceSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private Oauth2TokenFilter oauth2TokenFilter;
     /**
      * <p>@Description 配置资源的安全拦截策略 </p>
      * <p>@Author www </p>
@@ -31,6 +36,7 @@ public class ResourceSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();//关闭csrf跨域检查
         //此处只配置所有请求必须认证通过，哪些请求不需要认证的需要在ResourceServieConfig.configure(HttpSecurity http)中配置
         http.authorizeRequests().antMatchers("/**").authenticated();
+//        http.addFilterBefore(oauth2TokenFilter, UsernamePasswordAuthenticationFilter.class);//设置token解析过滤器在账号密码验证器之前
         http.authorizeRequests().anyRequest().permitAll(); //其他请求
     }
 }

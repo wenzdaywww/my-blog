@@ -5,6 +5,7 @@ import com.www.myblog.admin.service.menu.IMenuInfoService;
 import com.www.myblog.admin.service.menu.impl.MenuInfoServiceImpl;
 import com.www.myblog.common.pojo.ResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,6 +62,7 @@ public class MenuController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.admin.data.dto.SysMenuDTO>>
      */
     @GetMapping("all")
+    @PreAuthorize("hasAnyAuthority('admin')")
     public ResponseDTO<List<SysMenuDTO>> findAllMenu(String module,String menuType, String roleCode, String menuCode, String menuUrl,String vuePath, int pageNum, int pageSize){
         SysMenuDTO menuDTO = new SysMenuDTO();
         menuDTO.setModule(module);

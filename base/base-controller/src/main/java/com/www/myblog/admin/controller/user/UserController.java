@@ -7,6 +7,7 @@ import com.www.myblog.admin.data.entity.SysUserEntity;
 import com.www.myblog.admin.service.user.IUserInfoService;
 import com.www.myblog.common.pojo.ResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -88,6 +89,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO<com.www.myblog.admin.data.dto.SysUserDTO>
      */
     @GetMapping("info")
+    @PreAuthorize("hasAnyAuthority('user')")
     public ResponseDTO<SysUserDTO> findUser(String userId){
         return userInfoService.findUser(userId);
     }

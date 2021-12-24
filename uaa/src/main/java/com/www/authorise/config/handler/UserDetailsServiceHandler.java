@@ -56,7 +56,7 @@ public class UserDetailsServiceHandler implements UserDetailsService {
         }
         UserDetailDTO userDTO = new UserDetailDTO();
         userDTO.setUserId(userEntity.getUserId());
-        userDTO.setPassWord(userEntity.getPassWord());
+        userDTO.setPassword(userEntity.getPassword());
         userDTO.setEnabled(StringUtils.equals(userEntity.getStateCd(), CommonEnum.STATE_CD_1.getCode()));
         userDTO.setAccountNonExpired(StringUtils.equals(userEntity.getNotExpired(), CommonEnum.YES_1.getCode()));
         userDTO.setCredentialsNonExpired(StringUtils.equals(userEntity.getCredentialsNotExpired(), CommonEnum.YES_1.getCode()));
@@ -65,12 +65,12 @@ public class UserDetailsServiceHandler implements UserDetailsService {
         List<String> roleList = sysRoleMapper.findUserRole(userId);
         List<GrantedAuthority> authorities = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(roleList)){
-            for (String roleName : roleList){
-                authorities.add(new SimpleGrantedAuthority(roleName));
+            for (String roleCode : roleList){
+                authorities.add(new SimpleGrantedAuthority(roleCode));
             }
         }
         //密码必须加密，否则无效
-        User user = new User(userDTO.getUserId(), userDTO.getPassWord(), userDTO.isEnabled(),
+        User user = new User(userDTO.getUserId(), userDTO.getPassword(), userDTO.isEnabled(),
                 userDTO.isAccountNonExpired(),userDTO.isCredentialsNonExpired(), userDTO.isAccountNonLocked(),authorities);
         return user;
     }
