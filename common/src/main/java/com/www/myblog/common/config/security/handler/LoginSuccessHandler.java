@@ -28,6 +28,7 @@ import java.util.Map;
 @Slf4j
 //@Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
+    /** 使用redis保存用户的token的key前缀 **/
     @Value("${jwt.user-prefix}")
     private String redisUserPrefix;
     /**  返回客户段cookie中的token的name **/

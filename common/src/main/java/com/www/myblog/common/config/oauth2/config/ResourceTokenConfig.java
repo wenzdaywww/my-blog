@@ -1,5 +1,6 @@
 package com.www.myblog.common.config.oauth2.config;
 
+import com.www.myblog.common.config.oauth2.handler.JwtTokenConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +28,7 @@ public class ResourceTokenConfig {
     @Bean
     public TokenStore tokenStore(){
         //使用jwt方式存储
-        return new JwtTokenStore(jwtAccessTokenConverter());
+        return new JwtTokenStore(jwtTokenConverter());
     }
     /**
      * <p>@Description 注册jwt对象 </p>
@@ -36,8 +37,8 @@ public class ResourceTokenConfig {
      * @return org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter
      */
     @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter(){
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+    public JwtTokenConverter jwtTokenConverter(){
+        JwtTokenConverter converter = new JwtTokenConverter();
         converter.setSigningKey(signingKey);
         return converter;
     }

@@ -1,11 +1,14 @@
 package com.www.myblog.common.config.oauth2.config;
 
+import com.www.myblog.common.config.oauth2.handler.Oauth2AccessDecisionManager;
 import com.www.myblog.common.config.oauth2.handler.Oauth2AuthRejectHandler;
+import com.www.myblog.common.config.oauth2.handler.Oauth2MetadataSource;
 import com.www.myblog.common.config.oauth2.handler.Oauth2UnauthHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -14,6 +17,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
 /**
  * <p>@Description 资源服务方的认证配置 </p>
@@ -33,6 +37,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private Oauth2AuthRejectHandler oauth2AuthRejectHandler;
     @Autowired
     private Oauth2UnauthHandler oauth2UnauthHandler;
+    @Autowired
+    private Oauth2MetadataSource oauth2MetadataSource;
+    @Autowired
+    private Oauth2AccessDecisionManager oauth2AccessDecisionManager;
 
     /**
      * <p>@Description 配置资源服务方验证方式 </p>
@@ -48,6 +56,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 // .tokenServices(tokenServices()) //远程校验token时需要
                 .tokenStore(tokenStore) //jwt校验token
                 .stateless(true);
+        //先认证失败在拒绝方法
         resources.authenticationEntryPoint(oauth2AuthRejectHandler);//认证失败时的异常处理
         resources.accessDeniedHandler(oauth2UnauthHandler);//拒绝访问异常处理
     }
@@ -63,8 +72,19 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         log.info("=====> 配置资源服务方的安全拦截策略");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);//关闭session策略
-        http.authorizeRequests()
-            .antMatchers("/**").access("#oauth2.hasAnyScope('base:read','base:read')");
+        //固定写法的配置scope范围
+//        http.authorizeRequests()
+//            .antMatchers("/**").access("#oauth2.hasAnyScope('base:read','base:read')");
+        //动态配置权限范围
+        http.authorizeRequests().anyRequest().authenticated()
+                .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
+                    @Override
+                    public <O extends FilterSecurityInterceptor> O postProcess(O o) {
+                        o.setSecurityMetadataSource(oauth2MetadataSource);//访问权限配置
+                        o.setAccessDecisionManager(oauth2AccessDecisionManager);//访问权限验证
+                        return o;
+                    }
+        });
     }
     /**
      * <p>@Description 远程校验token </p>

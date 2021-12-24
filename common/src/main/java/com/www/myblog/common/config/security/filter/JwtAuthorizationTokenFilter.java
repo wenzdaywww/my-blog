@@ -34,9 +34,10 @@ import java.util.Map;
 public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+    /** 使用redis保存用户的token的key前缀 **/
     @Value("${jwt.user-prefix}")
     private String redisUserPrefix;
-    /** 密钥(www362412) */
+    /** jwt令牌签名 */
     @Value("${jwt.secret-key}")
     private String SECRET_KEY ;
     /**  过期时间（秒） */

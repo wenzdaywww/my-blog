@@ -3,6 +3,8 @@ package com.www.myblog.common.pojo;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -23,5 +25,5 @@ public class TokenDTO {
     /** 令牌有效时间 **/
     private int expiresSeconds;
     /** 授权范围 **/
-    private Set<String> scope;
+    private ArrayList<String> scope;
 }
