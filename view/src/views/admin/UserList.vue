@@ -27,7 +27,7 @@
         <el-table-column prop="userName" label="用户名称" align="center"></el-table-column>
         <el-table-column label="头像(查看大图)" align="center">
           <template #default="scope">
-            <el-image class="table-td-thumb" :src=" scope.row.photo ? 'api/admin'+ scope.row.photo : 'src/assets/img/img.jpg'" :preview-src-list="[scope.row.photo]">
+            <el-image class="table-td-thumb" :src=" scope.row.photo ? 'api/base'+ scope.row.photo : 'src/assets/img/img.jpg'" :preview-src-list="[scope.row.photo]">
             </el-image>
           </template>
         </el-table-column>
@@ -233,7 +233,7 @@ export default {
     const request = getCurrentInstance().appContext.config.globalProperties;
     // 获取表格数据
     const getData = () => {
-      request.$http.get("api/admin/user/all",query).then(function (res) {
+      request.$http.get("api/base/user/all",query).then(function (res) {
         if(res.code === 200){
           tableData.value = res.data;
           pageTotal.value = res.totalNum;
@@ -290,7 +290,7 @@ export default {
     };
     // 编辑页面的保存按钮
     const saveEdit = () => {
-      request.$http.post("api/admin/user/state",form).then(function (res) {
+      request.$http.post("api/base/user/state",form).then(function (res) {
         if(res.code === 200){
           editVisible.value = false;
           ElMessage.success('修改成功');
@@ -312,7 +312,7 @@ export default {
       form.photo = "";
       form.roleCode = "";
       form.email = "";
-      request.$http.get("api/admin/user/role",null).then(function (res) {
+      request.$http.get("api/base/user/role",null).then(function (res) {
         if(res.code === 200){
           rolesArr.value = res.data;
         }
@@ -322,7 +322,7 @@ export default {
     const saveAdd = () => {
       addForm.value.validate((valid) => {
         if (valid) {
-          request.$http.post("api/admin/user/new", form).then(function (res) {
+          request.$http.post("api/base/user/new", form).then(function (res) {
             if(res.code === 200){
               addVisible.value = false;
               ElMessage.success('新增成功');

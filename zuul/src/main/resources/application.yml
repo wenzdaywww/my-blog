@@ -14,9 +14,12 @@ zuul:
     connect-timeout-millis: 3000
     socket-timeout-millis:  3000
   routes:
-    #设置my-admin服务路径
-    my-admin.serviceId: my-admin
-    my-admin.path: /admin/**
+    #设置统一认证授权服务路径
+    my-uaa.serviceId: uaa
+    my-uaa.path: /uaa/**
+    #设置my-base服务路径
+    my-base.serviceId: my-base
+    my-base.path: /base/**
     #设置my-blog服务路径
     my-blog.serviceId: my-blog
     my-blog.path: /blog/**

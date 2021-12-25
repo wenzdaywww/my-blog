@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.www.myblog.admin.data.mapper.SysUserMapper">
-  <resultMap id="BaseResultMap" type="com.www.myblog.admin.data.entity.SysUserEntity">
+<mapper namespace="com.www.myblog.base.data.mapper.SysUserMapper">
+  <resultMap id="BaseResultMap" type="com.www.myblog.base.data.entity.SysUserEntity">
     <!--@Table sys_user-->
     <id column="SU_ID" property="suId" />
     <result column="USER_ID" property="userId" />
@@ -21,12 +21,12 @@
     <result column="CREATE_TIME" property="createTime" />
   </resultMap>
   <!--  查询用户拥有的角色信息-->
-  <select id="findUserRole" resultType="com.www.myblog.admin.data.entity.SysRoleEntity">
+  <select id="findUserRole" resultType="com.www.myblog.base.data.entity.SysRoleEntity">
     SELECT DISTINCT R.ROLE_ID, R.ROLE_CODE, R.ROLE_NAME, R.UPDATE_TIME, R.CREATE_TIME FROM SYS_USER_ROLE UR,SYS_ROLE R,SYS_USER U
     WHERE UR.ROLE_ID = R.ROLE_ID AND U.SU_ID = UR.SU_ID AND U.USER_ID = #{userId}
   </select>
   <!--  查询所有用户信息-->
-  <select id="findAllUser" resultType="com.www.myblog.admin.data.dto.SysUserDTO">
+  <select id="findAllUser" resultType="com.www.myblog.base.data.dto.SysUserDTO">
     SELECT SU_ID, USER_ID, USER_NAME, PHONE_NUM, BIRTHDAY, SEX, PHOTO, EMAIL,BRIEF, STATE_CD,
         NOT_EXPIRED,NOT_LOCKED,CREDENTIALS_NOT_EXPIRED,UPDATE_TIME, CREATE_TIME
     FROM SYS_USER
@@ -42,7 +42,7 @@
       </if>
   </select>
   <!--  根据ID查询用户信息-->
-  <select id="findUserInfoById" resultType="com.www.myblog.admin.data.dto.SysUserDTO">
+  <select id="findUserInfoById" resultType="com.www.myblog.base.data.dto.SysUserDTO">
       SELECT  U.SU_ID,
               U.USER_ID,
               U.USER_NAME,

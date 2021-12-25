@@ -60,10 +60,10 @@ export default {
     //登录方法
     const submitForm = () => {
       param.rmb = rememberMe.value ? "1" : "0";
-      request.$http.post("api/admin/login",param).then(function (res) {
+      request.$http.post("api/base/login",param).then(function (res) {
         if(res.code === 200){
           localStorage.setItem("userId",param.id);
-          request.$http.get("api/admin/user/router", {userId:param.id}).then(function (res) {
+          request.$http.get("api/base/user/router", {userId:param.id}).then(function (res) {
             if(res.code === 200){
               initUserRouter(res.data);
             }

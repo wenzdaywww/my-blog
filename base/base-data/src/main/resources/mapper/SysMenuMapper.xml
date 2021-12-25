@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.www.myblog.admin.data.mapper.SysMenuMapper">
-    <resultMap id="BaseResultMap" type="com.www.myblog.admin.data.entity.SysMenuEntity">
+<mapper namespace="com.www.myblog.base.data.mapper.SysMenuMapper">
+    <resultMap id="BaseResultMap" type="com.www.myblog.base.data.entity.SysMenuEntity">
         <!--@mbg.generated-->
         <!--@Table sys_menu-->
         <id column="MENU_ID" property="menuId" />
@@ -20,7 +20,7 @@
         <result column="CREATE_TIME" property="createTime" />
     </resultMap>
     <!--  查询所以权限菜单信息-->
-    <select id="findAllSecurityMenu" resultType="com.www.myblog.admin.data.dto.SysRoleMenuDTO">
+    <select id="findAllSecurityMenu" resultType="com.www.myblog.base.data.dto.SysRoleMenuDTO">
         SELECT DISTINCT M.MENU_URL,R.ROLE_CODE
         FROM SYS_MENU M
                      LEFT JOIN SYS_ROLE_MENU RM ON RM.MENU_ID = M.MENU_ID
@@ -28,7 +28,7 @@
         WHERE  M.MENU_TYPE = '2' AND M.MODULE = #{module}
     </select>
     <!--  查询用户vue的router权限-->
-    <select id="findUserRouter" resultType="com.www.myblog.admin.data.dto.SysMenuDTO">
+    <select id="findUserRouter" resultType="com.www.myblog.base.data.dto.SysMenuDTO">
         SELECT DISTINCT
                 M.MENU_ID,
                 M.MENU_CODE,
@@ -51,7 +51,7 @@
         ORDER BY M.MENU_ID,M.PARENT_ID,M.MENU_ORDER
     </select>
     <!--  查询用户菜单列表-->
-    <select id="findUserMenu" resultType="com.www.myblog.admin.data.dto.SysMenuDTO">
+    <select id="findUserMenu" resultType="com.www.myblog.base.data.dto.SysMenuDTO">
         SELECT  M.MENU_ID,
                 M.MENU_CODE,
                 M.MENU_URL,
@@ -73,7 +73,7 @@
         ORDER BY M.MENU_ID,M.PARENT_ID,M.MENU_ORDER
     </select>
     <!--    查询所有菜单-->
-    <select id="findAllMenu" resultType="com.www.myblog.admin.data.dto.SysMenuDTO">
+    <select id="findAllMenu" resultType="com.www.myblog.base.data.dto.SysMenuDTO">
         SELECT  RN.ROLE_CODE,
         M.MENU_ID,
         M.MENU_CODE,

@@ -76,12 +76,12 @@ export default {
     });
     // 获取用户数据
     const getData = () => {
-      request.$http.get("api/admin/user/info",user).then(function (res) {
+      request.$http.get("api/base/user/info",user).then(function (res) {
         if(res.code === 200){
           user.userName = res.data.userName;
           user.brief = res.data.brief;
           if (res.data.photo){
-            user.photo = "api/admin" + res.data.photo;
+            user.photo = "api/base" + res.data.photo;
           }
           user.friends = res.data.friends;
           user.fans = res.data.fans;

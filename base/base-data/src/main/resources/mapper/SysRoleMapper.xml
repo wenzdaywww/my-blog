@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.www.myblog.admin.data.mapper.SysRoleMapper">
-  <resultMap id="BaseResultMap" type="com.www.myblog.admin.data.entity.SysRoleEntity">
+<mapper namespace="com.www.myblog.base.data.mapper.SysRoleMapper">
+  <resultMap id="BaseResultMap" type="com.www.myblog.base.data.entity.SysRoleEntity">
     <!--@Table sys_role-->
     <id column="ROLE_ID" property="roleId" />
     <result column="ROLE_CODE" property="roleCode" />
@@ -10,7 +10,7 @@
     <result column="CREATE_TIME" property="createTime" />
   </resultMap>
   <!--  查询所有角色信息-->
-  <select id="findAllRole" resultType="com.www.myblog.admin.data.dto.SysRoleDTO">
+  <select id="findAllRole" resultType="com.www.myblog.base.data.dto.SysRoleDTO">
     SELECT  ROLE_ID, ROLE_CODE, ROLE_NAME FROM SYS_ROLE
   </select>
 </mapper>

@@ -274,7 +274,7 @@ export default {
     const editForm = ref(null);
     // 查询所有角色
     const getRoleList = () => {
-      request.$http.get("api/admin/user/role",null).then(function (res) {
+      request.$http.get("api/base/user/role",null).then(function (res) {
         if(res.code === 200){
           rolesArr.value = res.data;
         }
@@ -285,7 +285,7 @@ export default {
     const tableData = ref([]);
     // 获取表格数据
     const getData = () => {
-      request.$http.get("api/admin/menu/all",query).then(function (res) {
+      request.$http.get("api/base/menu/all",query).then(function (res) {
         if(res.code === 200){
           tableData.value = res.data;
           query.pageTotal = res.totalNum;
@@ -360,7 +360,7 @@ export default {
       // 二次确认删除
       ElMessageBox.confirm("确定要删除吗？", "提示", {type: "warning"}).then(() => {
         form.menuId= row.menuId;
-        request.$http.post("api/admin/menu/down", form).then(function (res) {
+        request.$http.post("api/base/menu/down", form).then(function (res) {
           if(res.code === 200){
             ElMessage.success('删除成功');
             getData();
@@ -379,7 +379,7 @@ export default {
             form.roleCode += temp + ",";
           });
           form.roleCode = form.roleCode ? form.roleCode.substring(0,form.roleCode.length-1) : "";
-          request.$http.post("api/admin/menu/edit", form).then(function (res) {
+          request.$http.post("api/base/menu/edit", form).then(function (res) {
             if(res.code === 200){
               dialogVisible.value = false;
               ElMessage.success('保存成功');

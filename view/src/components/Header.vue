@@ -119,10 +119,10 @@ export default {
     });
     // 获取用户数据
     const getData = () => {
-      request.$http.get("api/admin/user/info",form).then(function (res) {
+      request.$http.get("api/base/user/info",form).then(function (res) {
         if(res.code === 200){
           if(res.data.photo){
-            form.photo = "api/admin" + res.data.photo;
+            form.photo = "api/base" + res.data.photo;
           }
         }
       });
@@ -132,7 +132,7 @@ export default {
     const handleCommand = (command) => {
       // 退出
       if (command == "loginout") {
-        request.$http.post("api/admin/logout",null).then(function (res) {
+        request.$http.post("api/base/logout",null).then(function (res) {
           if(res.code === 200){
             localStorage.setItem('userId',null);
             ElMessage.success("退出成功");
@@ -156,7 +156,7 @@ export default {
     const savePwd = () => {
       editForm.value.validate((valid) => {
         if (valid) {
-          request.$http.post("api/admin/user/pwd",form).then(function (res) {
+          request.$http.post("api/base/user/pwd",form).then(function (res) {
             if(res.code === 200){
               ElMessage.success('修改成功');
               editVisible.value = false;

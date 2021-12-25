@@ -137,14 +137,14 @@ export default {
     });
     // 获取用户数据
     const getData = () => {
-      request.$http.get("api/admin/user/info",form).then(function (res) {
+      request.$http.get("api/base/user/info",form).then(function (res) {
         if(res.code === 200){
           form.userName = res.data.userName;
           form.phoneNum = res.data.phoneNum;
           form.birthday = res.data.birthday;
           form.sex = res.data.sex;
           if(res.data.photo){
-             form.photo = "api/admin" + res.data.photo;
+             form.photo = "api/base" + res.data.photo;
           }
           form.email = res.data.email;
           form.brief = res.data.brief;
@@ -156,7 +156,7 @@ export default {
     const onSubmit = () => {
       editForm.value.validate((valid) => {
         if (valid) {
-          request.$http.post("api/admin/user/edit",form).then(function (res) {
+          request.$http.post("api/base/user/edit",form).then(function (res) {
             if(res.code === 200){
               ElMessage.success('修改成功');
               getData();
@@ -215,7 +215,7 @@ export default {
       let fd = new FormData();//通过form数据格式来传
       fd.append("photo", base64ToFile(cropImg.value,file.name)); //传文件
       fd.append("userId", form.userId);
-      request.$http.upload("api/admin/user/photo",fd,{'Content-Type': 'multipart/form-data'}).then(function (res){
+      request.$http.upload("api/base/user/photo",fd,{'Content-Type': 'multipart/form-data'}).then(function (res){
         if(res.code === 200){
           ElMessage.success('上传成功');
           dialogVisible.value = false;

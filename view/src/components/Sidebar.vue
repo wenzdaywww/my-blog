@@ -47,7 +47,7 @@ export default {
     const items = ref([]);
     // 获取菜单
     const getData = () => {
-      request.$http.get("api/admin/user/menu", {userId:localStorage.getItem('userId')}).then(function (res) {
+      request.$http.get("api/base/user/menu", {userId:localStorage.getItem('userId')}).then(function (res) {
         if(res.code === 200){
           items.value = res.data;
         }
