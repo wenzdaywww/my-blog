@@ -1,8 +1,7 @@
 package com.www.myblog.admin.service.menu;
 
 import com.www.myblog.admin.data.dto.SysMenuDTO;
-import com.www.myblog.admin.data.dto.SysRoleMenuDTO;
-import com.www.myblog.common.pojo.ResponseDTO;
+import com.www.common.pojo.ResponseDTO;
 
 import java.util.List;
 

@@ -6,7 +6,7 @@ import com.www.authorise.data.entity.SysUserEntity;
 import com.www.authorise.data.enums.CommonEnum;
 import com.www.authorise.data.mapper.SysRoleMapper;
 import com.www.authorise.data.mapper.SysUserMapper;
-import com.www.myblog.common.pojo.UserDetailDTO;
+import com.www.common.pojo.UserDetailDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

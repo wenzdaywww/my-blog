@@ -3,10 +3,7 @@ package com.www.myblog.admin.service.user;
 import com.www.myblog.admin.data.dto.SysMenuDTO;
 import com.www.myblog.admin.data.dto.SysRoleDTO;
 import com.www.myblog.admin.data.dto.SysUserDTO;
-import com.www.myblog.admin.data.entity.SysRoleEntity;
-import com.www.myblog.admin.data.entity.SysUserEntity;
-import com.www.myblog.common.pojo.ResponseDTO;
-import org.springframework.web.bind.annotation.PostMapping;
+import com.www.common.pojo.ResponseDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

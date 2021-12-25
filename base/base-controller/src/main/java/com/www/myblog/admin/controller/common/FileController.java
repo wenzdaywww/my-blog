@@ -1,7 +1,7 @@
 package com.www.myblog.admin.controller.common;
 
-import com.www.myblog.common.pojo.ResponseDTO;
-import com.www.myblog.common.service.upload.IFileService;
+import com.www.common.pojo.ResponseDTO;
+import com.www.common.service.upload.IFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

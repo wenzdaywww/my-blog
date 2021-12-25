@@ -1,9 +1,8 @@
 package com.www.authorise.controller;
 
-import com.www.myblog.common.pojo.ResponseDTO;
-import com.www.myblog.common.pojo.TokenDTO;
-import com.www.myblog.common.utils.RedisUtils;
-import com.www.myblog.common.utils.TokenUtils;
+import com.www.common.pojo.ResponseDTO;
+import com.www.common.pojo.TokenDTO;
+import com.www.common.utils.RedisUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

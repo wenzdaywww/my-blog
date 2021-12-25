@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @EnableEurekaClient
-@ComponentScan(basePackages = {"com.www.myblog.common.utils","com.www.myblog.common.config.redis","com.www.authorise"}) //添加扫描包的路径
+@ComponentScan(basePackages = {"com.www.common.utils", "com.www.common.config.redis","com.www.authorise"}) //添加扫描包的路径
 public class UaaApplication {
     /**
      * <p>@Description 启动方法 </p>

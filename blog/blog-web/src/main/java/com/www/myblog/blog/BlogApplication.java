@@ -13,7 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @EnableEurekaClient
-@ComponentScan(basePackages = {"com.www.myblog.common","com.www.myblog.blog"}) //添加扫描包的路径
+@ComponentScan(basePackages = {"com.www.common","com.www.myblog.blog"}) //添加扫描包的路径
 public class BlogApplication {
     public static void main(String[] args) {
         //配置application加密的密钥

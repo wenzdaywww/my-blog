@@ -1,7 +1,7 @@
 package com.www.myblog.admin.service.oauth2;
 
-import com.www.myblog.common.config.oauth2.IOauth2Service;
-import com.www.myblog.common.pojo.ScopeDTO;
+import com.www.common.config.oauth2.IOauth2Service;
+import com.www.common.pojo.ScopeDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
