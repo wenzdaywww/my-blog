@@ -20,6 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("menu")
+@PreAuthorize("hasAnyAuthority('admin')")
 public class MenuController {
     @Autowired
     private IMenuInfoService menuInfoService;
@@ -61,7 +62,6 @@ public class MenuController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.SysMenuDTO>>
      */
     @GetMapping("all")
-    @PreAuthorize("hasAnyAuthority('admin')")
     public ResponseDTO<List<SysMenuDTO>> findAllMenu(String module,String menuType, String roleCode, String menuCode, String menuUrl,String vuePath, int pageNum, int pageSize){
         SysMenuDTO menuDTO = new SysMenuDTO();
         menuDTO.setModule(module);

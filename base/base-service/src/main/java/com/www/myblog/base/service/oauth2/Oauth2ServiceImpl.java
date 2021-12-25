@@ -25,10 +25,10 @@ public class Oauth2ServiceImpl implements IOauth2Service {
     public List<ScopeDTO> findUrlScope() {
         List<ScopeDTO> list = new ArrayList<>();
         ScopeDTO scopeDTO1 = new ScopeDTO();
-        scopeDTO1.setUrl("/menu/**").setScope("base:write,base:read");
+        scopeDTO1.setUrl("/menu/**").setScope("base:write,base:read,base:all");
         list.add(scopeDTO1);
         ScopeDTO scopeDTO2 = new ScopeDTO();
-        scopeDTO2.setUrl("/user/**").setScope("base:write,base:read");
+        scopeDTO2.setUrl("/user/**").setScope("base:write,base:read,base:all");
         list.add(scopeDTO2);
         return list;
     }

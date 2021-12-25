@@ -2,6 +2,7 @@ import axios from "axios";
 import qs from "qs";
 import router from '../router';
 import {ElMessage, ElMessageBox} from 'element-plus';
+import {getCurrentInstance} from "vue";
 //设置超时
 axios.defaults.timeout = 10000;
 axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded;charset=UTF-8";
@@ -16,20 +17,17 @@ axios.interceptors.request.use(
 );
 axios.interceptors.response.use(
     response => {
-        if (response.status == 200) {
-            //接口返回403则清除token
-            if(response.data && response.data.code === 403){
-                router.push("/login");//跳转登录页面
-            }
-            return Promise.resolve(response);
-        }else if(response.status == 403){
-            router.push("/login");
+        //接口返回403
+        if (response.status == 401) {
+            localStorage.clear();
+            router.push("/home");//跳转登录页面
         }else {
-            return Promise.reject(response);
+            return Promise.reject();
         }
     },
     error => {
         ElMessage.error("请求失败");
+        return Promise.reject();
     }
 );
 export default {
@@ -38,15 +36,15 @@ export default {
             axios({
                 method: 'post',
                 url,
-                data: qs.stringify(data),
+                data: qs.stringify(data)
             })
                 .then(res => {
-                    resolve(res.data)
+                    resolve(res.data);
                 })
                 .catch(err => {
-                    reject(err)
+                    reject(err);
                 });
-        })
+        });
     },
     upload(url, data,headers) {
         return new Promise((resolve, reject) => {
@@ -57,12 +55,12 @@ export default {
                 headers : headers
             })
                 .then(res => {
-                    resolve(res.data)
+                    resolve(res.data);
                 })
                 .catch(err => {
-                    reject(err)
+                    reject(err);
                 });
-        })
+        });
     },
     get(url,data) {
         return new Promise((resolve, reject) => {
@@ -72,11 +70,11 @@ export default {
                 params: data,
             })
                 .then(res => {
-                    resolve(res.data)
+                    resolve(res.data);
                 })
                 .catch(err => {
-                    reject(err)
+                    reject(err);
                 })
-        })
+        });
     }
 };

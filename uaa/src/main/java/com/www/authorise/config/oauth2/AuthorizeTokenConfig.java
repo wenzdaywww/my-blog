@@ -27,7 +27,7 @@ public class AuthorizeTokenConfig {
     @Bean
     public TokenStore tokenStore(){
         //使用jwt方式存储
-        return new JwtTokenStore(jwtAccessTokenConverter());
+        return new JwtTokenStore(Oauth2TokenConverter());
     }
     /**
      * <p>@Description 注册jwt对象 </p>
@@ -36,8 +36,8 @@ public class AuthorizeTokenConfig {
      * @return org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter
      */
     @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter(){
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+    public Oauth2TokenConverter Oauth2TokenConverter(){
+        Oauth2TokenConverter converter = new Oauth2TokenConverter();
         converter.setSigningKey(signingKey);
         return converter;
     }

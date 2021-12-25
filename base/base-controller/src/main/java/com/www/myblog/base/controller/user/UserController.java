@@ -20,6 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("user")
+@PreAuthorize("hasAnyAuthority('admin')")
 public class UserController {
     @Autowired
     private IUserInfoService userInfoService;
@@ -88,7 +89,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO<com.www.myblog.base.data.dto.SysUserDTO>
      */
     @GetMapping("info")
-    @PreAuthorize("hasAnyAuthority('user')")
+    @PreAuthorize("hasAnyAuthority('admin','user')")
     public ResponseDTO<SysUserDTO> findUser(String userId){
         return userInfoService.findUser(userId);
     }

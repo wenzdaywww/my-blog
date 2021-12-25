@@ -44,14 +44,20 @@ export default {
   setup() {
     // 接口请求
     const request = getCurrentInstance().appContext.config.globalProperties;
-    const items = ref([]);
+    const items = ref([
+      {
+
+      }
+    ]);
     // 获取菜单
     const getData = () => {
-      request.$http.get("api/base/user/menu", {userId:localStorage.getItem('userId')}).then(function (res) {
-        if(res.code === 200){
-          items.value = res.data;
-        }
-      });
+      if(localStorage.getItem('userId')){
+        // request.$http.get("api/base/user/menu", {userId:localStorage.getItem('userId')}).then(function (res) {
+        //   if(res.code === 200){
+        //     items.value = res.data;
+        //   }
+        // });
+      }
     };
     getData();
     // 路由

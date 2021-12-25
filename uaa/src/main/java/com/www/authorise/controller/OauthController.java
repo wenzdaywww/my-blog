@@ -1,8 +1,12 @@
 package com.www.authorise.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.www.authorise.config.oauth2.Oauth2TokenConverter;
 import com.www.common.pojo.ResponseDTO;
 import com.www.common.pojo.TokenDTO;
+import com.www.common.pojo.TokenInfoDTO;
 import com.www.common.utils.RedisUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,17 +26,23 @@ import java.util.Map;
  * <p>@Author www </p>
  * <p>@Date 2021/12/19 23:36 </p>
  */
+@Slf4j
 @RestController
-@RequestMapping("oauth")
 public class OauthController {
-    /** redis的key前缀 **/
-    private static String PREFIX = "oauth2_token";
     /** redis的key分隔符 **/
-    private static String SEPARATOR = ":";
+    private static final String SEPARATOR = ":";
+    /** redis的key前缀 **/
+    private static final String PREFIX = "oauth2_token" + SEPARATOR;
     /** oauth/token请求的username **/
-    private static String USERNAME = "username";
+    private static final String USERNAME = "username";
+    /** 保存到cookie的access_token的key **/
+    private static final String COOKIES_ACCESS_TOKEN = "access_token";
+    /** 保存到cookie的refresh_token的key **/
+    private static final String COOKIES_REFRESH_TOKEN = "refresh_token";
     @Autowired
     private TokenEndpoint tokenEndpoint;
+    @Autowired
+    private Oauth2TokenConverter oauth2TokenConverter;
 
     /**
      * <p>@Description 重写oauth/token的get请求 </p>
@@ -42,7 +52,7 @@ public class OauthController {
      * @param parameters
      * @return com.www.authorise.data.dto.ResponseDTO<java.util.Map>
      */
-    @GetMapping("/token")
+    @GetMapping("oauth/token")
     public ResponseDTO<TokenDTO> tokenGet(HttpServletResponse response, Principal principal, @RequestParam Map<String, String> parameters) throws Exception {
         return tokenPost(response,principal,parameters);
     }
@@ -54,7 +64,7 @@ public class OauthController {
      * @param parameters
      * @return com.www.authorise.data.dto.ResponseDTO<java.util.Map>
      */
-    @PostMapping("/token")
+    @PostMapping("oauth/token")
     public ResponseDTO<TokenDTO> tokenPost(HttpServletResponse response, Principal principal, @RequestParam Map<String, String> parameters) throws Exception  {
         ResponseDTO<TokenDTO> responseDTO = new ResponseDTO<>();
         ResponseEntity<OAuth2AccessToken> accessToken = tokenEndpoint.postAccessToken(principal, parameters);
@@ -65,20 +75,29 @@ public class OauthController {
         tokenDTO.setTokenType(accessToken.getBody().getTokenType());
         tokenDTO.setExpiresSeconds(accessToken.getBody().getExpiresIn());
         tokenDTO.setScope(accessToken.getBody().getScope());
+        //解析token信息
+        TokenInfoDTO tokenInfoDTO = oauth2TokenConverter.decodeToken(tokenDTO.getAccessToken());
+        tokenDTO.setUserId(tokenInfoDTO != null ? tokenInfoDTO.getUser_name() : null);
         //将token保存到cookie中
-        Cookie cookie = new Cookie("access_token",tokenDTO.getAccessToken());
-        cookie.setMaxAge(tokenDTO.getExpiresSeconds());
-        response.addCookie(cookie);
+        Cookie tokenCookie = new Cookie(COOKIES_ACCESS_TOKEN,tokenDTO.getAccessToken());
+        tokenCookie.setMaxAge(tokenDTO.getExpiresSeconds());
+        response.addCookie(tokenCookie);
+        // 有刷新令牌则也保存到cookie中
+        if(tokenDTO.getRefreshToken() != null){
+            Cookie refreshCookie = new Cookie(COOKIES_REFRESH_TOKEN,tokenDTO.getRefreshToken());
+            response.addCookie(refreshCookie);
+        }
         responseDTO.setResponseCode(ResponseDTO.RespEnum.SUCCESS,tokenDTO);
         //将token保存到redis中
-        String key = PREFIX + SEPARATOR + parameters.get(OAuth2Utils.CLIENT_ID) + SEPARATOR + parameters.get(OAuth2Utils.GRANT_TYPE);
+        String key = PREFIX + parameters.get(OAuth2Utils.CLIENT_ID) + SEPARATOR + parameters.get(OAuth2Utils.GRANT_TYPE);
         if(StringUtils.isNotBlank(parameters.get(OAuth2Utils.SCOPE))){
             key += SEPARATOR + parameters.get(OAuth2Utils.SCOPE);
         }
         if(StringUtils.isNotBlank(parameters.get(USERNAME))){
             key += SEPARATOR + parameters.get(USERNAME);
         }
-        RedisUtils.set(key,tokenDTO.getAccessToken(),tokenDTO.getExpiresSeconds());
+//        RedisUtils.set(key,tokenDTO.getAccessToken(),tokenDTO.getExpiresSeconds());
+        log.info("=====> oauth/token返回的token信息：{}", JSON.toJSONString(tokenDTO));
         return responseDTO;
     }
 }

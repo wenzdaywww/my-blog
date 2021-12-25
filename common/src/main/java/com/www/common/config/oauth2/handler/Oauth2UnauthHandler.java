@@ -40,7 +40,7 @@ public class Oauth2UnauthHandler implements AccessDeniedHandler {
         TokenInfoDTO tokenDTO = jwtTokenConverter.decodeToken(token);
         log.info("=====> 3、请求的角色拒绝访问，角色权限信息：{}，拒绝原因：{}",JSON.toJSONString(tokenDTO),e.getMessage());
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.FORBIDDEN,e.getMessage());
-        httpServletResponse.setStatus(403);
+        httpServletResponse.setStatus(ResponseDTO.RespEnum.UNAUTHORIZED.getCode());
         httpServletResponse.setContentType("application/json;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(responseDTO));
     }

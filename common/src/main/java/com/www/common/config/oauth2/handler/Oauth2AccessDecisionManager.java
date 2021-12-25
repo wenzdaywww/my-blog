@@ -43,14 +43,12 @@ public class Oauth2AccessDecisionManager implements AccessDecisionManager {
                 String needScope = ca.getAttribute();//当前请求需要的scope权限
                 //当前角色拥有scope范围
                 Collection<String> scopeList = oAuth2Authentication.getOAuth2Request().getScope();
-                if(CollectionUtils.isEmpty(scopeList)){
-                    log.info("=====> 2.1、当前URL访问scope范围验证-无访问范围权限");
-                    throw new AccessDeniedException("无访问范围权限");
-                }
-                for (String scope : scopeList){
-                    if(StringUtils.equals(needScope,scope)){
-                        log.info("=====> 2.2、当前URL访问scope范围验证-访问范围权限验证通过");
-                        return;
+                if(CollectionUtils.isNotEmpty(scopeList)){
+                    for (String scope : scopeList){
+                        if(StringUtils.equals(needScope,scope)){
+                            log.info("=====> 2.1、当前URL访问scope范围验证-访问范围权限验证通过");
+                            return;
+                        }
                     }
                 }
             }

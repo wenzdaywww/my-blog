@@ -14,9 +14,10 @@
     <h4>授权后表明您已同意</h4>
     <form method="post" action="/oauth/authorize">
         <input type="hidden" name="user_oauth_approval" value="true">
-        <div th:each="item:${scopes}">
-            <input type="radio" th:name="'scope.'+${item}" value="true" checked>同意
-            <input type="radio" th:name="'scope.'+${item}" value="false" >拒绝
+        <input type="hidden" name="user_scope" th:value="${scopes}">
+        <div>
+            <input type="radio" name="select" value="true" checked>同意
+            <input type="radio" name="select" value="false" >拒绝
         </div>
         <input name="authorize" value="确定" type="submit" class="authorize">
     </form>

@@ -2,22 +2,29 @@ import {createStore} from 'vuex'
 
 export default createStore({
     state: {
-        tagsList: [],
-        routerList : [],
-        collapse: false
+        tagsList: [], //标签栏信息
+        routerList : [], //用户拥有的router信息
+        collapse: false //侧边栏是否收缩
     },
     mutations: {
+        //设置用户是否登录
+        setIsLogin(data){
+            state.isLogin = data;
+        },
+        //设置用户ID
+        setUserId(data){
+            state.userId = data;
+        },
+        // 添加router
         setRouter(data){
-            this.state.routerList = data;
+            state.routerList = data;
         },
         delTagsItem(state, data) {
-            state
-                .tagsList
+            state.tagsList
                 .splice(data.index, 1);
         },
         setTagsItem(state, data) {
-            state
-                .tagsList
+            state.tagsList
                 .push(data)
         },
         clearTags(state) {
@@ -31,21 +38,13 @@ export default createStore({
                 const item = state.tagsList[i];
                 if (item.path === data.$route.fullPath) {
                     if (i < len - 1) {
-                        data
-                            .$router
-                            .push(state.tagsList[i + 1].path);
+                        data.$router.push(state.tagsList[i + 1].path);
                     } else if (i > 0) {
-                        data
-                            .$router
-                            .push(state.tagsList[i - 1].path);
+                        data.$router.push(state.tagsList[i - 1].path);
                     } else {
-                        data
-                            .$router
-                            .push("/");
+                        data.$router.push("/");
                     }
-                    state
-                        .tagsList
-                        .splice(i, 1);
+                    statetagsList.splice(i, 1);
                     break;
                 }
             }

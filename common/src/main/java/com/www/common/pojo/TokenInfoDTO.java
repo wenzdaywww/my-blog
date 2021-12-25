@@ -20,7 +20,7 @@ public class TokenInfoDTO {
     private String user_name;
     /** 授权范围 **/
     private ArrayList<String> scope;
-    /** 授权范围 **/
+    /** resouceId **/
     private ArrayList<String> aud;
     /** 令牌剩余有效时间 **/
     private long exp;

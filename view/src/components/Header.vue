@@ -7,7 +7,12 @@
     </div>
     <div class="logo">{{form.userId}}</div>
     <div class="header-right">
-      <div class="header-user-con">
+      <!-- 未登录 -->
+      <div v-if="isLogin == false" style="margin-top: 20px">
+        <el-link type="danger" :href="loginUrl">登录/注册</el-link>
+      </div>
+      <!-- 已登录 -->
+      <div class="header-user-con" v-if="isLogin == true">
         <!-- 消息中心 -->
         <div class="btn-bell">
           <el-tooltip effect="dark" :content="form.message?`有${form.message}条未读消息`:`消息中心`" placement="bottom">
@@ -33,7 +38,7 @@
         </el-dropdown>
       </div>
       <!-- 修改密码弹出框 -->
-      <el-dialog title="修改密码" v-model="editVisible" width="20%">
+      <el-dialog title="修改密码" v-model="editVisible" width="20%" v-if="isLogin == true">
         <el-form label-width="120px" :model="form" :rules="editRules" ref="editForm">
           <el-form-item label="旧密码：" prop="password">
             <el-input type="password" v-model="form.password" maxlength="20" placeholder="请输入旧密码"></el-input>
@@ -59,15 +64,24 @@
 import {computed, getCurrentInstance, onMounted, reactive, ref} from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import utils from '../utils/utils';
 import {ElMessage} from "element-plus";
 
 export default {
   setup() {
+    //uaa返回的地址
+    const redirect_uri = location.origin+"/home";
+    //登录地址
+    const loginUrl =  "http://localhost:8003/oauth/authorize?client_id=my-base&response_type=code&redirect_uri="+redirect_uri;
     // 接口请求
     const request = getCurrentInstance().appContext.config.globalProperties;
     // 路由
     const router = useRouter();
+    //store存储对象
     const store = useStore();
+    // 是否已登录
+    const isLogin = ref(false);
+    //侧边栏是否收缩
     const collapse = computed(() => store.state.collapse);
     //修改密码弹出框控制位
     const editVisible = ref(false);
@@ -75,7 +89,7 @@ export default {
     const editForm = ref(null);
     // 表单数据
     let form = reactive({
-      userId: localStorage.getItem("userId"),
+      userId: "",
       newPassWord: "",
       cfmPassWord: "",
       password : "",
@@ -100,7 +114,6 @@ export default {
             if (value){
               if (value !== form.newPassWord) {
                 return true
-              }else{
               }
             }
           }
@@ -117,8 +130,30 @@ export default {
         collapseChage();
       }
     });
+    //获取token
+    const getToken = () => {
+      if (localStorage.getItem("userId")){
+        isLogin.value = true;
+      }else{
+        const code = utils.getUrlParam("code");
+        if(code){
+          request.$http.post("api/uaa/oauth/token", {
+            client_id: 'my-base',
+            client_secret: 'wenzday',
+            grant_type: 'authorization_code',
+            code: code,
+            redirect_uri: redirect_uri
+          }).then(function (res) {
+            console.log(res);
+            //TODO 2021/12/25 23:37 请求成功却报错，待处理
+            // localStorage.setItem("userId",res.data.userId);
+          });
+        }
+      }
+    };
+    getToken();
     // 获取用户数据
-    const getData = () => {
+    const getUserData = () => {
       request.$http.get("api/base/user/info",form).then(function (res) {
         if(res.code === 200){
           if(res.data.photo){
@@ -127,22 +162,11 @@ export default {
         }
       });
     };
-    getData();
     // 用户头像点击方法
     const handleCommand = (command) => {
       // 退出
       if (command == "loginout") {
-        request.$http.post("api/base/logout",null).then(function (res) {
-          if(res.code === 200){
-            localStorage.setItem('userId',null);
-            ElMessage.success("退出成功");
-            router.push("/login");
-          }else {
-            ElMessage.error(res.data);
-          }
-        }).catch(function (res) {
-          ElMessage.error("退出失败");
-        });
+
       } else if (command == "user") { // 个人中心
         router.push("/user");
       } else if (command == "pwd") { // 修改密码
@@ -169,13 +193,17 @@ export default {
         }
       });
     };
-    return { form,editVisible,editForm,editRules, collapse,
+    return { loginUrl,isLogin,form,editVisible,editForm,editRules, collapse,
       collapseChage, handleCommand,savePwd
     };
   }
 };
 </script>
 <style scoped>
+.i-login{
+  color: white;
+  font-size: 18px;
+}
 .header {
   position: relative;
   box-sizing: border-box;

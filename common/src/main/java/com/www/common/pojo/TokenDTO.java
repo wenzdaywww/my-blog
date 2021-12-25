@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * <p>@Description 令牌信息DTO </p>
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 @Data
 @Accessors(chain = true)//开启链式编程
 public class TokenDTO {
+    /** 用户ID **/
+    private String userId;
     /** token令牌 **/
     private String accessToken;
     /** 刷洗后的token **/
@@ -23,5 +26,5 @@ public class TokenDTO {
     /** 令牌有效时间 **/
     private int expiresSeconds;
     /** 授权范围 **/
-    private ArrayList<String> scope;
+    private Set<String> scope;
 }

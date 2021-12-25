@@ -11,8 +11,8 @@ spring:
 #zuul路由网关配置
 zuul:
   host:
-    connect-timeout-millis: 3000
-    socket-timeout-millis:  3000
+    connect-timeout-millis: 30000
+    socket-timeout-millis:  30000
   routes:
     #设置统一认证授权服务路径
     my-uaa.serviceId: uaa
