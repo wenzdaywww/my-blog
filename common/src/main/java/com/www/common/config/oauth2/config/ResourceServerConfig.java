@@ -1,9 +1,6 @@
 package com.www.common.config.oauth2.config;
 
-import com.www.common.config.oauth2.handler.Oauth2AccessDecisionManager;
-import com.www.common.config.oauth2.handler.Oauth2AuthRejectHandler;
-import com.www.common.config.oauth2.handler.Oauth2MetadataSource;
-import com.www.common.config.oauth2.handler.Oauth2UnauthHandler;
+import com.www.common.config.oauth2.handler.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,6 +56,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         //先认证失败在拒绝方法
         resources.authenticationEntryPoint(oauth2AuthRejectHandler);//认证失败时的异常处理
         resources.accessDeniedHandler(oauth2UnauthHandler);//拒绝访问异常处理
+        resources.tokenExtractor(new Oauth2Extractor());//自定义token获取器
     }
     /**
      * <p>@Description 配置用户的安全拦截策略 </p>

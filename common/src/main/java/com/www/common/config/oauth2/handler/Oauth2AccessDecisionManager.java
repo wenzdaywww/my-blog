@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -34,7 +35,6 @@ public class Oauth2AccessDecisionManager implements AccessDecisionManager {
      */
     @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
-        log.info("=====> 2、当前URL访问scope范围验证");
         if(authentication instanceof OAuth2Authentication){
             OAuth2Authentication oAuth2Authentication = (OAuth2Authentication) authentication;
             Iterator<ConfigAttribute> iterator = collection.iterator();
@@ -46,15 +46,18 @@ public class Oauth2AccessDecisionManager implements AccessDecisionManager {
                 if(CollectionUtils.isNotEmpty(scopeList)){
                     for (String scope : scopeList){
                         if(StringUtils.equals(needScope,scope)){
-                            log.info("=====> 2.1、当前URL访问scope范围验证-访问范围权限验证通过");
+                            log.info("=====> 3、当前URL访问scope范围验证-访问范围权限验证通过");
                             return;
                         }
                     }
                 }
             }
             //用户拥有的角色统一在方法上使用@PreAuthorize注解校验
-            log.info("=====> 2.1、当前URL访问scope范围验证-无访问范围权限");
+            log.info("=====> 3、当前URL访问scope范围验证-无访问范围权限");
             throw new AccessDeniedException("无访问范围权限");
+        }else if(authentication instanceof AnonymousAuthenticationToken){
+            log.info("=====> 3、当前URL访问scope范围验证-匿名无访问范围权限");
+            throw new AccessDeniedException("匿名无访问范围权限");
         }
     }
 

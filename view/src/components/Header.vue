@@ -66,6 +66,7 @@ import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import utils from '../utils/utils';
 import {ElMessage} from "element-plus";
+import router, {initUserRouter} from "../router";
 
 export default {
   setup() {
@@ -95,6 +96,14 @@ export default {
       password : "",
       photo : "src/assets/img/img.jpg",
       message : 0
+    });
+    // token数据
+    let token = reactive({
+      client_id: 'my-base',
+      client_secret: 'wenzday',
+      grant_type: 'authorization_code',
+      code: '',
+      redirect_uri: redirect_uri
     });
     // 修改密码的规则校验
     const editRules = {
@@ -130,38 +139,43 @@ export default {
         collapseChage();
       }
     });
-    //获取token
-    const getToken = () => {
-      if (localStorage.getItem("userId")){
-        isLogin.value = true;
-      }else{
-        const code = utils.getUrlParam("code");
-        if(code){
-          request.$http.post("api/uaa/oauth/token", {
-            client_id: 'my-base',
-            client_secret: 'wenzday',
-            grant_type: 'authorization_code',
-            code: code,
-            redirect_uri: redirect_uri
-          }).then(function (res) {
-            console.log(res);
-            //TODO 2021/12/25 23:37 请求成功却报错，待处理
-            // localStorage.setItem("userId",res.data.userId);
-          });
-        }
-      }
-    };
-    getToken();
     // 获取用户数据
-    const getUserData = () => {
-      request.$http.get("api/base/user/info",form).then(function (res) {
+    const getUserData = (userId) => {
+      request.$http.get("api/base/user/info", {userId : userId}).then(function (res) {
         if(res.code === 200){
+          localStorage.setItem("userId",res.data.userId);
+          isLogin.value = true;
+          form.userId = res.data.userId;
           if(res.data.photo){
             form.photo = "api/base" + res.data.photo;
           }
         }
       });
     };
+    //获取token
+    const getToken = () => {
+      if (localStorage.getItem("userId")){
+        isLogin.value = true;
+        //加载用户拥有的路由权限
+        request.$http.get("api/base/user/router", {userId : localStorage.getItem("userId")}).then(function (res) {
+          if(res.code === 200){
+            initUserRouter(res.data);
+          }
+        });
+        getUserData(localStorage.getItem("userId"));
+      }else{
+        isLogin.value = false;
+        const code = utils.getUrlParam("code");
+        if(code){
+          token.code = code;
+          request.$http.post("api/uaa/oauth/token", token).then(function (res) {
+            localStorage.setItem("userId",res.data.userId);
+            router.go(0);//重新跳转当前页面
+          });
+        }
+      }
+    };
+    getToken();
     // 用户头像点击方法
     const handleCommand = (command) => {
       // 退出

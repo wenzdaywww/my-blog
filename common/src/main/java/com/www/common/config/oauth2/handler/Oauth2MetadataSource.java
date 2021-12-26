@@ -40,7 +40,7 @@ public class Oauth2MetadataSource implements FilterInvocationSecurityMetadataSou
      */
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
-        log.info("=====> 1、配置URL可访问的scope范围");
+        log.info("=====> 2、配置URL可访问的scope范围");
         String requestURL = ((FilterInvocation)o).getRequestUrl();
         //查询当前资源服务器的请求路径允许的scope范围
         List<ScopeDTO> urlScopeList = oauth2Service.findUrlScope();

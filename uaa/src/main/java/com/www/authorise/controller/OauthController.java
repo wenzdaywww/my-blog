@@ -81,10 +81,12 @@ public class OauthController {
         //将token保存到cookie中
         Cookie tokenCookie = new Cookie(COOKIES_ACCESS_TOKEN,tokenDTO.getAccessToken());
         tokenCookie.setMaxAge(tokenDTO.getExpiresSeconds());
+        tokenCookie.setPath("/");
         response.addCookie(tokenCookie);
         // 有刷新令牌则也保存到cookie中
         if(tokenDTO.getRefreshToken() != null){
             Cookie refreshCookie = new Cookie(COOKIES_REFRESH_TOKEN,tokenDTO.getRefreshToken());
+            refreshCookie.setPath("/");
             response.addCookie(refreshCookie);
         }
         responseDTO.setResponseCode(ResponseDTO.RespEnum.SUCCESS,tokenDTO);

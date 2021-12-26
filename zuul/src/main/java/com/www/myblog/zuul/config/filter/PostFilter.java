@@ -1,5 +1,6 @@
 package com.www.myblog.zuul.config.filter;
 
+import com.alibaba.fastjson.JSON;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
@@ -81,15 +82,15 @@ public class PostFilter extends ZuulFilter {
         ctx.setSendZuulResponse(true);
         ctx.setResponseStatusCode(200);
         // 转发headers信息
-        Enumeration<String> headerNames = request.getHeaderNames();
-        if (headerNames != null) {
-            while (headerNames.hasMoreElements()) {
-                String name = headerNames.nextElement();
-                String values = request.getHeader(name);
-                ctx.addZuulRequestHeader(name, values);
-//                log.info("post的headers => {}={}",name,values);
-            }
-        }
+//        Enumeration<String> headerNames = request.getHeaderNames();
+//        if (headerNames != null) {
+//            while (headerNames.hasMoreElements()) {
+//                String name = headerNames.nextElement();
+//                String values = request.getHeader(name);
+//                ctx.addZuulRequestHeader(name, values);
+////                log.info("post的headers => {}={}",name,values);
+//            }
+//        }
         return null;
     }
 }

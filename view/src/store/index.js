@@ -7,14 +7,6 @@ export default createStore({
         collapse: false //侧边栏是否收缩
     },
     mutations: {
-        //设置用户是否登录
-        setIsLogin(data){
-            state.isLogin = data;
-        },
-        //设置用户ID
-        setUserId(data){
-            state.userId = data;
-        },
         // 添加router
         setRouter(data){
             state.routerList = data;

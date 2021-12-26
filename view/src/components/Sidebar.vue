@@ -44,19 +44,19 @@ export default {
   setup() {
     // 接口请求
     const request = getCurrentInstance().appContext.config.globalProperties;
-    const items = ref([
-      {
-
-      }
-    ]);
+    const items = ref([{
+      menuUrl: '/home',
+      menuName: '首页',
+      menuIcon: 'el-icon-lx-home'
+    }]);
     // 获取菜单
     const getData = () => {
       if(localStorage.getItem('userId')){
-        // request.$http.get("api/base/user/menu", {userId:localStorage.getItem('userId')}).then(function (res) {
-        //   if(res.code === 200){
-        //     items.value = res.data;
-        //   }
-        // });
+        request.$http.get("api/base/user/menu", {userId:localStorage.getItem('userId')}).then(function (res) {
+          if(res.code === 200){
+            items.value = res.data;
+          }
+        });
       }
     };
     getData();

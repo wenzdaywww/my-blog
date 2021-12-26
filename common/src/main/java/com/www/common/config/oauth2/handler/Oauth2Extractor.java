@@ -1,0 +1,48 @@
+package com.www.common.config.oauth2.handler;
+
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.provider.authentication.BearerTokenExtractor;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.web.util.WebUtils;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
+/**
+ * <p>@Description 自定义token获取器 </p>
+ * <p>@Version 1.0 </p>
+ * <p>@Author www </p>
+ * <p>@Date 2021/12/26 16:14 </p>
+ */
+@Slf4j
+public class Oauth2Extractor extends BearerTokenExtractor {
+    /** 保存到cookie的access_token的key **/
+    private static final String COOKIES_ACCESS_TOKEN = "access_token";
+    /**
+     * <p>@Description 设置token获取方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/26 16:32 </p>
+     * @param request 请求
+     * @return org.springframework.security.core.Authentication
+     */
+    @Override
+    public Authentication extract(HttpServletRequest request) {
+        //token获取优先级
+        //1、从请求头header中获取Authorization参数值，参数值必须是【Bearer 】开头
+        //2、从请求参数中获取access_token的参数值
+        String tokenValue = super.extractToken(request);
+        //3、从cookie中获取access_token
+        if(StringUtils.isBlank(tokenValue)){
+            Cookie tokenCookie = WebUtils.getCookie(request,COOKIES_ACCESS_TOKEN);
+            tokenValue = tokenCookie != null ? tokenCookie.getValue() : null;
+        }
+        log.info("=====> 1、获取请求中的token");
+        if (tokenValue != null) {
+            PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(tokenValue, "");
+            return authentication;
+        }
+        return null;
+    }
+}

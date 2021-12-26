@@ -18,9 +18,12 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     response => {
         //接口返回403
-        if (response.status == 401) {
+        if ((response.data && (response.data.code == 401 || response.data.code == 403)) || response.status == 401 || response.status == 403) {
             localStorage.clear();
-            router.push("/home");//跳转登录页面
+            router.push("/home?" + new Date().getTime());//跳转登录页面
+            // router.go(0);//重新跳转当前页面
+        }else if(response.status == 200){
+            return Promise.resolve(response);
         }else {
             return Promise.reject();
         }
@@ -39,7 +42,9 @@ export default {
                 data: qs.stringify(data)
             })
                 .then(res => {
-                    resolve(res.data);
+                    if(res && res.data){
+                        resolve(res.data);
+                    }
                 })
                 .catch(err => {
                     reject(err);
@@ -55,7 +60,9 @@ export default {
                 headers : headers
             })
                 .then(res => {
-                    resolve(res.data);
+                    if(res && res.data){
+                        resolve(res.data);
+                    }
                 })
                 .catch(err => {
                     reject(err);
@@ -70,7 +77,9 @@ export default {
                 params: data,
             })
                 .then(res => {
-                    resolve(res.data);
+                    if(res && res.data){
+                        resolve(res.data);
+                    }
                 })
                 .catch(err => {
                     reject(err);
