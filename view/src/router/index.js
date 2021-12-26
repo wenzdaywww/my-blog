@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 import Home from "../views/admin/Home.vue";
-const modules = import.meta.glob("../views/**/**.vue");
+import {getCurrentInstance} from "vue";
+const modules = import.meta.glob("../views/**/**.vue");// 接口请求
 //主页路由
 let homeRouter = {
     path: "/",

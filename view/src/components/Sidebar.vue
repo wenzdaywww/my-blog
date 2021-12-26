@@ -42,6 +42,10 @@ import { useRoute } from "vue-router";
 
 export default {
   setup() {
+    // 路由
+    const router = useRoute();
+    const store = useStore();
+    const collapse = computed(() => store.state.collapse);
     // 接口请求
     const request = getCurrentInstance().appContext.config.globalProperties;
     const items = ref([{
@@ -60,14 +64,10 @@ export default {
       }
     };
     getData();
-    // 路由
-    const router = useRoute();
+
     const onRoutes = computed(() => {
       return router.path;
     });
-    const store = useStore();
-    const collapse = computed(() => store.state.collapse);
-
     return {
       items,
       onRoutes,

@@ -41,7 +41,7 @@
         <el-table-column prop="menuOrder" label="菜单序号" align="center"></el-table-column>
         <el-table-column prop="menuType" label="菜单类型" align="center">
           <template #default="scope">
-            {{ scope.row.menuType === '1' ? '页面菜单' : '请求路径'}}
+            {{ scope.row.menuType === '1' ? '页面菜单' : (scope.row.menuType === '2' ? '请求路径' : 'VUE路由')}}
           </template>
         </el-table-column>
         <el-table-column prop="module" label="菜单归属模块" align="center"></el-table-column>
@@ -136,6 +136,7 @@
             <el-form-item label="菜单类型：" prop="menuType">
               <el-radio v-model="form.menuType" label="1" style="width: 125px;">页面菜单</el-radio>
               <el-radio v-model="form.menuType" label="2" style="width: 125px;">请求路径</el-radio>
+              <el-radio v-model="form.menuType" label="3" style="width: 125px;">VUE路由</el-radio>
             </el-form-item>
           </el-col>
           <el-col :span="100">

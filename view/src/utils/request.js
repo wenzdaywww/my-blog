@@ -21,7 +21,6 @@ axios.interceptors.response.use(
         if ((response.data && (response.data.code == 401 || response.data.code == 403)) || response.status == 401 || response.status == 403) {
             localStorage.clear();
             router.push("/home?" + new Date().getTime());//跳转登录页面
-            // router.go(0);//重新跳转当前页面
         }else if(response.status == 200){
             return Promise.resolve(response);
         }else {

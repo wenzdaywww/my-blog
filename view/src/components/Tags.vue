@@ -93,10 +93,10 @@ export default {
         };
 
         // 关闭当前页面的标签页
-        // store.commit("closeCurrentTag", {
-        //     $router: router,
-        //     $route: route
-        // });
+        store.commit("closeCurrentTag", {
+            $router: router,
+            $route: route
+        });
 
         return {
             isActive,

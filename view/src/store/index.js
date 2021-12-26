@@ -36,7 +36,7 @@ export default createStore({
                     } else {
                         data.$router.push("/");
                     }
-                    statetagsList.splice(i, 1);
+                    // statetagsList.splice(i, 1);
                     break;
                 }
             }
