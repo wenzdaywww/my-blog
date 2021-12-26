@@ -1,6 +1,6 @@
 package com.www.common.config.oauth2;
 
-import com.www.common.pojo.ScopeDTO;
+import com.www.common.pojo.dto.ScopeDTO;
 
 import java.util.List;
 

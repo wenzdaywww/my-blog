@@ -2,6 +2,7 @@ package com.www.myblog.base.data.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.www.common.pojo.dto.ScopeDTO;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysRoleMenuDTO;
 import com.www.myblog.base.data.entity.SysMenuEntity;
@@ -18,6 +19,14 @@ import java.util.List;
  */
 @Mapper
 public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
+    /**
+     * <p>@Description 查询资源服务器的请求路径允许的scope范围 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/26 22:28 </p>
+     * @param resourceId 资源服务器ID
+     * @return java.util.List<com.www.common.pojo.ScopeDTO>
+     */
+    List<ScopeDTO> findUrlScopes(@Param("resourceId") String resourceId);
     /**
      * <p>@Description 查询所有菜单 </p>
      * <p>@Author www </p>

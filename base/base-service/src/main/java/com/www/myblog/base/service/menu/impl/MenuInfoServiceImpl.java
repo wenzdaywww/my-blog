@@ -2,6 +2,8 @@ package com.www.myblog.base.service.menu.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.www.common.pojo.constants.RedisCommonContant;
+import com.www.common.pojo.dto.ScopeDTO;
 import com.www.myblog.base.data.constants.RedisKeyConstant;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysRoleMenuDTO;
@@ -14,8 +16,8 @@ import com.www.myblog.base.data.mapper.SysRoleMenuMapper;
 import com.www.myblog.base.service.entity.ISysRoleMenuService;
 import com.www.myblog.base.service.entity.ISysRoleService;
 import com.www.myblog.base.service.menu.IMenuInfoService;
-import com.www.common.pojo.AuthorityDTO;
-import com.www.common.pojo.ResponseDTO;
+import com.www.common.pojo.dto.AuthorityDTO;
+import com.www.common.pojo.dto.ResponseDTO;
 import com.www.common.utils.DateUtils;
 import com.www.common.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +59,10 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
      */
     @Override
     public ResponseDTO<String> deleteMenu(Long menuId) {
+        SysMenuEntity menuEntity = sysMenuMapper.selectById(menuId);
+        if(menuEntity != null){
+            return new ResponseDTO<>(ResponseDTO.RespEnum.FAIL,"删除菜单失败，菜单不存在");
+        }
         QueryWrapper<SysMenuEntity> menuWrapper = new QueryWrapper<>();
         menuWrapper.lambda().eq(SysMenuEntity::getMenuId,menuId);
         sysMenuMapper.delete(menuWrapper);
@@ -64,7 +70,9 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         roleWrapper.lambda().eq(SysRoleMenuEntity::getMenuId,menuId);
         int count = sysRoleMenuMapper.delete(roleWrapper);
         if(count != 0){
-            this.updateRedisAuthority();
+            if(StringUtils.equals(menuEntity.getMenuType(),CommonEnum.MENU_TYPE_2.getCode())){
+                this.updateRedisUrlScope(menuEntity.getModule());
+            }
             return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,"删除菜单成功");
         }else {
             return new ResponseDTO<>(ResponseDTO.RespEnum.FAIL,"删除菜单失败");
@@ -191,33 +199,31 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         }
         //编辑的菜单是权限菜单，则需要更新redis中的权限菜单信息
         if(StringUtils.equals(menu.getMenuType(),CommonEnum.MENU_TYPE_2.getCode())){
-            this.updateRedisAuthority();
+            this.updateRedisUrlScope(menu.getModule());
         }
         responseDTO.setResponseCode(ResponseDTO.RespEnum.SUCCESS,"更新菜单成功");
         return responseDTO;
     }
     /**
-     * <p>@Description 编辑的菜单是权限菜单，则需要更新redis中的权限菜单信息 </p>
+     * <p>@Description 编辑/删除的菜单是请求路径，则需要更新redis中的请求路径 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/15 21:07 </p>
+     * @param resourceId 资源服务ID
      * @return
      */
-    private void updateRedisAuthority(){
+    private void updateRedisUrlScope(String resourceId){
         boolean isWait = true; //是否等待获取分布式锁
         String value = UUID.randomUUID().toString();
         while (isWait){
             try {
-                if(RedisUtils.lock(RedisKeyConstant.AUTHORITY_MENU_LOCK, value)){
+                if(RedisUtils.lock(RedisKeyConstant.URL_SCOPE_LOCK, value)){
                     isWait = false;
-                    RedisUtils.deleteKey(RedisKeyConstant.AUTHORITY_MENU);
-                    List<SysRoleMenuDTO> menuList = sysMenuMapper.findAllSecurityMenu("admin-security");
-                    if(CollectionUtils.isNotEmpty(menuList)){
-                        for (SysRoleMenuDTO menuDTO : menuList){
-                            AuthorityDTO authDTO = new AuthorityDTO();
-                            authDTO.setUrl(menuDTO.getMenuUrl());
-                            authDTO.setRole(menuDTO.getRoleCode());
-                            //将所有请求权限保存到redis中
-                            RedisUtils.listSet(RedisKeyConstant.AUTHORITY_MENU,authDTO);
+                    RedisUtils.deleteKey(RedisCommonContant.URL_SCOPE_PREFIX + resourceId);
+                    List<ScopeDTO> scopeList = sysMenuMapper.findUrlScopes(resourceId);
+                    if(CollectionUtils.isNotEmpty(scopeList)){
+                        for (ScopeDTO scopeDTO : scopeList){
+                            //资源服务ID的url的scope保存到redis中
+                            RedisUtils.listSet(RedisCommonContant.URL_SCOPE_PREFIX + resourceId,scopeDTO);
                         }
                     }
                 }
@@ -225,7 +231,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
                 log.info("查所询有请求权限，发生异常：{}",e.getMessage());
             }finally {
                 // 释放锁
-                RedisUtils.unlock(RedisKeyConstant.AUTHORITY_MENU_LOCK,value);
+                RedisUtils.unlock(RedisKeyConstant.URL_SCOPE_LOCK,value);
             }
         }
     }

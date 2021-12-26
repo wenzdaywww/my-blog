@@ -1,6 +1,6 @@
 package com.www.common.service.upload.impl;
 
-import com.www.common.pojo.ResponseDTO;
+import com.www.common.pojo.dto.ResponseDTO;
 import com.www.common.service.upload.IFileService;
 import com.www.common.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;

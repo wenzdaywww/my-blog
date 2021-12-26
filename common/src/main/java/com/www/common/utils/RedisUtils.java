@@ -1,10 +1,12 @@
 package com.www.common.utils;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -44,6 +46,20 @@ public final class RedisUtils {
      */
     public static boolean deleteKey(String key){
         return redisTemplate.delete(key);
+    }
+    /**
+     * <p>@Description 删除模糊key名 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/11/17 20:56 </p>
+     * @param key 模糊键
+     * @return boolean true删除成功，false失败
+     */
+    public static boolean deleteFuzzyKey(String key){
+        Set<String> keys = redisTemplate.keys(key);
+        if(CollectionUtils.isNotEmpty(keys)){
+            redisTemplate.delete(keys);
+        }
+        return false;
     }
     /**
      * <p>@Description 保存String数据 </p>

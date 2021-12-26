@@ -1,7 +1,7 @@
 package com.www.common.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.www.common.pojo.ResponseDTO;
+import com.www.common.pojo.dto.ResponseDTO;
 import com.www.common.utils.RedisUtils;
 import com.www.common.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;

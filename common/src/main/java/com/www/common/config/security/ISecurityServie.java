@@ -1,7 +1,7 @@
 package com.www.common.config.security;
 
-import com.www.common.pojo.AuthorityDTO;
-import com.www.common.pojo.UserDetailDTO;
+import com.www.common.pojo.dto.AuthorityDTO;
+import com.www.common.pojo.dto.UserDetailDTO;
 
 import java.util.List;
 

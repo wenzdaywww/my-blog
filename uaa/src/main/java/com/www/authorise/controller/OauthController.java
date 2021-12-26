@@ -2,10 +2,9 @@ package com.www.authorise.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.www.authorise.config.oauth2.Oauth2TokenConverter;
-import com.www.common.pojo.ResponseDTO;
-import com.www.common.pojo.TokenDTO;
-import com.www.common.pojo.TokenInfoDTO;
-import com.www.common.utils.RedisUtils;
+import com.www.common.pojo.dto.ResponseDTO;
+import com.www.common.pojo.dto.TokenDTO;
+import com.www.common.pojo.dto.TokenInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

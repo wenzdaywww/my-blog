@@ -1,7 +1,7 @@
 package com.www.common.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.www.common.pojo.ResponseDTO;
+import com.www.common.pojo.dto.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;

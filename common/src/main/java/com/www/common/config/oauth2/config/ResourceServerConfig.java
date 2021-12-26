@@ -26,6 +26,7 @@ import org.springframework.security.web.access.intercept.FilterSecurityIntercept
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
+    /** 资源服务id **/
     @Value("${spring.application.name}")
     private String resourceId;
     @Autowired

@@ -19,6 +19,14 @@
         <result column="UPDATE_TIME" property="updateTime" />
         <result column="CREATE_TIME" property="createTime" />
     </resultMap>
+    <!-- 查询资源服务器的请求路径允许的scope范围-->
+    <select id="findUrlScopes" resultType="com.www.common.pojo.dto.ScopeDTO">
+        SELECT M.MODULE RESOURCE_ID,M.MENU_URL URL,M.SCOPE SCOPE FROM SYS_MENU M
+        WHERE M.IS_DELETE = '0' AND M.MENU_TYPE = '2'
+        <if test="resourceId != null and resourceId != ''">
+            AND M.MODULE = #{resourceId}
+        </if>
+    </select>
     <!--  查询所以权限菜单信息-->
     <select id="findAllSecurityMenu" resultType="com.www.myblog.base.data.dto.SysRoleMenuDTO">
         SELECT DISTINCT M.MENU_URL,R.ROLE_CODE

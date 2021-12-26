@@ -1,7 +1,7 @@
 package com.www.common.config.oauth2.handler;
 
 import com.www.common.config.oauth2.IOauth2Service;
-import com.www.common.pojo.ScopeDTO;
+import com.www.common.pojo.dto.ScopeDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;

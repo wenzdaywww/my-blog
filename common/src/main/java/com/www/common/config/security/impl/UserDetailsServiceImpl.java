@@ -1,7 +1,7 @@
 package com.www.common.config.security.impl;
 
 import com.www.common.config.security.ISecurityServie;
-import com.www.common.pojo.UserDetailDTO;
+import com.www.common.pojo.dto.UserDetailDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.security.core.GrantedAuthority;

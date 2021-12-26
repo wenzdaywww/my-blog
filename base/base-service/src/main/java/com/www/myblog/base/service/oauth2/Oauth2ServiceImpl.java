@@ -1,10 +1,16 @@
 package com.www.myblog.base.service.oauth2;
 
+import com.alibaba.fastjson.JSON;
 import com.www.common.config.oauth2.IOauth2Service;
-import com.www.common.pojo.ScopeDTO;
+import com.www.common.pojo.constants.RedisCommonContant;
+import com.www.common.pojo.dto.ScopeDTO;
+import com.www.common.utils.RedisUtils;
+import com.www.myblog.base.data.mapper.SysMenuMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,8 +19,12 @@ import java.util.List;
  * <p>@Author www </p>
  * <p>@Date 2021/12/24 23:06 </p>
  */
+@Slf4j
 @Service
 public class Oauth2ServiceImpl implements IOauth2Service {
+    /** 资源服务id **/
+    @Value("${spring.application.name}")
+    private String resourceId;
     /**
      * <p>@Description 查询当前资源服务器的请求路径允许的scope范围 </p>
      * <p>@Author www </p>
@@ -23,13 +33,7 @@ public class Oauth2ServiceImpl implements IOauth2Service {
      */
     @Override
     public List<ScopeDTO> findUrlScope() {
-        List<ScopeDTO> list = new ArrayList<>();
-        ScopeDTO scopeDTO1 = new ScopeDTO();
-        scopeDTO1.setUrl("/menu/**").setScope("base:write,base:read,base:all");
-        list.add(scopeDTO1);
-        ScopeDTO scopeDTO2 = new ScopeDTO();
-        scopeDTO2.setUrl("/user/**").setScope("base:write,base:read,base:all");
-        list.add(scopeDTO2);
+        List<ScopeDTO> list = (List<ScopeDTO>) RedisUtils.listGet(RedisCommonContant.URL_SCOPE_PREFIX + resourceId);
         return list;
     }
 }

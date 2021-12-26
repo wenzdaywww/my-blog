@@ -9,9 +9,7 @@ package com.www.myblog.base.data.constants;
  * <p>@Date 2021/12/14 21:53 </p>
  */
 public class RedisKeyConstant {
-    /** 所有请求权限分布式锁key **/
-    public static final String AUTHORITY_MENU_LOCK =  "MY-BLOG:LOCK:AUTHORITY:SYS_MENU";
-    /** 所有请求权限 **/
-    public static final String AUTHORITY_MENU =  "MY-BLOG:AUTHORITY:SYS_MENU:MENU_TYPE_2";
+    /** 资源服务ID的url的scope分布式锁key **/
+    public static final String URL_SCOPE_LOCK =  "MY-BASE:LOCK:URL_SCOPE:SYS_MENU";
 
 }

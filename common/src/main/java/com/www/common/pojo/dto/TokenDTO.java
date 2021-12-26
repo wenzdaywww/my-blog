@@ -1,4 +1,4 @@
-package com.www.common.pojo;
+package com.www.common.pojo.dto;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
