@@ -3,9 +3,6 @@
     <div class="error-code">4<span>0</span>4</div>
     <div class="error-desc">啊哦~ 你所访问的页面不存在</div>
     <div class="error-handle">
-      <router-link to="/">
-        <el-button type="primary" size="large" @click="goBack">返回登录</el-button>
-      </router-link>
       <el-button class="error-btn" type="primary" size="large" @click="goBack">返回上一页</el-button>
     </div>
   </div>
@@ -17,14 +14,10 @@ export default {
   name: "404",
   setup() {
     const router = useRouter();
-    const goLogin = () => {
-      router.push("/");
-    };
     const goBack = () => {
       router.go(-1);
     };
     return {
-      goLogin,
       goBack
     };
   },

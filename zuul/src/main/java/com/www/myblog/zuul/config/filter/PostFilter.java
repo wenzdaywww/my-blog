@@ -81,16 +81,6 @@ public class PostFilter extends ZuulFilter {
         //允许继续路由
         ctx.setSendZuulResponse(true);
         ctx.setResponseStatusCode(200);
-        // 转发headers信息
-//        Enumeration<String> headerNames = request.getHeaderNames();
-//        if (headerNames != null) {
-//            while (headerNames.hasMoreElements()) {
-//                String name = headerNames.nextElement();
-//                String values = request.getHeader(name);
-//                ctx.addZuulRequestHeader(name, values);
-////                log.info("post的headers => {}={}",name,values);
-//            }
-//        }
         return null;
     }
 }

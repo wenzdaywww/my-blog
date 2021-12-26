@@ -3,7 +3,8 @@
         <v-header />
         <v-sidebar />
         <div class="content-box" :class="{ 'content-collapse': collapse }">
-            <v-tags></v-tags>
+<!--          //TODO 2021/12/26 22:19 第一次导航栏时标签栏未展示，先隐藏待处理-->
+<!--            <v-tags></v-tags>-->
             <div class="content">
                 <router-view v-slot="{ Component }">
                     <transition name="move" mode="out-in">
@@ -12,7 +13,6 @@
                         </keep-alive>
                     </transition>
                 </router-view>
-                <!-- <el-backtop target=".content"></el-backtop> -->
             </div>
         </div>
     </div>

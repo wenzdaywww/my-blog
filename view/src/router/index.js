@@ -1,6 +1,5 @@
 import {createRouter, createWebHistory} from "vue-router";
 import Home from "../views/admin/Home.vue";
-import {getCurrentInstance} from "vue";
 const modules = import.meta.glob("../views/**/**.vue");// 接口请求
 //主页路由
 let homeRouter = {
@@ -56,7 +55,7 @@ const hanleChilden = function (parent,children) {
             path: temp.menuUrl,
             name: temp.menuCode,
             meta : { title: temp.menuName },
-            component: modules[vuePath],
+            component : modules[vuePath],
             children: []
         };
         parent.push(tempRouter);

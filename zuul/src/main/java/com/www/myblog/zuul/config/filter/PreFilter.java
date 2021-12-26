@@ -82,17 +82,6 @@ public class PreFilter extends ZuulFilter {
         //不再路由
         ctx.setSendZuulResponse(false);
         ctx.setResponseStatusCode(200);
-        // 转发headers信息
-//        Enumeration<String> headerNames = request.getHeaderNames();
-//        if (headerNames != null) {
-//            while (headerNames.hasMoreElements()) {
-//                String name = headerNames.nextElement();
-//                String values = request.getHeader(name);
-//                ctx.addZuulRequestHeader(name, values);
-////                log.info("pre的headers => {}={}",name,values);
-//                response.setHeader(name,values);
-//            }
-//        }
         return null;
     }
 }

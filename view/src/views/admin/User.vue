@@ -1,5 +1,12 @@
 <template>
   <div>
+    <div class="crumbs">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item>
+          <i class="el-icon-s-custom"></i> 个人中心
+        </el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
     <el-row :gutter="20">
       <!--  基础信息-->
       <el-col :span="12">
