@@ -39,6 +39,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     private Oauth2MetadataSource oauth2MetadataSource;
     @Autowired
     private Oauth2AccessDecisionManager oauth2AccessDecisionManager;
+    @Autowired
+    private Oauth2Extractor oauth2Extractor;
 
     /**
      * <p>@Description 配置资源服务方验证方式 </p>
@@ -57,7 +59,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         //先认证失败在拒绝方法
         resources.authenticationEntryPoint(oauth2AuthRejectHandler);//认证失败时的异常处理
         resources.accessDeniedHandler(oauth2UnauthHandler);//拒绝访问异常处理
-        resources.tokenExtractor(new Oauth2Extractor());//自定义token获取器
+        resources.tokenExtractor(oauth2Extractor);//自定义token获取器
     }
     /**
      * <p>@Description 配置用户的安全拦截策略 </p>

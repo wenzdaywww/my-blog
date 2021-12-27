@@ -2,17 +2,19 @@ package com.www.authorise.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.www.authorise.config.oauth2.Oauth2TokenConverter;
+import com.www.common.config.oauth2.handler.RedisTokenHandler;
 import com.www.common.pojo.dto.ResponseDTO;
 import com.www.common.pojo.dto.TokenDTO;
 import com.www.common.pojo.dto.TokenInfoDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.common.util.OAuth2Utils;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -28,12 +30,6 @@ import java.util.Map;
 @Slf4j
 @RestController
 public class OauthController {
-    /** redis的key分隔符 **/
-    private static final String SEPARATOR = ":";
-    /** redis的key前缀 **/
-    private static final String PREFIX = "oauth2_token" + SEPARATOR;
-    /** oauth/token请求的username **/
-    private static final String USERNAME = "username";
     /** 保存到cookie的access_token的key **/
     private static final String COOKIES_ACCESS_TOKEN = "access_token";
     /** 保存到cookie的refresh_token的key **/
@@ -89,16 +85,8 @@ public class OauthController {
             response.addCookie(refreshCookie);
         }
         responseDTO.setResponseCode(ResponseDTO.RespEnum.SUCCESS,tokenDTO);
-        //将token保存到redis中
-        String key = PREFIX + parameters.get(OAuth2Utils.CLIENT_ID) + SEPARATOR + parameters.get(OAuth2Utils.GRANT_TYPE);
-        if(StringUtils.isNotBlank(parameters.get(OAuth2Utils.SCOPE))){
-            key += SEPARATOR + parameters.get(OAuth2Utils.SCOPE);
-        }
-        if(StringUtils.isNotBlank(parameters.get(USERNAME))){
-            key += SEPARATOR + parameters.get(USERNAME);
-        }
-//        RedisUtils.set(key,tokenDTO.getAccessToken(),tokenDTO.getExpiresSeconds());
-        log.info("=====> oauth/token返回的token信息：{}", JSON.toJSONString(tokenDTO));
+        //保存用户登录的token到redis中
+        RedisTokenHandler.setUserIdToken(tokenInfoDTO,tokenDTO.getAccessToken(),tokenDTO.getExpiresSeconds());
         return responseDTO;
     }
 }

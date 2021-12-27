@@ -2,7 +2,7 @@ package com.www.common.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.www.common.pojo.dto.ResponseDTO;
-import com.www.common.utils.RedisUtils;
+import com.www.common.config.redis.RedisOperation;
 import com.www.common.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,7 +47,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
         //获取token，删除redis中的token
         if(map != null && map.size() > 0) {
             String userId = String.valueOf(map.get(TokenUtils.USERID));
-            RedisUtils.deleteKey(redisUserPrefix + ":" + userId);
+            RedisOperation.deleteKey(redisUserPrefix + ":" + userId);
         }
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,"退出成功");
         cookie = new Cookie(LoginSuccessHandler.COOKIE_TOKEN,null);

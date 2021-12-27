@@ -1,13 +1,10 @@
 package com.www.myblog.base.service.oauth2;
 
-import com.alibaba.fastjson.JSON;
 import com.www.common.config.oauth2.IOauth2Service;
 import com.www.common.pojo.constants.RedisCommonContant;
 import com.www.common.pojo.dto.ScopeDTO;
-import com.www.common.utils.RedisUtils;
-import com.www.myblog.base.data.mapper.SysMenuMapper;
+import com.www.common.config.redis.RedisOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +30,7 @@ public class Oauth2ServiceImpl implements IOauth2Service {
      */
     @Override
     public List<ScopeDTO> findUrlScope() {
-        List<ScopeDTO> list = (List<ScopeDTO>) RedisUtils.listGet(RedisCommonContant.URL_SCOPE_PREFIX + resourceId);
+        List<ScopeDTO> list = (List<ScopeDTO>) RedisOperation.listGet(RedisCommonContant.URL_SCOPE_PREFIX + resourceId);
         return list;
     }
 }

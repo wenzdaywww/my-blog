@@ -6,7 +6,6 @@ import com.www.common.pojo.constants.RedisCommonContant;
 import com.www.common.pojo.dto.ScopeDTO;
 import com.www.myblog.base.data.constants.RedisKeyConstant;
 import com.www.myblog.base.data.dto.SysMenuDTO;
-import com.www.myblog.base.data.dto.SysRoleMenuDTO;
 import com.www.myblog.base.data.entity.SysMenuEntity;
 import com.www.myblog.base.data.entity.SysRoleEntity;
 import com.www.myblog.base.data.entity.SysRoleMenuEntity;
@@ -16,10 +15,9 @@ import com.www.myblog.base.data.mapper.SysRoleMenuMapper;
 import com.www.myblog.base.service.entity.ISysRoleMenuService;
 import com.www.myblog.base.service.entity.ISysRoleService;
 import com.www.myblog.base.service.menu.IMenuInfoService;
-import com.www.common.pojo.dto.AuthorityDTO;
 import com.www.common.pojo.dto.ResponseDTO;
 import com.www.common.utils.DateUtils;
-import com.www.common.utils.RedisUtils;
+import com.www.common.config.redis.RedisOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -216,14 +214,14 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         String value = UUID.randomUUID().toString();
         while (isWait){
             try {
-                if(RedisUtils.lock(RedisKeyConstant.URL_SCOPE_LOCK, value)){
+                if(RedisOperation.lock(RedisKeyConstant.URL_SCOPE_LOCK, value)){
                     isWait = false;
-                    RedisUtils.deleteKey(RedisCommonContant.URL_SCOPE_PREFIX + resourceId);
+                    RedisOperation.deleteKey(RedisCommonContant.URL_SCOPE_PREFIX + resourceId);
                     List<ScopeDTO> scopeList = sysMenuMapper.findUrlScopes(resourceId);
                     if(CollectionUtils.isNotEmpty(scopeList)){
                         for (ScopeDTO scopeDTO : scopeList){
                             //资源服务ID的url的scope保存到redis中
-                            RedisUtils.listSet(RedisCommonContant.URL_SCOPE_PREFIX + resourceId,scopeDTO);
+                            RedisOperation.listSet(RedisCommonContant.URL_SCOPE_PREFIX + resourceId,scopeDTO);
                         }
                     }
                 }
@@ -231,7 +229,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
                 log.info("查所询有请求权限，发生异常：{}",e.getMessage());
             }finally {
                 // 释放锁
-                RedisUtils.unlock(RedisKeyConstant.URL_SCOPE_LOCK,value);
+                RedisOperation.unlock(RedisKeyConstant.URL_SCOPE_LOCK,value);
             }
         }
     }

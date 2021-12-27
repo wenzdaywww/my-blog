@@ -2,7 +2,7 @@ package com.www.common.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.www.common.pojo.dto.ResponseDTO;
-import com.www.common.utils.RedisUtils;
+import com.www.common.config.redis.RedisOperation;
 import com.www.common.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -61,7 +61,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         //生成token
         Map<String,String> tokenMap = TokenUtils.generateToken(chaims);
         //将token添加到redis中
-        RedisUtils.set(redisUserPrefix + ":" + user.getUsername(),tokenMap.get(TokenUtils.TOKEN), expirationTime);
+        RedisOperation.set(redisUserPrefix + ":" + user.getUsername(),tokenMap.get(TokenUtils.TOKEN), expirationTime);
         //数据返回
         ResponseDTO<Map> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,tokenMap);
         Cookie cookie = new Cookie(COOKIE_TOKEN,tokenMap.get(TokenUtils.TOKEN));

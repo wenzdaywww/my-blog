@@ -1,4 +1,4 @@
-package com.www.common.utils;
+package com.www.common.config.redis;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -10,13 +10,13 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <p>@Description redis工具类 </p>
+ * <p>@Description redis操作类 </p>
  * <p>@Version 1.0 </p>
  * <p>@Author www </p>
  * <p>@Date 2021/8/1 21:07 </p>
  */
 @Component
-public final class RedisUtils {
+public final class RedisOperation {
     private static RedisTemplate<String,Object> redisTemplate;
     /**
      * <p>@Description 返回redisTemplate实例 </p>
@@ -58,6 +58,7 @@ public final class RedisUtils {
         Set<String> keys = redisTemplate.keys(key);
         if(CollectionUtils.isNotEmpty(keys)){
             redisTemplate.delete(keys);
+            return true;
         }
         return false;
     }
@@ -108,7 +109,7 @@ public final class RedisUtils {
     public static boolean unlock(String key,String value){
         // 判断是否是当前线程获取分布式锁，是则删除key
         if (StringUtils.equals(value,get(key))){
-            RedisUtils.deleteKey(key);
+            RedisOperation.deleteKey(key);
             return true;
         }
         return false;
@@ -251,6 +252,6 @@ public final class RedisUtils {
 
     @Autowired
     public void setRedisTemplate(RedisTemplate<String, Object> redisTemplate) {
-        RedisUtils.redisTemplate = redisTemplate;
+        RedisOperation.redisTemplate = redisTemplate;
     }
 }

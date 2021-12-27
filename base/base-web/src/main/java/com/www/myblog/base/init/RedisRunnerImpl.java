@@ -2,7 +2,7 @@ package com.www.myblog.base.init;
 
 import com.www.common.pojo.constants.RedisCommonContant;
 import com.www.common.pojo.dto.ScopeDTO;
-import com.www.common.utils.RedisUtils;
+import com.www.common.config.redis.RedisOperation;
 import com.www.myblog.base.data.constants.RedisKeyConstant;
 import com.www.myblog.base.data.mapper.SysMenuMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -39,15 +39,15 @@ public class RedisRunnerImpl implements ApplicationRunner {
         String value = UUID.randomUUID().toString();
         while (isWait){
             try {
-                if(RedisUtils.lock(RedisKeyConstant.URL_SCOPE_LOCK, value)){
+                if(RedisOperation.lock(RedisKeyConstant.URL_SCOPE_LOCK, value)){
                     isWait = false;
                     //删除所有资源服务id的scope数据
-                    RedisUtils.deleteFuzzyKey(RedisCommonContant.URL_SCOPE_PREFIX + "*");
+                    RedisOperation.deleteFuzzyKey(RedisCommonContant.URL_SCOPE_PREFIX + "*");
                     List<ScopeDTO> scopeList = sysMenuMapper.findUrlScopes(null);
                     if(CollectionUtils.isNotEmpty(scopeList)){
                         for (ScopeDTO scopeDTO : scopeList){
                             //资源服务ID的url的scope保存到redis中
-                            RedisUtils.listSet(RedisCommonContant.URL_SCOPE_PREFIX + scopeDTO.getResourceId(),scopeDTO);
+                            RedisOperation.listSet(RedisCommonContant.URL_SCOPE_PREFIX + scopeDTO.getResourceId(),scopeDTO);
                         }
                         log.info("=====> 启动加载资源服务ID的url的scope数据{}条",scopeList.size());
                     }
@@ -56,7 +56,7 @@ public class RedisRunnerImpl implements ApplicationRunner {
                 log.info("查所询有请求权限，发生异常：{}",e.getMessage());
             }finally {
                 // 释放锁
-                RedisUtils.unlock(RedisKeyConstant.URL_SCOPE_LOCK,value);
+                RedisOperation.unlock(RedisKeyConstant.URL_SCOPE_LOCK,value);
             }
         }
     }

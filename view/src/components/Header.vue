@@ -169,8 +169,10 @@ export default {
         if(code){
           token.code = code;
           request.$http.post("api/uaa/oauth/token", token).then(function (res) {
-            localStorage.setItem("userId",res.data.userId);
-            router.go(0);//重新跳转当前页面
+            if(res && res.data){
+              localStorage.setItem("userId",res.data.userId);
+              router.go(0);//重新跳转当前页面
+            }
           });
         }
       }
