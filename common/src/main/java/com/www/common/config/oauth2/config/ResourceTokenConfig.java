@@ -41,5 +41,4 @@ public class ResourceTokenConfig {
         converter.setSigningKey(signingKey);
         return converter;
     }
-
 }

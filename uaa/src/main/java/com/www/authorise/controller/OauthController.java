@@ -1,7 +1,6 @@
 package com.www.authorise.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.www.authorise.config.oauth2.Oauth2TokenConverter;
+import com.www.common.config.oauth2.handler.JwtTokenConverter;
 import com.www.common.config.oauth2.handler.RedisTokenHandler;
 import com.www.common.pojo.dto.ResponseDTO;
 import com.www.common.pojo.dto.TokenDTO;
@@ -31,13 +30,13 @@ import java.util.Map;
 @RestController
 public class OauthController {
     /** 保存到cookie的access_token的key **/
-    private static final String COOKIES_ACCESS_TOKEN = "access_token";
+    public static final String COOKIES_ACCESS_TOKEN = "access_token";
     /** 保存到cookie的refresh_token的key **/
-    private static final String COOKIES_REFRESH_TOKEN = "refresh_token";
+    public static final String COOKIES_REFRESH_TOKEN = "refresh_token";
     @Autowired
     private TokenEndpoint tokenEndpoint;
     @Autowired
-    private Oauth2TokenConverter oauth2TokenConverter;
+    private JwtTokenConverter jwtTokenConverter;
 
     /**
      * <p>@Description 重写oauth/token的get请求 </p>
@@ -71,7 +70,7 @@ public class OauthController {
         tokenDTO.setExpiresSeconds(accessToken.getBody().getExpiresIn());
         tokenDTO.setScope(accessToken.getBody().getScope());
         //解析token信息
-        TokenInfoDTO tokenInfoDTO = oauth2TokenConverter.decodeToken(tokenDTO.getAccessToken());
+        TokenInfoDTO tokenInfoDTO = jwtTokenConverter.decodeToken(tokenDTO.getAccessToken());
         tokenDTO.setUserId(tokenInfoDTO != null ? tokenInfoDTO.getUser_name() : null);
         //将token保存到cookie中
         Cookie tokenCookie = new Cookie(COOKIES_ACCESS_TOKEN,tokenDTO.getAccessToken());

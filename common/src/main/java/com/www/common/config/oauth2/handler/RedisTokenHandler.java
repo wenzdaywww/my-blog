@@ -1,5 +1,6 @@
 package com.www.common.config.oauth2.handler;
 
+import com.sun.org.apache.regexp.internal.RE;
 import com.www.common.config.redis.RedisOperation;
 import com.www.common.pojo.dto.TokenInfoDTO;
 import org.apache.commons.lang3.StringUtils;
@@ -17,21 +18,36 @@ public class RedisTokenHandler {
     private static final String PREFIX = "oauth2_token" + SEPARATOR;
 
     /**
+     * <p>@Description 删除用户登录的token到redis中 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/27 22:50 </p>
+     * @param tokenInfo token信息
+     * @return boolean true删除成功，false删除失败
+     */
+    public static boolean deleteUserIdToken(TokenInfoDTO tokenInfo){
+        if(tokenInfo == null){
+            return false;
+        }
+        //获取用户登录的token到redis中的key值
+        String key = RedisTokenHandler.getUserIdTokenKey(tokenInfo);
+        return RedisOperation.deleteKey(key);
+    }
+    /**
      * <p>@Description 保存用户登录的token到redis中 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/27 21:56 </p>
      * @param tokenInfo token信息
      * @param token token值
      * @param expiresSeconds 令牌有效时间
-     * @return boolean true保存成功，false失败
+     * @return boolean true保存成功，false保存失败
      */
     public static boolean setUserIdToken(TokenInfoDTO tokenInfo,String token,int expiresSeconds){
         if(StringUtils.isBlank(token) || tokenInfo == null){
             return false;
         }
+        //获取用户登录的token到redis中的key值
+        String key = RedisTokenHandler.getUserIdTokenKey(tokenInfo);
         //将token保存到redis中
-        //用户key格式：oauth2_token:客户端ID:用户ID
-        String key = PREFIX + tokenInfo.getClient_id() + SEPARATOR + tokenInfo.getUser_name();
         RedisOperation.set(key,token,expiresSeconds);
         return true;
     }
@@ -47,8 +63,22 @@ public class RedisTokenHandler {
         if(tokenInfo == null || StringUtils.isBlank(token)){
             return false;
         }
-        //用户key格式：oauth2_token:客户端ID:用户ID
-        String key = PREFIX + tokenInfo.getClient_id() + SEPARATOR + tokenInfo.getUser_name();
+        //获取用户登录的token到redis中的key值
+        String key = RedisTokenHandler.getUserIdTokenKey(tokenInfo);
         return  (RedisOperation.hasKey(key) && StringUtils.equals(token,RedisOperation.get(key)));
+    }
+    /**
+     * <p>@Description 获取用户登录的token到redis中的key值 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/27 22:52 </p>
+     * @param tokenInfo token信息
+     * @return java.lang.String
+     */
+    private static String getUserIdTokenKey(TokenInfoDTO tokenInfo){
+        if(tokenInfo == null){
+            return null;
+        }
+        //用户key格式：oauth2_token:客户端ID:用户ID
+        return PREFIX + tokenInfo.getClient_id() + SEPARATOR + tokenInfo.getUser_name();
     }
 }

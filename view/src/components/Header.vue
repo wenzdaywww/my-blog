@@ -182,7 +182,15 @@ export default {
     const handleCommand = (command) => {
       // 退出
       if (command == "loginout") {
-
+        request.$http.post("api/uaa/logout",null).then(function (res) {
+          if(res.code === 200){
+            localStorage.clear();
+            ElMessage.success("退出成功");
+            router.push("/home");
+          }
+        }).catch(function (res) {
+          ElMessage.error("退出失败");
+        });
       } else if (command == "user") { // 个人中心
         router.push("/user");
       } else if (command == "pwd") { // 修改密码

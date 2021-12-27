@@ -1,5 +1,7 @@
 package com.www.authorise.config.oauth2;
 
+import com.www.authorise.config.handler.Oauth2LogoutSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +23,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true,securedEnabled = true) //配置基于方法的安全认证,必要
 public class AuthorizeSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private Oauth2LogoutSuccessHandler oauth2LogoutSuccessHandler;
     /**
      * <p>@Description 配置密码加密方式 </p>
      * <p>@Author www </p>
@@ -58,6 +62,10 @@ public class AuthorizeSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().anyRequest().authenticated()//其他请求必须登录
                 .and()
                 .csrf().disable();//关闭csrf
+        http.logout()//退出
+                .logoutUrl("/logout")//退出路径
+                .logoutSuccessHandler(oauth2LogoutSuccessHandler)//退出成功处理逻辑
+                .deleteCookies("JSESSIONID");//登出之后删除cookie
     }
 
     @Override

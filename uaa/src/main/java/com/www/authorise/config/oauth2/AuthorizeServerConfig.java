@@ -1,5 +1,6 @@
 package com.www.authorise.config.oauth2;
 
+import com.www.common.config.oauth2.handler.JwtTokenConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -52,7 +53,7 @@ import java.util.Arrays;
 @Configuration
 @EnableAuthorizationServer
 @Slf4j
-public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
+public class AuthorizeServerConfig extends AuthorizationServerConfigurerAdapter {
     @Resource
     private DataSource dataSource;
     @Autowired
@@ -67,7 +68,7 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private JwtAccessTokenConverter jwtAccessTokenConverter;
+    private JwtTokenConverter jwtTokenConverter;
 
 
     /**
@@ -105,10 +106,6 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         log.info("=====> 配置令牌端点的安全约束");
-//        ClientExceptionHandler clientExceptionHandler = new ClientExceptionHandler(security);
-//        clientExceptionHandler.afterPropertiesSet();
-//        clientExceptionHandler.setAuthenticationEntryPoint(authenticationEntryPoint());
-//        security.addTokenEndpointAuthenticationFilter(clientExceptionHandler);
         security.tokenKeyAccess("permitAll()")//oauth/token_key设置公开
                 .checkTokenAccess("permitAll()")//oauth/check_token设置公开
                 .allowFormAuthenticationForClients();//允许表单认证，申请令牌
@@ -159,7 +156,7 @@ public class AuthorizeConfig extends AuthorizationServerConfigurerAdapter {
 //        services.setRefreshTokenValiditySeconds(refreshValidityDays*24*60*60);//刷新令牌默认有效时间（秒）
         //令牌增强,设置使用jwt令牌
         TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(jwtAccessTokenConverter));
+        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(jwtTokenConverter));
         services.setTokenEnhancer(tokenEnhancerChain);
         return services;
     }
