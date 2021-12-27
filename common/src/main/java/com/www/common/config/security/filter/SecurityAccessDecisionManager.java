@@ -7,6 +7,7 @@ import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -18,7 +19,7 @@ import java.util.Iterator;
  * <p>@Date 2021/11/24 19:22 </p>
  */
 @Slf4j
-//@Component
+@Component
 public class SecurityAccessDecisionManager implements AccessDecisionManager {
     /**
      * <p>@Description url访问校验 </p>

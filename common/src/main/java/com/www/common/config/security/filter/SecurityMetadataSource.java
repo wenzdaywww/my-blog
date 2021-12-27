@@ -9,6 +9,7 @@ import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
+import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
 import javax.annotation.Resource;
@@ -23,7 +24,7 @@ import java.util.List;
  * <p>@Date 2021/11/24 18:22 </p>
  */
 @Slf4j
-//@Component
+@Component
 public class SecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
     @Resource
     private ISecurityServie securityUserServie;

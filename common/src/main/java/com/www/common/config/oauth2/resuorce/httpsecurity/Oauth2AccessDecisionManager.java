@@ -1,4 +1,4 @@
-package com.www.common.config.oauth2.handler;
+package com.www.common.config.oauth2.resuorce.httpsecurity;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;

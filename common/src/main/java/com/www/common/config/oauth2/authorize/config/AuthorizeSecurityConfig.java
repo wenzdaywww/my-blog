@@ -1,6 +1,6 @@
-package com.www.authorise.config.oauth2;
+package com.www.common.config.oauth2.authorize.config;
 
-import com.www.authorise.config.handler.Oauth2LogoutSuccessHandler;
+import com.www.common.config.oauth2.authorize.handler.Oauth2LogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

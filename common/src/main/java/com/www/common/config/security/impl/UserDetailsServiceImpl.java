@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ import java.util.List;
  * <p>@Date 2021/8/1 21:12 </p>
  */
 @Slf4j
-//@Service
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Resource
     private ISecurityServie securityUserServie;

@@ -1,6 +1,5 @@
-package com.www.common.config.oauth2.handler;
+package com.www.common.config.oauth2.util;
 
-import com.sun.org.apache.regexp.internal.RE;
 import com.www.common.config.redis.RedisOperation;
 import com.www.common.pojo.dto.TokenInfoDTO;
 import org.apache.commons.lang3.StringUtils;

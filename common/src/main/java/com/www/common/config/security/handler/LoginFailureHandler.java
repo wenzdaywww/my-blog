@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,7 @@ import java.io.IOException;
  * <p>@Date 2021/8/1 21:11 </p>
  */
 @Slf4j
-//@Component
+@Component
 public class LoginFailureHandler implements AuthenticationFailureHandler  {
     /**
      * <p>@Description 登录失败处理事件 </p>

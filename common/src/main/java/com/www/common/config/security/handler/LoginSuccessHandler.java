@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -26,7 +27,7 @@ import java.util.Map;
  * <p>@Date 2021/8/1 21:12 </p>
  */
 @Slf4j
-//@Component
+@Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     /** 使用redis保存用户的token的key前缀 **/
     @Value("${jwt.user-prefix}")

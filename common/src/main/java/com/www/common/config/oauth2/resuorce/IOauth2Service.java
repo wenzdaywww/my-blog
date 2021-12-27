@@ -1,4 +1,4 @@
-package com.www.common.config.oauth2;
+package com.www.common.config.oauth2.resuorce;
 
 import com.www.common.pojo.dto.ScopeDTO;
 

@@ -5,6 +5,7 @@ import com.www.common.pojo.dto.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +19,7 @@ import java.io.IOException;
  * <p>@Date 2021/11/15 20:39 </p>
  */
 @Slf4j
-//@Component
+@Component
 public class SecurityAuthRejectHandler implements AuthenticationEntryPoint {
     /**
      * <p>@Description 认证失败时的异常处理 </p>

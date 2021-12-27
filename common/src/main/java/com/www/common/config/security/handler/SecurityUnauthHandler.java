@@ -5,6 +5,7 @@ import com.www.common.pojo.dto.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +19,7 @@ import java.io.IOException;
  * <p>@Date 2021/11/24 22:25 </p>
  */
 @Slf4j
-//@Component
+@Component
 public class SecurityUnauthHandler implements AccessDeniedHandler {
     /**
      * <p>@Description 拒绝访问异常处理  </p>

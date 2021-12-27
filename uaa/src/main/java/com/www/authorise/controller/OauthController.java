@@ -1,7 +1,7 @@
 package com.www.authorise.controller;
 
-import com.www.common.config.oauth2.handler.JwtTokenConverter;
-import com.www.common.config.oauth2.handler.RedisTokenHandler;
+import com.www.common.config.oauth2.authorize.store.JwtTokenConverter;
+import com.www.common.config.oauth2.util.RedisTokenHandler;
 import com.www.common.pojo.dto.ResponseDTO;
 import com.www.common.pojo.dto.TokenDTO;
 import com.www.common.pojo.dto.TokenInfoDTO;

@@ -5,6 +5,7 @@ import com.www.common.pojo.dto.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.web.session.SessionInformationExpiredEvent;
 import org.springframework.security.web.session.SessionInformationExpiredStrategy;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +18,7 @@ import java.io.IOException;
  * <p>@Date 2021/11/18 21:05 </p>
  */
 @Slf4j
-//@Component
+@Component
 public class SessionExpiredHandler implements SessionInformationExpiredStrategy {
     /**
      * <p>@Description 单点登录会话过期处理 </p>

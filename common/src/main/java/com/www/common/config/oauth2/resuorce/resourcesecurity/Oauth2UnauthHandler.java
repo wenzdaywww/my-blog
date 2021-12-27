@@ -1,6 +1,7 @@
-package com.www.common.config.oauth2.handler;
+package com.www.common.config.oauth2.resuorce.resourcesecurity;
 
 import com.alibaba.fastjson.JSON;
+import com.www.common.config.oauth2.authorize.store.JwtTokenConverter;
 import com.www.common.pojo.dto.ResponseDTO;
 import com.www.common.pojo.dto.TokenInfoDTO;
 import lombok.extern.slf4j.Slf4j;

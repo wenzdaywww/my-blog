@@ -11,9 +11,8 @@ import org.springframework.context.annotation.ComponentScan;
  * <p>@Author www </p>
  * <p>@Date 2021/12/19 12:57 </p>
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.www.common.config.redis","com.www.common.config.oauth2.authorize","com.www.authorise"})
 @EnableEurekaClient
-@ComponentScan(basePackages = {"com.www.common.config.redis","com.www.authorise"}) //添加扫描包的路径
 public class UaaApplication {
     /**
      * <p>@Description 启动方法 </p>

@@ -1,4 +1,4 @@
-package com.www.authorise.config.handler;
+package com.www.authorise.config.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
@@ -6,6 +6,7 @@ import com.www.authorise.data.entity.SysUserEntity;
 import com.www.authorise.data.enums.CommonEnum;
 import com.www.authorise.data.mapper.SysRoleMapper;
 import com.www.authorise.data.mapper.SysUserMapper;
+import com.www.common.config.oauth2.authorize.IUserService;
 import com.www.common.pojo.dto.UserDetailDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +30,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-public class UserDetailsServiceHandler implements UserDetailsService {
+public class UserServiceHandler implements IUserService {
     @Autowired
     private SysUserMapper sysUserMapper;
     @Autowired

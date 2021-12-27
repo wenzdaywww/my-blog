@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
 import javax.servlet.ServletException;
@@ -24,7 +25,7 @@ import java.util.Map;
  * <p>@Date 2021/11/15 20:51 </p>
  */
 @Slf4j
-//@Component
+@Component
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
     @Value("${jwt.user-prefix}")
     private String redisUserPrefix;

@@ -1,6 +1,6 @@
 package com.www.myblog.base.service.oauth2;
 
-import com.www.common.config.oauth2.IOauth2Service;
+import com.www.common.config.oauth2.resuorce.IOauth2Service;
 import com.www.common.pojo.constants.RedisCommonContant;
 import com.www.common.pojo.dto.ScopeDTO;
 import com.www.common.config.redis.RedisOperation;

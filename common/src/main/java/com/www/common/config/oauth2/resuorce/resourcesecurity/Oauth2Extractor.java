@@ -1,5 +1,7 @@
-package com.www.common.config.oauth2.handler;
+package com.www.common.config.oauth2.resuorce.resourcesecurity;
 
+import com.www.common.config.oauth2.authorize.store.JwtTokenConverter;
+import com.www.common.config.oauth2.util.RedisTokenHandler;
 import com.www.common.pojo.dto.TokenInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
  * <p>@Date 2021/12/26 16:14 </p>
  */
 @Slf4j
-@Component
 public class Oauth2Extractor extends BearerTokenExtractor {
     /** 保存到cookie的access_token的key **/
     private static final String COOKIES_ACCESS_TOKEN = "access_token";

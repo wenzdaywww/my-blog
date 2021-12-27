@@ -1,14 +1,13 @@
-package com.www.authorise.config.oauth2;
+package com.www.common.config.oauth2.authorize.config;
 
-import com.www.common.config.oauth2.handler.JwtTokenConverter;
+import com.www.common.config.oauth2.authorize.IUserService;
+import com.www.common.config.oauth2.authorize.store.JwtTokenConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -23,7 +22,6 @@ import org.springframework.security.oauth2.provider.token.AuthorizationServerTok
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
@@ -61,8 +59,7 @@ public class AuthorizeServerConfig extends AuthorizationServerConfigurerAdapter 
     @Autowired
     private AuthenticationManager authenticationManager; //密码模式必须配置
     @Autowired
-    @Qualifier("userDetailsServiceHandler")
-    private UserDetailsService userDetailsService;
+    private IUserService userService;
     @Autowired
     private TokenStore tokenStore;
     @Autowired
@@ -93,7 +90,7 @@ public class AuthorizeServerConfig extends AuthorizationServerConfigurerAdapter 
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        log.info("=====> 配置客户端");
+        log.info("=====> 认证服务器配置客户端");
         clients.withClientDetails(clientDetails());
     }
     /**
@@ -105,7 +102,7 @@ public class AuthorizeServerConfig extends AuthorizationServerConfigurerAdapter 
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        log.info("=====> 配置令牌端点的安全约束");
+        log.info("=====> 认证服务器配置令牌端点的安全约束");
         security.tokenKeyAccess("permitAll()")//oauth/token_key设置公开
                 .checkTokenAccess("permitAll()")//oauth/check_token设置公开
                 .allowFormAuthenticationForClients();//允许表单认证，申请令牌
@@ -119,9 +116,9 @@ public class AuthorizeServerConfig extends AuthorizationServerConfigurerAdapter 
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        log.info("=====> 配置令牌端点");
+        log.info("=====> 认证服务器配置令牌端点");
         endpoints.authenticationManager(authenticationManager)//密码模式需要的管理器
-                .userDetailsService(userDetailsService)//密码模式的用户信息管理
+                .userDetailsService(userService)//密码模式的用户信息管理
                 .authorizationCodeServices(authorizationCodeServices)//授权码需要的服务
                 .tokenServices(tokenServices())//令牌管理服务
                 .allowedTokenEndpointRequestMethods(HttpMethod.POST);

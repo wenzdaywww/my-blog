@@ -1,6 +1,6 @@
-package com.www.common.config.oauth2.handler;
+package com.www.common.config.oauth2.resuorce.httpsecurity;
 
-import com.www.common.config.oauth2.IOauth2Service;
+import com.www.common.config.oauth2.resuorce.IOauth2Service;
 import com.www.common.pojo.dto.ScopeDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -29,7 +29,7 @@ import java.util.List;
 public class Oauth2MetadataSource implements FilterInvocationSecurityMetadataSource {
     @Autowired
     private IOauth2Service oauth2Service;
-
+    /** 路径匹配器 **/
     AntPathMatcher antPathMatcher = new AntPathMatcher();
     /**
      * <p>@Description 访问权限角色配置 </p>

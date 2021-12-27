@@ -1,4 +1,4 @@
-package com.www.common.config.oauth2.handler;
+package com.www.common.config.oauth2.authorize.store;
 
 import com.alibaba.fastjson.JSON;
 import com.www.common.pojo.dto.TokenInfoDTO;
