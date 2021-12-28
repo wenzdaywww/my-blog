@@ -66,14 +66,16 @@ import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import utils from '../utils/utils';
 import {ElMessage} from "element-plus";
-import router, {initUserRouter} from "../router";
+import {initUserRouter} from "../router";
 
 export default {
   setup() {
+    //环境配置
+    const ENV = import.meta.env;
     //uaa返回的地址
-    const redirect_uri = location.origin+"/home";
+    const redirect_uri = ENV.VITE_BASE_REDIRECT_URI;
     //登录地址
-    const loginUrl =  "http://localhost:8003/oauth/authorize?client_id=my-base&response_type=code&redirect_uri="+redirect_uri;
+    const loginUrl =  ENV.VITE_UAA_LOGIN + "client_id=" + ENV.VITE_BASE_CLIENT_ID + "&response_type=code&redirect_uri="+redirect_uri;
     // 接口请求
     const request = getCurrentInstance().appContext.config.globalProperties;
     // 路由
@@ -99,9 +101,9 @@ export default {
     });
     // token数据
     let token = reactive({
-      client_id: 'my-base',
-      client_secret: 'wenzday',
-      grant_type: 'authorization_code',
+      client_id: ENV.VITE_BASE_CLIENT_ID,
+      client_secret: ENV.VITE_BASE_CLIENT_SECRET,
+      grant_type: ENV.VITE_BASE_GRANT_TYPE,
       code: '',
       redirect_uri: redirect_uri
     });

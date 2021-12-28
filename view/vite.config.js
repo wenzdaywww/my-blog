@@ -1,6 +1,7 @@
 import vue from '@vitejs/plugin-vue';
+import { defineConfig, loadEnv } from 'vite'
 
-export default {
+export default  ({ mode }) => defineConfig({
     base: './',
     plugins: [vue()],
     optimizeDeps: {
@@ -9,7 +10,7 @@ export default {
     server : {
         proxy: {
             '/api': {
-                target: 'http://localhost:8001/', //接口域名
+                target: loadEnv(mode, process.cwd()).VITE_API_URL, //接口域名
                 changeOrigin: true,      //是否跨域
                 rewrite: (path) => path.replace(/^\/api/, ''), //路径重写
                 ws: true,            //是否代理 websockets
@@ -17,4 +18,4 @@ export default {
             }
         }
     }
-}
+})
