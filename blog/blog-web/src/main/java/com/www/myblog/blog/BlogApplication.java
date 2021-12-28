@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 
 /**
  * <p>@Description blog启动类 </p>
@@ -13,7 +14,9 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @EnableEurekaClient
-@ComponentScan(basePackages = {"com.www.common","com.www.myblog.blog"}) //添加扫描包的路径
+@ComponentScan(basePackages = {"com.www.common","com.www.myblog.blog"}, //配置要扫描的包路径
+  excludeFilters = {@ComponentScan.Filter(type = FilterType.REGEX,pattern = "com.www.common.config.security.*")}//排除不扫描的包路径
+)
 public class BlogApplication {
     public static void main(String[] args) {
         //配置application加密的密钥

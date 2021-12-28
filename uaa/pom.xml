@@ -132,7 +132,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.www.authorise.UaaApplication</mainClass>
+                    <mainClass>com.www.uaa.UaaApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

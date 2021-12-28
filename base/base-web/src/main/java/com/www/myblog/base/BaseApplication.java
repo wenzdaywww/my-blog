@@ -15,10 +15,7 @@ import org.springframework.context.annotation.FilterType;
 @SpringBootApplication
 @EnableEurekaClient
 @ComponentScan(basePackages = {"com.www.common","com.www.myblog.base"}, //配置要扫描的包路径
-  excludeFilters = {//排除不扫描的包路径
-      @ComponentScan.Filter(type = FilterType.REGEX,pattern = "com.www.common.config.oauth2.authorize.*"),
-      @ComponentScan.Filter(type = FilterType.REGEX,pattern = "com.www.common.config.security.*")
-    }
+  excludeFilters = {@ComponentScan.Filter(type = FilterType.REGEX,pattern = "com.www.common.config.security.*")}//排除不扫描的包路径
 )
 public class BaseApplication {
     /**

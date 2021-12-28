@@ -9,7 +9,7 @@
     <div class="header-right">
       <!-- 未登录 -->
       <div v-if="isLogin == false" style="margin-top: 20px">
-        <el-link type="danger" :href="loginUrl">登录/注册</el-link>
+        <el-link type="danger" :href="loginUrl">登录</el-link>
       </div>
       <!-- 已登录 -->
       <div class="header-user-con" v-if="isLogin == true">
@@ -154,6 +154,7 @@ export default {
     };
     //获取token
     const getToken = () => {
+      console.log("获取token="+localStorage.getItem("userId"));
       if (localStorage.getItem("userId")){
         isLogin.value = true;
         //加载用户拥有的路由权限

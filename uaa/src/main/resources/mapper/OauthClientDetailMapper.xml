@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.www.authorise.data.mapper.OauthClientDetailMapper">
-  <resultMap id="BaseResultMap" type="com.www.authorise.data.entity.OauthClientDetailEntity">
+<mapper namespace="com.www.uaa.data.mapper.OauthClientDetailMapper">
+  <resultMap id="BaseResultMap" type="com.www.uaa.data.entity.OauthClientDetailEntity">
     <!--@Table oauth_client_details-->
     <id column="CLIENT_ID" property="clientId" />
     <result column="CLIENT_SECRET" property="clientSecret" />

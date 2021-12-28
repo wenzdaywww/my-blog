@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.www.authorise.data.mapper.SysUserRoleMapper">
-  <resultMap id="BaseResultMap" type="com.www.authorise.data.entity.SysUserRoleEntity">
+<mapper namespace="com.www.uaa.data.mapper.SysUserRoleMapper">
+  <resultMap id="BaseResultMap" type="com.www.uaa.data.entity.SysUserRoleEntity">
     <!--@Table sys_user_role-->
     <id column="SUR_ID" property="surId" />
     <result column="SU_ID" property="suId" />

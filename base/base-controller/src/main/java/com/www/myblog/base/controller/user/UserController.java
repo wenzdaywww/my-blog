@@ -20,7 +20,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("user")
-@PreAuthorize("hasAnyAuthority('admin')")
 public class UserController {
     @Autowired
     private IUserInfoService userInfoService;
@@ -33,6 +32,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
     @PostMapping("pwd")
+    @PreAuthorize("hasAnyAuthority('admin','user')")
     public ResponseDTO<String> updateUserPwd(SysUserDTO user){
         return userInfoService.updateUserPwd(user);
     }
@@ -44,6 +44,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO
      */
     @GetMapping("router")
+    @PreAuthorize("hasAnyAuthority('admin','user')")
     public ResponseDTO<List<SysMenuDTO>> findUserRouter(String userId){
         return userInfoService.findUserRouter(userId);
     }
@@ -55,6 +56,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO
      */
     @GetMapping("menu")
+    @PreAuthorize("hasAnyAuthority('admin','user')")
     public ResponseDTO<List<SysMenuDTO>> findUserMenu(String userId){
         return userInfoService.findUserMenu(userId);
     }
@@ -67,6 +69,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
     @PostMapping("photo")
+    @PreAuthorize("hasAnyAuthority('admin','user')")
     public ResponseDTO<String> uploadPhoto(MultipartFile photo,String userId){
         return userInfoService.uploadPhoto(photo,userId);
     }
@@ -78,6 +81,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
     @PostMapping("edit")
+    @PreAuthorize("hasAnyAuthority('admin','user')")
     public ResponseDTO<String> updateUserInfo(SysUserDTO user){
         return userInfoService.updateUserInfo(user);
     }
@@ -101,6 +105,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
     @PostMapping("new")
+    @PreAuthorize("hasAnyAuthority('admin')")
     public ResponseDTO<String> createUser(SysUserDTO user){
         return userInfoService.createUser(user);
     }
@@ -116,6 +121,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.SysUserDTO>>
      */
     @GetMapping("all")
+    @PreAuthorize("hasAnyAuthority('admin')")
     public ResponseDTO<List<SysUserDTO>> findAllUser(String stateCd, String userId, String userName, int pageNum, int pageSize){
         return userInfoService.findAllUser(stateCd,userId,userName,pageNum,pageSize);
     }
@@ -131,6 +137,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
     @PostMapping("state")
+    @PreAuthorize("hasAnyAuthority('admin')")
     public ResponseDTO<String> updateState(String userId,String stateCd,String expired,String locked,String credentials){
         return userInfoService.updateState(userId,stateCd,expired,locked,credentials);
     }
@@ -141,6 +148,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.SysUserRoleDTO>>
      */
     @GetMapping("role")
+    @PreAuthorize("hasAnyAuthority('admin')")
     public ResponseDTO<List<SysRoleDTO>> findAllRole(){
         return userInfoService.findAllRole();
     }
