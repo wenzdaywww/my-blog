@@ -166,6 +166,7 @@ export default {
         getUserData(localStorage.getItem("userId"));
       }else{
         isLogin.value = false;
+        form.userId = null;
         const code = utils.getUrlParam("code");
         if(code){
           token.code = code;
@@ -187,6 +188,7 @@ export default {
           if(res.code === 200){
             localStorage.clear();
             ElMessage.success("退出成功");
+            //TODO 2021/12/28 22:35 router.push路由跳转页面不刷新，待处理
             router.push("/home");
           }
         }).catch(function (res) {

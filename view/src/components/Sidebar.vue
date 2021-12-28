@@ -61,6 +61,12 @@ export default {
             items.value = res.data;
           }
         });
+      }else {
+        items.value = [{
+          menuUrl: '/home',
+          menuName: '首页',
+          menuIcon: 'el-icon-lx-home'
+        }];
       }
     };
     getData();
