@@ -1,5 +1,6 @@
 package com.www.myblog.blog;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.FilterType;
 @ComponentScan(basePackages = {"com.www.common","com.www.myblog.blog"}, //配置要扫描的包路径
   excludeFilters = {@ComponentScan.Filter(type = FilterType.REGEX,pattern = "com.www.common.config.security.*")}//排除不扫描的包路径
 )
+@MapperScan(basePackages = {"com.www.myblog.blog.data"})
 public class BlogApplication {
     public static void main(String[] args) {
         //配置application加密的密钥

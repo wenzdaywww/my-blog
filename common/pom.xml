@@ -18,41 +18,62 @@
     <description>公共API包</description>
 
     <dependencies>
+        <!-- 应用依赖  -->
         <!-- springboot框架web项目起步依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
         </dependency>
         <!--AOP相关的依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
+            <scope>provided</scope>
         </dependency>
         <!-- security安全认证依赖 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-security</artifactId>
+            <scope>provided</scope>
         </dependency>
         <!-- oauth2认证-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-oauth2</artifactId>
+            <scope>provided</scope>
         </dependency>
         <!-- ribbon负载均衡依赖 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- druid数据连接池 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <scope>provided</scope>
         </dependency>
         <!-- feign服务调用依赖-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <scope>provided</scope>
         </dependency>
         <!-- springboot的redis依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+            <scope>provided</scope>
         </dependency>
+        <!-- mybatis插件依赖 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- 工具包依赖  -->
         <!-- lombok链式编程依赖 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -67,11 +88,6 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-        </dependency>
-        <!-- mybatis插件依赖 -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
         <!--fastjson 依赖-->
         <dependency>

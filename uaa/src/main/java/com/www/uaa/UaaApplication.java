@@ -1,5 +1,6 @@
 package com.www.uaa;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -10,8 +11,9 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
  * <p>@Author www </p>
  * <p>@Date 2021/12/19 12:57 </p>
  */
-@SpringBootApplication(scanBasePackages = {"com.www.common.config.redis","com.www.common.config.oauth2.authorize", "com.www.uaa"})
+@SpringBootApplication(scanBasePackages = {"com.www.common.config.redis","com.www.common.config.druid", "com.www.uaa"})
 @EnableEurekaClient
+@MapperScan(basePackages = {"com.www.uaa.data"})
 public class UaaApplication {
     /**
      * <p>@Description 启动方法 </p>
