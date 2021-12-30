@@ -59,7 +59,7 @@ datasource:
       validation-query: SELECT 1 FROM DUAL
       test-on-borrow: false #申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
       test-on-return: false #归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
-      pool-prepared-statements: true #是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
+      pool-prepared-statements: false #是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
       filters: stat,wall,log4j #属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有： 监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall
       #要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100
       max-pool-prepared-statement-per-connection-size: 20
@@ -82,7 +82,7 @@ datasource:
       validation-query: SELECT 1 FROM DUAL
       test-on-borrow: false #申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
       test-on-return: false #归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
-      pool-prepared-statements: true #是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
+      pool-prepared-statements: false #是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
       filters: stat,wall,log4j #属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有： 监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall
       #要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100
       max-pool-prepared-statement-per-connection-size: 20
@@ -105,7 +105,7 @@ datasource:
       validation-query: SELECT 1 FROM DUAL
       test-on-borrow: false #申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
       test-on-return: false #归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
-      pool-prepared-statements: true #是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
+      pool-prepared-statements: false #是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
       filters: stat,wall,log4j #属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有： 监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall
       #要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100
       max-pool-prepared-statement-per-connection-size: 20

@@ -30,6 +30,7 @@ public class DruidMonitorConfig {
      */
     @Bean
     public ServletRegistrationBean statViewServlet(){
+        //TODO 2021/12/30 21:42 /druid/*路径会被拦截，待处理
         ServletRegistrationBean bean = new ServletRegistrationBean(new StatViewServlet(),"/druid/*");
         Map<String,String> initParam = new HashMap<>();
         //登录的key固定，不能改变
