@@ -3,6 +3,7 @@ package com.www.common.config.redis;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit;
  * <p>@Date 2021/8/1 21:07 </p>
  */
 @Component
+@ConditionalOnClass(RedisTemplate.class)
 public final class RedisOperation {
     private static RedisTemplate<String,Object> redisTemplate;
     /**

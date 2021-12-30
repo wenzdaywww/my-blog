@@ -5,7 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.core.Ordered;
+import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Aspect
 @Component
+@ConditionalOnBean(AbstractRoutingDataSource.class)
 public class ReadWriteInterceptor implements Ordered {
     /**
      * <p>@Description 读数据操作AOP切面 </p>

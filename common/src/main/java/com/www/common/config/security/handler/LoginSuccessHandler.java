@@ -1,12 +1,13 @@
 package com.www.common.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.www.common.pojo.dto.ResponseDTO;
 import com.www.common.config.redis.RedisOperation;
+import com.www.common.pojo.dto.ResponseDTO;
 import com.www.common.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -28,6 +29,7 @@ import java.util.Map;
  */
 @Slf4j
 @Component
+@ConditionalOnClass(AuthenticationSuccessHandler.class)
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     /** 使用redis保存用户的token的key前缀 **/
     @Value("${jwt.user-prefix}")

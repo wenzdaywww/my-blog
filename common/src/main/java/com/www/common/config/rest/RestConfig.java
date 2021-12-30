@@ -3,6 +3,7 @@ package com.www.common.config.rest;
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.RandomRule;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @Slf4j
 @Configuration
+@ConditionalOnClass(RestTemplate.class)
 public class RestConfig {
     /**
      * <p>@Description 注入RestTemplate </p>

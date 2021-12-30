@@ -1,6 +1,7 @@
 package com.www.common.config.oauth2.token;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -13,6 +14,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
  * <p>@Date 2021/12/18 12:21 </p>
  */
 @Configuration
+@ConditionalOnClass(JwtTokenStore.class)
 public class Oauth2TokenConfig {
     /** jwt令牌签名 **/
     @Value("${security.oauth2.authorization.jwt.key-value}")

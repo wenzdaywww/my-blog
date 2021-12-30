@@ -4,6 +4,7 @@ import com.www.common.config.security.ISecurityServie;
 import com.www.common.pojo.dto.UserDetailDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -24,6 +25,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@ConditionalOnClass(UserDetailsService.class)
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Resource
     private ISecurityServie securityUserServie;

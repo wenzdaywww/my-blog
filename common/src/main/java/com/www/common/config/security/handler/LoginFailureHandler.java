@@ -3,6 +3,7 @@ package com.www.common.config.security.handler;
 import com.alibaba.fastjson.JSON;
 import com.www.common.pojo.dto.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -21,6 +22,7 @@ import java.io.IOException;
  */
 @Slf4j
 @Component
+@ConditionalOnClass(AuthenticationFailureHandler.class)
 public class LoginFailureHandler implements AuthenticationFailureHandler  {
     /**
      * <p>@Description 登录失败处理事件 </p>

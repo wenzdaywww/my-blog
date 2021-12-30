@@ -3,6 +3,7 @@ package com.www.common.config.security.handler;
 import com.alibaba.fastjson.JSON;
 import com.www.common.pojo.dto.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.security.web.session.SessionInformationExpiredEvent;
 import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import java.io.IOException;
  */
 @Slf4j
 @Component
+@ConditionalOnClass(SessionInformationExpiredStrategy.class)
 public class SessionExpiredHandler implements SessionInformationExpiredStrategy {
     /**
      * <p>@Description 单点登录会话过期处理 </p>

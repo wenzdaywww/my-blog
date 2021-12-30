@@ -14,9 +14,9 @@ import org.springframework.context.annotation.Configuration;
  * <p>@Author www </p>
  * <p>@Date 2021/8/1 21:01 </p>
  */
-@Configuration
-@ConditionalOnClass({MybatisPlusInterceptor.class})
 @Slf4j
+@Configuration
+@ConditionalOnClass(MybatisPlusInterceptor.class)
 public class MyBatisConfig {
     /**
      * <p>@Description 新的分页插件,一缓和二缓遵循mybatis的规则,

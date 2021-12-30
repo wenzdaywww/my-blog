@@ -17,6 +17,7 @@ import org.aspectj.util.SoftHashMap;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +38,7 @@ import java.util.Map;
 @Slf4j
 @Configuration
 @EnableTransactionManagement
+@ConditionalOnClass(MybatisPlusAutoConfiguration.class)
 public class MultipleDataSourceConfig extends MybatisPlusAutoConfiguration {
     /** 写权限数据源前缀 **/
     public static final String WRITE_DATA_SOURCE_PREFIX = "writeDataSource_";

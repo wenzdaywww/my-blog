@@ -2,6 +2,8 @@ package com.www.common.config.mvc;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -12,8 +14,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * <p>@Author www </p>
  * <p>@Date 2021/12/10 20:48 </p>
  */
-@Configuration
 @Slf4j
+@Configuration
+@ConditionalOnClass(WebMvcConfigurer.class)
+@ConditionalOnProperty(prefix = "file",name = {"imgUrlPath","imgSavePath","otherUrlPath","otherSavePath"})
 public class WebMvcConfig implements WebMvcConfigurer {
     /** 图片访问路径 **/
     @Value("${file.imgUrlPath}")

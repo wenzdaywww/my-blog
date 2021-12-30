@@ -1,6 +1,7 @@
 package com.www.common.config.security.filter;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
@@ -20,6 +21,7 @@ import java.util.Iterator;
  */
 @Slf4j
 @Component
+@ConditionalOnClass(AccessDecisionManager.class)
 public class SecurityAccessDecisionManager implements AccessDecisionManager {
     /**
      * <p>@Description url访问校验 </p>

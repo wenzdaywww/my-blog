@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +25,7 @@ import java.lang.reflect.Parameter;
  */
 @Aspect
 @Component
+@ConditionalOnClass(ProceedingJoinPoint.class)
 public class ControllerAop {
     /**
      * <p>@Description 设置controller切入点 </p>

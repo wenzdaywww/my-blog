@@ -6,6 +6,7 @@ import com.www.common.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ import java.util.Arrays;
  */
 @Slf4j
 @Service
+@ConditionalOnProperty(prefix = "file",name = {"imgUrlPath","imgSavePath","otherUrlPath","otherSavePath"})
 public class FileServiceImpl implements IFileService {
     /** 图片类型  **/
     private String[] imgType = {"BMP","JPG","JPEG","PNG","GIF"};

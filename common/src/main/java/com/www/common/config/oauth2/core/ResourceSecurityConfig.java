@@ -1,6 +1,7 @@
 package com.www.common.config.oauth2.core;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Slf4j
 @Configuration
 @EnableWebSecurity
+@ConditionalOnClass(WebSecurityConfigurerAdapter.class)
 @EnableGlobalMethodSecurity(prePostEnabled = true,securedEnabled = true) //配置基于方法的安全认证,必要
 public class ResourceSecurityConfig extends WebSecurityConfigurerAdapter {
     /**

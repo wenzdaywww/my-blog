@@ -3,6 +3,7 @@ package com.www.common.config.security.handler;
 import com.alibaba.fastjson.JSON;
 import com.www.common.pojo.dto.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import java.io.IOException;
  */
 @Slf4j
 @Component
+@ConditionalOnClass(AuthenticationEntryPoint.class)
 public class SecurityAuthRejectHandler implements AuthenticationEntryPoint {
     /**
      * <p>@Description 认证失败时的异常处理 </p>

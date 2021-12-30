@@ -6,6 +6,7 @@ import com.www.common.config.redis.RedisOperation;
 import com.www.common.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,7 @@ import java.util.Map;
  */
 @Slf4j
 @Component
+@ConditionalOnClass(LogoutSuccessHandler.class)
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
     @Value("${jwt.user-prefix}")
     private String redisUserPrefix;

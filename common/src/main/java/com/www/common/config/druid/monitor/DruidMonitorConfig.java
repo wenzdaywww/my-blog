@@ -1,8 +1,10 @@
 package com.www.common.config.druid.monitor;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +21,7 @@ import java.util.Map;
  */
 @Slf4j
 @Configuration
+@ConditionalOnClass(DruidDataSource.class)
 public class DruidMonitorConfig {
     /**
      * <p>@Description 设置druid后台监控功能
