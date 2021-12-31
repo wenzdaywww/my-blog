@@ -1,4 +1,4 @@
-package com.www.common.pojo.constants;
+package com.www.common.pojo.constant;
 
 /**
  * <p>@Description redis公共参数的key设置 </p>

@@ -2,7 +2,7 @@ package com.www.myblog.base.service.menu.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.www.common.pojo.constants.RedisCommonContant;
+import com.www.common.pojo.constant.RedisCommonContant;
 import com.www.common.pojo.dto.ScopeDTO;
 import com.www.myblog.base.data.constants.RedisKeyConstant;
 import com.www.myblog.base.data.dto.SysMenuDTO;

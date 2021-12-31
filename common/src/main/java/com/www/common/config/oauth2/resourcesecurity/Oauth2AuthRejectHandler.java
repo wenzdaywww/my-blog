@@ -2,7 +2,6 @@ package com.www.common.config.oauth2.resourcesecurity;
 
 import com.alibaba.fastjson.JSON;
 import com.www.common.config.oauth2.token.JwtTokenConverter;
-import com.www.common.pojo.constants.CharConstant;
 import com.www.common.pojo.dto.ResponseDTO;
 import com.www.common.pojo.dto.TokenInfoDTO;
 import lombok.extern.slf4j.Slf4j;
