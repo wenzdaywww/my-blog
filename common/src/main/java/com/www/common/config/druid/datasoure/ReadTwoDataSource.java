@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 @ConditionalOnClass(DruidDataSource.class)
 //有配置datasource.druid.read-two的数据源参数才注入该数据源
 @ConditionalOnProperty(prefix = "datasource.druid.read-two",name = "url")
-@ConfigurationProperties(prefix = "datasource.druid.read-two")
 public class ReadTwoDataSource extends DruidDataSource implements IReadDataSoure {
     /**
      * <p>@Description 构造方法 </p>
