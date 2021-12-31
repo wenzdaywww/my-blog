@@ -35,7 +35,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler  {
      */
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        log.info("=====> 3、security登录认证失败处理");
+        log.info("3、security登录认证失败处理");
         String msg = "登录认证失败";
         if (exception instanceof LockedException) {
             msg = "账户被锁定，请联系管理员!";

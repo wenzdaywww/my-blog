@@ -19,7 +19,7 @@ public class ReadWriteDataSource extends AbstractRoutingDataSource {
      */
     @Override
     protected Object determineCurrentLookupKey() {
-//        log.info("=====> 数据源动态代理获取数据源");
+//        log.info("数据源动态代理获取数据源");
         return DataBaseHolder.getDataBaseType();
     }
 }

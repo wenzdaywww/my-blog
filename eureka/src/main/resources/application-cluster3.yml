@@ -18,6 +18,3 @@ eureka:
     register-with-eureka: false #实例是否在eureka服务器上注册自己的信息以供其他服务发现，默认为true
     service-url:
       defaultZone: http://www:www362412@192.168.1.132:8001/eureka/,http://www:www362412@192.168.1.133:8001/eureka/ #注册中心地址
-#配置eureka注册中心服务的status信息
-info:
-  name: my blog eureka server center

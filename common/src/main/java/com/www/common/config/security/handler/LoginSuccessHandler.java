@@ -52,7 +52,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
      */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        log.info("=====> 3、security登录认证成功处理");
+        log.info("3、security登录认证成功处理");
         //获取登录成功后的UserDetail对象
         User user = (User)authentication.getPrincipal();
         Map<String,Object> chaims = new HashMap<>();

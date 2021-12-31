@@ -43,7 +43,7 @@ public class Oauth2AuthRejectHandler implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         String token = httpServletRequest.getHeader(JwtTokenConverter.TOKEN_KEY);
         TokenInfoDTO tokenDTO = jwtTokenConverter.decodeToken(token);
-        log.info("=====> 4、请求认证失败，认证信息：{}，失败原因：{}",JSON.toJSONString(tokenDTO),e.getMessage());
+        log.info("4、请求认证失败，认证信息：{}，失败原因：{}",JSON.toJSONString(tokenDTO),e.getMessage());
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.UNAUTHORIZED,"认证失败");
         Cookie cookie = WebUtils.getCookie(httpServletRequest,"");
         httpServletResponse.setStatus(ResponseDTO.RespEnum.UNAUTHORIZED.getCode());

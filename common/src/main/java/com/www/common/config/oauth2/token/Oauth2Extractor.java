@@ -38,10 +38,10 @@ public class Oauth2Extractor extends BearerTokenExtractor {
         String tokenValue = this.getToken(request);
         TokenInfoDTO tokenInfoDTO = jwtTokenConverter.decodeToken(tokenValue);
         if(!RedisTokenHandler.isEffectiveToken(tokenInfoDTO,tokenValue)){
-            log.info("=====> 1、获取请求中的token单点登录验证不通过，请求中的token已失效");
+            log.info("1、获取请求中的token单点登录验证不通过，请求中的token已失效");
             return null;
         }
-        log.info("=====> 1、获取请求中的token单点登录验证通过");
+        log.info("1、获取请求中的token单点登录验证通过");
         if (tokenValue != null) {
             PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(tokenValue, "");
             return authentication;

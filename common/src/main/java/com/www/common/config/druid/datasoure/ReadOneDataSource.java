@@ -31,6 +31,6 @@ public class ReadOneDataSource extends DruidDataSource implements IReadDataSoure
      */
     public ReadOneDataSource(){
         super();
-        log.info("=====> 配置读权限数据源1");
+        log.info("配置读权限数据源1");
     }
 }

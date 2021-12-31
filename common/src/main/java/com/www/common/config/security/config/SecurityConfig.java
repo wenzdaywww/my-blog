@@ -58,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        log.info("=====> security服务配置访问的安全拦截策略");
+        log.info("security服务配置访问的安全拦截策略");
         //关闭CSRF（防止网站攻击）
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//关闭session
@@ -96,7 +96,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        log.info("=====> security服务配置认证用户信息");
+        log.info("security服务配置认证用户信息");
         //从数据库查询用户信息
         auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());;
     }

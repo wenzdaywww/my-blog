@@ -23,7 +23,7 @@ public class MvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        log.info("=====> 加载视图控制器");
+        log.info("加载视图控制器");
         registry.addViewController("/uaa-login").setViewName("uaa_login");//自定义登录页面跳转
     }
 }

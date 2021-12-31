@@ -31,7 +31,7 @@ public class SessionExpiredHandler implements SessionInformationExpiredStrategy 
      */
     @Override
     public void onExpiredSessionDetected(SessionInformationExpiredEvent sessionInformationExpiredEvent) throws IOException, ServletException {
-        log.info("=====> 6、security会话过期");
+        log.info("6、security会话过期");
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,"账号被挤下线");
         HttpServletResponse httpServletResponse = sessionInformationExpiredEvent.getResponse();
         httpServletResponse.setContentType("application/json;charset=utf-8");

@@ -76,7 +76,7 @@ public class MultipleDataSourceConfig extends MybatisPlusAutoConfiguration {
                    DefaultDataSource = writeMap.get(key);
                }
            }
-           log.info("=====> 加载{}个读写权限的数据源",writeNum);
+           log.info("加载{}个读写权限的数据源",writeNum);
         }
         //加载读权限的数据源
         Map<String,IReadDataSoure> readMap = applicationContext.getBeansOfType(IReadDataSoure.class);//读权限数据源集合
@@ -85,7 +85,7 @@ public class MultipleDataSourceConfig extends MybatisPlusAutoConfiguration {
                 targetDataSource.put(READ_DATA_SOURCE_PREFIX + readNum, readMap.get(key));
                 readNum ++;
             }
-            log.info("=====> 加载{}个只读权限的数据源",readNum);
+            log.info("加载{}个只读权限的数据源",readNum);
         }
         //默认数据源
         proxy.setDefaultTargetDataSource(DefaultDataSource);
@@ -103,7 +103,7 @@ public class MultipleDataSourceConfig extends MybatisPlusAutoConfiguration {
     @Bean(name = "sqlSessionFactory")
     @Override
     public SqlSessionFactory sqlSessionFactory(@Qualifier("routingDataSource") DataSource dataSource) throws Exception {
-        log.info("=====> 加载mybatis的sqlSessionFactory");
+        log.info("加载mybatis的sqlSessionFactory");
         return super.sqlSessionFactory(dataSource);
     }
     /**

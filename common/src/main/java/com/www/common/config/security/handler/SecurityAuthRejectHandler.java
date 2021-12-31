@@ -34,7 +34,7 @@ public class SecurityAuthRejectHandler implements AuthenticationEntryPoint {
      */
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        log.info("=====> 5、访问无认证失败");
+        log.info("5、访问无认证失败");
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.FORBIDDEN,"无权限访问");
         httpServletResponse.setStatus(403);
         httpServletResponse.setContentType("application/json;charset=utf-8");

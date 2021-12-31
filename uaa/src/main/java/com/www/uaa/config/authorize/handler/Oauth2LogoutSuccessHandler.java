@@ -49,7 +49,7 @@ public class Oauth2LogoutSuccessHandler implements LogoutSuccessHandler {
      */
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-        log.info("=====> 认证服务器退出成功");
+        log.info("认证服务器退出成功");
         //获取token信息
         String token = oauth2Extractor.getToken(httpServletRequest);
         TokenInfoDTO tokenInfoDTO = jwtTokenConverter.decodeToken(token);

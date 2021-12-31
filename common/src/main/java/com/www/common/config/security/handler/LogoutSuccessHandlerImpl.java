@@ -43,7 +43,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
      */
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
-        log.info("=====> 6、security退出成功");
+        log.info("6、security退出成功");
         Cookie cookie = WebUtils.getCookie(httpServletRequest,LoginSuccessHandler.COOKIE_TOKEN);
         String token = cookie != null ? cookie.getValue() : "";
         Map<String,Object> map = TokenUtils.validateTokenAndGetClaims(token);

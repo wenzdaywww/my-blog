@@ -52,7 +52,7 @@ public class RedisRunnerImpl implements ApplicationRunner {
                             //资源服务ID的url的scope保存到redis中
                             RedisOperation.listSet(RedisCommonContant.URL_SCOPE_PREFIX + scopeDTO.getResourceId(),scopeDTO);
                         }
-                        log.info("=====> 启动加载资源服务ID的url的scope数据{}条",scopeList.size());
+                        log.info("启动加载资源服务ID的url的scope数据{}条",scopeList.size());
                     }
                 }
             }catch (Exception e){

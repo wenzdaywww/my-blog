@@ -40,7 +40,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        log.info("=====> 配置MVC资源拦截");
+        log.info("配置MVC资源拦截");
         //配置图片访问的相对路径
         registry.addResourceHandler(imgUrlPath).addResourceLocations("file:"+imgSavePath);
         //配置图片外其他文件访问的相对路径

@@ -31,6 +31,6 @@ public class WriteDataSource extends DruidDataSource implements IWriteDataSoure 
      */
     public WriteDataSource(){
         super();
-        log.info("=====> 配置写权限数据源");
+        log.info("配置写权限数据源");
     }
 }

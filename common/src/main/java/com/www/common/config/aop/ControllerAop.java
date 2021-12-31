@@ -72,12 +72,12 @@ public class ControllerAop {
         try {
             Object result = pjd.proceed();// 执行目标方法
             stopWatch.stop();
-            log.info("=====> 请求{}方法执行耗时:{}秒。请求报文：{}，响应报文:{}",
+            log.info("请求{}方法执行耗时:{}秒。请求报文：{}，响应报文:{}",
                     controllerMethod,stopWatch.getTaskCount(),requestText,JSON.toJSONString(result));
             return result;
         }catch (Exception e){
-            log.error("=====> 请求{}方法发生异常。请求报文：{}，异常信息：", controllerMethod,requestText,e);
-            return new ResponseDTO<>(ResponseDTO.RespEnum.FAIL,"请求失败");
+            log.error("请求{}方法发生异常。请求报文：{}，异常信息：", controllerMethod,requestText,e);
+            return new ResponseDTO<>(ResponseDTO.RespEnum.UNDEFINE);
         }
     }
 }

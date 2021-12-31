@@ -28,7 +28,7 @@ public class MyBatisConfig {
      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor(){
-        log.info("=====> 配置Mybatis分页");
+        log.info("配置Mybatis分页");
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
         return interceptor;

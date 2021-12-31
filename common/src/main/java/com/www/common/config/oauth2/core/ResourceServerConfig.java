@@ -57,7 +57,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
      */
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        log.info("=====> 资源服务器配置验证方式");
+        log.info("资源服务器配置验证方式");
         resources.resourceId(resourceId) //资源ID
                 // .tokenServices(tokenServices()) //远程校验token时需要
                 .tokenStore(tokenStore) //jwt校验token
@@ -76,7 +76,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        log.info("=====> 资源服务器配置安全拦截策略");
+        log.info("资源服务器配置安全拦截策略");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);//关闭session策略
         //固定写法的配置scope范围

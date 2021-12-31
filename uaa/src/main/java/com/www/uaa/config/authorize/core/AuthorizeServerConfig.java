@@ -90,7 +90,7 @@ public class AuthorizeServerConfig extends AuthorizationServerConfigurerAdapter 
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        log.info("=====> 认证服务器配置客户端");
+        log.info("认证服务器配置客户端");
         clients.withClientDetails(clientDetails());
     }
     /**
@@ -102,7 +102,7 @@ public class AuthorizeServerConfig extends AuthorizationServerConfigurerAdapter 
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        log.info("=====> 认证服务器配置令牌端点的安全约束");
+        log.info("认证服务器配置令牌端点的安全约束");
         security.tokenKeyAccess("permitAll()")//oauth/token_key设置公开
                 .checkTokenAccess("permitAll()")//oauth/check_token设置公开
                 .allowFormAuthenticationForClients();//允许表单认证，申请令牌
@@ -116,7 +116,7 @@ public class AuthorizeServerConfig extends AuthorizationServerConfigurerAdapter 
      */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        log.info("=====> 认证服务器配置令牌端点");
+        log.info("认证服务器配置令牌端点");
         endpoints.authenticationManager(authenticationManager)//密码模式需要的管理器
                 .userDetailsService(userServiceHandler)//密码模式的用户信息管理
                 .authorizationCodeServices(authorizationCodeServices)//授权码需要的服务

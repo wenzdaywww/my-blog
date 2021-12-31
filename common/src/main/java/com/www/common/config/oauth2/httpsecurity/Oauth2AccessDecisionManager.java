@@ -48,17 +48,17 @@ public class Oauth2AccessDecisionManager implements AccessDecisionManager {
                 if(CollectionUtils.isNotEmpty(scopeList)){
                     for (String scope : scopeList){
                         if(StringUtils.equals(needScope,scope)){
-                            log.info("=====> 3、当前URL访问scope范围验证-访问范围权限验证通过");
+                            log.info("3、当前URL访问scope范围验证-访问范围权限验证通过");
                             return;
                         }
                     }
                 }
             }
             //用户拥有的角色统一在方法上使用@PreAuthorize注解校验
-            log.info("=====> 3、当前URL访问scope范围验证-无访问范围权限");
+            log.info("3、当前URL访问scope范围验证-无访问范围权限");
             throw new AccessDeniedException("无访问范围权限");
         }else if(authentication instanceof AnonymousAuthenticationToken){
-            log.info("=====> 3、当前URL访问scope范围验证-匿名无访问范围权限");
+            log.info("3、当前URL访问scope范围验证-匿名无访问范围权限");
             throw new AccessDeniedException("匿名无访问范围权限");
         }
     }

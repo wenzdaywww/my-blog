@@ -28,7 +28,7 @@ public class RestConfig {
     @Bean
     @LoadBalanced //此注解开启负载均衡
     public RestTemplate getRestTemplate(){
-        log.info("=====> 配置注入RestTemplate");
+        log.info("配置注入RestTemplate");
         return new RestTemplate();
     }
     /**
@@ -39,7 +39,7 @@ public class RestConfig {
      */
     @Bean
     public IRule getRule(){
-        log.info("=====> 配置全局负载均衡策略");
+        log.info("配置全局负载均衡策略");
         return new RandomRule();
     }
 }

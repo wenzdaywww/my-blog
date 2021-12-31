@@ -34,7 +34,7 @@ public class SecurityAccessDecisionManager implements AccessDecisionManager {
      */
     @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
-        log.info("=====> 4、访问权限角色验证");
+        log.info("4、访问权限角色验证");
         Iterator<ConfigAttribute> iterator = collection.iterator();
         while (iterator.hasNext()) {
             ConfigAttribute ca = iterator.next();
@@ -43,12 +43,12 @@ public class SecurityAccessDecisionManager implements AccessDecisionManager {
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             for (GrantedAuthority authority : authorities) {
                 if (authority.getAuthority().equals(needRole)) {
-                    log.info("=====> 4.1、访问权限角色验证-权限通过");
+                    log.info("4.1、访问权限角色验证-权限通过");
                     return;
                 }
             }
         }
-        log.info("=====> 4.1、访问权限角色验证-无权限访问");
+        log.info("4.1、访问权限角色验证-无权限访问");
         throw new AccessDeniedException("无权限访问");
     }
 

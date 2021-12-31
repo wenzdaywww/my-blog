@@ -44,19 +44,19 @@ public class ReadWriteInterceptor implements Ordered {
     public Object readOnly(ProceedingJoinPoint proceedingJoinPoint){
         Object result = null;
         try {
-//            log.info("=====> start 连接slave数据源  ");
+//            log.info("start 连接slave数据源  ");
             DataBaseHolder.setReadDataBaseType();
             result = proceedingJoinPoint.proceed();
-//            log.info("=====> end 连接slave数据源  ");
+//            log.info("end 连接slave数据源  ");
         }catch (Exception e){
-            log.error("=====> 连接slave数据源Exception异常："+e.getMessage());
+            log.error("连接slave数据源Exception异常："+e.getMessage());
             //查询从数据库出现异常再从主数据库查询
             result = insert(proceedingJoinPoint);
         } catch (Throwable throwable) {
-            log.error("=====> 连接slave数据源throwable异常："+throwable.getMessage());
+            log.error("连接slave数据源throwable异常："+throwable.getMessage());
         } finally {
             DataBaseHolder.clearDataBaseType();
-//            log.info("=====> 清除slave数据源连接  ");
+//            log.info("清除slave数据源连接  ");
         }
         return result;
     }
@@ -71,17 +71,17 @@ public class ReadWriteInterceptor implements Ordered {
     public Object insert(ProceedingJoinPoint proceedingJoinPoint){
         Object result = null;
         try {
-//            log.info("=====> start 连接master数据源  ");
+//            log.info("start 连接master数据源  ");
             DataBaseHolder.setWriteDataBaseType();
             result = proceedingJoinPoint.proceed();
-//            log.info("=====> end 连接master数据源  ");
+//            log.info("end 连接master数据源  ");
         }catch (Exception e){
-            log.error("=====> 连接master数据源Exception异常："+e.getMessage());
+            log.error("连接master数据源Exception异常："+e.getMessage());
         } catch (Throwable throwable) {
-            log.error("=====> 连接master数据源throwable异常："+throwable.getMessage());
+            log.error("连接master数据源throwable异常："+throwable.getMessage());
         } finally {
             DataBaseHolder.clearDataBaseType();
-//            log.info("=====> 清除master数据源连接  ");
+//            log.info("清除master数据源连接  ");
         }
         return result;
     }
