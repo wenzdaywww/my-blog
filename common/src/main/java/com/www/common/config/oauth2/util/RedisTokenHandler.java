@@ -1,6 +1,7 @@
 package com.www.common.config.oauth2.util;
 
 import com.www.common.config.redis.RedisOperation;
+import com.www.common.pojo.constants.CharConstant;
 import com.www.common.pojo.dto.TokenInfoDTO;
 import org.apache.commons.lang3.StringUtils;
 
@@ -11,10 +12,8 @@ import org.apache.commons.lang3.StringUtils;
  * <p>@Date 2021/12/27 21:54 </p>
  */
 public class RedisTokenHandler {
-    /** redis的key分隔符 **/
-    private static final String SEPARATOR = ":";
     /** redis的key前缀 **/
-    private static final String PREFIX = "oauth2_token" + SEPARATOR;
+    private static final String PREFIX = "oauth2_token" + CharConstant.COLON;
 
     /**
      * <p>@Description 删除用户登录的token到redis中 </p>
@@ -78,6 +77,6 @@ public class RedisTokenHandler {
             return null;
         }
         //用户key格式：oauth2_token:客户端ID:用户ID
-        return PREFIX + tokenInfo.getClient_id() + SEPARATOR + tokenInfo.getUser_name();
+        return PREFIX + tokenInfo.getClient_id() + CharConstant.COLON + tokenInfo.getUser_name();
     }
 }

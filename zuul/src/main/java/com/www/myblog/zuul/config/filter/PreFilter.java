@@ -3,13 +3,13 @@ package com.www.myblog.zuul.config.filter;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
+import com.www.common.config.filter.TraceIdFilter;
 import com.www.common.utils.UUIDUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.UUID;
 
 /**
  * <p>@Description pre过滤器:请求调用前的处理  </p>
@@ -55,7 +55,7 @@ public class PreFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
         //生成全局日志跟踪号
-        ctx.addZuulRequestHeader("traceId", UUIDUtils.getTraceId());
+        ctx.addZuulRequestHeader(TraceIdFilter.TRACE_ID, UUIDUtils.getTraceId());
 //        只过滤OPTIONS 请求
         if(request.getMethod().equals(RequestMethod.OPTIONS.name())){
             return true;

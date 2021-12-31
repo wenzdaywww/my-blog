@@ -10,8 +10,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -43,6 +45,11 @@ public class Oauth2UnauthHandler implements AccessDeniedHandler {
         TokenInfoDTO tokenDTO = jwtTokenConverter.decodeToken(token);
         log.info("4、请求的角色拒绝访问，角色权限信息：{}，拒绝原因：{}",JSON.toJSONString(tokenDTO),e.getMessage());
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.UNAUTHORIZED,e.getMessage());
+        Cookie cookie = WebUtils.getCookie(httpServletRequest, JwtTokenConverter.TOKEN_KEY);
+        if(cookie != null){
+            cookie.setValue(null);
+            httpServletResponse.addCookie(cookie);
+        }
         httpServletResponse.setStatus(ResponseDTO.RespEnum.UNAUTHORIZED.getCode());
         httpServletResponse.setContentType("application/json;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(responseDTO));

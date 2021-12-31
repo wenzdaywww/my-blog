@@ -1,6 +1,5 @@
 package com.www.common.config.filter;
 
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
@@ -24,7 +23,7 @@ import java.io.IOException;
 @Component
 public class TraceIdFilter extends OncePerRequestFilter {
     /** 日志跟踪号的key **/
-    private static String traceId = "traceId";
+    public static final String TRACE_ID = "traceId";
     /**
      * <p>@Description 过滤器设置 </p>
      * <p>@Author www </p>
@@ -36,7 +35,7 @@ public class TraceIdFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        MDC.put(traceId, httpServletRequest.getHeader(traceId));
+        MDC.put(TRACE_ID, httpServletRequest.getHeader(TRACE_ID));
         filterChain.doFilter(httpServletRequest,httpServletResponse);
     }
 }

@@ -1,6 +1,7 @@
 package com.www.common.config.aop;
 
 import com.alibaba.fastjson.JSON;
+import com.www.common.pojo.constants.CharConstant;
 import com.www.common.pojo.dto.ResponseDTO;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -53,19 +54,19 @@ public class ControllerAop {
         Logger log = LoggerFactory.getLogger(pjd.getSignature().getClass().getName());// 初始化日志打印
         Object[] paramValue = pjd.getArgs();// 获取方法参数值
         //获取请求参数集合并进行遍历拼接
-        String requestText = "{";
+        String requestText = CharConstant.LEFT_BRACE;
         for (int i = 0; i < paramName.length && i < paramValue.length && i < paramType.length;  i++) {
             String value = "";
             if(paramValue[i] instanceof  MultipartFile){
-                value = paramValue[i] != null ? ((MultipartFile) paramValue[i]).getOriginalFilename() : "";
+                value = paramValue[i] != null ? ((MultipartFile) paramValue[i]).getOriginalFilename() : CharConstant.EMPTY;
 
             }else {
                 value = JSON.toJSONString(paramValue[i]);
             }
             if(i != paramName.length -1){
-                requestText += paramName[i].getName() + "=" + value + ",";
+                requestText += paramName[i].getName() + CharConstant.EQUAL + value + CharConstant.COMMA;
             }else {
-                requestText += paramName[i].getName() + "=" + value ;
+                requestText += paramName[i].getName() + CharConstant.EQUAL + value ;
             }
         }
         requestText += "}";

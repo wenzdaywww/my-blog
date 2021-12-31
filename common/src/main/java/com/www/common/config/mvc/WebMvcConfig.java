@@ -31,6 +31,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     /** 图片外其他文件保存的绝对路径 **/
     @Value("${file.otherSavePath}")
     private String otherSavePath;
+    /** 资源映射前缀 **/
+    private String file = "file:";
     /**
      * <p>@Description 资源拦截配置 </p>
      * <p>@Author www </p>
@@ -42,8 +44,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         log.info("配置MVC资源拦截");
         //配置图片访问的相对路径
-        registry.addResourceHandler(imgUrlPath).addResourceLocations("file:"+imgSavePath);
+        registry.addResourceHandler(imgUrlPath).addResourceLocations(file + imgSavePath);
         //配置图片外其他文件访问的相对路径
-        registry.addResourceHandler(otherUrlPath).addResourceLocations("file:"+otherSavePath);
+        registry.addResourceHandler(otherUrlPath).addResourceLocations(file + otherSavePath);
     }
 }
