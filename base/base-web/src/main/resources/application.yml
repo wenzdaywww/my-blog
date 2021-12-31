@@ -19,7 +19,6 @@ mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   #实现数据库下划线字段到POJO类驼峰形式的自动映射
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #日志输出
     map-underscore-to-camel-case: true
   global-config:
     db-config:
@@ -32,3 +31,14 @@ logging:
   pattern:
     file: '%date [traceId=%X{traceId}] %level %logger{10} -> %file:%line => %msg%n'
     console: '%date [traceId=%X{traceId}] %level %logger{10} -> %file:%line => %msg%n'
+  #日志级别设置
+  level:
+    com:
+      www:
+        myblog:
+          base:
+            controller: info
+            service: info
+            data:
+              mapper: error
+

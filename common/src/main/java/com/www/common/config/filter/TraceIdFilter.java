@@ -36,7 +36,6 @@ public class TraceIdFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        log.info("header={}", JSON.toJSONString(httpServletRequest.getHeaderNames()));
         MDC.put(traceId, httpServletRequest.getHeader(traceId));
         filterChain.doFilter(httpServletRequest,httpServletResponse);
     }
