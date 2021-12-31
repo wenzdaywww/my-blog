@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @ConditionalOnClass(DruidDataSource.class)
+@ConfigurationProperties(prefix = "datasource.druid.read-one")
 //有配置datasource.druid.read-two的数据源参数才注入该数据源
 @ConditionalOnProperty(prefix = "datasource.druid.read-one",name = "url")
 public class ReadOneDataSource extends DruidDataSource implements IReadDataSoure {

@@ -56,6 +56,7 @@ public class RedisRunnerImpl implements ApplicationRunner {
                     }
                 }
             }catch (Exception e){
+                isWait = false;
                 log.info("查所询有请求权限，发生异常：{}",e.getMessage());
             }finally {
                 // 释放锁
