@@ -21,7 +21,6 @@ import org.springframework.stereotype.Component;
 @ConditionalOnClass(DruidDataSource.class)
 //有配置datasource.druid.write的数据源参数才注入该数据源
 @ConditionalOnProperty(prefix = "datasource.druid.write",name = "url")
-@ConfigurationProperties(prefix = "datasource.druid.write")
 public class WriteDataSource extends DruidDataSource implements IWriteDataSoure {
     /**
      * <p>@Description 构造方法 </p>
