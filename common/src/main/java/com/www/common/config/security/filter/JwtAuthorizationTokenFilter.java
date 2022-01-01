@@ -1,14 +1,14 @@
 package com.www.common.config.security.filter;
 
+import com.www.common.config.redis.RedisOperation;
 import com.www.common.config.security.handler.LoginSuccessHandler;
 import com.www.common.config.security.impl.UserDetailsServiceImpl;
-import com.www.common.config.redis.RedisOperation;
 import com.www.common.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,23 +33,33 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-@ConditionalOnClass(OncePerRequestFilter.class)
+@ConditionalOnProperty(prefix = "com.www.common.securuty",name = "enable") //是否开启Security安全
 public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
     /** 使用redis保存用户的token的key前缀 **/
-    @Value("${jwt.user-prefix}")
+    @Value("${com.www.common.securuty.user-prefix}")
     private String redisUserPrefix;
     /** jwt令牌签名 */
-    @Value("${jwt.secret-key}")
+    @Value("${com.www.common.securuty.secret-key}")
     private String SECRET_KEY ;
     /**  过期时间（秒） */
-    @Value("${jwt.expire-time-second}")
+    @Value("${com.www.common.securuty.expire-time-second}")
     private int EXPIRE_TIME;
     /** 设置token过期时间和密钥 **/
     @PostConstruct
     public void setSecretAndExpireTime(){
         TokenUtils.setSecretAndExpireTime(EXPIRE_TIME,SECRET_KEY);
+    }
+
+    /**
+     * <p>@Description 构造方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 18:12 </p>
+     * @return
+     */
+    public JwtAuthorizationTokenFilter(){
+        log.info("security配置token验证拦截器");
     }
     /**
      * <p>@Description token验证 </p>
@@ -64,7 +74,7 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         Cookie cookie = WebUtils.getCookie(httpServletRequest,LoginSuccessHandler.COOKIE_TOKEN);
         String token = cookie != null ? cookie.getValue() : "";
-        log.info("1、访问token验证，token={}",token);
+        log.info("1、security访问token验证，token={}",token);
         Map<String,Object> map = TokenUtils.validateTokenAndGetClaims(token);
         if(map != null && map.size() > 0){
             String userId = String.valueOf(map.get(TokenUtils.USERID));

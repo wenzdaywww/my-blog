@@ -1,4 +1,4 @@
-package com.www.common.service.upload;
+package com.www.common.config.mvc.upload;
 
 import com.www.common.pojo.dto.response.ResponseDTO;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
  * <p>@Author www </p>
  * <p>@Date 2021/12/5 22:37 </p>
  */
-public interface IFileService {
+public interface IFileUpload {
     /**
      * <p>@Description 上传文件 </p>
      * <p>@Author www </p>

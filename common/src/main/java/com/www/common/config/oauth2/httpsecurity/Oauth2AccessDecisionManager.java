@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
@@ -24,8 +25,17 @@ import java.util.Iterator;
  */
 @Slf4j
 @Component
-@ConditionalOnClass(AccessDecisionManager.class)
+@ConditionalOnProperty(prefix = "com.www.common.oauth2",name = "enable") //是否开启oauth2资源服务配置
 public class Oauth2AccessDecisionManager implements AccessDecisionManager {
+    /**
+     * <p>@Description 构造方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 18:06 </p>
+     * @return
+     */
+    public Oauth2AccessDecisionManager(){
+        log.info("资源服务器配置访问决策管理器");
+    }
     /**
      * <p>@Description url访问验证 </p>
      * <p>@Author www </p>
@@ -48,7 +58,7 @@ public class Oauth2AccessDecisionManager implements AccessDecisionManager {
                 if(CollectionUtils.isNotEmpty(scopeList)){
                     for (String scope : scopeList){
                         if(StringUtils.equals(needScope,scope)){
-                            log.info("3、当前URL访问scope范围验证-访问范围权限验证通过");
+                            log.debug("3、当前URL访问scope范围验证-访问范围权限验证通过");
                             return;
                         }
                     }

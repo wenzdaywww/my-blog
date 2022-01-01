@@ -9,7 +9,4 @@ package com.www.myblog.base.data.constants;
  * <p>@Date 2021/12/14 21:53 </p>
  */
 public class RedisKeyConstant {
-    /** 资源服务ID的url的scope分布式锁key **/
-    public static final String URL_SCOPE_LOCK =  "MY-BASE:LOCK:URL_SCOPE:SYS_MENU";
-
 }

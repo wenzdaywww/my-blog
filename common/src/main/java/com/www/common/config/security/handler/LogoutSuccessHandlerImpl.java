@@ -1,12 +1,12 @@
 package com.www.common.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.config.redis.RedisOperation;
+import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -27,11 +27,20 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-@ConditionalOnClass(LogoutSuccessHandler.class)
+@ConditionalOnProperty(prefix = "com.www.common.securuty",name = "enable") //是否开启Security安全
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
-    @Value("${jwt.user-prefix}")
+    @Value("${com.www.common.securuty.user-prefix}")
     private String redisUserPrefix;
 
+    /**
+     * <p>@Description 构造方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 18:16 </p>
+     * @return
+     */
+    public LogoutSuccessHandlerImpl(){
+        log.info("security配置退出成功的处理");
+    }
     /**
      * <p>@Description 退出成功处理 </p>
      * <p>@Author www </p>

@@ -3,6 +3,7 @@ package com.www.common.config.aop;
 import com.alibaba.fastjson.JSON;
 import com.www.common.pojo.constant.CharConstant;
 import com.www.common.pojo.dto.response.ResponseDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -10,7 +11,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,10 +25,20 @@ import java.lang.reflect.Parameter;
  * <p>@Author www </p>
  * <p>@Date 2021/12/8 20:08 </p>
  */
+@Slf4j
 @Aspect
 @Component
-@ConditionalOnClass(ProceedingJoinPoint.class)
+@ConditionalOnProperty(prefix = "com.www.common.ctl-aop",name = "enable")
 public class ControllerAop {
+    /**
+     * <p>@Description 构造方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 17:59 </p>
+     * @return
+     */
+    public ControllerAop(){
+        log.info("开启controller层的AOP日志拦截");
+    }
     /**
      * <p>@Description 设置controller切入点 </p>
      * <p>@Author www </p>

@@ -11,7 +11,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
  * <p>@Author www </p>
  * <p>@Date 2021/12/19 12:57 </p>
  */
-@SpringBootApplication(scanBasePackages = {"com.www.common.config.redis","com.www.common.config.druid", "com.www.uaa"})
+@SpringBootApplication(scanBasePackages = {"com.www.common","com.www.uaa"})
 @EnableEurekaClient
 @MapperScan(basePackages = {"com.www.uaa.data"})
 public class UaaApplication {

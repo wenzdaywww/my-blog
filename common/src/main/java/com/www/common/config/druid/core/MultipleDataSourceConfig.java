@@ -18,6 +18,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +39,8 @@ import java.util.Map;
 @Slf4j
 @Configuration
 @EnableTransactionManagement
-@ConditionalOnClass(MybatisPlusAutoConfiguration.class)
+//com.www.common.druid.enable=true才开启多数据源配置
+@ConditionalOnProperty(prefix = "com.www.common.druid",name = "enable")
 public class MultipleDataSourceConfig extends MybatisPlusAutoConfiguration {
     /** 写权限数据源前缀 **/
     public static final String WRITE_DATA_SOURCE_PREFIX = "writeDataSource_";
@@ -51,9 +53,24 @@ public class MultipleDataSourceConfig extends MybatisPlusAutoConfiguration {
     @Autowired
     private ApplicationContext applicationContext;
 
-
+    /**
+     * <p>@Description 构造方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 18:00 </p>
+     * @param properties
+     * @param interceptorsProvider
+     * @param typeHandlersProvider
+     * @param languageDriversProvider
+     * @param resourceLoader
+     * @param databaseIdProvider
+     * @param configurationCustomizersProvider
+     * @param mybatisPlusPropertiesCustomizerProvider
+     * @param applicationContext
+     * @return
+     */
     public MultipleDataSourceConfig(MybatisPlusProperties properties, ObjectProvider<Interceptor[]> interceptorsProvider, ObjectProvider<TypeHandler[]> typeHandlersProvider, ObjectProvider<LanguageDriver[]> languageDriversProvider, ResourceLoader resourceLoader, ObjectProvider<DatabaseIdProvider> databaseIdProvider, ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider, ObjectProvider<List<MybatisPlusPropertiesCustomizer>> mybatisPlusPropertiesCustomizerProvider, ApplicationContext applicationContext) {
         super(properties, interceptorsProvider, typeHandlersProvider, languageDriversProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider, mybatisPlusPropertiesCustomizerProvider, applicationContext);
+        log.info("配置mybatis多个数据源");
     }
     /**
      * <p>@Description 加载数据源类型 </p>
@@ -103,7 +120,6 @@ public class MultipleDataSourceConfig extends MybatisPlusAutoConfiguration {
     @Bean(name = "sqlSessionFactory")
     @Override
     public SqlSessionFactory sqlSessionFactory(@Qualifier("routingDataSource") DataSource dataSource) throws Exception {
-        log.info("加载mybatis的sqlSessionFactory");
         return super.sqlSessionFactory(dataSource);
     }
     /**

@@ -1,5 +1,6 @@
 package com.www.common.config.redis;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,22 @@ import java.util.concurrent.TimeUnit;
  * <p>@Author www </p>
  * <p>@Date 2021/8/1 21:07 </p>
  */
+@Slf4j
 @Component
 @ConditionalOnClass(RedisTemplate.class)
 public final class RedisOperation {
+    /** redisTemplate操作模板 **/
     private static RedisTemplate<String,Object> redisTemplate;
+
+    /**
+     * <p>@Description 构造方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 18:11 </p>
+     * @return
+     */
+    public RedisOperation(){
+        log.info("实例化redis操作类");
+    }
     /**
      * <p>@Description 返回redisTemplate实例 </p>
      * <p>@Author www </p>
@@ -99,6 +112,18 @@ public final class RedisOperation {
      */
     public static boolean lock(String key,String value){
         return setNX(key,value);
+    }
+    /**
+     * <p>@Description 获取分布式锁 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/8/1 21:07 </p>
+     * @param key 键值
+     * @param value 值
+     * @param seconds 超时时间(秒)
+     * @return boolean true获取锁成功，false获取锁失败
+     */
+    public static boolean lock(String key,String value,long seconds){
+        return setNX(key,value,seconds);
     }
     /**
      * <p>@Description 释放分布式锁 </p>
@@ -182,7 +207,7 @@ public final class RedisOperation {
      * @return java.lang.Object
      */
     public static Object hashGet(String key){
-        return redisTemplate.opsForHash().values(key);
+        return redisTemplate.opsForHash().entries(key);
     }
     /**
      * <p>@Description 从左边保存List数据 </p>

@@ -19,9 +19,9 @@ import org.springframework.stereotype.Component;
 @Primary//优先使用master
 @Component
 @ConditionalOnClass(DruidDataSource.class)
-@ConfigurationProperties(prefix = "datasource.druid.write")
-//有配置datasource.druid.write的数据源参数才注入该数据源
-@ConditionalOnProperty(prefix = "datasource.druid.write",name = "url")
+@ConfigurationProperties(prefix = "com.www.common.druid.write")
+//com.www.common.druid.enable=true才开启多数据源配置
+@ConditionalOnProperty(prefix = "com.www.common.druid.write",name = {"url"})
 public class WriteDataSource extends DruidDataSource implements IWriteDataSoure {
     /**
      * <p>@Description 构造方法 </p>
@@ -31,6 +31,6 @@ public class WriteDataSource extends DruidDataSource implements IWriteDataSoure 
      */
     public WriteDataSource(){
         super();
-        log.info("配置写权限数据源");
+        log.info("加载写权限数据源");
     }
 }

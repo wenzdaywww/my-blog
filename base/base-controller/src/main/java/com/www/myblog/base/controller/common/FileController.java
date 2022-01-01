@@ -1,7 +1,7 @@
 package com.www.myblog.base.controller.common;
 
 import com.www.common.pojo.dto.response.ResponseDTO;
-import com.www.common.service.upload.IFileService;
+import com.www.common.config.mvc.upload.IFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("common")
 public class FileController {
     @Autowired
-    private IFileService fileService;
+    private IFileUpload fileService;
 
     /**
      * <p>@Description 上传文件 </p>

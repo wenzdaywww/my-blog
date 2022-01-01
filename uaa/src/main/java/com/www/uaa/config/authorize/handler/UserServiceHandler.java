@@ -2,11 +2,13 @@ package com.www.uaa.config.authorize.handler;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.www.common.config.code.CodeDict;
+import com.www.common.pojo.dto.security.UserDetailDTO;
+import com.www.common.pojo.enums.CodeKeyEnum;
+import com.www.common.pojo.enums.CodeTypeEnum;
 import com.www.uaa.data.entity.SysUserEntity;
-import com.www.uaa.data.enums.CommonEnum;
 import com.www.uaa.data.mapper.SysRoleMapper;
 import com.www.uaa.data.mapper.SysUserMapper;
-import com.www.common.pojo.dto.security.UserDetailDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,10 +59,10 @@ public class UserServiceHandler implements UserDetailsService {
         UserDetailDTO userDTO = new UserDetailDTO();
         userDTO.setUserId(userEntity.getUserId());
         userDTO.setPassword(userEntity.getPassword());
-        userDTO.setEnabled(StringUtils.equals(userEntity.getStateCd(), CommonEnum.STATE_CD_1.getCode()));
-        userDTO.setAccountNonExpired(StringUtils.equals(userEntity.getNotExpired(), CommonEnum.YES_1.getCode()));
-        userDTO.setCredentialsNonExpired(StringUtils.equals(userEntity.getCredentialsNotExpired(), CommonEnum.YES_1.getCode()));
-        userDTO.setAccountNonLocked(StringUtils.equals(userEntity.getNotLocked(), CommonEnum.YES_1.getCode()));
+        userDTO.setEnabled(StringUtils.equals(userEntity.getStateCd(), CodeDict.getValue(CodeTypeEnum.USER_STATUS, CodeKeyEnum.K1)));
+        userDTO.setAccountNonExpired(StringUtils.equals(userEntity.getNotExpired(), CodeDict.getValue(CodeTypeEnum.YES_NO, CodeKeyEnum.K1)));
+        userDTO.setCredentialsNonExpired(StringUtils.equals(userEntity.getCredentialsNotExpired(), CodeDict.getValue(CodeTypeEnum.YES_NO, CodeKeyEnum.K1)));
+        userDTO.setAccountNonLocked(StringUtils.equals(userEntity.getNotLocked(), CodeDict.getValue(CodeTypeEnum.YES_NO, CodeKeyEnum.K1)));
         //查询用户的角色
         List<String> roleList = sysRoleMapper.findUserRole(userId);
         List<GrantedAuthority> authorities = new ArrayList<>();

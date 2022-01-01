@@ -50,7 +50,4 @@ public enum CodeKeyEnum {
         return key;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
 }

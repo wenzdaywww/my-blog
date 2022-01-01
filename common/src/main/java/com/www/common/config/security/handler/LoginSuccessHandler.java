@@ -7,7 +7,7 @@ import com.www.common.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -29,18 +29,28 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-@ConditionalOnClass(AuthenticationSuccessHandler.class)
+@ConditionalOnProperty(prefix = "com.www.common.securuty",name = "enable") //是否开启Security安全
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     /** 使用redis保存用户的token的key前缀 **/
-    @Value("${jwt.user-prefix}")
+    @Value("${com.www.common.securuty.user-prefix}")
     private String redisUserPrefix;
     /**  返回客户段cookie中的token的name **/
     public static final String COOKIE_TOKEN = "token";
     /** 是否免登录 **/
     private static final String IS_REMENMBER_ME = "1";
     /** cookie免登录有效天数 **/
-    @Value("${jwt.cookie-day}")
+    @Value("${com.www.common.securuty.cookie-day}")
     private int COOKIE_AGE;
+
+    /**
+     * <p>@Description 构造方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 18:15 </p>
+     * @return
+     */
+    public LoginSuccessHandler(){
+        log.info("security配置登录认证成功处理");
+    }
     /**
      * <p>@Description security登录认证成功处理 </p>
      * <p>@Author www </p>

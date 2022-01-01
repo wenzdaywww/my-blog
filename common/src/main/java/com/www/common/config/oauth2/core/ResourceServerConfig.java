@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,7 +31,7 @@ import org.springframework.security.web.access.intercept.FilterSecurityIntercept
 @Slf4j
 @Configuration
 @EnableResourceServer
-@ConditionalOnClass(ResourceServerConfigurerAdapter.class)
+@ConditionalOnProperty(prefix = "com.www.common.oauth2",name = "enable") //是否开启oauth2资源服务配置
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     /** 资源服务id **/
     @Value("${spring.application.name}")

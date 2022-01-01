@@ -24,6 +24,16 @@ import java.io.IOException;
 public class TraceIdFilter extends OncePerRequestFilter {
     /** 日志跟踪号的key **/
     public static final String TRACE_ID = "traceId";
+
+    /**
+     * <p>@Description 构造方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 18:04 </p>
+     * @return
+     */
+    public TraceIdFilter(){
+        log.info("开启日志全局跟踪号过滤器");
+    }
     /**
      * <p>@Description 过滤器设置 </p>
      * <p>@Author www </p>

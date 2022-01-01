@@ -40,7 +40,7 @@ public class Oauth2Extractor extends BearerTokenExtractor {
             log.info("1、获取请求中的token单点登录验证不通过，请求中的token已失效");
             return null;
         }
-        log.info("1、获取请求中的token单点登录验证通过");
+        log.debug("1、获取请求中的token单点登录验证通过");
         if (tokenValue != null) {
             PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(tokenValue, "");
             return authentication;

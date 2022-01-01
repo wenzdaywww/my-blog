@@ -7,6 +7,7 @@ import com.www.common.pojo.dto.token.TokenInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -26,10 +27,20 @@ import java.io.IOException;
  */
 @Slf4j
 @Component
-@ConditionalOnClass(AccessDeniedHandler.class)
+@ConditionalOnProperty(prefix = "com.www.common.oauth2",name = "enable") //是否开启oauth2资源服务配置
 public class Oauth2UnauthHandler implements AccessDeniedHandler {
     @Autowired
     private JwtTokenConverter jwtTokenConverter;
+
+    /**
+     * <p>@Description 构造方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 18:08 </p>
+     * @return
+     */
+    public Oauth2UnauthHandler(){
+        log.info("资源服务器配置拒绝访问异常处理");
+    }
     /**
      * <p>@Description 拒绝访问异常处理  </p>
      * <p>@Author www </p>
@@ -43,7 +54,7 @@ public class Oauth2UnauthHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
         String token = httpServletRequest.getHeader(JwtTokenConverter.TOKEN_KEY);
         TokenInfoDTO tokenDTO = jwtTokenConverter.decodeToken(token);
-        log.info("4、请求的角色拒绝访问，角色权限信息：{}，拒绝原因：{}",JSON.toJSONString(tokenDTO),e.getMessage());
+        log.error("4、请求的角色拒绝访问，角色权限信息：{}，拒绝原因：{}",JSON.toJSONString(tokenDTO),e.getMessage());
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.UNAUTHORIZED,e.getMessage());
         Cookie cookie = WebUtils.getCookie(httpServletRequest, JwtTokenConverter.TOKEN_KEY);
         if(cookie != null){

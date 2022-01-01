@@ -5,7 +5,7 @@ import com.www.common.pojo.dto.security.AuthorityDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
@@ -26,12 +26,22 @@ import java.util.List;
  */
 @Slf4j
 @Component
-@ConditionalOnClass(FilterInvocationSecurityMetadataSource.class)
+@ConditionalOnProperty(prefix = "com.www.common.securuty",name = "enable") //是否开启Security安全
 public class SecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
     @Resource
     private ISecurityServie securityUserServie;
-
+    /** 路径匹配 **/
     AntPathMatcher antPathMatcher = new AntPathMatcher();
+
+    /**
+     * <p>@Description  </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 18:14 </p>
+     * @return
+     */
+    public SecurityMetadataSource(){
+        log.info("security配置安全元数据源");
+    }
     /**
      * <p>@Description 访问权限角色配置 </p>
      * <p>@Author www </p>

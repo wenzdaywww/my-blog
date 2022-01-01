@@ -7,6 +7,7 @@ import com.www.common.pojo.dto.token.TokenInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -26,10 +27,20 @@ import java.io.IOException;
  */
 @Slf4j
 @Component
-@ConditionalOnClass(AuthenticationEntryPoint.class)
+@ConditionalOnProperty(prefix = "com.www.common.oauth2",name = "enable") //是否开启oauth2资源服务配置
 public class Oauth2AuthRejectHandler implements AuthenticationEntryPoint {
     @Autowired
     private JwtTokenConverter jwtTokenConverter;
+
+    /**
+     * <p>@Description 构造方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 18:07 </p>
+     * @return
+     */
+    public Oauth2AuthRejectHandler(){
+        log.info("资源服务器配置认证失败时的异常处理");
+    }
     /**
      * <p>@Description 认证失败时的异常处理 </p>
      * <p>@Author www </p>
@@ -43,7 +54,7 @@ public class Oauth2AuthRejectHandler implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         String token = httpServletRequest.getHeader(JwtTokenConverter.TOKEN_KEY);
         TokenInfoDTO tokenDTO = jwtTokenConverter.decodeToken(token);
-        log.info("4、请求认证失败，认证信息：{}，失败原因：{}",JSON.toJSONString(tokenDTO),e.getMessage());
+        log.error("4、请求认证失败，认证信息：{}，失败原因：{}",JSON.toJSONString(tokenDTO),e.getMessage());
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.UNAUTHORIZED,"认证失败");
         Cookie cookie = WebUtils.getCookie(httpServletRequest, JwtTokenConverter.TOKEN_KEY);
         if(cookie != null){

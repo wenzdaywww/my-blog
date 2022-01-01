@@ -1,7 +1,7 @@
 package com.www.common.config.security.filter;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
@@ -21,8 +21,18 @@ import java.util.Iterator;
  */
 @Slf4j
 @Component
-@ConditionalOnClass(AccessDecisionManager.class)
+@ConditionalOnProperty(prefix = "com.www.common.securuty",name = "enable") //是否开启Security安全
 public class SecurityAccessDecisionManager implements AccessDecisionManager {
+
+    /**
+     * <p>@Description 构造方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 18:13 </p>
+     * @return
+     */
+    public SecurityAccessDecisionManager(){
+        log.info("security配置访问决策管理器");
+    }
     /**
      * <p>@Description url访问校验 </p>
      * <p>@Author www </p>

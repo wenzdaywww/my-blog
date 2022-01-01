@@ -2,12 +2,10 @@ package com.www.common.config.druid.datasoure;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.www.common.config.druid.interfaces.IReadDataSoure;
-import com.www.common.config.druid.interfaces.IWriteDataSoure;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,9 +17,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @ConditionalOnClass(DruidDataSource.class)
-@ConfigurationProperties(prefix = "datasource.druid.read-two")
-//有配置datasource.druid.read-two的数据源参数才注入该数据源
-@ConditionalOnProperty(prefix = "datasource.druid.read-two",name = "url")
+@ConfigurationProperties(prefix = "com.www.common.druid.read-two")
+//com.www.common.druid.enable=true才开启多数据源配置
+@ConditionalOnProperty(prefix = "com.www.common.druid.read-two",name = {"url"})
 public class ReadTwoDataSource extends DruidDataSource implements IReadDataSoure {
     /**
      * <p>@Description 构造方法 </p>
@@ -31,6 +29,6 @@ public class ReadTwoDataSource extends DruidDataSource implements IReadDataSoure
      */
     public ReadTwoDataSource(){
         super();
-        log.info("配置读权限数据源2");
+        log.info("加载读权限数据源2");
     }
 }

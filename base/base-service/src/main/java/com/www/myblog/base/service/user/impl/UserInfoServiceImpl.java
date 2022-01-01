@@ -2,13 +2,17 @@ package com.www.myblog.base.service.user.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.www.common.config.code.CodeDict;
+import com.www.common.pojo.dto.response.ResponseDTO;
+import com.www.common.pojo.enums.CodeTypeEnum;
+import com.www.common.config.mvc.upload.IFileUpload;
+import com.www.common.utils.DateUtils;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysRoleDTO;
 import com.www.myblog.base.data.dto.SysUserDTO;
 import com.www.myblog.base.data.entity.SysRoleEntity;
 import com.www.myblog.base.data.entity.SysUserEntity;
 import com.www.myblog.base.data.entity.SysUserRoleEntity;
-import com.www.myblog.base.data.enums.CommonEnum;
 import com.www.myblog.base.data.mapper.SysMenuMapper;
 import com.www.myblog.base.data.mapper.SysRoleMapper;
 import com.www.myblog.base.data.mapper.SysUserMapper;
@@ -16,9 +20,6 @@ import com.www.myblog.base.data.mapper.SysUserRoleMapper;
 import com.www.myblog.base.service.entity.ISysRoleService;
 import com.www.myblog.base.service.entity.ISysUserService;
 import com.www.myblog.base.service.user.IUserInfoService;
-import com.www.common.pojo.dto.response.ResponseDTO;
-import com.www.common.service.upload.IFileService;
-import com.www.common.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -48,7 +49,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Autowired
     private SysUserRoleMapper sysUserRoleMapper;
     @Autowired
-    private IFileService fileService;
+    private IFileUpload fileService;
     @Autowired
     private ISysUserService sysUserService;
     @Autowired
@@ -191,7 +192,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     public ResponseDTO<String> updateUserInfo(SysUserDTO user) {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
         if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName())
-                || (StringUtils.isNotBlank(user.getSex()) && !StringUtils.containsAny(user.getSex(),CommonEnum.SEX_1.getCode(),CommonEnum.SEX_0.getCode()))){
+                || CodeDict.isIllegalValue(CodeTypeEnum.SEX,user.getSex())){
             responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL,"更新用户信息失败，用户信息有误");
             return responseDTO;
         }
@@ -249,7 +250,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     public ResponseDTO<String> createUser(SysUserDTO user) {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
         if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName(),user.getPassword(),user.getRoleCode())
-                || (StringUtils.isNotBlank(user.getSex()) && !StringUtils.containsAny(user.getSex(),CommonEnum.SEX_1.getCode(),CommonEnum.SEX_0.getCode()))){
+                || CodeDict.isIllegalValue(CodeTypeEnum.SEX,user.getSex())){
             responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL,"信息不完整，创建用户失败");
             return responseDTO;
         }
@@ -308,10 +309,10 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     public ResponseDTO<String> updateState(String userId, String stateCd, String notExpired, String notLocked, String credentialsNotExpired) {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
-        if(!StringUtils.containsAny(stateCd, CommonEnum.STATE_CD_1.getCode(), CommonEnum.STATE_CD_2.getCode(), CommonEnum.STATE_CD_3.getCode())
-                || !StringUtils.containsAny(notExpired, CommonEnum.YES_1.getCode(), CommonEnum.NO_0.getCode())
-                || !StringUtils.containsAny(notLocked, CommonEnum.YES_1.getCode(), CommonEnum.NO_0.getCode())
-                || !StringUtils.containsAny(credentialsNotExpired, CommonEnum.YES_1.getCode(), CommonEnum.NO_0.getCode())){
+        if(CodeDict.isIllegalValue(CodeTypeEnum.USER_STATUS,stateCd)
+                || CodeDict.isIllegalValue(CodeTypeEnum.YES_NO,notExpired)
+                || CodeDict.isIllegalValue(CodeTypeEnum.YES_NO,notLocked)
+                || CodeDict.isIllegalValue(CodeTypeEnum.YES_NO,credentialsNotExpired)){
             responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL,"更新用户信息失败");
             return responseDTO;
         }

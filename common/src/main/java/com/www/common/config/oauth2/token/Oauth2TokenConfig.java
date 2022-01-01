@@ -1,7 +1,9 @@
 package com.www.common.config.oauth2.token;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -13,12 +15,22 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
  * <p>@Author www </p>
  * <p>@Date 2021/12/18 12:21 </p>
  */
+@Slf4j
 @Configuration
-@ConditionalOnClass(JwtTokenStore.class)
+@ConditionalOnProperty(prefix = "com.www.common.oauth2",name = "enable") //是否开启oauth2资源服务配置
 public class Oauth2TokenConfig {
     /** jwt令牌签名 **/
-    @Value("${security.oauth2.authorization.jwt.key-value}")
+    @Value("${com.www.common.oauth2.signing-key}")
     private String signingKey;
+    /**
+     * <p>@Description 构造方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 18:09 </p>
+     * @return
+     */
+    public Oauth2TokenConfig(){
+        log.info("配置token存储方式");
+    }
     /**
      * <p>@Description 配置token存储方式 </p>
      * <p>@Author www </p>

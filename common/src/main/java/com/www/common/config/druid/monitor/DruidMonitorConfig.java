@@ -5,6 +5,7 @@ import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -21,8 +22,18 @@ import java.util.Map;
  */
 @Slf4j
 @Configuration
-@ConditionalOnClass(DruidDataSource.class)
+//com.www.common.druid.monitor.enable=true才开启druid监控平台
+@ConditionalOnProperty(prefix = "com.www.common.druid.monitor",name = "enable")
 public class DruidMonitorConfig {
+    /**
+     * <p>@Description 构造方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 18:04 </p>
+     * @return
+     */
+    public DruidMonitorConfig(){
+        log.info("开启druid数据源监控平台");
+    }
     /**
      * <p>@Description 设置druid后台监控功能
      *     因为spring boot内置了servlet容器，所以没有web.xml，替代方法使用：ServletRegistrationBean
@@ -45,7 +56,7 @@ public class DruidMonitorConfig {
 //        initParam.put("www","192.168.1.105");
         //设置初始化参数
         bean.setInitParameters(initParam);
-        log.info("设置druid后台监控功能");
+        log.info("配置druid后台监控信息");
         return  bean;
     }
     /**
@@ -62,7 +73,7 @@ public class DruidMonitorConfig {
         //设置不统计的过滤器
         initParam.put("exclusions","*.js,*.css,/druid/*");
         bean.setInitParameters(initParam);
-        log.info("druid监控过滤器");
+        log.info("配置druid监控过滤器");
         return bean;
     }
 }

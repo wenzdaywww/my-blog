@@ -3,7 +3,7 @@ package com.www.common.config.security.handler;
 import com.alibaba.fastjson.JSON;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -21,8 +21,18 @@ import java.io.IOException;
  */
 @Slf4j
 @Component
-@ConditionalOnClass(AccessDeniedHandler.class)
+@ConditionalOnProperty(prefix = "com.www.common.securuty",name = "enable") //是否开启Security安全
 public class SecurityUnauthHandler implements AccessDeniedHandler {
+
+    /**
+     * <p>@Description 构造方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 18:18 </p>
+     * @return
+     */
+    public SecurityUnauthHandler(){
+        log.info("security配置拒绝访问异常处理");
+    }
     /**
      * <p>@Description 拒绝访问异常处理  </p>
      * <p>@Author www </p>

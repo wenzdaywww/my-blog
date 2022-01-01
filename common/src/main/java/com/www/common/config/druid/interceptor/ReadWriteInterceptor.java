@@ -5,10 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.Ordered;
-import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,8 +18,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Aspect
 @Component
-@ConditionalOnBean(AbstractRoutingDataSource.class)
+//com.www.common.druid.enable=true才开启多数据源配置
+@ConditionalOnProperty(prefix = "com.www.common.druid",name = "enable")
 public class ReadWriteInterceptor implements Ordered {
+    /**
+     * <p>@Description 构造方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 18:03 </p>
+     * @return
+     */
+    public ReadWriteInterceptor(){
+        log.info("开启读写分离数据源切换AOP拦截");
+    }
     /**
      * <p>@Description 读数据操作AOP切面 </p>
      * <p>@Author www </p>
@@ -44,19 +52,16 @@ public class ReadWriteInterceptor implements Ordered {
     public Object readOnly(ProceedingJoinPoint proceedingJoinPoint){
         Object result = null;
         try {
-//            log.info("start 连接slave数据源  ");
             DataBaseHolder.setReadDataBaseType();
             result = proceedingJoinPoint.proceed();
-//            log.info("end 连接slave数据源  ");
         }catch (Exception e){
-            log.error("连接slave数据源Exception异常："+e.getMessage());
+            log.error("连接slave数据源Exception异常：{}",e.getMessage());
             //查询从数据库出现异常再从主数据库查询
             result = insert(proceedingJoinPoint);
         } catch (Throwable throwable) {
-            log.error("连接slave数据源throwable异常："+throwable.getMessage());
+            log.error("连接slave数据源throwable异常：{}",throwable.getMessage());
         } finally {
             DataBaseHolder.clearDataBaseType();
-//            log.info("清除slave数据源连接  ");
         }
         return result;
     }
@@ -71,17 +76,14 @@ public class ReadWriteInterceptor implements Ordered {
     public Object insert(ProceedingJoinPoint proceedingJoinPoint){
         Object result = null;
         try {
-//            log.info("start 连接master数据源  ");
             DataBaseHolder.setWriteDataBaseType();
             result = proceedingJoinPoint.proceed();
-//            log.info("end 连接master数据源  ");
         }catch (Exception e){
-            log.error("连接master数据源Exception异常："+e.getMessage());
+            log.error("连接master数据源Exception异常：{}",e.getMessage());
         } catch (Throwable throwable) {
-            log.error("连接master数据源throwable异常："+throwable.getMessage());
+            log.error("连接master数据源throwable异常：{}",throwable.getMessage());
         } finally {
             DataBaseHolder.clearDataBaseType();
-//            log.info("清除master数据源连接  ");
         }
         return result;
     }

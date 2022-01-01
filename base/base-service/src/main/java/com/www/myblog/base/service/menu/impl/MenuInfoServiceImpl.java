@@ -2,22 +2,21 @@ package com.www.myblog.base.service.menu.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.www.common.pojo.constant.RedisCommonContant;
-import com.www.common.pojo.dto.security.ScopeDTO;
-import com.www.myblog.base.data.constants.RedisKeyConstant;
+import com.www.common.config.code.CodeDict;
+import com.www.common.pojo.dto.response.ResponseDTO;
+import com.www.common.pojo.enums.CodeKeyEnum;
+import com.www.common.pojo.enums.CodeTypeEnum;
+import com.www.common.utils.DateUtils;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.entity.SysMenuEntity;
 import com.www.myblog.base.data.entity.SysRoleEntity;
 import com.www.myblog.base.data.entity.SysRoleMenuEntity;
-import com.www.myblog.base.data.enums.CommonEnum;
 import com.www.myblog.base.data.mapper.SysMenuMapper;
 import com.www.myblog.base.data.mapper.SysRoleMenuMapper;
 import com.www.myblog.base.service.entity.ISysRoleMenuService;
 import com.www.myblog.base.service.entity.ISysRoleService;
 import com.www.myblog.base.service.menu.IMenuInfoService;
-import com.www.common.pojo.dto.response.ResponseDTO;
-import com.www.common.utils.DateUtils;
-import com.www.common.config.redis.RedisOperation;
+import com.www.myblog.base.service.menu.IUrlScopeService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -46,6 +44,8 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
     private SysRoleMenuMapper sysRoleMenuMapper;
     @Autowired
     private ISysRoleMenuService sysRoleMenuService;
+    @Autowired
+    private IUrlScopeService urlScopeService;
 
 
     /**
@@ -68,8 +68,8 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         roleWrapper.lambda().eq(SysRoleMenuEntity::getMenuId,menuId);
         int count = sysRoleMenuMapper.delete(roleWrapper);
         if(count != 0){
-            if(StringUtils.equals(menuEntity.getMenuType(),CommonEnum.MENU_TYPE_2.getCode())){
-                this.updateRedisUrlScope(menuEntity.getModule());
+            if(StringUtils.equals(menuEntity.getMenuType(),CodeDict.getValue(CodeTypeEnum.MENU_TYPE, CodeKeyEnum.K2))){
+                urlScopeService.updateRedisUrlScope(menuEntity.getModule());
             }
             return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,"删除菜单成功");
         }else {
@@ -87,7 +87,8 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
     public ResponseDTO<String> updateOrSave(SysMenuDTO menu) {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
         if(menu == null || StringUtils.isAnyBlank(menu.getMenuCode(),menu.getMenuUrl(),menu.getMenuType())
-            || !StringUtils.equalsAny(menu.getMenuType(), CommonEnum.MENU_TYPE_1.getCode(),CommonEnum.MENU_TYPE_2.getCode())){
+            || CodeDict.isIllegalValue(CodeTypeEnum.MENU_TYPE,menu.getMenuType())
+        ){
             responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL,"更新菜单失败，信息有误");
             return responseDTO;
         }
@@ -131,7 +132,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         if(isUpdate){
             sysMenuMapper.updateById(menuEntity);
         }else {
-            menuEntity.setIsDelete(CommonEnum.NO_0.getCode());
+            menuEntity.setIsDelete(CodeDict.getValue(CodeTypeEnum.YES_NO,CodeKeyEnum.K0));
             menuEntity.setCreateTime(isUpdate ? menuEntity.getCreateTime() : DateUtils.getCurrentDateTime());
             sysMenuMapper.insert(menuEntity);
         }
@@ -196,42 +197,11 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
             sysRoleMenuMapper.delete(delWrapper);
         }
         //编辑的菜单是权限菜单，则需要更新redis中的权限菜单信息
-        if(StringUtils.equals(menu.getMenuType(),CommonEnum.MENU_TYPE_2.getCode())){
-            this.updateRedisUrlScope(menu.getModule());
+        if(StringUtils.equals(menu.getMenuType(),CodeDict.getValue(CodeTypeEnum.MENU_TYPE, CodeKeyEnum.K2))){
+            urlScopeService.updateRedisUrlScope(menu.getModule());
         }
         responseDTO.setResponseCode(ResponseDTO.RespEnum.SUCCESS,"更新菜单成功");
         return responseDTO;
-    }
-    /**
-     * <p>@Description 编辑/删除的菜单是请求路径，则需要更新redis中的请求路径 </p>
-     * <p>@Author www </p>
-     * <p>@Date 2021/12/15 21:07 </p>
-     * @param resourceId 资源服务ID
-     * @return
-     */
-    private void updateRedisUrlScope(String resourceId){
-        boolean isWait = true; //是否等待获取分布式锁
-        String value = UUID.randomUUID().toString();
-        while (isWait){
-            try {
-                if(RedisOperation.lock(RedisKeyConstant.URL_SCOPE_LOCK, value)){
-                    isWait = false;
-                    RedisOperation.deleteKey(RedisCommonContant.URL_SCOPE_PREFIX + resourceId);
-                    List<ScopeDTO> scopeList = sysMenuMapper.findUrlScopes(resourceId);
-                    if(CollectionUtils.isNotEmpty(scopeList)){
-                        for (ScopeDTO scopeDTO : scopeList){
-                            //资源服务ID的url的scope保存到redis中
-                            RedisOperation.listSet(RedisCommonContant.URL_SCOPE_PREFIX + resourceId,scopeDTO);
-                        }
-                    }
-                }
-            }catch (Exception e){
-                log.info("查所询有请求权限，发生异常：{}",e.getMessage());
-            }finally {
-                // 释放锁
-                RedisOperation.unlock(RedisKeyConstant.URL_SCOPE_LOCK,value);
-            }
-        }
     }
     /**
      * <p>@Description 查询所有菜单 </p>

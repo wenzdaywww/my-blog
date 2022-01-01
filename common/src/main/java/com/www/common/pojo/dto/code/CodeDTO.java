@@ -17,7 +17,7 @@ public class CodeDTO {
     /** code类型名称 **/
     private String typeName;
     /** code的key **/
-    private String key;
+    private String codeKey;
     /** code的数值 **/
     private String value;
     /** code的数值名称 **/

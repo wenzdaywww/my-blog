@@ -2,7 +2,6 @@ package com.www.common.config.mvc;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -16,20 +15,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Slf4j
 @Configuration
-@ConditionalOnClass(WebMvcConfigurer.class)
-@ConditionalOnProperty(prefix = "file",name = {"imgUrlPath","imgSavePath","otherUrlPath","otherSavePath"})
-public class WebMvcConfig implements WebMvcConfigurer {
+@ConditionalOnProperty(prefix = "com.www.common.file",name = "enable")
+public class FileMvcConfig implements WebMvcConfigurer {
     /** 图片访问路径 **/
-    @Value("${file.imgUrlPath}")
+    @Value("${com.www.common.file.imgUrlPath}")
     private String imgUrlPath;
     /** 图片保存的绝对路径 **/
-    @Value("${file.imgSavePath}")
+    @Value("${com.www.common.file.imgSavePath}")
     private String imgSavePath;
     /** 图片外其他文件访问路径 **/
-    @Value("${file.otherUrlPath}")
+    @Value("${com.www.common.file.otherUrlPath}")
     private String otherUrlPath;
     /** 图片外其他文件保存的绝对路径 **/
-    @Value("${file.otherSavePath}")
+    @Value("${com.www.common.file.otherSavePath}")
     private String otherSavePath;
     /** 资源映射前缀 **/
     private String file = "file:";
@@ -42,7 +40,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        log.info("配置MVC资源拦截");
+        log.info("配置MVC文件资源拦截规则");
         //配置图片访问的相对路径
         registry.addResourceHandler(imgUrlPath).addResourceLocations(file + imgSavePath);
         //配置图片外其他文件访问的相对路径

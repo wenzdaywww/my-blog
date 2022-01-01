@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * <p>@Description base启动类 </p>
@@ -15,9 +16,7 @@ import org.springframework.context.annotation.FilterType;
  */
 @SpringBootApplication
 @EnableEurekaClient
-@ComponentScan(basePackages = {"com.www.common","com.www.myblog.base"}, //配置要扫描的包路径
-  excludeFilters = {@ComponentScan.Filter(type = FilterType.REGEX,pattern = "com.www.common.config.security.*")}//排除不扫描的包路径
-)
+@ComponentScan(basePackages = {"com.www.common","com.www.myblog.base"}) //配置要扫描的包路径
 @MapperScan(basePackages = {"com.www.myblog.base.data"})
 public class BaseApplication {
     /**

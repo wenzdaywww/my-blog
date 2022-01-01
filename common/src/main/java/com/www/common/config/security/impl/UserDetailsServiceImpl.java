@@ -4,7 +4,7 @@ import com.www.common.config.security.ISecurityServie;
 import com.www.common.pojo.dto.security.UserDetailDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -25,10 +25,20 @@ import java.util.List;
  */
 @Slf4j
 @Service
-@ConditionalOnClass(UserDetailsService.class)
+@ConditionalOnProperty(prefix = "com.www.common.securuty",name = "enable") //是否开启Security安全
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Resource
     private ISecurityServie securityUserServie;
+
+    /**
+     * <p>@Description 构造方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 18:20 </p>
+     * @return
+     */
+    public UserDetailsServiceImpl(){
+        log.info("security配置用户详细信息服务类");
+    }
     /**
      * <p>@Description 加载用户信息 </p>
      * <p>@Author www </p>

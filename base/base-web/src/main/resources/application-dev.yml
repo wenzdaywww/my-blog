@@ -20,12 +20,6 @@ spring:
     sentinel:
       master: mymaster
       nodes: 192.168.1.130:26379,192.168.1.131:26379,192.168.1.132:26379
-#配置文件路径
-file:
-  imgUrlPath: /imgs/** #配置访问图片的相对路径
-  imgSavePath : D:\WorkSpaces\temp\${spring.application.name}\img\ #图片保存的绝对路径，window的路径必须是\且路径最后也需要\
-  otherUrlPath: /file/** #配置访问图片外其他文件的相对路径
-  otherSavePath : D:\WorkSpaces\temp\${spring.application.name}\file\ #图片外其他文件保存的绝对路径，window的路径必须是\且路径最后也需要\
 #mybatis配置
 mybatis-plus:
   configuration:
@@ -39,35 +33,44 @@ eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port} #该实例注册到服务中心的唯一ID
     prefer-ip-address: true #该实例，相较于hostname是否优先使用IP
-#security安全配置
-security:
-  oauth2:
-    authorization:
-      jwt:
-        key-value: wenzday #oauth2的jwt签名
-#数据库配置
-datasource:
-  druid:
-    #写数据库
-    write:
-      url: jdbc:mysql://192.168.1.130:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      username: admin
-      password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
-      initial-size: 5 #启动程序时，在连接池中初始化多少个连接
-      min-idle: 5 #最小连接池数量
-      max-active: 20 #连接池中最多支持多少个活动会话
-      max-wait: 60000 #程序向连接池中请求连接时,超过maxWait的值后，认为本次请求失败，即连接池
-      #有两个含义： 1) Destroy线程会检测连接的间隔时间，如果连接空闲时间大于等于minEvictableIdleTimeMillis则关闭物理连接。 2) testWhileIdle的判断依据，详细看testWhileIdle属性的说明
-      time-between-eviction-runs-millis: 6000
-      min-evictable-idle-time-millis: 300000 #连接保持空闲而不被驱逐的最小时间
-      #用来检测连接是否有效的sql，要求是一个查询语句，常用select 'x'。如果validationQuery为null，testOnBorrow、testOnReturn、testWhileIdle都不会起作用。
-      validation-query: SELECT 1 FROM DUAL
-      test-on-borrow: false #申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
-      test-on-return: false #归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
-      pool-prepared-statements: false #是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
-      filters: stat,wall #属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有： 监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall
-      #要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100
-      max-pool-prepared-statement-per-connection-size: 20
-      use-global-data-source-stat: true #
-      connect-properties: druid.stat.mergeSql=true,druid.stat.slowSqlMillis=500 #
+#自定义common配置
+com:
+  www:
+    common:
+      ctl-aop:
+        enable: true #开启controller的AOP日志拦截
+      #配置文件路径
+      file:
+        enable: true #开启上传文件配置
+        imgUrlPath: /imgs/** #配置访问图片的相对路径
+        imgSavePath: D:\WorkSpaces\temp\${spring.application.name}\img\ #图片保存的绝对路径，window的路径必须是\且路径最后也需要\
+        otherUrlPath: /file/** #配置访问图片外其他文件的相对路径
+        otherSavePath: D:\WorkSpaces\temp\${spring.application.name}\file\ #图片外其他文件保存的绝对路径，window的路径必须是\且路径最后也需要\
+      oauth2:
+        enable: true #开启统一认证资源服务方配置
+        signing-key: wenzday #JWT令牌签名
+      druid:
+        enable: true #开启数据源配置
+        #写数据库
+        write:
+          url: jdbc:mysql://192.168.1.130:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          username: admin
+          password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
+          initial-size: 5 #启动程序时，在连接池中初始化多少个连接
+          min-idle: 5 #最小连接池数量
+          max-active: 20 #连接池中最多支持多少个活动会话
+          max-wait: 60000 #程序向连接池中请求连接时,超过maxWait的值后，认为本次请求失败，即连接池
+          #有两个含义： 1) Destroy线程会检测连接的间隔时间，如果连接空闲时间大于等于minEvictableIdleTimeMillis则关闭物理连接。 2) testWhileIdle的判断依据，详细看testWhileIdle属性的说明
+          time-between-eviction-runs-millis: 6000
+          min-evictable-idle-time-millis: 300000 #连接保持空闲而不被驱逐的最小时间
+          #用来检测连接是否有效的sql，要求是一个查询语句，常用select 'x'。如果validationQuery为null，testOnBorrow、testOnReturn、testWhileIdle都不会起作用。
+          validation-query: SELECT 1 FROM DUAL
+          test-on-borrow: false #申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+          test-on-return: false #归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。
+          pool-prepared-statements: false #是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。
+          filters: stat,wall #属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有： 监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall
+          #要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100
+          max-pool-prepared-statement-per-connection-size: 20
+          use-global-data-source-stat: true #
+          connect-properties: druid.stat.mergeSql=true,druid.stat.slowSqlMillis=500

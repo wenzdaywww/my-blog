@@ -1,4 +1,4 @@
-package com.www.common.code;
+package com.www.common.config.code;
 
 import com.www.common.pojo.constant.CharConstant;
 import com.www.common.pojo.dto.code.CodeDTO;
@@ -22,6 +22,17 @@ public class CodeDict {
     /** 数据字典集合 **/
     private static Map<String,Map<String, CodeDTO>> codeMap = new HashMap<>();
 
+
+    /**
+     * <p>@Description 初始化数据字典数据 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 16:29 </p>
+     * @param codeMap
+     * @return void
+     */
+    public static void initCode(Map<String,Map<String, CodeDTO>> codeMap){
+        CodeDict.codeMap = codeMap;
+    }
     /**
      * <p>@Description 判断value值对应的code类型中是否是非法数值 </p>
      * <p>@Author www </p>
@@ -125,6 +136,36 @@ public class CodeDict {
             return valueMap.get(value);
         }
         return CharConstant.EMPTY;
+    }
+    /**
+     * <p>@Description 获取code码key值数据 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 14:01 </p>
+     * @param codeType code类型枚举
+     * @param codeKey code的key值
+     * @return null则不存此数据
+     */
+    public static String getValue(CodeTypeEnum codeType, CodeKeyEnum codeKey){
+        if(codeType == null){
+            return null;
+        }
+        return getValue(codeType.getCodeType(),codeKey.getKey());
+    }
+    /**
+     * <p>@Description 获取code码key值数据 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 14:01 </p>
+     * @param codeType code类型
+     * @param codeKey code的key值
+     * @return java.lang.String null则不存此数据
+     */
+    public static String getValue(String codeType,String codeKey){
+        Map<String,CodeDTO> keyMap = getAllCodeDTO(codeType);
+        if(MapUtils.isNotEmpty(keyMap) && keyMap.containsKey(codeKey)){
+            CodeDTO codeDTO = keyMap.get(codeKey);
+            return codeDTO.getValue();
+        }
+        return null;
     }
     /**
      * <p>@Description 获取code码key值数据 </p>

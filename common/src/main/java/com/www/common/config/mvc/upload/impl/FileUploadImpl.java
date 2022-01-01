@@ -1,7 +1,7 @@
-package com.www.common.service.upload.impl;
+package com.www.common.config.mvc.upload.impl;
 
+import com.www.common.config.mvc.upload.IFileUpload;
 import com.www.common.pojo.dto.response.ResponseDTO;
-import com.www.common.service.upload.IFileService;
 import com.www.common.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -22,23 +22,32 @@ import java.util.Arrays;
  */
 @Slf4j
 @Service
-@ConditionalOnProperty(prefix = "file",name = {"imgUrlPath","imgSavePath","otherUrlPath","otherSavePath"})
-public class FileServiceImpl implements IFileService {
+@ConditionalOnProperty(prefix = "com.www.common.file",name = "enable")
+public class FileUploadImpl implements IFileUpload {
     /** 图片类型  **/
     private String[] imgType = {"BMP","JPG","JPEG","PNG","GIF"};
     /** 图片访问路径 **/
-    @Value("${file.imgUrlPath}")
+    @Value("${com.www.common.file.imgUrlPath}")
     private String imgUrlPath;
     /** 图片保存的绝对路径 **/
-    @Value("${file.imgSavePath}")
+    @Value("${com.www.common.file.imgSavePath}")
     private String imgSavePath;
     /** 图片外其他文件访问路径 **/
-    @Value("${file.otherUrlPath}")
+    @Value("${com.www.common.file.otherUrlPath}")
     private String otherUrlPath;
     /** 图片外其他文件保存的绝对路径 **/
-    @Value("${file.otherSavePath}")
+    @Value("${com.www.common.file.otherSavePath}")
     private String otherSavePath;
 
+    /**
+     * <p>@Description 构造方法 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/1 18:20 </p>
+     * @return
+     */
+    public FileUploadImpl(){
+        log.info("配置文件上传");
+    }
     /**
      * <p>@Description 上传文件 </p>
      * <p>@Author www </p>

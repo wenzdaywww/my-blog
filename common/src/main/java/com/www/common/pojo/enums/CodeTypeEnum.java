@@ -14,7 +14,7 @@ public enum CodeTypeEnum {
     /** 是否标志 **/
     YES_NO("yesNo","是否指示器"),
     /** 用户状态 **/
-    STATE_CD_1("userStatus","用户状态")
+    USER_STATUS("userStatus","用户状态")
     ;
 
 
@@ -39,15 +39,8 @@ public enum CodeTypeEnum {
         return codeName;
     }
 
-    public void setCodeName(String codeName) {
-        this.codeName = codeName;
-    }
-
     public String getCodeType() {
         return codeType;
     }
 
-    public void setCodeType(String codeType) {
-        this.codeType = codeType;
-    }
 }
