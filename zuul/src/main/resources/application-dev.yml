@@ -2,6 +2,9 @@
 #服务器配置
 server:
   port: 8001
+#日志配置
+logging:
+  config: classpath:logback-dev.xml
 #eureka配置
 eureka:
   client:

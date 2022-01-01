@@ -1,6 +1,9 @@
 #服务信息配置
 server:
   port: 8003
+#日志配置
+logging:
+  config: classpath:logback-dev.xml
 #spring配置
 spring:
   #redis配置

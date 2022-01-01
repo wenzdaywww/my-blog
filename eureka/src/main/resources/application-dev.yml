@@ -1,6 +1,9 @@
 #端口配置
 server:
   port: 8002
+#日志配置
+logging:
+  config: classpath:logback-dev.xml
 #spring配置
 spring:
   #安全认证配置

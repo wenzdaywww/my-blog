@@ -33,5 +33,5 @@ info:
 #日志配置
 logging:
   pattern:
-    file: '%date [traceId=%X{traceId}] %level %logger{10} -> %file:%line => %msg%n'
-    console: '%date [traceId=%X{traceId}] %level %logger{10} -> %file:%line => %msg%n'
+    file: '%date [traceId=%X{traceId}] %level %logger %file.%M:%line => %msg%n'
+    console: '%date [traceId=%X{traceId}] %level %logger %file.%M:%line => %msg%n'

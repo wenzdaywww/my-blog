@@ -2,6 +2,9 @@
 #服务器配置
 server:
   port: 8070
+#日志配置
+logging:
+  config: classpath:logback-dev.xml
 #spring配置
 spring:
   servlet:

@@ -69,7 +69,7 @@ public class ControllerAop {
                 requestText += paramName[i].getName() + CharConstant.EQUAL + value ;
             }
         }
-        requestText += "}";
+        requestText += CharConstant.RIGHT_BRACE;
         try {
             Object result = pjd.proceed();// 执行目标方法
             stopWatch.stop();

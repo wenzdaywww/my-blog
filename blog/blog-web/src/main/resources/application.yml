@@ -24,8 +24,3 @@ mybatis-plus:
 #配置eureka注册中心服务的status信息
 info:
   name: my blog server
-#日志配置
-logging:
-  pattern:
-    file: '%date [traceId=%X{traceId}] %level %logger{10} -> %file:%line => %msg%n'
-    console: '%date [traceId=%X{traceId}] %level %logger{10} -> %file:%line => %msg%n'
