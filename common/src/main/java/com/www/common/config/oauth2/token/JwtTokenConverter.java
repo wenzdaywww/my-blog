@@ -1,7 +1,7 @@
 package com.www.common.config.oauth2.token;
 
 import com.alibaba.fastjson.JSON;
-import com.www.common.pojo.dto.TokenInfoDTO;
+import com.www.common.pojo.dto.token.TokenInfoDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 

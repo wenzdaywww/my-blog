@@ -6,7 +6,7 @@ import com.www.uaa.data.entity.SysUserEntity;
 import com.www.uaa.data.enums.CommonEnum;
 import com.www.uaa.data.mapper.SysRoleMapper;
 import com.www.uaa.data.mapper.SysUserMapper;
-import com.www.common.pojo.dto.UserDetailDTO;
+import com.www.common.pojo.dto.security.UserDetailDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

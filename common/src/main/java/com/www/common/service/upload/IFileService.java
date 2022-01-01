@@ -1,6 +1,6 @@
 package com.www.common.service.upload;
 
-import com.www.common.pojo.dto.ResponseDTO;
+import com.www.common.pojo.dto.response.ResponseDTO;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

@@ -16,7 +16,7 @@ import com.www.myblog.base.data.mapper.SysUserRoleMapper;
 import com.www.myblog.base.service.entity.ISysRoleService;
 import com.www.myblog.base.service.entity.ISysUserService;
 import com.www.myblog.base.service.user.IUserInfoService;
-import com.www.common.pojo.dto.ResponseDTO;
+import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.service.upload.IFileService;
 import com.www.common.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;

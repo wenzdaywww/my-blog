@@ -1,7 +1,7 @@
 package com.www.myblog.base.init;
 
 import com.www.common.pojo.constant.RedisCommonContant;
-import com.www.common.pojo.dto.ScopeDTO;
+import com.www.common.pojo.dto.security.ScopeDTO;
 import com.www.common.config.redis.RedisOperation;
 import com.www.myblog.base.data.constants.RedisKeyConstant;
 import com.www.myblog.base.data.mapper.SysMenuMapper;

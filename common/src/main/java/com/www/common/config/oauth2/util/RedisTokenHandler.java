@@ -2,7 +2,7 @@ package com.www.common.config.oauth2.util;
 
 import com.www.common.config.redis.RedisOperation;
 import com.www.common.pojo.constant.CharConstant;
-import com.www.common.pojo.dto.TokenInfoDTO;
+import com.www.common.pojo.dto.token.TokenInfoDTO;
 import org.apache.commons.lang3.StringUtils;
 
 /**

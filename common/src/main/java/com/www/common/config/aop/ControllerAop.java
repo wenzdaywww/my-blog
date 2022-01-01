@@ -2,7 +2,7 @@ package com.www.common.config.aop;
 
 import com.alibaba.fastjson.JSON;
 import com.www.common.pojo.constant.CharConstant;
-import com.www.common.pojo.dto.ResponseDTO;
+import com.www.common.pojo.dto.response.ResponseDTO;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

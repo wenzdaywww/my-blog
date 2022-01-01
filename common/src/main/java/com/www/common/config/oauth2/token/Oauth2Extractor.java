@@ -1,8 +1,7 @@
 package com.www.common.config.oauth2.token;
 
-import com.www.common.config.oauth2.token.JwtTokenConverter;
 import com.www.common.config.oauth2.util.RedisTokenHandler;
-import com.www.common.pojo.dto.TokenInfoDTO;
+import com.www.common.pojo.dto.token.TokenInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

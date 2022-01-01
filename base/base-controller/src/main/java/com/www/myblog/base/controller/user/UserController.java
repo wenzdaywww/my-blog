@@ -4,7 +4,7 @@ import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysRoleDTO;
 import com.www.myblog.base.data.dto.SysUserDTO;
 import com.www.myblog.base.service.user.IUserInfoService;
-import com.www.common.pojo.dto.ResponseDTO;
+import com.www.common.pojo.dto.response.ResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

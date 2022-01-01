@@ -1,6 +1,6 @@
 package com.www.myblog.base.controller.common;
 
-import com.www.common.pojo.dto.ResponseDTO;
+import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.service.upload.IFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

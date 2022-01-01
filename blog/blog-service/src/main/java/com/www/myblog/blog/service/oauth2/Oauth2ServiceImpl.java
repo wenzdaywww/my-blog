@@ -3,7 +3,7 @@ package com.www.myblog.blog.service.oauth2;
 import com.www.common.config.oauth2.IOauth2Service;
 import com.www.common.config.redis.RedisOperation;
 import com.www.common.pojo.constant.RedisCommonContant;
-import com.www.common.pojo.dto.ScopeDTO;
+import com.www.common.pojo.dto.security.ScopeDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package com.www.myblog.base.service.menu;
 
 import com.www.myblog.base.data.dto.SysMenuDTO;
-import com.www.common.pojo.dto.ResponseDTO;
+import com.www.common.pojo.dto.response.ResponseDTO;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package com.www.myblog.base.controller.menu;
 
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.service.menu.IMenuInfoService;
-import com.www.common.pojo.dto.ResponseDTO;
+import com.www.common.pojo.dto.response.ResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;

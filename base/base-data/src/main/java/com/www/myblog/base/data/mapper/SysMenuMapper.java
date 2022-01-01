@@ -2,7 +2,7 @@ package com.www.myblog.base.data.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.www.common.pojo.dto.ScopeDTO;
+import com.www.common.pojo.dto.security.ScopeDTO;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysRoleMenuDTO;
 import com.www.myblog.base.data.entity.SysMenuEntity;
