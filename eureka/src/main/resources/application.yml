@@ -1,8 +1,8 @@
 spring:
   application:
-    name: eureka-server
+    name: eureka
   profiles:
     active: @profileActive@
 #配置eureka注册中心服务的status信息
 info:
-  name: my blog eureka server center
+  name: ${eureka.instance.instance-id}

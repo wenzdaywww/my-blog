@@ -1,0 +1,4 @@
+--构建镜像
+docker build -f Dockerfile -t zuul:1.0.0 .
+--创建容器
+docker run -d -p 8001:8001 --name zuul --restart always -v /home/ap/logs/zuul/:/home/ap/logs/zuul zuul:1.0.0

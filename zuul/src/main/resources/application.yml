@@ -1,6 +1,6 @@
 spring:
   application:
-    name: zuul-server
+    name: zuul
   profiles:
     active: @profileActive@
   servlet:
@@ -10,7 +10,7 @@ spring:
       max-request-size: 100MB
 #配置eureka注册中心服务的status信息
 info:
-  name: my blog zuul server
+  name: 网关服务
 #zuul路由网关配置
 zuul:
   host:

@@ -128,7 +128,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.www.AdminApplication</mainClass>
+                    <mainClass>com.www.myblog.base.BaseApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
