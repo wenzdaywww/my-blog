@@ -1,6 +1,6 @@
 FROM java:8
-COPY *.jar /eureka-1.0.0.jar
+COPY *.jar /eureka-1.0.0-exec.jar
 CMD ["--server.port=8002"]
 VOLUME "/home/ap/logs/eureka/"
 EXPOSE 8002
-ENTRYPOINT ["java","-jar","/eureka-1.0.0.jar"]
+ENTRYPOINT ["java","-jar","/eureka-1.0.0-exec.jar"]

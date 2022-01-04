@@ -1,6 +1,6 @@
 --构建镜像
-docker build -f Dockerfile-130 -t base:1.0.0 .
-docker build -f Dockerfile-131 -t base:1.0.0 .
-docker build -f Dockerfile-132 -t base:1.0.0 .
+docker build -f Dockerfile -t base:1.0.0 .
 --创建容器
-docker run -d -p 8070:8070 --name base --restart always -v /home/ap/logs/my-base/:/home/ap/logs/my-base base:1.0.0
+docker run -d -p 8070:8070 --name base --restart always -e EUREKA_INSTANCE_IP-ADDRESS=192.168.1.130 -v /home/ap/logs/my-base/:/home/ap/logs/my-base base:1.0.0
+docker run -d -p 8070:8070 --name base --restart always -e EUREKA_INSTANCE_IP-ADDRESS=192.168.1.131 -v /home/ap/logs/my-base/:/home/ap/logs/my-base base:1.0.0
+docker run -d -p 8070:8070 --name base --restart always -e EUREKA_INSTANCE_IP-ADDRESS=192.168.1.132 -v /home/ap/logs/my-base/:/home/ap/logs/my-base base:1.0.0
