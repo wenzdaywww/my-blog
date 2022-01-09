@@ -14,6 +14,7 @@ spring:
 #eureka配置
 eureka:
   instance:
+    ip-address: localhost
     instance-id: ${spring-application.name}:${eureka.instance.ip-address}:${server.port} #该实例注册到服务中心的唯一ID
     prefer-ip-address: true #该实例，相较于hostname是否优先使用IP
   client:
