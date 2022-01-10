@@ -8,7 +8,6 @@ logging:
 spring:
   #redis配置
   redis:
-    key-project-name : MY-UAA #redis的key项目名称
     password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
     #sentile配置
     sentinel:

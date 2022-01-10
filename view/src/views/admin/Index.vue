@@ -89,7 +89,7 @@ export default {
             user.userName = res.data.userName;
             user.brief = res.data.brief;
             if (res.data.photo){
-              user.photo = "api/base" + res.data.photo;
+              user.photo = res.data.photo;
             }
             user.friends = res.data.friends;
             user.fans = res.data.fans;

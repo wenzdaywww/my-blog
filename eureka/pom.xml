@@ -62,25 +62,16 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
-        <!--eureka集群1配置-->
         <profile>
-            <id>eureka-cluster1</id>
+            <id>eureka-test</id>
             <properties>
-                <profileActive>cluster1</profileActive>
+                <profileActive>test</profileActive>
             </properties>
         </profile>
-        <!--eureka集群2配置-->
         <profile>
-            <id>eureka-cluster2</id>
+            <id>eureka-prod</id>
             <properties>
-                <profileActive>cluster2</profileActive>
-            </properties>
-        </profile>
-        <!--eureka集群3配置-->
-        <profile>
-            <id>eureka-cluster3</id>
-            <properties>
-                <profileActive>cluster3</profileActive>
+                <profileActive>prod</profileActive>
             </properties>
         </profile>
     </profiles>

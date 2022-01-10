@@ -16,7 +16,6 @@ spring:
 #eureka配置
 eureka:
   instance:
-    ip-address: 192.168.1.131
     instance-id: ${spring.application.name}:${eureka.instance.ip-address}:${server.port} #该实例注册到服务中心的唯一ID
     prefer-ip-address: true #该实例，相较于hostname是否优先使用IP
   client:
@@ -25,4 +24,4 @@ eureka:
     registry-fetch-interval-seconds: 10 #指示从eureka服务器获取注册表信息的频率（s）
     instance-info-replication-interval-seconds: 10 #更新实例信息的变化到Eureka服务端的间隔时间，（s）
     service-url:
-      defaultZone: http://www:www362412@192.168.1.130:8002/eureka/,http://www:www362412@192.168.1.132:8002/eureka/ #注册中心地址
+      defaultZone: http://www:www362412@192.168.1.130:8002/eureka/,http://www:www362412@192.168.1.131:8002/eureka/,http://www:www362412@192.168.1.132:8002/eureka/ #注册中心地址

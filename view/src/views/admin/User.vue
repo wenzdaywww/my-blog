@@ -151,7 +151,7 @@ export default {
           form.birthday = res.data.birthday;
           form.sex = res.data.sex;
           if(res.data.photo){
-             form.photo = "api/base" + res.data.photo;
+             form.photo = res.data.photo;
           }
           form.email = res.data.email;
           form.brief = res.data.brief;

@@ -1,15 +1,22 @@
-#服务信息配置
+#生产环境配置
+#服务器配置
 server:
-  port: 8003
+  port: 8070
 #日志配置
 logging:
-  config: classpath:logback-prod.xml
+  config: classpath:logback-test.xml
   file:
     path: /home/ap/logs/${spring.application.name}/  #日志路径
 #spring配置
 spring:
+  servlet:
+    #文件上传配置
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
   #redis配置
   redis:
+    key-project-name : MY-BLOG #redis的key项目名称
     password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
     #sentile配置
     sentinel:
@@ -22,24 +29,31 @@ eureka:
       #配置eureka集群地址
       defaultZone : http://www:www362412@192.168.1.130:8002/eureka/,http://www:www362412@192.168.1.131:8002/eureka/,http://www:www362412@192.168.1.132:8002/eureka/ #注册中心地址
   instance:
-    ip-address: 192.168.1.131
     instance-id: ${spring.application.name}:${eureka.instance.ip-address}:${server.port} #该实例注册到服务中心的唯一ID
     prefer-ip-address: true #该实例，相较于hostname是否优先使用IP
 #自定义common配置
 com:
   www:
     common:
-      code:
-        enable: true #开启数据字典加载
+      ctl-aop:
+        enable: true #开启controller的AOP日志拦截
+      #配置文件路径
+      file:
+        enable: true #开启上传文件配置
+        imgUrlPath: /imgs/** #配置访问图片的相对路径
+        imgSavePath: /home/ap/upload/${spring.application.name}/img/ #图片保存的绝对路径，window的路径必须是\且路径最后也需要\
+        otherUrlPath: /file/** #配置访问图片外其他文件的相对路径
+        otherSavePath: /home/ap/upload/${spring.application.name}/other/ #图片外其他文件保存的绝对路径，window的路径必须是\且路径最后也需要\
       oauth2:
-        signing-key: wenzday
-      druid: #数据库配置
+        enable: true #开启统一认证资源服务方配置
+        signing-key: wenzday #JWT令牌签名
+      druid:
         enable: true #开启数据源配置
         #写数据库
         write:
           url: jdbc:mysql://192.168.1.130:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
           driver-class-name: com.mysql.cj.jdbc.Driver
-          username: uaa
+          username: admin
           password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
           initial-size: 5 #启动程序时，在连接池中初始化多少个连接
           min-idle: 5 #最小连接池数量
@@ -57,7 +71,7 @@ com:
           #要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100
           max-pool-prepared-statement-per-connection-size: 20
           use-global-data-source-stat: true #
-          connect-properties: druid.stat.mergeSql=true,druid.stat.slowSqlMillis=500 #
+          connect-properties: druid.stat.mergeSql=true,druid.stat.slowSqlMillis=500
         #读数据库
         read-one:
           url: jdbc:mysql://192.168.1.131:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
@@ -80,7 +94,7 @@ com:
           #要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100
           max-pool-prepared-statement-per-connection-size: 20
           use-global-data-source-stat: true #
-          connect-properties: druid.stat.mergeSql=true,druid.stat.slowSqlMillis=500 #
+          connect-properties: druid.stat.mergeSql=true,druid.stat.slowSqlMillis=500
         #读数据库
         read-two:
           url: jdbc:mysql://192.168.1.132:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8

@@ -62,6 +62,13 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
+        <!--eureka测试配置-->
+        <profile>
+            <id>zuul-test</id>
+            <properties>
+                <profileActive>test</profileActive>
+            </properties>
+        </profile>
         <!--eureka生产配置-->
         <profile>
             <id>zuul-prod</id>

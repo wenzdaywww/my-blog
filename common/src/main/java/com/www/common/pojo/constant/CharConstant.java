@@ -23,4 +23,6 @@ public class CharConstant {
     public static final String SEMICOLON = ";";
     /** 冒号 **/
     public static final String COLON = ":";
+    /** 问号 **/
+    public static final String QUESTION_MARK = "?";
 }

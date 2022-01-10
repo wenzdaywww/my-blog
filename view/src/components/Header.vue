@@ -149,7 +149,7 @@ export default {
           isLogin.value = true;
           form.userId = res.data.userId;
           if(res.data.photo){
-            form.photo = "api/base" + res.data.photo;
+            form.photo = res.data.photo;
           }
         }
       });

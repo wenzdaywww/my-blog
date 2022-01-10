@@ -120,6 +120,12 @@
             </activation>
         </profile>
         <profile>
+            <id>blog-test</id>
+            <properties>
+                <profileActive>test</profileActive>
+            </properties>
+        </profile>
+        <profile>
             <id>blog-prod</id>
             <properties>
                 <profileActive>prod</profileActive>
