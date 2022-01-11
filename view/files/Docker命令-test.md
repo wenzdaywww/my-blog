@@ -12,6 +12,6 @@
 ## 6.2、配置keepalived开机自启
 ### systemctl enable keepalived.service #开机自启
 ### systemctl disable keepalived.service #取消开机自启
-## 6.3、以192.168.1.130为主服务器，192.168.1.131、192.168.1.132为备服务器为例，上传/master/keepalived.conf到130的/etc/keepalived中，
-## 上传/backup/keepalived.conf到131和132的/etc/keepalived中，且将检查脚本nginx_check.sh分别上传到3台服务器的/etc/keepalived中
+## 6.3、以192.168.1.130为主服务器，192.168.1.131、192.168.1.132为备服务器为例，上传/keepalived/master/keepalived.conf到130的/etc/keepalived中，
+## 上传/keepalived/backup/keepalived.conf到131和132的/etc/keepalived中，且将检查脚本nginx_check.sh分别上传到3台服务器的/etc/keepalived中
 ## 6.4、重启keepalived即可验证
