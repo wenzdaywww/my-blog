@@ -74,6 +74,7 @@ export default {
     const ENV = import.meta.env;
     //uaa返回的地址
     const redirect_uri = ENV.VITE_BASE_REDIRECT_URI;
+    ///TODO 2022/1/11 22:45 测试环境nginx配置多个uaa负载均衡不能使用，待处理
     //登录地址
     const loginUrl =  ENV.VITE_UAA_LOGIN + "client_id=" + ENV.VITE_BASE_CLIENT_ID + "&response_type=code&redirect_uri="+redirect_uri;
     // 接口请求
@@ -191,6 +192,7 @@ export default {
             localStorage.clear();
             ElMessage.success("退出成功");
             //TODO 2021/12/28 22:35 router.push路由跳转页面不刷新，待处理
+            ///TODO 2022/1/11 22:43 测试环境部署多个前端，退出后不能到登录页面，待处理
             router.push("/home");
           }
         }).catch(function (res) {
