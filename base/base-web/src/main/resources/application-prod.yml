@@ -17,7 +17,7 @@ spring:
   #redis配置
   redis:
     host: 1.2.3.4
-    port: 6380
+    port: 6379
     key-project-name : MY-BLOG #redis的key项目名称
     password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
 #eureka配置
