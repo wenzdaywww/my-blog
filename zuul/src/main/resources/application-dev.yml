@@ -12,5 +12,5 @@ eureka:
       #配置eureka集群地址
       defaultZone : http://www:www362412@localhost:8002/eureka/ #注册中心地址
   instance:
-    instance-id: ${spring.application.name}:${eureka.instance.ip-address}:${server.port} #该实例注册到服务中心的唯一ID
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port} #该实例注册到服务中心的唯一ID
     prefer-ip-address: true #该实例，相较于hostname是否优先使用IP

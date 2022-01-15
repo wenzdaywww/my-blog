@@ -1,6 +1,8 @@
 package com.www.uaa.config.authorize.core;
 
+import com.www.uaa.config.authorize.handler.Oauth2LoginFailureHandler;
 import com.www.uaa.config.authorize.handler.Oauth2LogoutSuccessHandler;
+import com.www.uaa.config.mvc.MvcConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,8 +25,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true,securedEnabled = true) //配置基于方法的安全认证,必要
 public class AuthorizeSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private Oauth2LogoutSuccessHandler oauth2LogoutSuccessHandler;
+    @Autowired
+    private Oauth2LoginFailureHandler oauth2LoginFailureHandler;
+
     /**
      * <p>@Description 配置密码加密方式 </p>
      * <p>@Author www </p>
@@ -55,8 +61,9 @@ public class AuthorizeSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
-                .loginPage("/uaa-login") //自定义的登录页面 **重要**
+                .loginPage(MvcConfig.LOGIN_PAGE) //自定义的登录页面 **重要**
                 .loginProcessingUrl("/login")  //原始的处理登录的URL,保持和uaa_login.html的form表单的action一致 ，不要修改
+                .failureHandler(oauth2LoginFailureHandler)//登录失败处理逻辑
                 .permitAll() //放开
                 .and()
                 .authorizeRequests().anyRequest().authenticated()//其他请求必须登录

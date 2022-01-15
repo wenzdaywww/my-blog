@@ -14,6 +14,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Slf4j
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
+    /** 登录页面请求路径 **/
+    public static final String LOGIN_PAGE = "/uaa-login";
     /**
      * <p>@Description 设置视图控制器 </p>
      * <p>@Author www </p>
