@@ -1,17 +1,16 @@
 import {createRouter, createWebHistory} from "vue-router";
-import Home from "../views/admin/Home.vue";
 const modules = import.meta.glob("../views/**/**.vue");// 接口请求
 //主页路由
 let homeRouter = {
     path: "/",
     name: "Home",
-    component: Home,
+    component: () => import ("../views/admin/Home.vue"),
     children: [
         {
             path: "/home",
             name: "index",
             meta: {
-                title: '首页'
+                title: '后台首页'
             },
             component: () => import ("../views/admin/Index.vue")
         }
@@ -22,6 +21,20 @@ let routes = [
     {
         path: "/",
         redirect: "/home"
+    },{
+        path: "/",
+        name: "Blog",
+        component: () => import ("../views/blog/Home.vue"),
+        children: [
+            {
+                path: "/blog",
+                name: "blog",
+                meta: {
+                    title: '博客首页'
+                },
+                component: () => import ("../views/blog/Index.vue")
+            }
+        ]
     },{
         path: "/404",
         name: "404",

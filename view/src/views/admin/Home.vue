@@ -18,7 +18,7 @@
     </div>
 </template>
 <script>
-import { computed } from "vue";
+import {computed, ref,provide } from "vue";
 import { useStore } from "vuex";
 import vHeader from "../../components/Header.vue";
 import vSidebar from "../../components/Sidebar.vue";
@@ -30,6 +30,8 @@ export default {
         vTags,
     },
     setup() {
+        //向子组件传值
+        provide("isAdmin",true);
         const store = useStore();
         const tagsList = computed(() =>
             store.state.tagsList.map((item) => item.name)

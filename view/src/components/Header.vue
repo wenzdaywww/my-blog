@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <!-- 折叠按钮 -->
-    <div class="collapse-btn" @click="collapseChage">
+    <div v-if="isAdmin" class="collapse-btn" @click="collapseChage">
       <i v-if="!collapse" class="el-icon-s-fold"></i>
       <i v-else class="el-icon-s-unfold"></i>
     </div>
@@ -61,7 +61,7 @@
   </div>
 </template>
 <script>
-import {computed, getCurrentInstance, onMounted, reactive, ref} from "vue";
+import {computed, getCurrentInstance, onMounted, reactive, ref,inject} from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import utils from '../utils/utils';
@@ -70,19 +70,32 @@ import {initUserRouter} from "../router";
 
 export default {
   setup() {
-    //环境配置
-    const ENV = import.meta.env;
-    //uaa返回的地址
-    const redirect_uri = ENV.VITE_BASE_REDIRECT_URI;
-    //TODO 2022/1/11 22:45 测试环境nginx配置多个uaa负载均衡不能使用，待处理
-    //登录地址
-    const loginUrl =  ENV.VITE_UAA_LOGIN + "client_id=" + ENV.VITE_BASE_CLIENT_ID + "&response_type=code&redirect_uri="+redirect_uri;
     // 接口请求
     const request = getCurrentInstance().appContext.config.globalProperties;
     // 路由
     const router = useRouter();
     //store存储对象
     const store = useStore();
+    //从父组件获取传值
+    const isAdmin = inject("isAdmin"); //是否后台首页
+    //环境配置
+    const ENV = import.meta.env;
+    /** 客户端信息 **/
+    let clientInfo = reactive({
+      //客户端ID
+      client_id: isAdmin ? ENV.VITE_BASE_CLIENT_ID : ENV.VITE_BLOG_CLIENT_ID,
+      //客户端签名
+      client_secret: isAdmin ? ENV.VITE_BASE_CLIENT_SECRET : ENV.VITE_BLOG_CLIENT_SECRET,
+      //授权方式
+      grant_type: isAdmin ? ENV.VITE_BASE_GRANT_TYPE : ENV.VITE_BLOG_GRANT_TYPE,
+      //uaa返回的地址
+      redirect_uri : isAdmin ? ENV.VITE_BASE_REDIRECT_URI : ENV.VITE_BLOG_REDIRECT_URI,
+      //授权码
+      code: ""
+    });
+    //TODO 2022/1/11 22:45 测试环境nginx配置多个uaa负载均衡不能使用，待处理
+    //登录地址
+    const loginUrl =  ENV.VITE_UAA_LOGIN + "client_id=" + clientInfo.client_id + "&response_type=code&redirect_uri=" + clientInfo.redirect_uri;
     // 是否已登录
     const isLogin = ref(false);
     //侧边栏是否收缩
@@ -99,14 +112,6 @@ export default {
       password : "",
       photo : "src/assets/img/img.jpg",
       message : 0
-    });
-    // token数据
-    let token = reactive({
-      client_id: ENV.VITE_BASE_CLIENT_ID,
-      client_secret: ENV.VITE_BASE_CLIENT_SECRET,
-      grant_type: ENV.VITE_BASE_GRANT_TYPE,
-      code: '',
-      redirect_uri: redirect_uri
     });
     // 修改密码的规则校验
     const editRules = {
@@ -157,7 +162,6 @@ export default {
     };
     //获取token
     const getToken = () => {
-      console.log("获取token="+localStorage.getItem("userId"));
       if (localStorage.getItem("userId")){
         isLogin.value = true;
         //加载用户拥有的路由权限
@@ -172,8 +176,8 @@ export default {
         form.userId = null;
         const code = utils.getUrlParam("code");
         if(code){
-          token.code = code;
-          request.$http.post("api/uaa/oauth/token", token).then(function (res) {
+          clientInfo.code = code;
+          request.$http.post("api/uaa/oauth/token", clientInfo).then(function (res) {
             if(res && res.data){
               localStorage.setItem("userId",res.data.userId);
               router.go(0);//重新跳转当前页面
@@ -224,7 +228,7 @@ export default {
         }
       });
     };
-    return { loginUrl,isLogin,form,editVisible,editForm,editRules, collapse,
+    return { isAdmin,loginUrl,isLogin,form,editVisible,editForm,editRules, collapse,
       collapseChage, handleCommand,savePwd
     };
   }
