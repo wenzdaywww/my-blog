@@ -1,6 +1,7 @@
 package com.www.common.config.druid.interceptor;
 
 import com.www.common.config.druid.core.DataBaseHolder;
+import com.www.common.config.druid.core.MultipleDataSourceConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -56,8 +57,10 @@ public class ReadWriteInterceptor implements Ordered {
             result = proceedingJoinPoint.proceed();
         }catch (Exception e){
             log.error("连接slave数据源Exception异常：{}",e.getMessage());
-            //查询从数据库出现异常再从主数据库查询
-            result = insert(proceedingJoinPoint);
+            //有配置从数据库出现异常再从主数据库查询
+            if(MultipleDataSourceConfig.getReadNum() != 0){
+                result = insert(proceedingJoinPoint);
+            }
         } catch (Throwable throwable) {
             log.error("连接slave数据源throwable异常：{}",throwable.getMessage());
         } finally {

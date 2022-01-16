@@ -48,7 +48,7 @@ com:
         enable: true #开启数据源配置
         #写数据库
         write:
-          url: jdbc:mysql://1.2.3.4:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
+          url: jdbc:mysql://1.2.3.4:3300/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
           driver-class-name: com.mysql.cj.jdbc.Driver
           username: admin
           password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
