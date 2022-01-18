@@ -3,32 +3,23 @@ const modules = import.meta.glob("../views/**/**.vue");// 接口请求
 //主页路由
 let homeRouter = {
     path: "/",
-    name: "Home",
+    name: "Admin",
     component: () => import ("../views/admin/Home.vue"),
-    children: [
-        {
-            path: "/home",
-            name: "index",
-            meta: {
-                title: '后台首页'
-            },
-            component: () => import ("../views/admin/Index.vue")
-        }
-    ]
+    children: []
 };
 // 初始路由
 let routes = [
     {
         path: "/",
-        redirect: "/home"
+        redirect: "/index"
     },{
         path: "/",
         name: "Blog",
         component: () => import ("../views/blog/Home.vue"),
         children: [
             {
-                path: "/blog",
-                name: "blog",
+                path: "/index",
+                name: "blogIndex",
                 meta: {
                     title: '博客首页'
                 },
@@ -86,7 +77,7 @@ router.beforeEach((to, from, next) => {
             initUserRouter(routerList);
         }
     }
-    //TODO 2021/12/26 19:34 刷新404级第一次标签栏不选中，待处理
+    //TODO 2021/12/26 19:34 刷新404，待处理
     next();
 });
 

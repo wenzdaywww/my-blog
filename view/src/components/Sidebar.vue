@@ -48,11 +48,8 @@ export default {
     const collapse = computed(() => store.state.collapse);
     // 接口请求
     const request = getCurrentInstance().appContext.config.globalProperties;
-    const items = ref([{
-      menuUrl: '/home',
-      menuName: '首页',
-      menuIcon: 'el-icon-lx-home'
-    }]);
+    //菜单列表
+    const items = ref([]);
     // 获取菜单
     const getData = () => {
       if(localStorage.getItem('userId')){
@@ -62,11 +59,7 @@ export default {
           }
         });
       }else {
-        items.value = [{
-          menuUrl: '/home',
-          menuName: '首页',
-          menuIcon: 'el-icon-lx-home'
-        }];
+        items.value = [];
       }
     };
     getData();

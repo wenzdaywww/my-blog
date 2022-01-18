@@ -20,7 +20,7 @@ axios.interceptors.response.use(
         //接口返回403
         if ((response.data && (response.data.code == 401 || response.data.code == 403)) || response.status == 401 || response.status == 403) {
             localStorage.clear();
-            router.push("/home");//跳转登录页面
+            router.push("/index");//跳转登录页面
         }else if(response.status == 200){
             return Promise.resolve(response);
         }else {

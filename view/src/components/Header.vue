@@ -5,7 +5,7 @@
       <i v-if="!collapse" class="el-icon-s-fold"></i>
       <i v-else class="el-icon-s-unfold"></i>
     </div>
-    <div class="logo">{{form.userId}}</div>
+    <div class="logo header-item" @click="handleCommand('blog-index')">博客</div>
     <div class="header-right">
       <!-- 未登录 -->
       <div v-if="isLogin == false" style="margin-top: 20px">
@@ -30,9 +30,10 @@
           </div>
           <template #dropdown>
             <el-dropdown-menu>
+              <el-dropdown-item command="blog">我的博客</el-dropdown-item>
               <el-dropdown-item command="user">个人中心</el-dropdown-item>
               <el-dropdown-item command="pwd">修改密码</el-dropdown-item>
-              <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
+              <el-dropdown-item divided command="loginout" class="login-out">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -106,7 +107,6 @@ export default {
     const editForm = ref(null);
     // 表单数据
     let form = reactive({
-      userId: "",
       newPassWord: "",
       cfmPassWord: "",
       password : "",
@@ -153,7 +153,6 @@ export default {
         if(res.code === 200){
           localStorage.setItem("userId",res.data.userId);
           isLogin.value = true;
-          form.userId = res.data.userId;
           if(res.data.photo){
             form.photo = res.data.photo;
           }
@@ -173,7 +172,6 @@ export default {
         getUserData(localStorage.getItem("userId"));
       }else{
         isLogin.value = false;
-        form.userId = null;
         const code = utils.getUrlParam("code");
         if(code){
           clientInfo.code = code;
@@ -197,18 +195,22 @@ export default {
             ElMessage.success("退出成功");
             //TODO 2021/12/28 22:35 router.push路由跳转页面不刷新，待处理
             //TODO 2022/1/11 22:43 测试环境部署多个前端，退出后不能到登录页面，待处理
-            router.push("/home");
+            router.push("/index");
           }
         }).catch(function (res) {
           ElMessage.error("退出失败");
         });
       } else if (command == "user") { // 个人中心
         router.push("/user");
+      }else if (command == "blog") { // 我的博客
+        router.push("/index");
       } else if (command == "pwd") { // 修改密码
         editVisible.value = true;
         form.password = "";
         form.newPassWord = "";
         form.cfmPassWord = "";
+      }else if(command == "blog-index"){ //博客首页
+        router.push("/index");
       }
     };
     // 保存
@@ -235,10 +237,6 @@ export default {
 };
 </script>
 <style scoped>
-.i-login{
-  color: white;
-  font-size: 18px;
-}
 .header {
   position: relative;
   box-sizing: border-box;
@@ -254,8 +252,8 @@ export default {
   line-height: 70px;
 }
 .header .logo {
+  margin-left: 10px;
   float: left;
-  width: 250px;
   line-height: 70px;
 }
 .header-right {
@@ -306,11 +304,16 @@ export default {
   height: 40px;
   border-radius: 50%;
 }
-.el-dropdown-link {
-  color: #fff;
-  cursor: pointer;
+.login-out{
+  color: red;
 }
-.el-dropdown-menu__item {
-  text-align: center;
+.header-item{
+  font-size: 18px;
+  width: auto;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+.header-item:hover {
+  background-color: #a19f9f;
 }
 </style>

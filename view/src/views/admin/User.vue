@@ -10,23 +10,63 @@
     <el-row :gutter="20">
       <!--  基础信息-->
       <el-col :span="12">
-        <el-card shadow="hover">
-          <template #header>
-            <div class="clearfix">
-              <span>基本信息</span>
-            </div>
-          </template>
-          <div class="info">
-            <div class="info-image" @click="showDialog">
-              <img :src="form.photo" />
-              <span class="info-edit">
+        <el-row class="mgb20">
+          <el-col :span="8">
+            <el-card shadow="hover" :body-style="{ padding: '0px'}" class="num-card">
+              <div class="grid-content grid-con-1">
+                <i class="el-icon-user grid-con-icon"></i>
+                <div class="grid-cont-right">
+                  <div class="grid-num">{{user.friends}}</div>
+                  <div>关注</div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :span="8">
+            <el-card shadow="hover" :body-style="{ padding: '0px' }" class="num-card">
+              <div class="grid-content grid-con-2">
+                <i class="el-icon-s-custom grid-con-icon"></i>
+                <div class="grid-cont-right">
+                  <div class="grid-num">{{user.fans}}</div>
+                  <div>粉丝</div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+          <el-col :span="8">
+            <el-card shadow="hover" :body-style="{ padding: '0px' }" class="num-card">
+              <div class="grid-content grid-con-3">
+                <i class="el-icon-tickets grid-con-icon"></i>
+                <div class="grid-cont-right">
+                  <div class="grid-num">{{user.blogs}}</div>
+                  <div>博客</div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-card shadow="hover" class="info-card">
+            <template #header>
+              <div class="clearfix">
+                <span>基本信息</span>
+              </div>
+            </template>
+            <div class="info">
+              <div class="user-info">
+                <div class="info-image" @click="showDialog">
+                  <img :src="user.photo" class="user-avator" alt/>
+                  <span class="info-edit">
                   <i class="el-icon-lx-camerafill"></i>
-              </span>
+                </span>
+                </div>
+              </div>
+              <div class="user-info-list">
+                个性签名： <span>{{ user.brief }}</span>
+              </div>
             </div>
-            <div class="info-name"></div>
-            <div class="info-desc">{{form.brief}}</div>
-          </div>
-        </el-card>
+          </el-card>
+        </el-row>
       </el-col>
       <!-- 账户编辑-->
       <el-col :span="12">
@@ -36,28 +76,28 @@
               <span>信息修改</span>
             </div>
           </template>
-          <el-form label-width="90px" :model="form" :rules="editRules" ref="editForm">
-            <el-form-item label="用户ID："> {{ form.userId }} </el-form-item>
+          <el-form label-width="90px" :model="user" :rules="editRules" ref="editForm">
+            <el-form-item label="用户ID："> {{ user.userId }} </el-form-item>
             <el-form-item label="用户名称" prop="userName">
-              <el-input v-model="form.userName" maxlength="100" placeholder="请输入用户名称"></el-input>
+              <el-input v-model="user.userName" maxlength="100" placeholder="请输入用户名称"></el-input>
             </el-form-item>
             <el-form-item label="性别">
-              <el-radio v-model="form.sex" label="1">男</el-radio>
-              <el-radio v-model="form.sex" label="0">女</el-radio>
+              <el-radio v-model="user.sex" label="1">男</el-radio>
+              <el-radio v-model="user.sex" label="0">女</el-radio>
             </el-form-item>
             <el-form-item label="手机号" prop="phoneNum">
-              <el-input v-model="form.phoneNum" maxlength="11" placeholder="请输入手机号码"
+              <el-input v-model="user.phoneNum" maxlength="11" placeholder="请输入手机号码"
                         οninput="value=value.replace(/[^\d]/g,'');if(value.length > 11)value = value.slice(0, 11)"></el-input>
             </el-form-item>
             <el-form-item label="生日">
-              <el-date-picker v-model="form.birthday" type="date" value-format="YYYY-MM-DD" format="YYYY年MM月DD日" placeholder="请选择出生日期" style="width: 100%">
+              <el-date-picker v-model="user.birthday" type="date" value-format="YYYY-MM-DD" format="YYYY年MM月DD日" placeholder="请选择出生日期" style="width: 100%">
               </el-date-picker>
             </el-form-item>
             <el-form-item label="邮箱" prop="email">
-              <el-input v-model="form.email" maxlength="100" placeholder="请输入邮箱地址"></el-input>
+              <el-input v-model="user.email" maxlength="100" placeholder="请输入邮箱地址"></el-input>
             </el-form-item>
             <el-form-item label="个性签名：">
-              <el-input v-model="form.brief" maxlength="100" placeholder="请输入个性签名"></el-input>
+              <el-input v-model="user.brief" maxlength="100" placeholder="请输入个性签名"></el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="onSubmit">保存</el-button>
@@ -131,8 +171,8 @@ export default {
     };
     // 表单对象
     const editForm = ref(null);
-    // 表单数据
-    let form = reactive({
+    // 用户信息
+    let user = reactive({
       userId: localStorage.getItem('userId'),
       userName : "",
       phoneNum : "",
@@ -140,30 +180,38 @@ export default {
       sex : "",
       photo : "src/assets/img/img.jpg",
       email : "",
-      brief : ""
+      brief : "",
+      friends : 0,
+      fans : 0,
+      blogs : 0
     });
     // 获取用户数据
     const getData = () => {
-      request.$http.get("api/base/user/info",form).then(function (res) {
-        if(res.code === 200){
-          form.userName = res.data.userName;
-          form.phoneNum = res.data.phoneNum;
-          form.birthday = res.data.birthday;
-          form.sex = res.data.sex;
-          if(res.data.photo){
-             form.photo = res.data.photo;
+      if(user.userId){
+        request.$http.get("api/base/user/info",user).then(function (res) {
+          if(res.code === 200){
+            user.userName = res.data.userName;
+            user.phoneNum = res.data.phoneNum;
+            user.birthday = res.data.birthday;
+            user.sex = res.data.sex;
+            if(res.data.photo){
+              user.photo = res.data.photo;
+            }
+            user.email = res.data.email;
+            user.brief = res.data.brief;
+            user.friends = res.data.friends;
+            user.fans = res.data.fans;
+            user.blogs = res.data.blogs;
           }
-          form.email = res.data.email;
-          form.brief = res.data.brief;
-        }
-      });
+        });
+      }
     };
     getData();
     // 保存按钮
     const onSubmit = () => {
       editForm.value.validate((valid) => {
         if (valid) {
-          request.$http.post("api/base/user/edit",form).then(function (res) {
+          request.$http.post("api/base/user/edit",user).then(function (res) {
             if(res.code === 200){
               ElMessage.success('修改成功');
               getData();
@@ -186,13 +234,13 @@ export default {
     const cropper = ref(null);
     //选中的图片文件
     let file = reactive({
-      name : form.userId + ".jpg"
+      name : user.userId + ".jpg"
     });
     //打开图片上传弹窗
     const showDialog = () => {
       dialogVisible.value = true;
-      imgSrc.value = form.photo;
-      cropper.value = form.photo;
+      imgSrc.value = user.photo;
+      cropper.value = user.photo;
     };
     //设置选中的图片
     const setImage = (e) => {
@@ -221,7 +269,7 @@ export default {
     const uploadImg = () => {
       let fd = new FormData();//通过form数据格式来传
       fd.append("photo", base64ToFile(cropImg.value,file.name)); //传文件
-      fd.append("userId", form.userId);
+      fd.append("userId", user.userId);
       request.$http.upload("api/base/user/photo",fd,{'Content-Type': 'multipart/form-data'}).then(function (res){
         if(res.code === 200){
           ElMessage.success('上传成功');
@@ -247,7 +295,7 @@ export default {
       }
       return new File([ia], fileName, { type: mime });
     };
-    return { editRules, editForm, form, onSubmit, cropper, imgSrc, cropImg,
+    return { editRules, editForm, user, onSubmit, cropper, imgSrc, cropImg,
       showDialog, dialogVisible, setImage, cropImage, uploadImg
     };
   },
@@ -262,12 +310,15 @@ export default {
 .info-image {
   position: relative;
   margin: auto;
-  width: 180px;
-  height: 180px;
+  display: flex;
+  width: 200px;
+  height: 200px;
+  align-items: center;
   background: #f8f8f8;
   border: 1px solid #eee;
-  border-radius: 90px;
+  border-radius: 50%;
   overflow: hidden;
+  border-bottom: 2px solid #ccc;
 }
 .info-image img {
   width: 100%;
@@ -293,12 +344,6 @@ export default {
 .info-image:hover .info-edit {
   opacity: 1;
 }
-.info-name {
-  margin: 15px 0 10px;
-  font-size: 24px;
-  font-weight: 500;
-  color: #262626;
-}
 .crop-demo-btn {
   position: relative;
 }
@@ -310,5 +355,72 @@ export default {
   top: 0;
   opacity: 0;
   cursor: pointer;
+}
+.grid-content {
+  display: flex;
+  align-items: center;
+  height: 100px;
+}
+.mgb20 {
+  margin-bottom: 10px;
+}
+.grid-cont-right {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  color: #999;
+}
+.grid-num {
+  font-size: 30px;
+  font-weight: bold;
+}
+.grid-con-icon {
+  font-size: 50px;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  line-height: 100px;
+  color: #fff;
+}
+.grid-con-1 .grid-con-icon {
+  background: rgb(45, 140, 240);
+}
+.grid-con-1 .grid-num {
+  color: rgb(45, 140, 240);
+}
+.grid-con-2 .grid-con-icon {
+  background: rgb(100, 213, 114);
+}
+.grid-con-2 .grid-num {
+  color: rgb(45, 140, 240);
+}
+.grid-con-3 .grid-con-icon {
+  background: rgb(242, 94, 67);
+}
+.grid-con-3 .grid-num {
+  color: rgb(242, 94, 67);
+}
+.info-card{
+  width: 100%;
+}
+.user-info-list {
+  font-size: 14px;
+  color: #999;
+  line-height: 25px;
+}
+.user-avator {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+}
+.user-info {
+  display: flex;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #ccc;
+  margin-bottom: 20px;
+}
+.num-card{
+  margin-right: 5px;
 }
 </style>
