@@ -65,9 +65,9 @@
 import {computed, getCurrentInstance, onMounted, reactive, ref,inject} from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import utils from '../utils/utils';
+import utils from '../../utils/utils';
 import {ElMessage} from "element-plus";
-import {initUserRouter} from "../router";
+import {initUserRouter} from "../../router";
 
 export default {
   setup() {
@@ -203,7 +203,7 @@ export default {
       } else if (command == "user") { // 个人中心
         router.push("/user");
       }else if (command == "blog") { // 我的博客
-        router.push("/index");
+        router.push("/blog");
       } else if (command == "pwd") { // 修改密码
         editVisible.value = true;
         form.password = "";

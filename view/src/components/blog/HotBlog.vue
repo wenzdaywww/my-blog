@@ -1,6 +1,6 @@
 <template>
   <!-- 热门博客 -->
-  <el-card class="hot-card">
+  <el-card v-bind:class="float_type">
     <span class="span-title"><b>热门博客</b></span>
     <el-row class="hot-row" v-for="item in hotBlog">
       <el-col>
@@ -11,11 +11,12 @@
 </template>
 
 <script>
-import {getCurrentInstance, ref} from "vue";
+import {getCurrentInstance, inject, ref} from "vue";
 
 export default {
   name: "HotBlog",
   setup() {
+    const float_type = inject("float_type"); //样式控制
     // 接口请求
     const request = getCurrentInstance().appContext.config.globalProperties;
     // 热门博客数据
@@ -29,13 +30,29 @@ export default {
         title: "2、你真的理解什么是财富自由吗？"
       }
     ]);
-    return {hotBlog};
+    return {hotBlog,float_type};
   }
 }
 </script>
 
 <style scoped>
 .hot-card{
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  width: 50%;
+}
+.float-left{
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  width: 50%;
+  float: left;
+}
+.float-right{
+  margin-left: 10px;
   margin-right: 10px;
   border-radius: 8px;
   margin-bottom: 20px;

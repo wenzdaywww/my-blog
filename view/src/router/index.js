@@ -24,6 +24,13 @@ let routes = [
                     title: '博客首页'
                 },
                 component: () => import ("../views/blog/Index.vue")
+            },{
+                path: "/blog",
+                name: "userBlog",
+                meta: {
+                    title: '我的博客'
+                },
+                component: () => import ("../views/blog/UserBlog.vue")
             }
         ]
     },{
