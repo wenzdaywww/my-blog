@@ -256,12 +256,12 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     public ResponseDTO<String> createUser(SysUserDTO user) {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
-        if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName(),user.getPassword(),user.getRoleCode())
-                || CodeDict.isIllegalValue(CodeTypeEnum.SEX,user.getSex())){
+        if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName(),user.getPassword())
+                || (StringUtils.isNotBlank(user.getSex()) && CodeDict.isIllegalValue(CodeTypeEnum.SEX,user.getSex()))){
             responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL,"信息不完整，创建用户失败");
             return responseDTO;
         }
-        SysRoleEntity roleEntity = sysRoleService.findRoleEntityByName(user.getRoleCode());
+        SysRoleEntity roleEntity = sysRoleService.findRoleEntityByName("user");
         if(roleEntity == null){
             responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL);
             responseDTO.setMsg("用户角色错误，创建用户失败");

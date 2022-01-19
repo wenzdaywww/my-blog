@@ -2,8 +2,10 @@ package com.www.common.config.oauth2.resourcesecurity;
 
 import com.alibaba.fastjson.JSON;
 import com.www.common.config.oauth2.token.JwtTokenConverter;
+import com.www.common.config.oauth2.token.Oauth2Extractor;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.pojo.dto.token.TokenInfoDTO;
+import com.www.common.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -56,11 +58,8 @@ public class Oauth2UnauthHandler implements AccessDeniedHandler {
         TokenInfoDTO tokenDTO = jwtTokenConverter.decodeToken(token);
         log.error("4、请求的角色拒绝访问，角色权限信息：{}，拒绝原因：{}",JSON.toJSONString(tokenDTO),e.getMessage());
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.UNAUTHORIZED,e.getMessage());
-        Cookie cookie = WebUtils.getCookie(httpServletRequest, JwtTokenConverter.TOKEN_KEY);
-        if(cookie != null){
-            cookie.setValue(null);
-            httpServletResponse.addCookie(cookie);
-        }
+        //清除响应报文的token信息
+        TokenUtils.clearResponseToken(httpServletResponse, Oauth2Extractor.COOKIES_ACCESS_TOKEN);
         httpServletResponse.setStatus(ResponseDTO.RespEnum.UNAUTHORIZED.getCode());
         httpServletResponse.setContentType("application/json;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(responseDTO));

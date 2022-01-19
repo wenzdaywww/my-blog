@@ -6,6 +6,7 @@ import com.www.common.config.oauth2.token.Oauth2Extractor;
 import com.www.common.config.oauth2.util.RedisTokenHandler;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.pojo.dto.token.TokenInfoDTO;
+import com.www.common.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -57,10 +58,7 @@ public class Oauth2LogoutSuccessHandler implements LogoutSuccessHandler {
         RedisTokenHandler.deleteUserIdToken(tokenInfoDTO);
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,"退出成功");
         //清除token
-        Cookie accessCookie = new Cookie(COOKIES_ACCESS_TOKEN,null);
-        httpServletResponse.addCookie(accessCookie);
-        Cookie refreshCookie = new Cookie(COOKIES_REFRESH_TOKEN,null);
-        httpServletResponse.addCookie(refreshCookie);
+        TokenUtils.clearResponseToken(httpServletResponse,COOKIES_ACCESS_TOKEN,COOKIES_REFRESH_TOKEN);
         httpServletResponse.setContentType("application/json;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(responseDTO));
     }

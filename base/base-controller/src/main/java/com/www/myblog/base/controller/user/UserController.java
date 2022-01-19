@@ -98,18 +98,6 @@ public class UserController {
         return userInfoService.findUser(userId);
     }
     /**
-     * <p>@Description 创建用户信息 </p>
-     * <p>@Author www </p>
-     * <p>@Date 2021/12/7 21:20 </p>
-     * @param user 用户信息
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
-     */
-    @PostMapping("new")
-    @PreAuthorize("hasAnyAuthority('admin')")
-    public ResponseDTO<String> createUser(SysUserDTO user){
-        return userInfoService.createUser(user);
-    }
-    /**
      * <p>@Description 查询所有用户信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/11/30 21:10 </p>

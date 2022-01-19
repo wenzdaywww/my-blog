@@ -2,6 +2,7 @@ package com.www.common.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.www.common.config.redis.RedisOperation;
+import com.www.common.pojo.constant.CharConstant;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -79,6 +80,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         ResponseDTO<Map> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,tokenMap);
         Cookie cookie = new Cookie(COOKIE_TOKEN,tokenMap.get(TokenUtils.TOKEN));
         cookie.setMaxAge(expirationTime);
+        cookie.setPath(CharConstant.LEFT_SLASH);
         response.addCookie(cookie);
         response.setContentType("application/json;charset=utf-8");
         response.setHeader(TokenUtils.AUTHORIZATION,tokenMap.get(TokenUtils.TOKEN));

@@ -9,7 +9,9 @@
     <div class="header-right">
       <!-- 未登录 -->
       <div v-if="isLogin == false" style="margin-top: 20px">
-        <el-link type="danger" :href="loginUrl">登录</el-link>
+        <el-link type="danger" class="red" :href="loginUrl">登录</el-link>
+        <span class="red">&nbsp;/&nbsp;</span>
+        <span class="regist-span" @click="shwoRegist">注册</span>
       </div>
       <!-- 已登录 -->
       <div class="header-user-con" v-if="isLogin == true">
@@ -39,37 +41,26 @@
         </el-dropdown>
       </div>
       <!-- 修改密码弹出框 -->
-      <el-dialog title="修改密码" v-model="editVisible" width="20%" v-if="isLogin == true">
-        <el-form label-width="120px" :model="form" :rules="editRules" ref="editForm">
-          <el-form-item label="旧密码：" prop="password">
-            <el-input type="password" v-model="form.password" maxlength="20" placeholder="请输入旧密码"></el-input>
-          </el-form-item>
-          <el-form-item label="新密码：" prop="newPassWord">
-            <el-input type="password" v-model="form.newPassWord" maxlength="20" placeholder="请输入新密码"></el-input>
-          </el-form-item>
-          <el-form-item label="确认密码：" prop="cfmPassWord">
-            <el-input type="password" v-model="form.cfmPassWord" maxlength="20" placeholder="请重新输入新密码"></el-input>
-          </el-form-item>
-        </el-form>
-        <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="editVisible = false">取 消</el-button>
-          <el-button type="primary" @click="savePwd">确 定</el-button>
-        </span>
-        </template>
-      </el-dialog>
+      <password ref="passwordDialog" v-if="isLogin == true"/>
+      <!-- 用户注册弹出框 -->
+      <register ref="registerDialog" v-if="isLogin == false"/>
     </div>
   </div>
 </template>
 <script>
-import {computed, getCurrentInstance, onMounted, reactive, ref,inject} from "vue";
+
+import {computed, getCurrentInstance, onMounted, reactive, ref, inject, provide} from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import utils from '../../utils/utils';
 import {ElMessage} from "element-plus";
 import {initUserRouter} from "../../router";
+import Register from "../../views/admin/Register.vue";
+import Password from "../../views/admin/Password.vue";
 
 export default {
+  name: "Header",
+  components: {Register,Password},
   setup() {
     // 接口请求
     const request = getCurrentInstance().appContext.config.globalProperties;
@@ -101,45 +92,22 @@ export default {
     const isLogin = ref(false);
     //侧边栏是否收缩
     const collapse = computed(() => store.state.collapse);
-    //修改密码弹出框控制位
-    const editVisible = ref(false);
-    // 表单对象
-    const editForm = ref(null);
     // 表单数据
     let form = reactive({
-      newPassWord: "",
-      cfmPassWord: "",
-      password : "",
       photo : "src/assets/img/img.jpg",
       message : 0
     });
-    // 修改密码的规则校验
-    const editRules = {
-      password : [
-        { required: true, message: "旧密码不能为空", trigger: "blur" },
-        { min: 6, message: "密码不能小于6位数", trigger: "blur" }
-      ],
-      newPassWord : [
-        { required: true, message: "新密码不能为空", trigger: "blur" },
-        { min: 6, message: "密码不能小于6位数", trigger: "blur" }
-      ],
-      cfmPassWord : [
-        { required: true, message: "确认密码不能为空", trigger: "blur" },
-        { min: 6, message: "密码不能小于6位数", trigger: "blur" },
-        { type: 'string', message: '与新密码不一致', trigger: 'blur',
-          transform (value) {
-            if (value){
-              if (value !== form.newPassWord) {
-                return true
-              }
-            }
-          }
-        }
-      ]
-    };
+    //用户注册弹窗对象
+    const passwordDialog = ref();
+    //用户注册弹窗对象
+    const registerDialog = ref();
     // 侧边栏折叠
     const collapseChage = () => {
       store.commit("handleCollapse", !collapse.value);
+    };
+    // 显示用户注册弹窗
+    const shwoRegist = () => {
+      registerDialog.value.shwoDialog();
     };
     // 侧边栏缩放点击
     onMounted(() => {
@@ -205,33 +173,13 @@ export default {
       }else if (command == "blog") { // 我的博客
         router.push("/blog");
       } else if (command == "pwd") { // 修改密码
-        editVisible.value = true;
-        form.password = "";
-        form.newPassWord = "";
-        form.cfmPassWord = "";
+        passwordDialog.value.shwoDialog();
       }else if(command == "blog-index"){ //博客首页
         router.push("/index");
       }
     };
-    // 保存
-    const savePwd = () => {
-      editForm.value.validate((valid) => {
-        if (valid) {
-          request.$http.post("api/base/user/pwd",form).then(function (res) {
-            if(res.code === 200){
-              ElMessage.success('修改成功');
-              editVisible.value = false;
-            }else {
-              ElMessage.error(res.data);
-            }
-          });
-        } else {
-          return false;
-        }
-      });
-    };
-    return { isAdmin,loginUrl,isLogin,form,editVisible,editForm,editRules, collapse,
-      collapseChage, handleCommand,savePwd
+    return { isAdmin,loginUrl,isLogin,form, collapse,
+      collapseChage, handleCommand,passwordDialog,shwoRegist,registerDialog
     };
   }
 };
@@ -315,5 +263,20 @@ export default {
 }
 .header-item:hover {
   background-color: #a19f9f;
+}
+.red{
+  color: red;
+  font-size: 14px;
+}
+.regist-span{
+  color: red;
+  font-size: 14px;
+}
+.regist-span:hover{
+  color: #d97d7d;
+  font-size: 14px;
+  text-decoration: underline;
+  padding-bottom: 1px;
+  cursor:default;
 }
 </style>

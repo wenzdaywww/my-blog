@@ -62,8 +62,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
             RedisOperation.deleteKey(redisUserPrefix + ":" + userId);
         }
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,"退出成功");
-        cookie = new Cookie(LoginSuccessHandler.COOKIE_TOKEN,null);
-        httpServletResponse.addCookie(cookie);
+        TokenUtils.clearResponseToken(httpServletResponse,LoginSuccessHandler.COOKIE_TOKEN);
         httpServletResponse.setContentType("application/json;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(responseDTO));
     }

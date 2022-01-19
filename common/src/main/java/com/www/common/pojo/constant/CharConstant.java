@@ -25,4 +25,6 @@ public class CharConstant {
     public static final String COLON = ":";
     /** 问号 **/
     public static final String QUESTION_MARK = "?";
+    /** 左斜杆 **/
+    public static final String LEFT_SLASH = "/";
 }

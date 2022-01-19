@@ -2,6 +2,7 @@ package com.www.uaa.controller;
 
 import com.www.common.config.oauth2.token.JwtTokenConverter;
 import com.www.common.config.oauth2.util.RedisTokenHandler;
+import com.www.common.pojo.constant.CharConstant;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.pojo.dto.token.TokenDTO;
 import com.www.common.pojo.dto.token.TokenInfoDTO;
@@ -75,12 +76,12 @@ public class OauthController {
         //将token保存到cookie中
         Cookie tokenCookie = new Cookie(COOKIES_ACCESS_TOKEN,tokenDTO.getAccessToken());
         tokenCookie.setMaxAge(tokenDTO.getExpiresSeconds());
-        tokenCookie.setPath("/");
+        tokenCookie.setPath(CharConstant.LEFT_SLASH);
         response.addCookie(tokenCookie);
         // 有刷新令牌则也保存到cookie中
         if(tokenDTO.getRefreshToken() != null){
             Cookie refreshCookie = new Cookie(COOKIES_REFRESH_TOKEN,tokenDTO.getRefreshToken());
-            refreshCookie.setPath("/");
+            refreshCookie.setPath(CharConstant.LEFT_SLASH);
             response.addCookie(refreshCookie);
         }
         responseDTO.setResponseCode(ResponseDTO.RespEnum.SUCCESS,tokenDTO);

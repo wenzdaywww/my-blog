@@ -19,7 +19,6 @@
         <el-input v-model="query.userName" placeholder="用户名称" class="handle-input mr10"></el-input>
         <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
         <el-button type="primary" icon="el-icon-refresh-left" @click="handleReset">重置</el-button>
-        <el-button type="primary" icon="el-icon-plus" @click="handleAdd">新增用户</el-button>
       </div>
       <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
         <el-table-column prop="suId" label="ID" width="55" align="center"></el-table-column>
@@ -109,47 +108,6 @@
         </span>
       </template>
     </el-dialog>
-    <!-- 新增用户弹出框 -->
-    <el-dialog title="新增用户" v-model="addVisible" width="20%">
-      <el-form label-width="120px" :model="form" :rules="addRules" ref="addForm">
-        <el-form-item label="用户ID" prop="userId">
-          <el-input v-model="form.userId" maxlength="40" placeholder="请输入用户ID" style="width: 250px"></el-input>
-        </el-form-item>
-        <el-form-item label="用户名称" prop="userName">
-          <el-input v-model="form.userName" maxlength="100" placeholder="请输入用户名称" style="width: 250px"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="form.password" type="password" maxlength="20" placeholder="请输入密码" style="width: 250px"></el-input>
-        </el-form-item>
-        <el-form-item label="角色" prop="roleCode">
-          <el-select v-model="form.roleCode" placeholder="角色" class="handle-select mr10" style="width: 250px">
-            <el-option v-for="item in rolesArr" :key="item.roleCode" :label="item.roleName" :value="item.roleCode"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="性别">
-          <el-radio v-model="form.sex" label="1">男</el-radio>
-          <el-radio v-model="form.sex" label="0">女</el-radio>
-        </el-form-item>
-        <el-form-item label="手机号" prop="phoneNum">
-          <el-input v-model="form.phoneNum" maxlength="11" placeholder="请输入手机号码"
-                    οninput="value=value.replace(/[^\d]/g,'');if(value.length > 11)value = value.slice(0, 11)" style="width: 250px"></el-input>
-        </el-form-item>
-        <el-form-item label="生日">
-          <el-date-picker v-model="form.birthday" type="date" style="width: 250px"
-                          value-format="YYYY-MM-DD" format="YYYY年MM月DD日" placeholder="请选择出生日期" >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="form.email" maxlength="100" placeholder="请输入邮箱地址" style="width: 250px"></el-input>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="addVisible = false">取 消</el-button>
-          <el-button type="primary" @click="saveAdd">确 定</el-button>
-        </span>
-      </template>
-    </el-dialog>
   </div>
 </template>
 
@@ -168,63 +126,6 @@ export default {
       pageNum: 1,
       pageSize: 10
     });
-    // 角色列表
-    const rolesArr = ref([]);
-    // 新增用户的规则校验
-    const addRules = {
-      userId : [
-        { required: true, message: "用户ID不能为空", trigger: "blur" },
-        { type: 'string', message: '只能输入字母和数字', trigger: 'blur',
-          transform (value) {
-            if (value){
-              if (/[^A-Za-z0-9]/.test(value)) {
-                return true
-              }else{
-              }
-            }
-          }
-        }
-      ],
-      userName : [
-        { required: true, message: "用户名称不能为空", trigger: "blur" }
-      ],
-      password : [
-        { required: true, message: "密码不能为空", trigger: "blur" }
-      ],
-      roleCode : [
-        { required: true, message: "角色不能为空", trigger: "blur" }
-      ],
-      phoneNum: [
-        { min: 11, message: "手机号格式不正确", trigger: "blur" },
-        { type: 'number', message: '手机号格式不正确', trigger: 'blur',
-          transform (value) {
-            if(value){
-              var phonereg = 11 && /^((13|14|15|16|17|18|19)[0-9]{1}\d{8})$/
-              if (!phonereg.test(value)) {
-                return false
-              }else{
-                return Number(value)
-              }
-            }
-          }
-        }
-      ],
-      email: [
-        { type: 'string', message: '长度不能超过100位', trigger: 'blur', max: 100 },
-        { type: 'string', message: '邮箱格式不正确', trigger: 'blur',
-          transform (value) {
-            if (value){
-              if (!/^\w+((-\w+)|(\.\w+))*@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/.test(value)) {
-                return true
-              }else{
-              }
-            }
-          }
-        }
-      ]
-    };
-    // 表单校验
-    const addForm = ref(null);
     // 表格数据
     const tableData = ref([]);
     // 页数
@@ -260,8 +161,6 @@ export default {
     };
     // 表格编辑时弹窗和保存
     const editVisible = ref(false);
-    // 新增用户弹出
-    const addVisible = ref(false);
     // 表单数据
     let form = reactive({
       userId: "",
@@ -271,7 +170,6 @@ export default {
       birthday : "",
       sex : "",
       photo : "",
-      roleCode : "",
       email : "",
       stateCd: "",
       expired : "",
@@ -300,45 +198,8 @@ export default {
         }
       })
     };
-    //新增用户
-    const handleAdd = () => {
-      addVisible.value = true;
-      form.userId =  "";
-      form.userName = "";
-      form.password = "";
-      form.phoneNum = "";
-      form.birthday = "";
-      form.sex = "";
-      form.photo = "";
-      form.roleCode = "";
-      form.email = "";
-      request.$http.get("api/base/user/role",null).then(function (res) {
-        if(res.code === 200){
-          rolesArr.value = res.data;
-        }
-      })
-    };
-    // 新增页面的保存按钮
-    const saveAdd = () => {
-      addForm.value.validate((valid) => {
-        if (valid) {
-          request.$http.post("api/base/user/new", form).then(function (res) {
-            if(res.code === 200){
-              addVisible.value = false;
-              ElMessage.success('新增成功');
-              getData();
-            }else {
-              ElMessage.error(res.data);
-            }
-          });
-        } else {
-          return false;
-        }
-      });
-    };
-    return { query,rolesArr,addRules,tableData,pageTotal,editVisible,addVisible,form,addForm,
-      handleSearch,handleReset,handlePageChange,handleEdit,saveEdit,handleAdd,saveAdd
-    };
+    return { query,tableData,pageTotal,editVisible,form,
+      handleSearch,handleReset,handlePageChange,handleEdit,saveEdit};
   }
 };
 </script>

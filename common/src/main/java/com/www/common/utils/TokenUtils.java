@@ -1,11 +1,14 @@
 package com.www.common.utils;
 
+import com.www.common.pojo.constant.CharConstant;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -104,5 +107,20 @@ public class TokenUtils {
         }
         body.put(AUTHORIZATION,token.replace(TOKEN_PREFIX + " ",""));
         return body;
+    }
+    /**
+     * <p>@Description 清除响应报文cookie中的token信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/19 22:34 </p>
+     * @param response 响应报文
+     * @param tokenKey token的key值
+     * @return void
+     */
+    public static void clearResponseToken(HttpServletResponse response,String... tokenKey){
+        for (String key : tokenKey){
+            Cookie cookie = new Cookie(key,null);
+            cookie.setPath(CharConstant.LEFT_SLASH);
+            response.addCookie(cookie);
+        }
     }
 }

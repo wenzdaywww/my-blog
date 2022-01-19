@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class Oauth2Extractor extends BearerTokenExtractor {
     /** 保存到cookie的access_token的key **/
-    private static final String COOKIES_ACCESS_TOKEN = "access_token";
+    public static final String COOKIES_ACCESS_TOKEN = "access_token";
     @Autowired
     private JwtTokenConverter jwtTokenConverter;
     /**
@@ -35,6 +35,10 @@ public class Oauth2Extractor extends BearerTokenExtractor {
     @Override
     public Authentication extract(HttpServletRequest request) {
         String tokenValue = this.getToken(request);
+        if(StringUtils.isBlank(tokenValue)){
+            log.info("1、获取请求中的token单点登录验证不通过，请求中的token不存在");
+            return null;
+        }
         TokenInfoDTO tokenInfoDTO = jwtTokenConverter.decodeToken(tokenValue);
         if(!RedisTokenHandler.isEffectiveToken(tokenInfoDTO,tokenValue)){
             log.info("1、获取请求中的token单点登录验证不通过，请求中的token已失效");
@@ -61,9 +65,15 @@ public class Oauth2Extractor extends BearerTokenExtractor {
         String tokenValue = super.extractToken(request);
         //3、从cookie中获取access_token
         if(StringUtils.isBlank(tokenValue)){
-            Cookie tokenCookie = WebUtils.getCookie(request,COOKIES_ACCESS_TOKEN);
-            tokenValue = tokenCookie != null ? tokenCookie.getValue() : null;
+            Cookie[] cookies = request.getCookies();
+            if(cookies != null){
+                for (int i = 0; i < cookies.length; i++){
+                    if (StringUtils.equals(COOKIES_ACCESS_TOKEN,cookies[i].getName()) && StringUtils.isNotBlank(cookies[i].getValue())){
+                        return cookies[i].getValue();
+                    }
+                }
+            }
         }
-        return tokenValue;
+        return null;
     }
 }
