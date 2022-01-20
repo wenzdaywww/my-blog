@@ -36,15 +36,15 @@ public class Oauth2Extractor extends BearerTokenExtractor {
     public Authentication extract(HttpServletRequest request) {
         String tokenValue = this.getToken(request);
         if(StringUtils.isBlank(tokenValue)){
-            log.info("1、获取请求中的token单点登录验证不通过，请求中的token不存在");
+            log.info("1、获取请求{} 中的token单点登录验证不通过，请求中的token不存在",request.getRequestURI());
             return null;
         }
         TokenInfoDTO tokenInfoDTO = jwtTokenConverter.decodeToken(tokenValue);
         if(!RedisTokenHandler.isEffectiveToken(tokenInfoDTO,tokenValue)){
-            log.info("1、获取请求中的token单点登录验证不通过，请求中的token已失效");
+            log.info("1、获取请求{} 中的token单点登录验证不通过，请求中的token已失效",request.getRequestURI());
             return null;
         }
-        log.info("1、获取请求中的token单点登录验证通过");
+        log.info("1、获取请求{} 中的token单点登录验证通过",request.getRequestURI());
         if (tokenValue != null) {
             PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(tokenValue, "");
             return authentication;
@@ -72,8 +72,6 @@ public class Oauth2Extractor extends BearerTokenExtractor {
                         return cookies[i].getValue();
                     }
                 }
-            }else {
-                log.info("请求的cookie为空");
             }
         }
         return null;

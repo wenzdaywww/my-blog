@@ -14,8 +14,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
@@ -58,6 +61,9 @@ public class ControllerAop {
     public Object around(ProceedingJoinPoint pjd) throws Throwable {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
+        //获取当前请求
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = requestAttributes.getRequest();
         String controllerMethod = pjd.getSignature().toString();//获取方法全量名
         Method targetMethod = ((MethodSignature) (pjd.getSignature())).getMethod();
         Parameter[] paramName = targetMethod.getParameters();//获取方法参数名称
@@ -84,11 +90,11 @@ public class ControllerAop {
         try {
             Object result = pjd.proceed();// 执行目标方法
             stopWatch.stop();
-            log.info("请求{}方法执行耗时:{}秒。请求报文：{}，响应报文:{}",
+            log.info("请求:{} 调用{}方法执行耗时:{}秒。请求报文:{}，响应报文:{}",request.getRequestURI(),
                     controllerMethod,stopWatch.getTaskCount(),requestText,JSON.toJSONString(result));
             return result;
         }catch (Exception e){
-            log.error("请求{}方法发生异常。请求报文：{}，异常信息：", controllerMethod,requestText,e);
+            log.error("请求:{} 调用{}方法发生异常。请求报文:{}，异常信息:",request.getRequestURI(), controllerMethod,requestText,e);
             return new ResponseDTO<>(ResponseDTO.RespEnum.UNDEFINE);
         }
     }
