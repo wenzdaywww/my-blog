@@ -50,7 +50,7 @@ public class BlogArticleEntity implements Serializable {
     @TableField("BLOG_LIKE")
     private Long blogLike;
     /**
-    * 博客状态：1有效，2删除，3封号
+    * 博客状态：1有效，2删除
     */
     @TableField("STATE_CD")
     private String stateCd;

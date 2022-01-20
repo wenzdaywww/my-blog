@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.config.code.CodeDict;
 import com.www.common.config.mvc.upload.IFileUpload;
+import com.www.common.feign.IBlogFeignService;
 import com.www.common.pojo.constant.CharConstant;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.pojo.enums.CodeTypeEnum;
@@ -56,6 +57,8 @@ public class UserInfoServiceImpl implements IUserInfoService {
     private ISysUserService sysUserService;
     @Autowired
     private ISysRoleService sysRoleService;
+    @Autowired
+    private IBlogFeignService blogFeignService;
     @Value("${server.port}")
     private String serverPort;
     @Value("${eureka.instance.ip-address}")
@@ -241,6 +244,10 @@ public class UserInfoServiceImpl implements IUserInfoService {
             responseDTO.setCode(ResponseDTO.RespEnum.FAIL.getCode());
             responseDTO.setMsg("查询不到该用户信息");
             return responseDTO;
+        }
+        ResponseDTO<Integer> blogResponse = blogFeignService.findUserBlogNum(userId);
+        if(blogResponse != null && ResponseDTO.RespEnum.SUCCESS.getCode().equals(blogResponse.getCode())){
+            userDTO.setBlogs(blogResponse.getData());
         }
         responseDTO.setResponseCode(ResponseDTO.RespEnum.SUCCESS,userDTO);
         return responseDTO;

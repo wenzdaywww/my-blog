@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.www.myblog.blog.data.mapper.BlogClassMapper">
-  <resultMap id="BaseResultMap" type="com.www.myblog.blog.data.entity.BlogClassEntity">
+<mapper namespace="com.www.myblog.blog.data.mapper.UserBlogGroupMapper">
+  <resultMap id="BaseResultMap" type="com.www.myblog.blog.data.entity.UserBlogGroupEntity">
     <!--@mbg.generated-->
-    <!--@Table BLOG_CLASS-->
-    <id column="BC_ID" property="bcId" />
-    <result column="BLOG_ID" property="blogId" />
+    <!--@Table USER_BLOG_GROUP-->
+    <id column="UBG_ID" property="ubgId" />
+    <result column="BG_ID" property="bgId" />
     <result column="USER_ID" property="userId" />
-    <result column="CLASS_ID" property="classId" />
+    <result column="BLOG_ID" property="blogId" />
     <result column="UPDATE_TIME" property="updateTime" />
     <result column="CREATE_TIME" property="createTime" />
   </resultMap>

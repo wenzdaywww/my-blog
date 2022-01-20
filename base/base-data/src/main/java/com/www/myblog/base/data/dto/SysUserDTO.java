@@ -81,15 +81,15 @@ public class SysUserDTO implements Serializable {
     /**
      * 关注数
      */
-    private Long friends;
+    private Integer friends;
     /**
      * 粉丝数
      */
-    private Long fans;
+    private Integer fans;
     /**
      * 博客数量
      */
-    private Long blogs;
+    private Integer blogs;
     /**
     * 更新时间
     */

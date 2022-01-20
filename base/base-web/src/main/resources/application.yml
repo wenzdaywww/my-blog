@@ -26,5 +26,3 @@ mybatis-plus:
 #配置eureka注册中心服务的status信息
 info:
   name: my blog administrator server
-
-

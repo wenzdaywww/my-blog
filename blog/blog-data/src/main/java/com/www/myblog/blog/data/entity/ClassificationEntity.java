@@ -10,35 +10,30 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
- * <p>@Description 博客分类信息 </p>
+ * <p>@Description 博客分类类型 </p>
  * <p>@Version 1.0 </p>
  * <p>@Author www </p>
  * <p>@Date 2021/11/10 23:07 </p>
  */
 @Data
-@TableName("BLOG_CLASS")
-public class BlogClassEntity implements Serializable {
+@TableName("CLASSIFICATION")
+public class ClassificationEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
-    * 博客分类主键
+    * 分类主键
     */
-    @TableId(value = "BC_ID",type = IdType.AUTO)
-    private Long bcId;
-    /**
-    * 博客ID
-    */
-    @TableField("BLOG_ID")
-    private Long blogId;
-    /**
-     * 用户ID
-     */
-    @TableField("USER_ID")
-    private Long userId;
-    /**
-    * 分类ID
-    */
-    @TableField("CLASS_ID")
+    @TableId(value = "COMMENT_ID",type = IdType.AUTO)
     private Long classId;
+    /**
+     * 分类编码
+     */
+    @TableField("CLASS_CODE")
+    private String classCode;
+    /**
+    * 分类名称
+    */
+    @TableField("CLASS_NAME")
+    private String className;
     /**
     * 更新时间
     */

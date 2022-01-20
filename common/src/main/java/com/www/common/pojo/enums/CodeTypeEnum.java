@@ -7,6 +7,8 @@ package com.www.common.pojo.enums;
  * <p>@Date 2021/12/2 21:04 </p>
  */
 public enum CodeTypeEnum {
+    /** 博客状态 **/
+    BLOG_STATUS("blogStatus","博客状态"),
     /** 菜单类型 **/
     MENU_TYPE("menuType","菜单类型"),
     /** 性别 **/

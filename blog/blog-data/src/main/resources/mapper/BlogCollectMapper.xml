@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.www.myblog.blog.data.mapper.BlogCommentMapper">
+<mapper namespace="com.www.myblog.blog.data.mapper.BlogCollectMapper">
   <resultMap id="BaseResultMap" type="com.www.myblog.blog.data.entity.BlogCommentEntity">
     <!--@mbg.generated-->
-    <!--@Table BLOG_COMMENT-->
-    <id column="COMMENT_ID" property="commentId" />
+    <!--@Table BLOG_COLLECT-->
+    <id column="COLLECT_ID" property="collectId" />
     <result column="BLOG_ID" property="blogId" />
     <result column="USER_ID" property="userId" />
-    <result column="LIKE_NUM" property="likeNum" />
-    <result column="COMMENT" property="comment" />
-    <result column="PARENT_COM_ID" property="parentComId" />
     <result column="UPDATE_TIME" property="updateTime" />
     <result column="CREATE_TIME" property="createTime" />
   </resultMap>

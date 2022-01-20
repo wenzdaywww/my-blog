@@ -3,7 +3,7 @@
 <mapper namespace="com.www.myblog.blog.data.mapper.BlogArticleMapper">
   <resultMap id="BaseResultMap" type="com.www.myblog.blog.data.entity.BlogArticleEntity">
     <!--@mbg.generated-->
-    <!--@Table blog_article-->
+    <!--@Table BLOG_ARTICLE-->
     <id column="BLOG_ID" property="blogId" />
     <result column="USER_ID" property="userId" />
     <result column="BLOG_THEME" property="blogTheme" />
@@ -16,114 +16,4 @@
     <result column="CREATE_TIME" property="createTime" />
   </resultMap>
 
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    BLOG_ID, USER_ID, BLOG_THEME, BLOG_CONTENT, BLOG_VIEWS, BLOG_LIKE, STATE_CD, BLOG_COMMENT,
-    UPDATE_TIME, CREATE_TIME
-  </sql>
-
-  <!--  根据博客ID删除博客文章-->
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    <!--@mbg.generated-->
-    delete from blog_article
-    where BLOG_ID = #{blogId}
-  </delete>
-
-  <!--  插入数据，包括空字段-->
-  <insert id="insert" keyColumn="BLOG_ID" keyProperty="blogId" parameterType="com.www.myblog.blog.data.entity.BlogArticleEntity" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into blog_article (USER_ID, BLOG_THEME, BLOG_CONTENT, BLOG_VIEWS, BLOG_LIKE, STATE_CD,
-      BLOG_COMMENT, UPDATE_TIME, CREATE_TIME)
-    values (#{userId}, #{blogTheme}, #{blogContent}, #{blogViews}, #{blogLike}, #{stateCd},
-      #{blogComment}, #{updateTime}, #{createTime})
-  </insert>
-
-  <!--  插入数据，不包括空字段-->
-  <insert id="insertNotNull" keyColumn="BLOG_ID" keyProperty="blogId" parameterType="com.www.myblog.blog.data.entity.BlogArticleEntity" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into blog_article
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        USER_ID,
-      </if>
-      <if test="blogTheme != null">
-        BLOG_THEME,
-      </if>
-      <if test="blogContent != null">
-        BLOG_CONTENT,
-      </if>
-      <if test="blogViews != null">
-        BLOG_VIEWS,
-      </if>
-      <if test="blogLike != null">
-        BLOG_LIKE,
-      </if>
-      <if test="stateCd != null">
-        STATE_CD,
-      </if>
-      <if test="blogComment != null">
-        BLOG_COMMENT,
-      </if>
-      <if test="updateTime != null">
-        UPDATE_TIME,
-      </if>
-      <if test="createTime != null">
-        CREATE_TIME,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        #{userId},
-      </if>
-      <if test="blogTheme != null">
-        #{blogTheme},
-      </if>
-      <if test="blogContent != null">
-        #{blogContent},
-      </if>
-      <if test="blogViews != null">
-        #{blogViews},
-      </if>
-      <if test="blogLike != null">
-        #{blogLike},
-      </if>
-      <if test="stateCd != null">
-        #{stateCd},
-      </if>
-      <if test="blogComment != null">
-        #{blogComment},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime},
-      </if>
-      <if test="createTime != null">
-        #{createTime},
-      </if>
-    </trim>
-  </insert>
-
-  <!--  根据博客ID查询博客信息-->
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select
-    <include refid="Base_Column_List" />
-    from blog_article
-    where BLOG_ID = #{blogId}
-  </select>
-
-  <!--  根据博客ID更新博客信息，包括空字段-->
-  <update id="updateByPrimaryKey" parameterType="com.www.myblog.blog.data.entity.BlogArticleEntity">
-    <!--@mbg.generated-->
-    update blog_article
-    set USER_ID = #{userId},
-      BLOG_THEME = #{blogTheme},
-      BLOG_CONTENT = #{blogContent},
-      BLOG_VIEWS = #{blogViews},
-      BLOG_LIKE = #{blogLike},
-      STATE_CD = #{stateCd},
-      BLOG_COMMENT = #{blogComment},
-      UPDATE_TIME = #{updateTime},
-      CREATE_TIME = #{createTime}
-    where BLOG_ID = #{blogId}
-  </update>
 </mapper>
