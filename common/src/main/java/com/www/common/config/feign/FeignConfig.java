@@ -1,4 +1,4 @@
-package com.www.common.config.rest;
+package com.www.common.config.feign;
 
 import com.www.common.config.filter.TraceIdFilter;
 import com.www.common.config.oauth2.token.Oauth2Extractor;
@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -41,7 +40,12 @@ public class FeignConfig{
         return new RequestInterceptor(){
             @Override
             public void apply(RequestTemplate requestTemplate) {
+                // 开启hystrix后RequestContextHolder.getRequestAttributes()=null,需要自定义hystrix策略
                 ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+                if(requestAttributes == null){
+                    log.error("请求ServletRequestAttributes为空");
+                    return;
+                }
                 HttpServletRequest request = requestAttributes.getRequest();
                 //转发日志全局跟踪号
                 requestTemplate.header(TraceIdFilter.TRACE_ID, request.getHeader(TraceIdFilter.TRACE_ID));

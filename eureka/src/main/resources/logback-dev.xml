@@ -5,7 +5,7 @@
 <!-- debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 -->
 <configuration scan="true">
     <!-- 日志输出格式和颜色【控制台】 -->
-    <property name="CONSOLE_LOG_COLOR" value="%date{yyyy-MM-dd HH:mm:ss:sss} %red([traceId=%X{traceId}]) %highlight(%level) %logger %green(%file.%M:%line) => %m%n"/>
+    <property name="CONSOLE_LOG_COLOR" value="%highlight(%level) %date{yyyy-MM-dd HH:mm:ss:sss} %red([traceId=%X{traceId}]) %logger %green(%file.%M:%line) => %m%n"/>
     <!-- 日志格式 -->
     <property name="LOG_PATTERN" value="%date [traceId=%X{traceId}] %level %logger %file.%M:%line => %msg%n"/>
     <!--输出到控制台-->

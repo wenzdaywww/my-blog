@@ -1,4 +1,4 @@
-package com.www.common.config.rest;
+package com.www.common.config.feign;
 
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.RandomRule;

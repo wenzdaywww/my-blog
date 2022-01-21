@@ -1,7 +1,9 @@
 package com.www.myblog.blog.controller.feign;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.service.feign.IBlogArticleService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * <p>@Author www </p>
  * <p>@Date 2022/1/20 21:13 </p>
  */
+@Slf4j
 @RestController
 @RequestMapping("/feign")
 public class BlogArticleController {
@@ -27,7 +30,19 @@ public class BlogArticleController {
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Integer>
      */
     @GetMapping("blogs")
+    @HystrixCommand(fallbackMethod = "findUserBlogNumFallback")//设置备选方案
     public ResponseDTO<Integer> findUserBlogNum(String userId){
         return blogArticleService.findUserBlogNum(userId);
+    }
+    /**
+     * <p>@Description 查询用户的博客数量-服务熔断处理 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/21 19:57 </p>
+     * @param userId
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Integer>
+     */
+    public ResponseDTO<Integer> findUserBlogNumFallback(String userId,Throwable throwable){
+        log.error("查询用户的博客数量-服务熔断处理,异常信息:",throwable);
+        return null;
     }
 }

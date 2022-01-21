@@ -1,8 +1,7 @@
-package com.www.common.feign;
+package com.www.common.feign.blog;
 
 import com.www.common.pojo.dto.response.ResponseDTO;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
  * <p>@Date 2022/1/20 21:29 </p>
  */
 @Component
-@FeignClient(value = "my-blog")//服务提供者名称
-@ConditionalOnClass(FeignClient.class)
+//@FeignClient(value = "my-blog",fallbackFactory = BlogFeignFallback.class)//服务提供者名称
+@FeignClient(value = "${com.www.common.feign.blog}")//服务提供者名称
+@ConditionalOnProperty(prefix = "com.www.common.feign",name = {"blog"})
 public interface IBlogFeignService {
     /**
      * <p>@Description 查询用户的博客数量 </p>
