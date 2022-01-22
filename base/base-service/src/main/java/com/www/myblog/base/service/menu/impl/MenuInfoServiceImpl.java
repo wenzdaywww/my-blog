@@ -89,7 +89,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         if(menu == null || StringUtils.isAnyBlank(menu.getMenuCode(),menu.getMenuUrl(),menu.getMenuType())
             || CodeDict.isIllegalValue(CodeTypeEnum.MENU_TYPE,menu.getMenuType())
         ){
-            responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL,"更新菜单失败，信息有误");
+            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新菜单失败，信息有误");
             return responseDTO;
         }
         SysMenuEntity parentEntity = null;
@@ -104,7 +104,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         if(menu.getParentId() != null){
             parentEntity = sysMenuMapper.selectById(menu.getParentId());
             if(parentEntity == null){
-                responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL,"更新菜单失败，父级菜单不存在");
+                responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新菜单失败，父级菜单不存在");
                 return responseDTO;
             }
         }
@@ -112,7 +112,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
             String[] roleArr = menu.getRoleCode().split(",");
             roleList = sysRoleService.findRoleEntityByName(roleArr);
             if(CollectionUtils.isEmpty(roleList)){
-                responseDTO.setResponseCode(ResponseDTO.RespEnum.FAIL,"更新菜单失败，角色不存在");
+                responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新菜单失败，角色不存在");
                 return responseDTO;
             }
         }
@@ -200,7 +200,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         if(StringUtils.equals(menu.getMenuType(),CodeDict.getValue(CodeTypeEnum.MENU_TYPE, CodeKeyEnum.K2))){
             urlScopeService.updateRedisUrlScope(menu.getModule());
         }
-        responseDTO.setResponseCode(ResponseDTO.RespEnum.SUCCESS,"更新菜单成功");
+        responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,"更新菜单成功");
         return responseDTO;
     }
     /**

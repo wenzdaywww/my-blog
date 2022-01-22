@@ -78,7 +78,7 @@ CREATE INDEX INDEX_USER_ID ON BLOG_CLASS (USER_ID);
 /**6、博客分组信息*/
 CREATE TABLE IF NOT EXISTS BLOG_GROUP (
     BG_ID BIGINT AUTO_INCREMENT comment '博客分组主键',
-    GROUP_NAME BIGINT comment '博客分组名称',
+    GROUP_NAME VARCHAR(256) comment '博客分组名称',
     USER_ID VARCHAR(40) comment '用户ID',
     UPDATE_TIME DATETIME comment '更新时间',
     CREATE_TIME DATETIME comment '创建时间',

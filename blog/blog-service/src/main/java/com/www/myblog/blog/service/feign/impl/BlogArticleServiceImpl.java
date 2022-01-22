@@ -34,14 +34,14 @@ public class BlogArticleServiceImpl implements IBlogArticleService {
     public ResponseDTO<Integer> findUserBlogNum(String userId) {
         ResponseDTO<Integer> response = new ResponseDTO<>();
         if(StringUtils.isBlank(userId)){
-            response.setResponseCode(ResponseDTO.RespEnum.SUCCESS,0);
+            response.setResponse(ResponseDTO.RespEnum.SUCCESS,0);
             return response;
         }
         QueryWrapper<BlogArticleEntity> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(BlogArticleEntity::getUserId,userId);
         wrapper.lambda().eq(BlogArticleEntity::getStateCd, CodeDict.getValue(CodeTypeEnum.BLOG_STATUS, CodeKeyEnum.K1));
         int count = blogArticleMapper.selectCount(wrapper);
-        response.setResponseCode(ResponseDTO.RespEnum.SUCCESS,count);
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,count);
         return response;
     }
 }

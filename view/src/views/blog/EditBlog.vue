@@ -11,8 +11,8 @@
       <el-form label-width="120px" :model="blogText" :rules="blogRules" ref="blogForm">
         <el-row>
           <el-col :span="16">
-            <el-form-item label="主题：" prop="theme">
-              <el-input v-model="blogText.theme" maxlength="300"></el-input>
+            <el-form-item label="主题：" prop="blogTheme">
+              <el-input v-model="blogText.blogTheme" maxlength="300"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="4"></el-col>
@@ -21,14 +21,14 @@
         <el-row>
           <el-col :span="8">
             <el-form-item label="分类：">
-              <el-select v-model="blogText.class" placeholder="分类" multiple="true" class="handle-select mr10 blog-class">
-                <el-option v-for="item in classArr" :key="item.classCode" :label="item.className" :value="item.classCode"></el-option>
+              <el-select v-model="blogText.classIds" placeholder="分类" multiple="true" class="handle-select mr10 blog-class">
+                <el-option v-for="item in classArr" :key="item.classId" :label="item.className" :value="item.classId"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="分组：">
-              <el-select v-model="blogText.group" placeholder="分组" class="handle-select mr10 blog-group">
+              <el-select v-model="blogText.bgId" placeholder="分组" class="handle-select mr10 blog-group">
                 <el-option v-for="item in groupArr" :key="item.bgId" :label="item.groupName" :value="item.bgId"></el-option>
               </el-select>
               <span class="add-group" @click="groupVisible=true">新增分组</span>
@@ -38,8 +38,9 @@
         </el-row>
       </el-form>
       <!-- 博客内容编辑 -->
-      <div class="mgb20" ref='editor'></div>
-      <el-button type="primary" @click="submitBlog">提交</el-button>
+      <span class="blog-text-title">博客内容</span>
+      <div class="mgb20 editor-div" ref='editor'></div>
+      <el-button type="primary" @click="submitBlog" :disabled="submitDisabled">提交</el-button>
     </div>
     <!-- 新增/编辑弹出框 -->
     <el-dialog title="新增分组" v-model="groupVisible" width="20%">
@@ -75,7 +76,7 @@ export default {
     const editor = ref(null);
     // 新增博客的规则校验
     const blogRules = {
-      theme : [
+      blogTheme : [
         { required: true, message: "主题不能为空", trigger: "blur" }
       ]
     };
@@ -89,13 +90,15 @@ export default {
     const blogForm = ref(null);
     //博客对象
     const blogText = reactive({
-      theme: "",
-      class:"",
-      group:"",
-      html: ""
+      blogTheme: "",
+      classIds:"",
+      bgId:"",
+      blogContent: ""
     });
     // 是否显示新增分组弹窗
     const groupVisible = ref(false);
+    // 提交按钮
+    const submitDisabled = ref(false);
     //博客分组对象
     const group = reactive({
       name: ""
@@ -107,20 +110,54 @@ export default {
     onMounted(() => {
       instance = new WangEditor(editor.value);
       instance.config.zIndex = 1;
+      instance.config.height = 600;
+      instance.config.showLinkImg = false;
+      instance.config.showLinkVideo = false;
+      instance.config.uploadImgShowBase64 = true;
       instance.create();
     });
     onBeforeUnmount(() => {
       instance.destroy();
       instance = null;
     });
+    // 获取博客分类
+    const getBlogClass = () => {
+      request.$http.post("api/blog/class/all",null).then(function (res) {
+        if(res.code === 200){
+            classArr.value = res.data;
+          }
+      });
+    }
+    getBlogClass();
+    // 获取博客分组
+    const getBlogGroup = () => {
+      request.$http.post("api/blog/edit/group",null).then(function (res) {
+        if(res.code === 200){
+          groupArr.value = res.data;
+        }
+      });
+    }
+    getBlogGroup();
     /** 博客提交 **/
     const submitBlog = () => {
       blogForm.value.validate((valid) => {
         if (valid) {
-          blogText.html = instance.txt.html();
-          if(blogText.html){
-            ElMessage.success('上传博客');
-            console.log(blogText.html);
+          blogText.blogContent = instance.txt.html();
+          if(blogText.blogContent){
+            submitDisabled.value = true;
+            request.$http.post("api/blog/edit/new",blogText).then(function (res) {
+              if(res.code === 200){
+                ElMessage.success('发布博客成功');
+                instance.txt.clear();
+                blogText.blogTheme = null;
+                blogText.classIds = null;
+                blogText.bgId = null;
+                blogText.blogContent = null;
+              }else {
+                ElMessage.error('发布博客失败');
+              }
+              submitDisabled.value = false;
+            });
           }else {
             ElMessage.error("博客内容不能为空");
           }
@@ -133,14 +170,22 @@ export default {
     const addGroup = () => {
       groupForm.value.validate((valid) => {
         if (valid) {
-          ElMessage.success('新增分组成功');
+          request.$http.post("api/blog/edit/new-group",group).then(function (res) {
+            if(res.code === 200){
+              groupVisible.value = false;
+              ElMessage.success('新增分组成功');
+              getBlogGroup();
+            }else {
+              ElMessage.error('新增分组失败');
+            }
+          });
         } else {
           return false;
         }
       });
     };
     return {
-      classArr,groupArr,editor,blogText,blogRules,blogForm,groupVisible,group,groupRules,groupForm,
+      submitDisabled,classArr,groupArr,editor,blogText,blogRules,blogForm,groupVisible,group,groupRules,groupForm,
       submitBlog,addGroup
     };
   },
@@ -148,6 +193,9 @@ export default {
 </script>
 
 <style>
+.w-e-text-container {
+  height: 600px;
+}
 .blog-class{
   width: 100%;
 }
@@ -165,5 +213,8 @@ export default {
 }
 .btn-save{
   text-align: center;
+}
+.blog-text-title{
+  color: #606266;
 }
 </style>

@@ -84,7 +84,7 @@ public class OauthController {
             refreshCookie.setPath(CharConstant.LEFT_SLASH);
             response.addCookie(refreshCookie);
         }
-        responseDTO.setResponseCode(ResponseDTO.RespEnum.SUCCESS,tokenDTO);
+        responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,tokenDTO);
         //保存用户登录的token到redis中
         RedisTokenHandler.setUserIdToken(tokenInfoDTO,tokenDTO.getAccessToken(),tokenDTO.getExpiresSeconds());
         return responseDTO;

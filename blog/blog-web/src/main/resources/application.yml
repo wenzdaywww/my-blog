@@ -1,5 +1,7 @@
 #服务器配置
 server:
+  tomcat:
+    max-http-form-post-size: 20MB #设置post请求最大值
   servlet:
     #访问路径设置
     context-path: /

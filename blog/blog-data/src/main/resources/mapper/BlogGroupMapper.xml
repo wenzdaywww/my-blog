@@ -10,4 +10,8 @@
     <result column="UPDATE_TIME" property="updateTime" />
     <result column="CREATE_TIME" property="createTime" />
   </resultMap>
+  <!--  查询用户的博客分组列表-->
+  <select id="findBlogGroup" resultType="com.www.myblog.blog.data.dto.BlogGroupDTO">
+    SELECT B.BG_ID,B.GROUP_NAME FROM BLOG_GROUP B WHERE B.USER_ID = #{userId} ORDER BY B.BG_ID
+  </select>
 </mapper>

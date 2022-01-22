@@ -1,6 +1,7 @@
 package com.www.myblog.base.controller.user;
 
 import com.www.common.config.oauth2.token.JwtTokenConverter;
+import com.www.common.pojo.constant.AuthorityContant;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysRoleDTO;
 import com.www.myblog.base.data.dto.SysUserDTO;
@@ -36,7 +37,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
     @PostMapping("pwd")
-    @PreAuthorize("hasAnyAuthority('admin','user')")
+    @PreAuthorize(AuthorityContant.ALL)
     public ResponseDTO<String> updateUserPwd(SysUserDTO user){
         if(user != null){
             user.setUserId(jwtTokenConverter.getUserId());
@@ -50,7 +51,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO
      */
     @GetMapping("router")
-    @PreAuthorize("hasAnyAuthority('admin','user')")
+    @PreAuthorize(AuthorityContant.ALL)
     public ResponseDTO<List<SysMenuDTO>> findUserRouter(){
         return userInfoService.findUserRouter(jwtTokenConverter.getUserId());
     }
@@ -61,7 +62,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO
      */
     @GetMapping("menu")
-    @PreAuthorize("hasAnyAuthority('admin','user')")
+    @PreAuthorize(AuthorityContant.ALL)
     public ResponseDTO<List<SysMenuDTO>> findUserMenu(){
         return userInfoService.findUserMenu(jwtTokenConverter.getUserId());
     }
@@ -73,7 +74,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
     @PostMapping("photo")
-    @PreAuthorize("hasAnyAuthority('admin','user')")
+    @PreAuthorize(AuthorityContant.ALL)
     public ResponseDTO<String> uploadPhoto(MultipartFile photo){
         return userInfoService.uploadPhoto(photo,jwtTokenConverter.getUserId());
     }
@@ -85,7 +86,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
     @PostMapping("edit")
-    @PreAuthorize("hasAnyAuthority('admin','user')")
+    @PreAuthorize(AuthorityContant.ALL)
     public ResponseDTO<String> updateUserInfo(SysUserDTO user){
         if(user != null){
             user.setUserId(jwtTokenConverter.getUserId());
@@ -99,7 +100,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO<com.www.myblog.base.data.dto.SysUserDTO>
      */
     @GetMapping("info")
-    @PreAuthorize("hasAnyAuthority('admin','user')")
+    @PreAuthorize(AuthorityContant.ALL)
     public ResponseDTO<SysUserDTO> findUser(){
         return userInfoService.findUser(jwtTokenConverter.getUserId());
     }
@@ -115,7 +116,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.SysUserDTO>>
      */
     @GetMapping("all")
-    @PreAuthorize("hasAnyAuthority('admin')")
+    @PreAuthorize(AuthorityContant.ADMIN)
     public ResponseDTO<List<SysUserDTO>> findAllUser(String stateCd, String userId, String userName, int pageNum, int pageSize){
         return userInfoService.findAllUser(stateCd,userId,userName,pageNum,pageSize);
     }
@@ -131,7 +132,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
     @PostMapping("state")
-    @PreAuthorize("hasAnyAuthority('admin')")
+    @PreAuthorize(AuthorityContant.ADMIN)
     public ResponseDTO<String> updateState(String userId,String stateCd,String expired,String locked,String credentials){
         return userInfoService.updateState(userId,stateCd,expired,locked,credentials);
     }
@@ -142,7 +143,7 @@ public class UserController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.SysUserRoleDTO>>
      */
     @GetMapping("role")
-    @PreAuthorize("hasAnyAuthority('admin')")
+    @PreAuthorize(AuthorityContant.ADMIN)
     public ResponseDTO<List<SysRoleDTO>> findAllRole(){
         return userInfoService.findAllRole();
     }

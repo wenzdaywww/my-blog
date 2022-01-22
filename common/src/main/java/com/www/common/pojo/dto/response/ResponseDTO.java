@@ -70,13 +70,23 @@ public class ResponseDTO<T> implements Serializable {
         this.data = data;
     }
     /**
+     * <p>@Description 设置成功响应信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/2 21:14 </p>
+     * @param data 响应信息
+     * @return void
+     */
+    public void setResponse(T data){
+        this.data = data;
+    }
+    /**
      * <p>@Description 设置响应码值 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/2 21:14 </p>
      * @param code 码值
      * @return void
      */
-    public void setResponseCode(RespEnum code){
+    public void setResponse(RespEnum code){
         this.code = code.getCode();
         this.msg = msg == null ? code.getMsg() : msg;
     }
@@ -88,7 +98,19 @@ public class ResponseDTO<T> implements Serializable {
      * @param data 响应信息
      * @return void
      */
-    public void setResponseCode(RespEnum code, T data){
+    public void setResponse(RespEnum code, T data){
+        this.setResponse(code,code.getMsg(),data);
+    }
+    /**
+     * <p>@Description 设置成功响应信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/2 21:14 </p>
+     * @param code 响应码
+     * @param msg 响应信息
+     * @param data 响应信息
+     * @return void
+     */
+    public void setResponse(RespEnum code, String msg, T data){
         this.code = code.getCode();
         this.msg = msg == null ? code.getMsg() : msg;
         this.data = data;

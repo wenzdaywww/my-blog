@@ -10,4 +10,9 @@
     <result column="UPDATE_TIME" property="updateTime" />
     <result column="CREATE_TIME" property="createTime" />
   </resultMap>
+
+  <!--  查询所有博客分类-->
+  <select id="findAllBlogClass" resultType="com.www.myblog.blog.data.dto.ClassificationDTO">
+    SELECT CLASS_ID,CLASS_CODE,CLASS_NAME FROM CLASSIFICATION ORDER BY CLASS_ID;
+  </select>
 </mapper>

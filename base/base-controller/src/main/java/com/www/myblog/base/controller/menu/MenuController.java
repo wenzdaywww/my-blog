@@ -1,5 +1,6 @@
 package com.www.myblog.base.controller.menu;
 
+import com.www.common.pojo.constant.AuthorityContant;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.service.menu.IMenuInfoService;
 import com.www.common.pojo.dto.response.ResponseDTO;
@@ -20,7 +21,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("menu")
-@PreAuthorize("hasAnyAuthority('admin')")
+@PreAuthorize(AuthorityContant.ADMIN)
 public class MenuController {
     @Autowired
     private IMenuInfoService menuInfoService;

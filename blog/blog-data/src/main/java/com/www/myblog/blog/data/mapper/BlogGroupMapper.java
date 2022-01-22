@@ -1,8 +1,12 @@
 package com.www.myblog.blog.data.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.www.myblog.blog.data.dto.BlogGroupDTO;
 import com.www.myblog.blog.data.entity.BlogGroupEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>@Description 博客分组信息 </p>
@@ -12,4 +16,12 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface BlogGroupMapper extends BaseMapper<BlogGroupEntity> {
+    /**
+     * <p>@Description 查询用户的博客分组列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/22 18:34 </p>
+     * @param userId 用户ID
+     * @return java.util.List<com.www.myblog.blog.data.dto.BlogGroupDTO>
+     */
+    List<BlogGroupDTO> findBlogGroup(@Param("userId") String userId);
 }

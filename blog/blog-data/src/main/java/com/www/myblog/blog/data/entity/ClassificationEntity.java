@@ -22,7 +22,7 @@ public class ClassificationEntity implements Serializable {
     /**
     * 分类主键
     */
-    @TableId(value = "COMMENT_ID",type = IdType.AUTO)
+    @TableId(value = "CLASS_ID",type = IdType.AUTO)
     private Long classId;
     /**
      * 分类编码
