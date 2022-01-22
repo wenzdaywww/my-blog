@@ -55,7 +55,7 @@ public class Oauth2Extractor extends BearerTokenExtractor {
         String imgUrl = environment.getProperty(IMG_URL_PATH); // 图片资源路径
         String uri = request.getRequestURI(); //当前uri
         // 判断是否是图片资源，是则不获取token
-        if(antPathMatcher.match(imgUrl,uri)){
+        if(StringUtils.isNotBlank(imgUrl) && antPathMatcher.match(imgUrl,uri)){
             log.debug("当前请求{} 为图片资源，不获取token",uri);
             return null;
         }

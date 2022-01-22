@@ -26,6 +26,13 @@ mybatis-plus:
 feign:
   hystrix:
     enabled: true #开启熔断机制
+#配置ribbon超时时间解决504问题
+ribbon:
+  ServerListRefreshInterval: 1000 # 从注册中心刷新servelist的时间 默认30秒，单位ms
+  ReadTimeout: 10000 # 请求处理的超时时间 默认1秒，单位ms
+  ConnectTimeout: 10000 # 请求连接的超时时间 默认1秒，单位ms
+  MaxAutoRetries: 0 # 对当前实例的重试次数 默认0
+  MaxAutoRetriesNextServer: 1 # 切换实例的重试次数 默认1
 # hystrix配置
 hystrix:
   shareSecurityContext: true #开启共享SecurityContext

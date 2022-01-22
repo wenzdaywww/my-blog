@@ -91,7 +91,7 @@ public class ControllerAop {
             Object result = pjd.proceed();// 执行目标方法
             stopWatch.stop();
             log.info("请求:{} 调用{}方法执行耗时:{}秒。请求报文:{}，响应报文:{}",request.getRequestURI(),
-                    controllerMethod,stopWatch.getTaskCount(),requestText,JSON.toJSONString(result));
+                    controllerMethod,stopWatch.getTotalTimeSeconds(),requestText,JSON.toJSONString(result));
             return result;
         }catch (Exception e){
             log.error("请求:{} 调用{}方法发生异常。请求报文:{}，异常信息:",request.getRequestURI(), controllerMethod,requestText,e);

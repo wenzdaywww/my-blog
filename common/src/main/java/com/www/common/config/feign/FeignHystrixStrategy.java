@@ -11,7 +11,9 @@ import com.netflix.hystrix.strategy.executionhook.HystrixCommandExecutionHook;
 import com.netflix.hystrix.strategy.metrics.HystrixMetricsPublisher;
 import com.netflix.hystrix.strategy.properties.HystrixPropertiesStrategy;
 import com.netflix.hystrix.strategy.properties.HystrixProperty;
+import com.www.common.config.filter.TraceIdFilter;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
@@ -134,9 +136,11 @@ public class FeignHystrixStrategy extends HystrixConcurrencyStrategy {
     static class WrappedCallable<T> implements Callable<T> {
         private final Callable<T> target;
         private final RequestAttributes requestAttributes;
+        private String traceId;
 
         public WrappedCallable(Callable<T> target, RequestAttributes requestAttributes) {
             this.target = target;
+            this.traceId = MDC.get(TraceIdFilter.TRACE_ID);//获取当前线程的日志跟踪ID
             this.requestAttributes = requestAttributes;
         }
         /**
@@ -148,6 +152,7 @@ public class FeignHystrixStrategy extends HystrixConcurrencyStrategy {
         @Override
         public T call() throws Exception {
             try {
+                MDC.put(TraceIdFilter.TRACE_ID,traceId);//添加日志跟踪ID，必须有，否则feign服务提供方会缺少日志跟踪ID
                 RequestContextHolder.setRequestAttributes(requestAttributes);
                 return target.call();
             } finally {

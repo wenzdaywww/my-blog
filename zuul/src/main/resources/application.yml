@@ -11,6 +11,13 @@ spring:
 #配置eureka注册中心服务的status信息
 info:
   name: 网关服务
+#配置ribbon超时时间解决504问题
+ribbon:
+  ServerListRefreshInterval: 10000 # 从注册中心刷新servelist的时间 默认30秒，单位ms
+  ReadTimeout: 10000 # 请求处理的超时时间 默认1秒，单位ms
+  ConnectTimeout: 10000 # 请求连接的超时时间 默认1秒，单位ms
+  MaxAutoRetries: 0 # 对当前实例的重试次数 默认0
+  MaxAutoRetriesNextServer: 1 # 切换实例的重试次数 默认1
 #zuul路由网关配置
 zuul:
   host:
