@@ -1,5 +1,6 @@
 package com.www.myblog.base.controller.user;
 
+import com.www.common.config.oauth2.token.JwtTokenConverter;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysRoleDTO;
 import com.www.myblog.base.data.dto.SysUserDTO;
@@ -10,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -21,6 +23,8 @@ import java.util.List;
 @RestController
 @RequestMapping("user")
 public class UserController {
+    @Autowired
+    private JwtTokenConverter jwtTokenConverter;
     @Autowired
     private IUserInfoService userInfoService;
 
@@ -34,47 +38,47 @@ public class UserController {
     @PostMapping("pwd")
     @PreAuthorize("hasAnyAuthority('admin','user')")
     public ResponseDTO<String> updateUserPwd(SysUserDTO user){
+        if(user != null){
+            user.setUserId(jwtTokenConverter.getUserId());
+        }
         return userInfoService.updateUserPwd(user);
     }
     /**
-     * <p>@Description 查询用户vue的router权限 </p>
+     * <p>@Description 查询当前登录的用户vue的router权限 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 00:22 </p>
-     * @param userId 用户ID
      * @return com.www.myblog.common.pojo.ResponseDTO
      */
     @GetMapping("router")
     @PreAuthorize("hasAnyAuthority('admin','user')")
-    public ResponseDTO<List<SysMenuDTO>> findUserRouter(String userId){
-        return userInfoService.findUserRouter(userId);
+    public ResponseDTO<List<SysMenuDTO>> findUserRouter(){
+        return userInfoService.findUserRouter(jwtTokenConverter.getUserId());
     }
     /**
-     * <p>@Description 查询用户菜单列表 </p>
+     * <p>@Description 查询当前登录的用户菜单列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 00:22 </p>
-     * @param userId 用户ID
      * @return com.www.myblog.common.pojo.ResponseDTO
      */
     @GetMapping("menu")
     @PreAuthorize("hasAnyAuthority('admin','user')")
-    public ResponseDTO<List<SysMenuDTO>> findUserMenu(String userId){
-        return userInfoService.findUserMenu(userId);
+    public ResponseDTO<List<SysMenuDTO>> findUserMenu(){
+        return userInfoService.findUserMenu(jwtTokenConverter.getUserId());
     }
     /**
-     * <p>@Description 更新用户头像 </p>
+     * <p>@Description 更新当前登录的用户头像 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 20:02 </p>
      * @param photo 头像文件
-     * @param userId 用户ID
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
     @PostMapping("photo")
     @PreAuthorize("hasAnyAuthority('admin','user')")
-    public ResponseDTO<String> uploadPhoto(MultipartFile photo,String userId){
-        return userInfoService.uploadPhoto(photo,userId);
+    public ResponseDTO<String> uploadPhoto(MultipartFile photo){
+        return userInfoService.uploadPhoto(photo,jwtTokenConverter.getUserId());
     }
     /**
-     * <p>@Description 更新用户信息 </p>
+     * <p>@Description 更新当前登录的用户信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 19:58 </p>
      * @param user 用户信息
@@ -83,19 +87,21 @@ public class UserController {
     @PostMapping("edit")
     @PreAuthorize("hasAnyAuthority('admin','user')")
     public ResponseDTO<String> updateUserInfo(SysUserDTO user){
+        if(user != null){
+            user.setUserId(jwtTokenConverter.getUserId());
+        }
         return userInfoService.updateUserInfo(user);
     }
     /**
      * <p>@Description 查询单个用户信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 19:43 </p>
-     * @param userId 用户ID
      * @return com.www.myblog.common.pojo.ResponseDTO<com.www.myblog.base.data.dto.SysUserDTO>
      */
     @GetMapping("info")
     @PreAuthorize("hasAnyAuthority('admin','user')")
-    public ResponseDTO<SysUserDTO> findUser(String userId){
-        return userInfoService.findUser(userId);
+    public ResponseDTO<SysUserDTO> findUser(){
+        return userInfoService.findUser(jwtTokenConverter.getUserId());
     }
     /**
      * <p>@Description 查询所有用户信息 </p>

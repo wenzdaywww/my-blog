@@ -173,7 +173,6 @@ export default {
     const editForm = ref(null);
     // 用户信息
     let user = reactive({
-      userId: localStorage.getItem('userId'),
       userName : "",
       phoneNum : "",
       birthday : "",
@@ -187,24 +186,22 @@ export default {
     });
     // 获取用户数据
     const getData = () => {
-      if(user.userId){
-        request.$http.get("api/base/user/info",user).then(function (res) {
-          if(res.code === 200){
-            user.userName = res.data.userName;
-            user.phoneNum = res.data.phoneNum;
-            user.birthday = res.data.birthday;
-            user.sex = res.data.sex;
-            if(res.data.photo){
-              user.photo = res.data.photo;
-            }
-            user.email = res.data.email;
-            user.brief = res.data.brief;
-            user.friends = res.data.friends;
-            user.fans = res.data.fans;
-            user.blogs = res.data.blogs;
+      request.$http.get("api/base/user/info",null).then(function (res) {
+        if(res.code === 200){
+          user.userName = res.data.userName;
+          user.phoneNum = res.data.phoneNum;
+          user.birthday = res.data.birthday;
+          user.sex = res.data.sex;
+          if(res.data.photo){
+            user.photo = res.data.photo;
           }
-        });
-      }
+          user.email = res.data.email;
+          user.brief = res.data.brief;
+          user.friends = res.data.friends;
+          user.fans = res.data.fans;
+          user.blogs = res.data.blogs;
+        }
+      });
     };
     getData();
     // 保存按钮
@@ -269,7 +266,6 @@ export default {
     const uploadImg = () => {
       let fd = new FormData();//通过form数据格式来传
       fd.append("photo", base64ToFile(cropImg.value,file.name)); //传文件
-      fd.append("userId", user.userId);
       request.$http.upload("api/base/user/photo",fd,{'Content-Type': 'multipart/form-data'}).then(function (res){
         if(res.code === 200){
           ElMessage.success('上传成功');

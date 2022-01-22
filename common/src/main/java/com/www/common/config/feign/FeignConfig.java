@@ -41,12 +41,12 @@ public class FeignConfig{
             @Override
             public void apply(RequestTemplate requestTemplate) {
                 // 开启hystrix后RequestContextHolder.getRequestAttributes()=null,需要自定义hystrix策略
-                ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-                if(requestAttributes == null){
+                ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+                if(attributes == null){
                     log.error("请求ServletRequestAttributes为空");
                     return;
                 }
-                HttpServletRequest request = requestAttributes.getRequest();
+                HttpServletRequest request = attributes.getRequest();
                 //转发日志全局跟踪号
                 requestTemplate.header(TraceIdFilter.TRACE_ID, request.getHeader(TraceIdFilter.TRACE_ID));
                 Cookie[] cookies = request.getCookies();

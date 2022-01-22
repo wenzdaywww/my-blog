@@ -2,7 +2,6 @@ package com.www.uaa.config.authorize.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.www.common.config.oauth2.token.JwtTokenConverter;
-import com.www.common.config.oauth2.token.Oauth2Extractor;
 import com.www.common.config.oauth2.util.RedisTokenHandler;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.pojo.dto.token.TokenInfoDTO;
@@ -14,7 +13,6 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -35,9 +33,6 @@ public class Oauth2LogoutSuccessHandler implements LogoutSuccessHandler {
     /** 自定义jwt的token转换器 **/
     @Autowired
     private JwtTokenConverter jwtTokenConverter;
-    /** 自定义token获取器 **/
-    @Autowired
-    private Oauth2Extractor oauth2Extractor;
 
     /**
      * <p>@Description 退出成功处理 </p>
@@ -52,8 +47,7 @@ public class Oauth2LogoutSuccessHandler implements LogoutSuccessHandler {
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         log.info("认证服务器退出成功");
         //获取token信息
-        String token = oauth2Extractor.getToken(httpServletRequest);
-        TokenInfoDTO tokenInfoDTO = jwtTokenConverter.decodeToken(token);
+        TokenInfoDTO tokenInfoDTO = jwtTokenConverter.decodeToken(httpServletRequest);
         //删除用户登录的token到redis中
         RedisTokenHandler.deleteUserIdToken(tokenInfoDTO);
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,"退出成功");

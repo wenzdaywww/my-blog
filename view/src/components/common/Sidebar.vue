@@ -39,6 +39,7 @@
 import {computed, ref, getCurrentInstance, reactive} from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
+import utils from "../../utils/utils";
 
 export default {
   setup() {
@@ -52,8 +53,8 @@ export default {
     const items = ref([]);
     // 获取菜单
     const getData = () => {
-      if(localStorage.getItem('userId')){
-        request.$http.get("api/base/user/menu", {userId:localStorage.getItem('userId')}).then(function (res) {
+      if(utils.getToken()){
+        request.$http.get("api/base/user/menu", null).then(function (res) {
           if(res.code === 200){
             items.value = res.data;
           }

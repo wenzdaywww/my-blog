@@ -7,5 +7,19 @@ export default {
             return unescape(r[2]);
         }
         return null;
+    },
+    /** 获取cookie中的值 **/
+    getCookie(name) {
+        var arr;
+        var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if (arr = document.cookie.match(reg)){
+            return (arr[2]);
+        }else{
+            return null;
+        }
+    },
+    /** 获取cookie中的token值 **/
+    getToken() {
+        return this.getCookie("access_token");
     }
 }

@@ -57,7 +57,6 @@ export default {
     };
     // 表单数据
     let form = reactive({
-      userId: localStorage.getItem("userId"),
       newPassWord: "",
       cfmPassWord: "",
       password : ""

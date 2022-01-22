@@ -116,10 +116,9 @@ export default {
       }
     });
     // 获取用户数据
-    const getUserData = (userId) => {
-      request.$http.get("api/base/user/info", {userId : userId}).then(function (res) {
+    const getUserData = () => {
+      request.$http.get("api/base/user/info", null).then(function (res) {
         if(res.code === 200){
-          localStorage.setItem("userId",res.data.userId);
           isLogin.value = true;
           if(res.data.photo){
             form.photo = res.data.photo;
@@ -129,15 +128,15 @@ export default {
     };
     //获取token
     const getToken = () => {
-      if (localStorage.getItem("userId")){
+      if (utils.getToken()){
         isLogin.value = true;
         //加载用户拥有的路由权限
-        request.$http.get("api/base/user/router", {userId : localStorage.getItem("userId")}).then(function (res) {
+        request.$http.get("api/base/user/router", null).then(function (res) {
           if(res.code === 200){
             initUserRouter(res.data);
           }
         });
-        getUserData(localStorage.getItem("userId"));
+        getUserData();
       }else{
         isLogin.value = false;
         const code = utils.getUrlParam("code");
@@ -145,7 +144,6 @@ export default {
           clientInfo.code = code;
           request.$http.post("api/uaa/oauth/token", clientInfo).then(function (res) {
             if(res && res.data){
-              localStorage.setItem("userId",res.data.userId);
               router.go(0);//重新跳转当前页面
             }
           });
@@ -159,7 +157,6 @@ export default {
       if (command == "loginout") {
         request.$http.post("api/uaa/logout",null).then(function (res) {
           if(res.code === 200){
-            localStorage.clear();
             ElMessage.success("退出成功");
             //TODO 2021/12/28 22:35 router.push路由跳转页面不刷新，待处理
             //TODO 2022/1/11 22:43 测试环境部署多个前端，退出后不能到登录页面，待处理

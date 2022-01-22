@@ -8,15 +8,12 @@ import com.www.common.pojo.dto.token.TokenInfoDTO;
 import com.www.common.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.WebUtils;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -54,8 +51,7 @@ public class Oauth2UnauthHandler implements AccessDeniedHandler {
      */
     @Override
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
-        String token = httpServletRequest.getHeader(JwtTokenConverter.TOKEN_KEY);
-        TokenInfoDTO tokenDTO = jwtTokenConverter.decodeToken(token);
+        TokenInfoDTO tokenDTO = jwtTokenConverter.decodeToken(httpServletRequest);
         log.error("4、请求的角色拒绝访问，角色权限信息：{}，拒绝原因：{}",JSON.toJSONString(tokenDTO),e.getMessage());
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.UNAUTHORIZED,e.getMessage());
         //清除响应报文的token信息
