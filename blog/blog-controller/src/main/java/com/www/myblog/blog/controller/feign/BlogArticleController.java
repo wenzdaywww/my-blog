@@ -2,11 +2,13 @@ package com.www.myblog.blog.controller.feign;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.www.common.config.oauth2.token.JwtTokenConverter;
+import com.www.common.pojo.constant.AuthorityContant;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.service.feign.IBlogArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/feign")
+@PreAuthorize(AuthorityContant.ALL)
 public class BlogArticleController {
     @Autowired
     private JwtTokenConverter jwtTokenConverter;
@@ -31,7 +34,7 @@ public class BlogArticleController {
      * <p>@Date 2022/1/20 21:16 </p>
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Integer>
      */
-    @GetMapping("blogs")
+    @PostMapping("blogs")
     @HystrixCommand(fallbackMethod = "findUserBlogNumFallback")//设置备选方案
     public ResponseDTO<Integer> findUserBlogNum(){
         return blogArticleService.findUserBlogNum(jwtTokenConverter.getUserId());

@@ -16,5 +16,5 @@ public interface IBlogArticleService {
      * @param userId 用户ID
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Integer>
      */
-    public ResponseDTO<Integer> findUserBlogNum(String userId);
+    ResponseDTO<Integer> findUserBlogNum(String userId);
 }

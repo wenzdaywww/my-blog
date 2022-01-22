@@ -1,6 +1,7 @@
 package com.www.common.pojo.dto.response;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.io.Serializable;
  */
 @Data
 @Accessors(chain = true)//开启链式编程
+@NoArgsConstructor
 public class ResponseDTO<T> implements Serializable {
     private static final long serialVersionUID = 1L;
     /** 响应码 **/
@@ -27,12 +29,6 @@ public class ResponseDTO<T> implements Serializable {
     private String msg;
     /** 响应数据 **/
     private T data;
-    /**
-     * <p>@Description 有其他有参构造方法，则必须有无参数的构造方法，否则反序列的时候会报错 </p>
-     * <p>@Author www </p>
-     * <p>@Date 2021/8/1 21:21 </p>
-     */
-    public ResponseDTO() {}
     /**
      * <p>@Description 响应报文构造方法(默认成功状态) </p>
      * <p>@Author www </p>

@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 
 /**
  * <p>@Description Controller层的AOP配置 </p>
@@ -33,6 +35,7 @@ import java.lang.reflect.Parameter;
 @Component
 @ConditionalOnProperty(prefix = "com.www.common.ctl-aop",name = "enable")
 public class ControllerAop {
+    private NumberFormat numberFormat;
     /**
      * <p>@Description 构造方法 </p>
      * <p>@Author www </p>
@@ -41,6 +44,11 @@ public class ControllerAop {
      */
     public ControllerAop(){
         log.info("开启controller层的AOP日志拦截");
+        numberFormat = NumberFormat.getNumberInstance();
+        // 保留两位小数
+        numberFormat.setMaximumFractionDigits(3);
+        // 如果不需要四舍五入，可以使用RoundingMode.DOWN
+        numberFormat.setRoundingMode(RoundingMode.UP);
     }
     /**
      * <p>@Description 设置controller切入点 </p>
@@ -62,11 +70,13 @@ public class ControllerAop {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         //获取当前请求
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = requestAttributes.getRequest();
-        String controllerMethod = pjd.getSignature().toString();//获取方法全量名
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        //获取方法全量名
+        String controllerMethod = pjd.getSignature().toString();
         Method targetMethod = ((MethodSignature) (pjd.getSignature())).getMethod();
-        Parameter[] paramName = targetMethod.getParameters();//获取方法参数名称
+        //获取方法参数名称
+        Parameter[] paramName = targetMethod.getParameters();
         Class<?>[] paramType = targetMethod.getParameterTypes();
         Logger log = LoggerFactory.getLogger(pjd.getSignature().getClass().getName());// 初始化日志打印
         Object[] paramValue = pjd.getArgs();// 获取方法参数值
@@ -91,7 +101,7 @@ public class ControllerAop {
             Object result = pjd.proceed();// 执行目标方法
             stopWatch.stop();
             log.info("请求:{} 调用{}方法执行耗时:{}秒。请求报文:{}，响应报文:{}",request.getRequestURI(),
-                    controllerMethod,stopWatch.getTotalTimeSeconds(),requestText,JSON.toJSONString(result));
+                    controllerMethod,numberFormat.format(stopWatch.getTotalTimeSeconds()),requestText,JSON.toJSONString(result));
             return result;
         }catch (Exception e){
             log.error("请求:{} 调用{}方法发生异常。请求报文:{}，异常信息:",request.getRequestURI(), controllerMethod,requestText,e);
