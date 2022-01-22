@@ -1,7 +1,7 @@
 package com.www.common.config.feign;
 
 import com.www.common.config.filter.TraceIdFilter;
-import com.www.common.config.oauth2.token.Oauth2Extractor;
+import com.www.common.config.oauth2.token.Oauth2TokenExtractor;
 import com.www.common.pojo.constant.CharConstant;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
@@ -52,7 +52,7 @@ public class FeignConfig{
                 Cookie[] cookies = request.getCookies();
                 if(cookies != null){
                     for (int i = 0; i < cookies.length; i++){
-                        if (StringUtils.equals(Oauth2Extractor.COOKIES_ACCESS_TOKEN,cookies[i].getName()) && StringUtils.isNotBlank(cookies[i].getValue())){
+                        if (StringUtils.equals(Oauth2TokenExtractor.COOKIES_ACCESS_TOKEN,cookies[i].getName()) && StringUtils.isNotBlank(cookies[i].getValue())){
                             //转发token
                             requestTemplate.header(COOKIE, cookies[i].getName() + CharConstant.EQUAL + cookies[i].getValue());
                             break;

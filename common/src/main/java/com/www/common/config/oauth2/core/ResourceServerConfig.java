@@ -3,12 +3,11 @@ package com.www.common.config.oauth2.core;
 import com.www.common.config.oauth2.httpsecurity.Oauth2AccessDecisionManager;
 import com.www.common.config.oauth2.httpsecurity.Oauth2MetadataSource;
 import com.www.common.config.oauth2.resourcesecurity.Oauth2AuthRejectHandler;
-import com.www.common.config.oauth2.token.Oauth2Extractor;
+import com.www.common.config.oauth2.token.Oauth2TokenExtractor;
 import com.www.common.config.oauth2.resourcesecurity.Oauth2UnauthHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
@@ -47,7 +46,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Autowired
     private Oauth2AccessDecisionManager oauth2AccessDecisionManager;
     @Autowired
-    private Oauth2Extractor oauth2Extractor;
+    private Oauth2TokenExtractor oauth2TokenExtractor;
 
     /**
      * <p>@Description 配置资源服务方验证方式 </p>
@@ -66,7 +65,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
         //先认证失败在拒绝方法
         resources.authenticationEntryPoint(oauth2AuthRejectHandler);//认证失败时的异常处理
         resources.accessDeniedHandler(oauth2UnauthHandler);//拒绝访问异常处理
-        resources.tokenExtractor(oauth2Extractor);//自定义token获取器
+        resources.tokenExtractor(oauth2TokenExtractor);//自定义token获取器
     }
     /**
      * <p>@Description 配置用户的安全拦截策略 </p>

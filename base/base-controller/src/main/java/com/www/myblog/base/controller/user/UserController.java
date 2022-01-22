@@ -29,7 +29,7 @@ public class UserController {
     private IUserInfoService userInfoService;
 
     /**
-     * <p>@Description 更新用户密码 </p>
+     * <p>@Description 更新当前登录的用户密码 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 19:58 </p>
      * @param user 用户信息
@@ -93,7 +93,7 @@ public class UserController {
         return userInfoService.updateUserInfo(user);
     }
     /**
-     * <p>@Description 查询单个用户信息 </p>
+     * <p>@Description 查询当前登录的用户信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 19:43 </p>
      * @return com.www.myblog.common.pojo.ResponseDTO<com.www.myblog.base.data.dto.SysUserDTO>

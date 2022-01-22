@@ -23,7 +23,7 @@ public class JwtTokenConverter extends JwtAccessTokenConverter {
     /** 令牌前缀 **/
     public static String TOKEN_PREFIX = "Bearer ";
     @Autowired
-    private Oauth2Extractor oauth2Extractor;
+    private Oauth2TokenExtractor oauth2TokenExtractor;
 
     /**
      * <p>@Description token解析 </p>
@@ -51,7 +51,7 @@ public class JwtTokenConverter extends JwtAccessTokenConverter {
         if(request == null){
             return null;
         }
-        String token = oauth2Extractor.getToken(request);
+        String token = oauth2TokenExtractor.getToken(request);
         return decodeToken(token);
     }
     /**

@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
  * <p>@Date 2021/12/26 16:14 </p>
  */
 @Slf4j
-public class Oauth2Extractor extends BearerTokenExtractor {
+public class Oauth2TokenExtractor extends BearerTokenExtractor {
     /** 保存到cookie的access_token的key **/
     public static final String COOKIES_ACCESS_TOKEN = "access_token";
     /** 图片资源路径的application.yml的key **/
@@ -40,7 +40,7 @@ public class Oauth2Extractor extends BearerTokenExtractor {
      * <p>@Date 2022/1/21 22:39 </p>
      * @return
      */
-    public Oauth2Extractor(){
+    public Oauth2TokenExtractor(){
         log.info("配置token提取器");
     }
     /**

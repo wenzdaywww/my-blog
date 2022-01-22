@@ -245,7 +245,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
             responseDTO.setMsg("查询不到该用户信息");
             return responseDTO;
         }
-        ResponseDTO<Integer> blogResponse = blogFeignService.findUserBlogNum(userId);
+        ResponseDTO<Integer> blogResponse = blogFeignService.findUserBlogNum();
         if(blogResponse != null && ResponseDTO.RespEnum.SUCCESS.getCode().equals(blogResponse.getCode())){
             userDTO.setBlogs(blogResponse.getData());
         }

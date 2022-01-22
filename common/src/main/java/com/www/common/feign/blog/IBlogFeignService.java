@@ -19,12 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @ConditionalOnProperty(prefix = "com.www.common.feign",name = {"blog"})
 public interface IBlogFeignService {
     /**
-     * <p>@Description 查询用户的博客数量 </p>
+     * <p>@Description 查询当前登录用户的博客数量 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/20 21:16 </p>
-     * @param userId 用户ID
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Integer>
      */
     @GetMapping("/feign/blogs")
-    ResponseDTO<Integer> findUserBlogNum(@RequestParam("userId") String userId);
+    ResponseDTO<Integer> findUserBlogNum();
 }

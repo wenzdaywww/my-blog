@@ -2,7 +2,7 @@ package com.www.common.config.oauth2.resourcesecurity;
 
 import com.alibaba.fastjson.JSON;
 import com.www.common.config.oauth2.token.JwtTokenConverter;
-import com.www.common.config.oauth2.token.Oauth2Extractor;
+import com.www.common.config.oauth2.token.Oauth2TokenExtractor;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.pojo.dto.token.TokenInfoDTO;
 import com.www.common.utils.TokenUtils;
@@ -55,7 +55,7 @@ public class Oauth2AuthRejectHandler implements AuthenticationEntryPoint {
         log.error("4、请求认证失败，认证信息：{}，失败原因：{}",JSON.toJSONString(tokenDTO),e.getMessage());
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.UNAUTHORIZED,"认证失败");
         //清除响应报文的token信息
-        TokenUtils.clearResponseToken(httpServletResponse, Oauth2Extractor.COOKIES_ACCESS_TOKEN);
+        TokenUtils.clearResponseToken(httpServletResponse, Oauth2TokenExtractor.COOKIES_ACCESS_TOKEN);
         httpServletResponse.setStatus(ResponseDTO.RespEnum.UNAUTHORIZED.getCode());
         httpServletResponse.setContentType("application/json;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(responseDTO));
