@@ -15,11 +15,11 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface BlogArticleMapper extends BaseMapper<BlogArticleEntity> {
     /**
-     * <p>@Description 查询博主博客相关信息 </p>
+     * <p>@Description 查询博主的相关统计信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 16:42 </p>
      * @param userId 博主ID
      * @return com.www.myblog.blog.data.dto.AuthorDTO
      */
-    AuthorDTO findAuthorInfo(@Param("userId") String userId);
+    AuthorDTO findAuthorCount(@Param("userId") String userId);
 }

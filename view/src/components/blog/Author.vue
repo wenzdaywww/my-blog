@@ -84,18 +84,20 @@ export default {
     const isFan = ref(false);
     // 获取博主信息
     const getAuthorInfo = () => {
-      request.$http.get("api/blog/browse/author/"+authorId,null).then(function (res) {
-        if(res.code === 200){
-          author.userName = res.data.userName;
-          author.photo = res.data.photo;
-          author.age = res.data.age;
-          author.blogs = res.data.blogs;
-          author.fans = res.data.fans;
-          author.likes = res.data.likes;
-          author.comments = res.data.comments;
-          author.collects = res.data.collects;
-        }
-      });
+      if(authorId){
+        request.$http.get("api/blog/browse/author/"+authorId,null).then(function (res) {
+          if(res.code === 200){
+            author.userName = res.data.userName;
+            author.photo = res.data.photo;
+            author.age = res.data.age;
+            author.blogs = res.data.blogs;
+            author.fans = res.data.fans;
+            author.likes = res.data.likes;
+            author.comments = res.data.comments;
+            author.collects = res.data.collects;
+          }
+        });
+      }
     }
     getAuthorInfo();
     return {author,isFan};
@@ -146,7 +148,7 @@ export default {
   color: #999;
 }
 .grid-num {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   margin-bottom: 8px;
 }

@@ -11,8 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-
 /**
  * <p>@Description 匿名用户博客浏览Service </p>
  * <p>@Version 1.0 </p>
@@ -45,9 +43,9 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
             responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"查询失败，博主信息不存在",null);
             return responseDTO;
         }
-        AuthorDTO authorDTO = blogArticleMapper.findAuthorInfo(userId);
+        AuthorDTO authorDTO = blogArticleMapper.findAuthorCount(userId);
         authorDTO = authorDTO != null ? authorDTO : new AuthorDTO().setUserId(userInfoDTO.getUserId());
-        authorDTO.setUserName(userInfoDTO.getUserName()).setPhoto(userInfoDTO.getPhoto()).setFans(userInfoDTO.getFans());
+        authorDTO.setUserName(userInfoDTO.getUserName()).setPhoto(userInfoDTO.getPhoto());
         //计算码龄
         int month = DateUtils.getMonths(userInfoDTO.getCreateTime(),DateUtils.getCurrentDateTime());
         if(month != -1){

@@ -17,12 +17,4 @@ import org.springframework.web.bind.annotation.GetMapping;
 @FeignClient(value = "${com.www.common.feign.blog}",fallbackFactory = BlogFeignFallback.class)//服务提供者名称
 @ConditionalOnProperty(prefix = "com.www.common.feign",name = {"blog"})
 public interface IBlogFeignService {
-    /**
-     * <p>@Description 查询当前登录用户的博客数量 </p>
-     * <p>@Author www </p>
-     * <p>@Date 2022/1/20 21:16 </p>
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Integer>
-     */
-    @GetMapping("/feign/oauth/blogs")
-    ResponseDTO<Integer> findUserBlogNum();
 }

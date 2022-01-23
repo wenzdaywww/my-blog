@@ -79,18 +79,6 @@ public class SysUserDTO implements Serializable {
     */
     private String credentialsNotExpired;
     /**
-     * 关注数
-     */
-    private Integer friends;
-    /**
-     * 粉丝数
-     */
-    private Integer fans;
-    /**
-     * 博客数量
-     */
-    private Integer blogs;
-    /**
     * 更新时间
     */
     private Date updateTime;

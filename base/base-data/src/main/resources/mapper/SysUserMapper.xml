@@ -49,8 +49,6 @@
               U.PHONE_NUM,
               U.BIRTHDAY,
               IR.ROLE_CODE,
-              0 FRIENDS,
-              0 FANS,
               U.SEX,
               U.PHOTO,
               U.EMAIL,

@@ -16,7 +16,7 @@
               <div class="grid-content grid-con-1">
                 <i class="el-icon-user grid-con-icon"></i>
                 <div class="grid-cont-right">
-                  <div class="grid-num">{{user.friends}}</div>
+                  <div class="grid-num">{{user.follows}}</div>
                   <div>关注</div>
                 </div>
               </div>
@@ -180,12 +180,12 @@ export default {
       photo : "src/assets/img/img.jpg",
       email : "",
       brief : "",
-      friends : 0,
+      follows : 0,
       fans : 0,
       blogs : 0
     });
     // 获取用户数据
-    const getData = () => {
+    const getUserData = () => {
       request.$http.get("api/base/user/info",null).then(function (res) {
         if(res.code === 200){
           user.userName = res.data.userName;
@@ -197,13 +197,21 @@ export default {
           }
           user.email = res.data.email;
           user.brief = res.data.brief;
-          user.friends = res.data.friends;
+        }
+      });
+    };
+    getUserData();
+    // 获取用户统计数据
+    const getUserCount = () => {
+      request.$http.get("api/blog/user/count",null).then(function (res) {
+        if(res.code === 200){
+          user.follows = res.data.follows;
           user.fans = res.data.fans;
           user.blogs = res.data.blogs;
         }
       });
     };
-    getData();
+    getUserCount();
     // 保存按钮
     const onSubmit = () => {
       editForm.value.validate((valid) => {
@@ -211,7 +219,7 @@ export default {
           request.$http.post("api/base/user/edit",user).then(function (res) {
             if(res.code === 200){
               ElMessage.success('修改成功');
-              getData();
+              getUserData();
             }else {
               ElMessage.error(res.data);
             }
@@ -270,7 +278,7 @@ export default {
         if(res.code === 200){
           ElMessage.success('上传成功');
           dialogVisible.value = false;
-          getData();
+          getUserData();
         }else {
           ElMessage.error("上传失败");
         }

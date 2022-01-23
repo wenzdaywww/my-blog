@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.www.myblog.blog.data.mapper.UserFansMapper">
+  <resultMap id="BaseResultMap" type="com.www.myblog.blog.data.entity.UserFansEntity">
+    <!--@mbg.generated-->
+    <!--@Table USER_FANS-->
+    <id column="UF_ID" property="ufId" />
+    <result column="USER_ID" property="userId" />
+    <result column="FANS_ID" property="fansId" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="CREATE_TIME" property="createTime" />
+  </resultMap>
+</mapper>

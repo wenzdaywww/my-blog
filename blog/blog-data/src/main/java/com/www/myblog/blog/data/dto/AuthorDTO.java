@@ -45,6 +45,10 @@ public class AuthorDTO implements Serializable {
     */
     private Integer likes;
     /**
+    * 关注数
+    */
+    private Integer follows;
+    /**
     * 评论数量
     */
     private Integer comments;

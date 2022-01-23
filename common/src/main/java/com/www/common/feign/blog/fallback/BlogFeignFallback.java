@@ -28,17 +28,6 @@ public class BlogFeignFallback implements FallbackFactory<IBlogFeignService> {
     public IBlogFeignService create(Throwable throwable) {
         log.error("blog服务降级,失败原因:",throwable);
         return new IBlogFeignService() {
-            /**
-             * <p>@Description 查询当前登录用户的博客数量 </p>
-             * <p>@Author www </p>
-             * <p>@Date 2022/1/20 21:16 </p>
-             * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Integer>
-             */
-            @Override
-            public ResponseDTO<Integer> findUserBlogNum() {
-                log.error("blog服务降级：查询用户的博客数量");
-                return null;
-            }
         };
     }
 }
