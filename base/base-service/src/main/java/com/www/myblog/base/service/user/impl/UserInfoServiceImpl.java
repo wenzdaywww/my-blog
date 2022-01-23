@@ -6,6 +6,7 @@ import com.www.common.config.code.CodeDict;
 import com.www.common.config.mvc.upload.IFileUpload;
 import com.www.common.feign.blog.IBlogFeignService;
 import com.www.common.pojo.constant.CharConstant;
+import com.www.common.pojo.dto.feign.UserInfoDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.pojo.enums.CodeTypeEnum;
 import com.www.common.utils.DateUtils;
@@ -63,6 +64,34 @@ public class UserInfoServiceImpl implements IUserInfoService {
     private String serverPort;
     @Value("${eureka.instance.ip-address}")
     private String ip;
+
+    /**
+     * <p>@Description 查询用户信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 15:43 </p>
+     * @param userId 用户id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     */
+    @Override
+    public ResponseDTO<UserInfoDTO> findUserInfo(String userId) {
+        ResponseDTO<UserInfoDTO> response = new ResponseDTO<>();
+        if(StringUtils.isBlank(userId)){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询失败，用户ID为空",null);
+            return response;
+        }
+        SysUserEntity userEntity = sysUserService.findUserEntityById(userId);
+        if(userEntity == null){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询失败，查无此用户",null);
+            return response;
+        }
+        UserInfoDTO userInfoDTO = new UserInfoDTO();
+        userInfoDTO.setSuId(userEntity.getSuId()).setUserId(userEntity.getUserId()).setUserName(userEntity.getUserName())
+                .setPhoneNum(userEntity.getPhoneNum()).setBirthday(userEntity.getBirthday()).setSex(userEntity.getSex())
+                .setPhoto(userEntity.getPhoto()).setEmail(userEntity.getEmail()).setBrief(userEntity.getBrief())
+                .setUpdateTime(userEntity.getUpdateTime()).setCreateTime(userEntity.getCreateTime());
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,userInfoDTO);
+        return response;
+    }
 
     /**
      * <p>@Description 更新用户密码 </p>

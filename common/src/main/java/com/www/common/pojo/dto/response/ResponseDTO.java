@@ -79,7 +79,19 @@ public class ResponseDTO<T> implements Serializable {
         this.msg = msg == null ? code.getMsg() : msg;
         this.data = data;
     }
-
+    /**
+     * <p>@Description 获取成功返回的数据,只要code=200才有值 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 16:09 </p>
+     * @param response 返回对象
+     * @return T 返回数据
+     */
+    public static <T> T getBackData(ResponseDTO<T> response){
+        if(response == null){
+            return null;
+        }
+        return RespEnum.SUCCESS.getCode().equals(response.code) ? response.data : null;
+    }
     /**
      * <p>@Description 响应码枚举值 </p>
      * <p>@Version 1.0 </p>

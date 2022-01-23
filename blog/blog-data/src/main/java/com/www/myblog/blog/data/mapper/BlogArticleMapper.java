@@ -1,9 +1,10 @@
 package com.www.myblog.blog.data.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.www.common.pojo.dto.response.ResponseDTO;
+import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.entity.BlogArticleEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>@Description 博客文章Mapper </p>
@@ -13,4 +14,12 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface BlogArticleMapper extends BaseMapper<BlogArticleEntity> {
+    /**
+     * <p>@Description 查询博主博客相关信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 16:42 </p>
+     * @param userId 博主ID
+     * @return com.www.myblog.blog.data.dto.AuthorDTO
+     */
+    AuthorDTO findAuthorInfo(@Param("userId") String userId);
 }

@@ -1,7 +1,11 @@
 <template>
   <!-- 博客分组 -->
   <el-card class="group-card">
-    <span class="span-title"><b>分组</b></span>
+    <template #header>
+      <div class="clearfix card-title">
+        <span>分组</span>
+      </div>
+    </template>
     <el-row class="group-row" v-for="item in groupBlog">
       <el-col :span="12"><div class="grid-content bg-purple">{{item.name}}</div></el-col>
       <el-col :span="12"><div class="grid-content bg-purple-light">{{item.num}}</div></el-col>
@@ -9,7 +13,11 @@
   </el-card>
   <!-- 博客分类 -->
   <el-card class="class-card">
-    <span class="span-title"><b>分类</b></span>
+    <template #header>
+      <div class="clearfix card-title">
+        <span>分类专栏</span>
+      </div>
+    </template>
     <el-row class="class-row" v-for="item in classBlog">
       <el-col :span="12"><div class="grid-content bg-purple">{{item.name}}</div></el-col>
       <el-col :span="12"><div class="grid-content bg-purple-light">{{item.num}}</div></el-col>
@@ -89,5 +97,9 @@ export default {
 .span-title{
   font-size: 20px;
   margin-bottom: 10px;
+}
+.card-title{
+  font-weight: bold;
+  font-size: 18px;
 }
 </style>

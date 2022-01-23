@@ -5,7 +5,7 @@ import com.www.common.pojo.dto.response.ResponseDTO;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * <p>@Description blog应用提供的对外服务接口 </p>
@@ -23,6 +23,6 @@ public interface IBlogFeignService {
      * <p>@Date 2022/1/20 21:16 </p>
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Integer>
      */
-    @PostMapping("/feign/blogs")
+    @GetMapping("/feign/oauth/blogs")
     ResponseDTO<Integer> findUserBlogNum();
 }

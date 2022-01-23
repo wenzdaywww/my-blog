@@ -15,5 +15,14 @@
     <result column="UPDATE_TIME" property="updateTime" />
     <result column="CREATE_TIME" property="createTime" />
   </resultMap>
-
+  <!--  查询博主博客相关信息-->
+  <select id="findAuthorInfo" resultType="com.www.myblog.blog.data.dto.AuthorDTO">
+    SELECT A.USER_ID,
+           A.BLOGS,
+           A.LIKES,
+           A.COMMENTS,
+           IFNULL(D.COLLECTS,0) COLLECTS
+    FROM (SELECT B.USER_ID,COUNT(B.BLOG_ID) BLOGS,SUM(B.BLOG_LIKE) LIKES,SUM(B.BLOG_COMMENT) COMMENTS FROM BLOG_ARTICLE B WHERE B.USER_ID = #{userId} GROUP BY B.USER_ID) A
+         LEFT JOIN (SELECT C.USER_ID, COUNT(C.COLLECT_ID) COLLECTS FROM BLOG_COLLECT C WHERE C.USER_ID = #{userId} GROUP BY C.USER_ID) D ON A.USER_ID=D.USER_ID
+  </select>
 </mapper>

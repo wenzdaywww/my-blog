@@ -8,21 +8,21 @@ import com.www.myblog.blog.service.feign.IBlogArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * <p>@Description 博客文章对外服务接口 </p>
+ * <p>@Description 博客应用对外服务接口,需要认证访问 </p>
  * <p>@Version 1.0 </p>
  * <p>@Author www </p>
  * <p>@Date 2022/1/20 21:13 </p>
  */
 @Slf4j
 @RestController
-@RequestMapping("/feign")
+@RequestMapping("feign/oauth")
 @PreAuthorize(AuthorityContant.ALL)
-public class BlogArticleController {
+public class BlogFeignOauthController {
     @Autowired
     private JwtTokenConverter jwtTokenConverter;
     @Autowired
@@ -34,7 +34,7 @@ public class BlogArticleController {
      * <p>@Date 2022/1/20 21:16 </p>
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Integer>
      */
-    @PostMapping("blogs")
+    @GetMapping("blogs")
     @HystrixCommand(fallbackMethod = "findUserBlogNumFallback")//设置备选方案
     public ResponseDTO<Integer> findUserBlogNum(){
         return blogArticleService.findUserBlogNum(jwtTokenConverter.getUserId());
@@ -46,7 +46,7 @@ public class BlogArticleController {
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Integer>
      */
     public ResponseDTO<Integer> findUserBlogNumFallback(Throwable throwable){
-        log.error("查询用户的博客数量-服务熔断处理,异常信息:",throwable);
+        log.error("服务熔断处理: 查询用户的博客数量,异常信息:",throwable);
         return null;
     }
 }

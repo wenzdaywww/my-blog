@@ -1,9 +1,11 @@
 package com.www.myblog.base.service.user;
 
+import com.www.common.pojo.dto.feign.UserInfoDTO;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysRoleDTO;
 import com.www.myblog.base.data.dto.SysUserDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -15,6 +17,14 @@ import java.util.List;
  * <p>@Date 2021/11/14 15:31 </p>
  */
 public interface IUserInfoService {
+    /**
+     * <p>@Description 查询用户信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 15:43 </p>
+     * @param userId 用户id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     */
+    ResponseDTO<UserInfoDTO> findUserInfo(String userId);
     /**
      * <p>@Description 更新用户密码 </p>
      * <p>@Author www </p>

@@ -1,7 +1,11 @@
 <template>
   <!-- 热门博客 -->
   <el-card v-bind:class="float_type">
-    <span class="span-title"><b>热门博客</b></span>
+    <template #header>
+      <div class="clearfix card-title">
+        <span>热门博客</span>
+      </div>
+    </template>
     <el-row class="hot-row" v-for="item in hotBlog">
       <el-col>
         <a href="#" style="width: 100%;">{{item.title}}</a>
@@ -68,5 +72,9 @@ export default {
   margin-bottom: 0px;
   align-content: center;
   height: 30px;
+}
+.card-title{
+  font-size: 18px;
+  font-weight: bold;
 }
 </style>

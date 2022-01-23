@@ -4,6 +4,8 @@
       <el-row>
         <el-col :span="7">
           <div class="grid-content bg-purple purple-left">
+            <!-- 博主信息 -->
+            <author/>
             <!-- 热门博客 -->
             <hot-blog/>
           </div>
@@ -25,12 +27,13 @@
 <script>
 import groupBlog from "../../components/blog/GroupBlog.vue";
 import hotBlog from "../../components/blog/HotBlog.vue";
+import author from "../../components/blog/Author.vue";
 import blogList from "../../components/blog/BlogList.vue";
 import {provide} from "vue";
 
 export default {
   components: {
-    groupBlog, hotBlog,blogList
+    groupBlog, hotBlog,author,blogList
   },
   setup() {
     provide("float_type","float-right");//设置hotBlog样式

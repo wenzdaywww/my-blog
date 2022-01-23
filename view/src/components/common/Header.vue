@@ -144,6 +144,7 @@ export default {
           clientInfo.code = code;
           request.$http.post("api/uaa/oauth/token", clientInfo).then(function (res) {
             if(res && res.data){
+              localStorage.setItem("userId",res.data.userId);
               router.go(0);//重新跳转当前页面
             }
           });
@@ -168,7 +169,7 @@ export default {
       } else if (command == "user") { // 个人中心
         router.push("/user");
       }else if (command == "blog") { // 我的博客
-        router.push("/blog");
+        router.push("/blog?id="+localStorage.getItem("userId"));
       } else if (command == "pwd") { // 修改密码
         passwordDialog.value.shwoDialog();
       }else if(command == "blog-index"){ //博客首页

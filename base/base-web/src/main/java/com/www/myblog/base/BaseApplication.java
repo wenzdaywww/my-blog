@@ -4,6 +4,7 @@ import com.www.common.config.feign.RestConfig;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @EnableEurekaClient
+@EnableCircuitBreaker //开启hystrix熔断器
 @ComponentScan(basePackages = {"com.www.common","com.www.myblog.base"}) //配置要扫描的包路径
 @MapperScan(basePackages = {"com.www.myblog.base.data"})
 @EnableFeignClients(basePackages = {"com.www.common.feign"})//配置feign扫描路径
