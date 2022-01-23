@@ -5,17 +5,18 @@
   <el-card class="blog-card" v-for="item in blogList">
     <img :src="item.img" class="image" />
     <div class="blog-detail">
-      <el-link class="blog-title" type="primary" @click="showBlogDetail(item.blogId)">{{item.title}}</el-link>
+      <el-link class="blog-title" type="primary" @click="showBlogDetail(item.blogId)">{{item.blogTheme}}</el-link>
       <div class="bottom card-header">
         <el-row class="el-row">
-          <span class="blog-article">{{item.content}}</span>
+          <span class="blog-article">{{item.blogContent}}</span>
         </el-row>
         <el-row class="el-row">
-          <div style="width: 20%;">
-            <i class="el-icon-star-on color-grad">{{item.likeNum}}</i>
-            <i class="el-icon-chat-dot-round color-grad" style="padding-left: 10px;">{{item.commentNum}}</i>
+          <div style="width: 50%;">
+            <i class="el-icon-view color-grad">{{item.blogViews}}</i>
+            <i class="el-icon-star-on color-grad padding-left10">{{item.blogLike}}</i>
+            <i class="el-icon-chat-dot-round color-grad padding-left10">{{item.blogComment}}</i>
           </div>
-          <div style="width: 80%">
+          <div style="width: 50%">
             <span class="blog-time color-grad">{{item.createTime}}</span>
           </div>
         </el-row>
@@ -47,20 +48,12 @@ export default {
       {
         blogId: "1",
         img: "src/assets/img/img.jpg",
-        title: "你真的理解什么是财富自由吗？",
-        content: "正确做好任何一件事情的前提是清晰、正确的理解目标。而事实是，我们很多人很多时候根本没有对目标正确的定义，甚至根本从来没有想过，只是大家都那么做而已,正确做好任何一件事情的前提是清晰、正确的......",
-        likeNum: 123,
-        commentNum: 456,
+        blogTheme: "你真的理解什么是财富自由吗？",
+        blogContent: "正确做好任何一件事情的前提是清晰、正确的理解目标。而事实是，我们很多人很多时候根本没有对目标正确的定义，甚至根本从来没有想过，只是大家都那么做而已,正确做好任何一件事情的前提是清晰、正确的......",
+        blogViews: 1,
+        blogLike: 123,
+        blogComment: 456,
         createTime: "2021-01-01 21:21:00"
-      },
-      {
-        blogId: "2",
-        img: "src/assets/img/img.jpg",
-        title: "你真的理解什么是财富自由吗？",
-        content: "正确做好任何一件事情的前提是清晰、正确的理解目标。而事实是，我们很多人很多时候根本没有对目标正确的定义，甚至根本从来没有想过，只是大家都那么做而已,正确做好任何一件事情的前提是清晰、正确的......",
-        likeNum: 11,
-        commentNum: 22,
-        createTime: "2021-01-02 21:21:00"
       }
     ]);
     // 获取用户数据
@@ -110,10 +103,7 @@ export default {
 .color-grad{
   color: #999697;
 }
-.detail-left{
-  width: 80%;
-}
-.detail-right{
-  width: 20%;
+.padding-left10{
+  padding-left: 10px;
 }
 </style>

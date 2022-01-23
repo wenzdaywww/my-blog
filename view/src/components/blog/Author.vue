@@ -1,8 +1,8 @@
 <template>
   <el-card shadow="hover" class="info-card">
-    <div>
-      <el-row>
-        <div class="info-image" @click="showDialog">
+    <template #header>
+      <div class="clearfix">
+        <div class="info-image">
           <img :src="author.photo" class="user-avator" alt/>
         </div>
         <div>
@@ -13,8 +13,10 @@
             <span class="info-age">码龄:{{author.age}}</span>
           </el-row>
         </div>
-      </el-row>
-      <el-row class="margin-top10">
+      </div>
+    </template>
+    <div>
+      <el-row>
         <el-col :span="1"></el-col>
         <el-col :span="4">
           <div class="grid-cont-right">
@@ -125,6 +127,9 @@ export default {
 </script>
 
 <style scoped>
+.clearfix{
+  margin-bottom: 10px;
+}
 .info-card{
   margin-left: 10px;
   margin-right: 10px;

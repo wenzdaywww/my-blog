@@ -74,7 +74,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
         blogEntity.setBlogContent(blog.getBlogContent());
         blogEntity.setBlogLike(0L);
         blogEntity.setBlogComment(0L);
-        blogEntity.setBlogViews(0L);
+        blogEntity.setBlogView(0L);
         blogEntity.setStateCd(CodeDict.getValue(CodeTypeEnum.BLOG_STATUS.getCodeType(), CodeKeyEnum.K1.getKey()));
         blogEntity.setUpdateTime(DateUtils.getCurrentDateTime());
         blogEntity.setCreateTime(DateUtils.getCurrentDateTime());

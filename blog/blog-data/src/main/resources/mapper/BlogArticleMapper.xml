@@ -8,7 +8,7 @@
         <result column="USER_ID" property="userId" />
         <result column="BLOG_THEME" property="blogTheme" />
         <result column="BLOG_CONTENT" property="blogContent" />
-        <result column="BLOG_VIEWS" property="blogViews" />
+        <result column="BLOG_VIEW" property="blogView" />
         <result column="BLOG_LIKE" property="blogLike" />
         <result column="STATE_CD" property="stateCd" />
         <result column="BLOG_COMMENT" property="blogComment" />
@@ -17,7 +17,7 @@
     </resultMap>
     <!-- 获取热门博客前10名单-->
     <select id="findHotBlogRank" resultType="com.www.myblog.blog.data.dto.BlogArticleDTO">
-        select b.BLOG_ID,b.BLOG_THEME from blog_article b order by b.BLOG_VIEWS desc LIMIT 10
+        SELECT B.BLOG_ID,B.BLOG_THEME FROM BLOG_ARTICLE B ORDER BY B.BLOG_VIEW DESC,B.BLOG_ID LIMIT 10
     </select>
     <!--  查询博主的相关统计信息-->
     <select id="findAuthorCount" resultType="com.www.myblog.blog.data.dto.AuthorDTO">

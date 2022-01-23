@@ -42,8 +42,8 @@ public class BlogArticleEntity implements Serializable {
     /**
     * 博客浏览量
     */
-    @TableField("BLOG_VIEWS")
-    private Long blogViews;
+    @TableField("BLOG_VIEW")
+    private Long blogView;
     /**
     * 博客点赞数
     */

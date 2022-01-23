@@ -52,9 +52,9 @@ public class BlogArticleDTO implements Serializable {
     */
     private Long blogLike;
     /**
-    * 博客状态：1有效，2删除
+    * 博客创建时间
     */
-    private String stateCd;
+    private String createTime;
     /**
     * 博客评论数
     */
