@@ -1,9 +1,12 @@
 package com.www.common.config.feign;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.RandomRule;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +22,11 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 @ConditionalOnClass(RestTemplate.class)
 public class RestConfig {
+    @Autowired
+    private RestTemplateBuilder restTemplateBuilder;
+    @Autowired
+    private ObjectMapper objectMapper;
+
     /**
      * <p>@Description 注入RestTemplate </p>
      * <p>@Author www </p>
@@ -27,9 +35,11 @@ public class RestConfig {
      */
     @Bean
     @LoadBalanced //此注解开启负载均衡
-    public RestTemplate getRestTemplate(){
+    public RestTemplate restTemplate(){
         log.info("配置RestTemplate负载均衡");
-        return new RestTemplate();
+        // 创建 RestTemplate 实例， 我这里使用的OkHttp
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        return restTemplate;
     }
     /**
      * <p>@Description 添加全局负载均衡策略 </p>

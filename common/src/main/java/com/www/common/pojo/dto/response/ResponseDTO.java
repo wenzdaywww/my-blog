@@ -1,5 +1,6 @@
 package com.www.common.pojo.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -14,6 +15,7 @@ import java.io.Serializable;
  */
 @Data
 @Accessors(chain = true)//开启链式编程
+@AllArgsConstructor
 @NoArgsConstructor
 public class ResponseDTO<T> implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -29,17 +31,7 @@ public class ResponseDTO<T> implements Serializable {
     private String msg;
     /** 响应数据 **/
     private T data;
-    /**
-     * <p>@Description 响应报文构造方法(默认成功状态) </p>
-     * <p>@Author www </p>
-     * <p>@Date 2021/8/1 21:22 </p>
-     * @param data 数据
-     */
-    public ResponseDTO(T data) {
-        this.code = RespEnum.SUCCESS.getCode();
-        this.msg = RespEnum.SUCCESS.getMsg();
-        this.data = data;
-    }
+
     /**
      * <p>@Description 响应报文构造方法 </p>
      * <p>@Author www </p>
@@ -57,34 +49,10 @@ public class ResponseDTO<T> implements Serializable {
      * <p>@Author www </p>
      * <p>@Date 2021/8/1 21:22 </p>
      * @param code 响应码
-     * @param msg 响应信息
-     * @param data 数据
      */
-    public ResponseDTO(RespEnum code, String msg, T data) {
+    public ResponseDTO(RespEnum code) {
         this.code = code.getCode();
-        this.msg = msg == null ? code.getMsg() : msg;
-        this.data = data;
-    }
-    /**
-     * <p>@Description 设置成功响应信息 </p>
-     * <p>@Author www </p>
-     * <p>@Date 2021/12/2 21:14 </p>
-     * @param data 响应信息
-     * @return void
-     */
-    public void setResponse(T data){
-        this.data = data;
-    }
-    /**
-     * <p>@Description 设置响应码值 </p>
-     * <p>@Author www </p>
-     * <p>@Date 2021/12/2 21:14 </p>
-     * @param code 码值
-     * @return void
-     */
-    public void setResponse(RespEnum code){
-        this.code = code.getCode();
-        this.msg = msg == null ? code.getMsg() : msg;
+        this.msg = code.getMsg();
     }
     /**
      * <p>@Description 设置响应码值及响应信息 </p>

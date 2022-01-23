@@ -270,8 +270,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
         }
         SysRoleEntity roleEntity = sysRoleService.findRoleEntityByName("user");
         if(roleEntity == null){
-            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL);
-            responseDTO.setMsg("用户角色错误，创建用户失败");
+            responseDTO.setCode(ResponseDTO.RespEnum.FAIL.getCode()).setMsg("用户角色错误，创建用户失败");
             return responseDTO;
         }
         //创建用户
