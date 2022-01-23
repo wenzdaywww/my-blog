@@ -1,6 +1,6 @@
 import {createRouter, createWebHistory} from "vue-router";
 const modules = import.meta.glob("../views/**/**.vue");// 接口请求
-//主页路由
+//用户后台路由
 let homeRouter = {
     path: "/",
     name: "Admin",
@@ -31,6 +31,13 @@ let routes = [
                     title: '我的博客'
                 },
                 component: () => import ("../views/blog/UserBlog.vue")
+            },{
+                path: "/article",
+                name: "Article",
+                meta: {
+                    title: '博客文章'
+                },
+                component: () => import ("../views/blog/Article.vue")
             }
         ]
     },{

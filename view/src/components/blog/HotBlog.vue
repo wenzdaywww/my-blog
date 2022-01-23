@@ -8,7 +8,9 @@
     </template>
     <el-row class="hot-row" v-for="item in hotBlog">
       <el-col>
-        <a href="#" style="width: 100%;">{{item.title}}</a>
+        <el-tooltip class="item" effect="light" :content="item.blogTheme" placement="bottom">
+          <el-link :href="item.blogId ? '/article?id=' + item.blogId : '#'" target="_blank" type="primary">{{ellipsis(item.blogTheme)}}</el-link>
+        </el-tooltip>
       </el-col>
     </el-row>
   </el-card>
@@ -27,14 +29,31 @@ export default {
     let hotBlog = ref([
       {
         blogId: "1",
-        title: "1、你真的理解什么是财富自由吗？"
+        blogTheme: "1、你真的理解什么是财富自由吗？"
       },
       {
         blogId: "2",
-        title: "2、你真的理解什么是财富自由吗？"
+        blogTheme: "2、你真的理解什么是财富自由吗？"
       }
     ]);
-    return {hotBlog,float_type};
+    // 文字超长设置省略号
+    const ellipsis = (value) => {
+      if (!value) return "";
+      if (value.length > 30) {
+        return value.slice(0, 30) + "...";
+      }
+      return value;
+    }
+    // 获取热门博客排行
+    const getHotRank = () => {
+      request.$http.get("api/blog/browse/hot-rank",null).then(function (res) {
+        if(res.code === 200){
+          hotBlog.value = res.data;
+        }
+      });
+    }
+    getHotRank();
+    return {hotBlog,float_type,ellipsis};
   }
 }
 </script>

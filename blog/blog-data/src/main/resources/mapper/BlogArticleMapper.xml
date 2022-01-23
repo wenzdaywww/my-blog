@@ -1,36 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.www.myblog.blog.data.mapper.BlogArticleMapper">
-  <resultMap id="BaseResultMap" type="com.www.myblog.blog.data.entity.BlogArticleEntity">
-    <!--@mbg.generated-->
-    <!--@Table BLOG_ARTICLE-->
-    <id column="BLOG_ID" property="blogId" />
-    <result column="USER_ID" property="userId" />
-    <result column="BLOG_THEME" property="blogTheme" />
-    <result column="BLOG_CONTENT" property="blogContent" />
-    <result column="BLOG_VIEWS" property="blogViews" />
-    <result column="BLOG_LIKE" property="blogLike" />
-    <result column="STATE_CD" property="stateCd" />
-    <result column="BLOG_COMMENT" property="blogComment" />
-    <result column="UPDATE_TIME" property="updateTime" />
-    <result column="CREATE_TIME" property="createTime" />
-  </resultMap>
-  <!--  查询博主的相关统计信息-->
-  <select id="findAuthorCount" resultType="com.www.myblog.blog.data.dto.AuthorDTO">
-      SELECT U.USER_ID,
-              G.BLOGS,
-              G.LIKES,
-              G.COMMENTS,
-              IFNULL( D.COLLECTS, 0 ) COLLECTS,
-              IFNULL( A.FANS, 0 ) FANS,
-              IFNULL( B.FOLLOW, 0 ) FOLLOWS
-      FROM ( SELECT #{userId} USER_ID FROM DUAL ) U
-           LEFT JOIN (SELECT B.USER_ID,
-                              COUNT( B.BLOG_ID ) BLOGS,
-                              SUM( B.BLOG_LIKE ) LIKES,
-                              SUM( B.BLOG_COMMENT ) COMMENTS FROM BLOG_ARTICLE B  WHERE B.USER_ID = #{userId} GROUP BY B.USER_ID) g ON g.USER_ID = U.USER_ID
-           LEFT JOIN ( SELECT C.USER_ID, COUNT( C.COLLECT_ID ) COLLECTS FROM BLOG_COLLECT C WHERE C.USER_ID = #{userId} GROUP BY C.USER_ID ) D ON D.USER_ID = u.USER_ID
-           LEFT JOIN ( SELECT L.USER_ID, COUNT( L.UF_ID ) FANS FROM USER_FANS L WHERE L.USER_ID = #{userId} GROUP BY L.USER_ID ) A ON A.USER_ID = U.USER_ID
-           LEFT JOIN ( SELECT F.USER_ID, COUNT( F.UF_ID ) FOLLOW FROM USER_FANS F WHERE F.FANS_ID = #{userId} GROUP BY F.USER_ID ) B ON B.USER_ID = U.USER_ID
-  </select>
+    <resultMap id="BaseResultMap" type="com.www.myblog.blog.data.entity.BlogArticleEntity">
+        <!--@mbg.generated-->
+        <!--@Table BLOG_ARTICLE-->
+        <id column="BLOG_ID" property="blogId" />
+        <result column="USER_ID" property="userId" />
+        <result column="BLOG_THEME" property="blogTheme" />
+        <result column="BLOG_CONTENT" property="blogContent" />
+        <result column="BLOG_VIEWS" property="blogViews" />
+        <result column="BLOG_LIKE" property="blogLike" />
+        <result column="STATE_CD" property="stateCd" />
+        <result column="BLOG_COMMENT" property="blogComment" />
+        <result column="UPDATE_TIME" property="updateTime" />
+        <result column="CREATE_TIME" property="createTime" />
+    </resultMap>
+    <!-- 获取热门博客前10名单-->
+    <select id="findHotBlogRank" resultType="com.www.myblog.blog.data.dto.BlogArticleDTO">
+        select b.BLOG_ID,b.BLOG_THEME from blog_article b order by b.BLOG_VIEWS desc LIMIT 10
+    </select>
+    <!--  查询博主的相关统计信息-->
+    <select id="findAuthorCount" resultType="com.www.myblog.blog.data.dto.AuthorDTO">
+        SELECT U.USER_ID,
+               G.BLOGS,
+               G.LIKES,
+               G.COMMENTS,
+               IFNULL( D.COLLECTS, 0 ) COLLECTS,
+               IFNULL( A.FANS, 0 ) FANS,
+               IFNULL( B.FOLLOW, 0 ) FOLLOWS
+        FROM ( SELECT #{userId} USER_ID FROM DUAL ) U
+                     LEFT JOIN (SELECT B.USER_ID,
+                                       COUNT( B.BLOG_ID ) BLOGS,
+                                       SUM( B.BLOG_LIKE ) LIKES,
+                                       SUM( B.BLOG_COMMENT ) COMMENTS FROM BLOG_ARTICLE B  WHERE B.USER_ID = #{userId} GROUP BY B.USER_ID) g ON g.USER_ID = U.USER_ID
+                     LEFT JOIN ( SELECT C.USER_ID, COUNT( C.COLLECT_ID ) COLLECTS FROM BLOG_COLLECT C WHERE C.USER_ID = #{userId} GROUP BY C.USER_ID ) D ON D.USER_ID = u.USER_ID
+                     LEFT JOIN ( SELECT L.USER_ID, COUNT( L.UF_ID ) FANS FROM USER_FANS L WHERE L.USER_ID = #{userId} GROUP BY L.USER_ID ) A ON A.USER_ID = U.USER_ID
+                     LEFT JOIN ( SELECT F.USER_ID, COUNT( F.UF_ID ) FOLLOW FROM USER_FANS F WHERE F.FANS_ID = #{userId} GROUP BY F.USER_ID ) B ON B.USER_ID = U.USER_ID
+    </select>
 </mapper>

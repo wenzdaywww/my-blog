@@ -2,6 +2,9 @@ package com.www.myblog.blog.service.browse;
 
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.AuthorDTO;
+import com.www.myblog.blog.data.dto.BlogArticleDTO;
+
+import java.util.List;
 
 /**
  * <p>@Description 匿名用户博客浏览Service接口 </p>
@@ -18,4 +21,11 @@ public interface IBlogBrowseService {
      * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.AuthorDTO>
      */
     ResponseDTO<AuthorDTO> findAuthorInfo(String userId);
+    /**
+     * <p>@Description 获取热门博客前10名单 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 19:24 </p>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     */
+    ResponseDTO<List<BlogArticleDTO>> findHotBlogRank();
 }

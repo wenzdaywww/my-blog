@@ -5,11 +5,15 @@ import com.www.common.pojo.dto.feign.UserInfoDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.dto.AuthorDTO;
+import com.www.myblog.blog.data.dto.BlogArticleDTO;
 import com.www.myblog.blog.data.mapper.BlogArticleMapper;
 import com.www.myblog.blog.service.browse.IBlogBrowseService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>@Description 匿名用户博客浏览Service </p>
@@ -23,6 +27,24 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     private IBaseFeignService baseFeignService;
     @Autowired
     private BlogArticleMapper blogArticleMapper;
+
+    /**
+     * <p>@Description 获取热门博客前10名单 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 19:24 </p>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     */
+    @Override
+    public ResponseDTO<List<BlogArticleDTO>> findHotBlogRank() {
+        List<BlogArticleDTO> list = blogArticleMapper.findHotBlogRank();
+        if(CollectionUtils.isNotEmpty(list)){
+            for (int i = 0; i < list.size(); i++){
+                BlogArticleDTO dto = list.get(i);
+                dto.setBlogTheme((i+1) + "、" + dto.getBlogTheme());
+            }
+        }
+        return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,list);
+    }
 
     /**
      * <p>@Description 查询博主信息 </p>

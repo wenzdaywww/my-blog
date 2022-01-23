@@ -50,7 +50,7 @@
       <el-row class="margin-top10">
         <el-col :span="1"></el-col>
         <el-col :span="20">
-          <el-button style="width: 100%" size="mini" round>{{isFan ? "取消关注" : "关注"}}</el-button>
+          <el-button v-if="followFlag" style="width: 100%" size="mini" round @click="followAuthor">{{isFan ? "取消关注" : "关注"}}</el-button>
         </el-col>
         <el-col :span="3"></el-col>
       </el-row>
@@ -61,6 +61,7 @@
 <script>
 import {getCurrentInstance, reactive, ref} from "vue";
 import utils from '../../utils/utils';
+import {ElMessage} from "element-plus";
 
 export default {
   name: "Author",
@@ -80,6 +81,8 @@ export default {
       comments : 0,
       collects : 0
     });
+    // 是否显示关注
+    let followFlag = ref(false);
     // 是否已关注
     const isFan = ref(false);
     // 获取博主信息
@@ -87,6 +90,7 @@ export default {
       if(authorId){
         request.$http.get("api/blog/browse/author/"+authorId,null).then(function (res) {
           if(res.code === 200){
+            followFlag.value = authorId != localStorage.getItem("userId");
             author.userName = res.data.userName;
             author.photo = res.data.photo;
             author.age = res.data.age;
@@ -100,7 +104,22 @@ export default {
       }
     }
     getAuthorInfo();
-    return {author,isFan};
+    // 关注博主
+    const followAuthor = () => {
+      if(utils.isLogin()){
+        if(authorId){
+          request.$http.get("api/blog/user/follow/"+authorId,null).then(function (res) {
+            if(res.code === 200){
+              //TODO 2022/1/23 19:17 关注/取消博主待后面开放
+              ElMessage.success('关注成功');
+            }
+          });
+        }
+      }else {
+        ElMessage.info('请登录');
+      }
+    }
+    return {author,isFan,followFlag,followAuthor};
   }
 }
 </script>

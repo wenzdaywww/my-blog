@@ -10,8 +10,8 @@ export default {
     },
     /** 获取cookie中的值 **/
     getCookie(name) {
-        var arr;
-        var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        let arr;
+        let reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
         if (arr = document.cookie.match(reg)){
             return (arr[2]);
         }else{
@@ -21,5 +21,10 @@ export default {
     /** 获取cookie中的token值 **/
     getToken() {
         return this.getCookie("access_token");
+    },
+    /** 已登录 **/
+    isLogin() {
+        let token = this.getCookie("access_token");
+        return token ? true : false;
     }
 }

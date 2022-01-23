@@ -2,9 +2,12 @@ package com.www.myblog.blog.data.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.www.myblog.blog.data.dto.AuthorDTO;
+import com.www.myblog.blog.data.dto.BlogArticleDTO;
 import com.www.myblog.blog.data.entity.BlogArticleEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>@Description 博客文章Mapper </p>
@@ -14,6 +17,13 @@ import org.apache.ibatis.annotations.Param;
  */
 @Mapper
 public interface BlogArticleMapper extends BaseMapper<BlogArticleEntity> {
+    /**
+     * <p>@Description 获取热门博客前10名单 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 19:24 </p>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     */
+    List<BlogArticleDTO> findHotBlogRank();
     /**
      * <p>@Description 查询博主的相关统计信息 </p>
      * <p>@Author www </p>
