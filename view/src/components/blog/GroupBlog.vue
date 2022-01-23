@@ -8,7 +8,7 @@
     </template>
     <el-row class="group-row" v-for="item in groupBlog">
       <el-col :span="12"><div class="grid-content bg-purple">{{item.name}}</div></el-col>
-      <el-col :span="12"><div class="grid-content bg-purple-light">{{item.num}}</div></el-col>
+      <el-col :span="12"><div class="grid-content bg-purple-light text-center">{{item.num}}</div></el-col>
     </el-row>
   </el-card>
   <!-- 博客分类 -->
@@ -20,7 +20,7 @@
     </template>
     <el-row class="class-row" v-for="item in classBlog">
       <el-col :span="12"><div class="grid-content bg-purple">{{item.name}}</div></el-col>
-      <el-col :span="12"><div class="grid-content bg-purple-light">{{item.num}}</div></el-col>
+      <el-col :span="12"><div class="grid-content bg-purple-light text-center">{{item.num}}</div></el-col>
     </el-row>
   </el-card>
 </template>
@@ -65,19 +65,21 @@ export default {
 </script>
 
 <style scoped>
+.text-center{
+  text-align: center;
+}
 .class-card{
   margin-left: 10px;
   margin-bottom: 20px;
   border-radius: 8px;
-  width: 50%;
+  width: 360px;
 }
 .group-card{
   margin-left: 10px;
   margin-bottom: 20px;
   border-radius: 8px;
-  width: 50%;
+  width: 360px;
 }
-
 .class-row{
   margin-top: 0px;
   margin-bottom: 0px;

@@ -1,5 +1,5 @@
 <template>
-  <el-card shadow="hover" class="info-card">
+  <el-card class="info-card">
     <template #header>
       <div class="clearfix">
         <div class="info-image">
@@ -135,7 +135,7 @@ export default {
   margin-right: 10px;
   border-radius: 8px;
   margin-bottom: 20px;
-  width: 50%;
+  width: 360px;
   float: right;
 }
 .info-image {

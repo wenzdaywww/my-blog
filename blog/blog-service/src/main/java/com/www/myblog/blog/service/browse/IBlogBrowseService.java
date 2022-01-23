@@ -14,6 +14,14 @@ import java.util.List;
  */
 public interface IBlogBrowseService {
     /**
+     * <p>@Description 获取博主博客列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 21:37 </p>
+     * @param queryDTO 查询条件
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     */
+    ResponseDTO<List<BlogArticleDTO>> findAuthorBlogList(BlogArticleDTO queryDTO);
+    /**
      * <p>@Description 查询博主信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:14 </p>

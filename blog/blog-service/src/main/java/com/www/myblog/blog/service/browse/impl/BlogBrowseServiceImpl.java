@@ -1,5 +1,6 @@
 package com.www.myblog.blog.service.browse.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.feign.base.IBaseFeignService;
 import com.www.common.pojo.dto.feign.UserInfoDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
@@ -12,6 +13,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
@@ -27,6 +29,31 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     private IBaseFeignService baseFeignService;
     @Autowired
     private BlogArticleMapper blogArticleMapper;
+
+    /**
+     * <p>@Description 获取博主博客列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 21:37 </p>
+     * @param queryDTO 查询条件
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     */
+    @Override
+    public ResponseDTO<List<BlogArticleDTO>> findAuthorBlogList(BlogArticleDTO queryDTO) {
+        ResponseDTO<List<BlogArticleDTO>> response = new ResponseDTO<>();
+        if(queryDTO == null || StringUtils.isBlank(queryDTO.getUserId())){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客列表失败，博主ID为空",null);
+            return response;
+        }
+        Page<BlogArticleDTO> page = new Page<>(queryDTO.getPageNum(),queryDTO.getPageSize());
+        //TODO 2022/1/23 23:07 博客内容返回待处理，mapper暂注释
+        page = blogArticleMapper.findAuthorBlogList(page,queryDTO);
+        List<BlogArticleDTO> blogList =  page.getRecords();
+        response.setPageNum(queryDTO.getPageNum());
+        response.setPageSize(queryDTO.getPageSize());
+        response.setTotalNum(page.getTotal());
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,blogList);
+        return response;
+    }
 
     /**
      * <p>@Description 获取热门博客前10名单 </p>

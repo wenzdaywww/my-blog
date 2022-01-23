@@ -1,6 +1,7 @@
 package com.www.myblog.blog.data.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.dto.BlogArticleDTO;
 import com.www.myblog.blog.data.entity.BlogArticleEntity;
@@ -17,6 +18,14 @@ import java.util.List;
  */
 @Mapper
 public interface BlogArticleMapper extends BaseMapper<BlogArticleEntity> {
+    /**
+     * <p>@Description 获取博主博客列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 21:37 </p>
+     * @param queryDTO 查询条件
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     */
+    Page<BlogArticleDTO> findAuthorBlogList(Page<BlogArticleDTO> page, @Param("query") BlogArticleDTO queryDTO);
     /**
      * <p>@Description 获取热门博客前10名单 </p>
      * <p>@Author www </p>

@@ -33,11 +33,11 @@ let routes = [
                 component: () => import ("../views/blog/UserBlog.vue")
             },{
                 path: "/article",
-                name: "Article",
+                name: "BlogArticle",
                 meta: {
                     title: '博客文章'
                 },
-                component: () => import ("../views/blog/Article.vue")
+                component: () => import ("../views/blog/Blog.vue")
             }
         ]
     },{

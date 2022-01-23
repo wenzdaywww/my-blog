@@ -42,4 +42,15 @@ public class BlogBrowseController {
     public ResponseDTO<List<BlogArticleDTO>> findHotBlogRank(){
         return blogBrowseService.findHotBlogRank();
     }
+    /**
+     * <p>@Description 获取博主博客列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 21:37 </p>
+     * @param query 查询条件
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     */
+    @PostMapping("list")
+    public ResponseDTO<List<BlogArticleDTO>> findAuthorBlogList(BlogArticleDTO query){
+        return blogBrowseService.findAuthorBlogList(query);
+    }
 }

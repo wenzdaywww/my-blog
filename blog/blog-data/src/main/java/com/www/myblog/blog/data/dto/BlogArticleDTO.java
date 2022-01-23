@@ -1,13 +1,8 @@
 package com.www.myblog.blog.data.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,6 +14,10 @@ import java.util.List;
 @Data
 public class BlogArticleDTO implements Serializable {
     private static final long serialVersionUID = 1L;
+    /** 当前页数 **/
+    private Integer pageNum;
+    /** 页面条数 **/
+    private Integer pageSize;
     /**
     * 博客主键
     */
@@ -28,9 +27,13 @@ public class BlogArticleDTO implements Serializable {
      */
     private Long bgId;
     /**
-     * 博客分类主键
+     * 博客分类主键集合
      */
     private List<Long> classIds;
+    /**
+     * 博客分类主键
+     */
+    private Long classId;
     /**
     * 用户ID
     */
@@ -46,7 +49,7 @@ public class BlogArticleDTO implements Serializable {
     /**
     * 博客浏览量
     */
-    private Long blogViews;
+    private Long blogView;
     /**
     * 博客点赞数
     */
@@ -59,5 +62,9 @@ public class BlogArticleDTO implements Serializable {
     * 博客评论数
     */
     private Long blogComment;
+    /**
+    * 博客评论数
+    */
+    private Long blogCollect;
 
 }

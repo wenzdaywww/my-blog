@@ -15,6 +15,27 @@
         <result column="UPDATE_TIME" property="updateTime" />
         <result column="CREATE_TIME" property="createTime" />
     </resultMap>
+    <!--    获取博主博客列表-->
+    <select id="findAuthorBlogList" resultType="com.www.myblog.blog.data.dto.BlogArticleDTO">
+        SELECT A.BLOG_ID,
+               A.BLOG_THEME,
+<!--               A.BLOG_CONTENT,-->
+               A.BLOG_VIEW,
+               A.BLOG_COMMENT,
+               A.BLOG_LIKE,
+               IFNULL( CO.BLOG_COLLECT, 0 ) BLOG_COLLECT,
+               DATE_FORMAT(A.CREATE_TIME,'%Y-%m-%d') CREATE_TIME
+        FROM (SELECT B.BLOG_ID,B.BLOG_THEME,B.BLOG_CONTENT,B.BLOG_VIEW,B.BLOG_COMMENT,B.BLOG_LIKE,B.CREATE_TIME FROM BLOG_ARTICLE B WHERE B.USER_ID = #{query.userId}) A
+        LEFT JOIN (SELECT BC.BLOG_ID,COUNT( BC.COLLECT_ID ) BLOG_COLLECT FROM BLOG_COLLECT BC GROUP BY BC.BLOG_ID) CO ON CO.BLOG_ID = A.BLOG_ID
+        <where>
+            <if test="query.classId != null">
+               AND EXISTS ( SELECT 1 FROM BLOG_CLASS C WHERE C.USER_ID = #{query.userId} AND C.CLASS_ID = #{query.classId} AND C.BLOG_ID = A.BLOG_ID )
+            </if>
+            <if test="query.bgId != null">
+                AND EXISTS ( SELECT 1 FROM USER_BLOG_GROUP G WHERE G.USER_ID = #{query.userId} AND G.BG_ID = #{query.bgId} AND G.BLOG_ID = A.BLOG_ID )
+            </if>
+        </where>
+    </select>
     <!-- 获取热门博客前10名单-->
     <select id="findHotBlogRank" resultType="com.www.myblog.blog.data.dto.BlogArticleDTO">
         SELECT B.BLOG_ID,B.BLOG_THEME FROM BLOG_ARTICLE B ORDER BY B.BLOG_VIEW DESC,B.BLOG_ID LIMIT 10

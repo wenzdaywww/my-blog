@@ -3,16 +3,18 @@
     <span class="span-title"><b>最新博客</b></span>
   </el-card>
   <el-card class="blog-card" v-for="item in blogList">
-    <img :src="item.img" class="image" />
     <div class="blog-detail">
-      <el-link class="blog-title" type="primary" @click="showBlogDetail(item.blogId)">{{item.blogTheme}}</el-link>
+      <el-link :href="item.blogId ? '/article?id=' + item.blogId : '#'" class="blog-title"
+               target="_blank" type="primary" @click="showBlogDetail(item.blogId)">{{item.blogTheme}}</el-link>
       <div class="bottom card-header">
         <el-row class="el-row">
-          <span class="blog-article">{{item.blogContent}}</span>
+          <div>
+            {{item.blogContent}}
+          </div>
         </el-row>
         <el-row class="el-row">
           <div style="width: 50%;">
-            <i class="el-icon-view color-grad">{{item.blogViews}}</i>
+            <i class="el-icon-view color-grad">{{item.blogView}}</i>
             <i class="el-icon-star-on color-grad padding-left10">{{item.blogLike}}</i>
             <i class="el-icon-chat-dot-round color-grad padding-left10">{{item.blogComment}}</i>
           </div>
@@ -33,29 +35,36 @@
 <script>
 import {getCurrentInstance, reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
+import utils from "../../utils/utils";
 export default {
-  name: "index",
+  name: "blogList",
   setup() {
     // 接口请求
     const request = getCurrentInstance().appContext.config.globalProperties;
+    //博主id
+    const authorId = utils.getUrlParam("id");
+    //查询条件
     const query = reactive({
+      userId: authorId,
+      classId: "",
+      bgId: "",
       pageNum: 1,
       pageSize: 10,
       pageTotal: 1
     });
     // 博客列表数据
-    let blogList = ref([
-      {
-        blogId: "1",
-        img: "src/assets/img/img.jpg",
-        blogTheme: "你真的理解什么是财富自由吗？",
-        blogContent: "正确做好任何一件事情的前提是清晰、正确的理解目标。而事实是，我们很多人很多时候根本没有对目标正确的定义，甚至根本从来没有想过，只是大家都那么做而已,正确做好任何一件事情的前提是清晰、正确的......",
-        blogViews: 1,
-        blogLike: 123,
-        blogComment: 456,
-        createTime: "2021-01-01 21:21:00"
+    let blogList = ref([]);
+    const getBlogList = () => {
+      if(query.userId){
+        request.$http.post("api/blog/browse/list/",query).then(function (res) {
+          if(res.code === 200){
+            blogList.value = res.data;
+            query.pageTotal = res.totalNum;
+          }
+        });
       }
-    ]);
+    }
+    getBlogList();
     // 获取用户数据
     const showBlogDetail = (blogId) => {
       ElMessage.success(blogId);
@@ -63,9 +72,10 @@ export default {
     // 分页导航
     const handlePageChange = (val) => {
       query.pageNum = val;
+      getBlogList();
     };
     return { query,blogList,showBlogDetail,handlePageChange };
-  },
+  }
 };
 </script>
 
