@@ -26,16 +26,7 @@ export default {
     // 接口请求
     const request = getCurrentInstance().appContext.config.globalProperties;
     // 热门博客数据
-    let hotBlog = ref([
-      {
-        blogId: "1",
-        blogTheme: "1、你真的理解什么是财富自由吗？"
-      },
-      {
-        blogId: "2",
-        blogTheme: "2、你真的理解什么是财富自由吗？"
-      }
-    ]);
+    let hotBlog = ref([]);
     // 文字超长设置省略号
     const ellipsis = (value) => {
       if (!value) return "";
@@ -59,13 +50,6 @@ export default {
 </script>
 
 <style scoped>
-.hot-card{
-  margin-left: 10px;
-  margin-right: 10px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  width: 50%;
-}
 .float-left{
   margin-left: 10px;
   margin-right: 10px;
@@ -81,10 +65,6 @@ export default {
   margin-bottom: 20px;
   width: 50%;
   float: right;
-}
-.span-title{
-  font-size: 20px;
-  margin-bottom: 10px;
 }
 .hot-row{
   margin-top: 0px;
