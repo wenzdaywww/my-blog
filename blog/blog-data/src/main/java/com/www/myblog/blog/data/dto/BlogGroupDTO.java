@@ -22,6 +22,10 @@ public class BlogGroupDTO implements Serializable {
     */
     private String groupName;
     /**
+    * 分组博客数量
+    */
+    private String groupNum;
+    /**
     * 用户ID
     */
     private Long userId;

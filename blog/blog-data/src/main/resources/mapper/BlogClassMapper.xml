@@ -11,4 +11,14 @@
     <result column="UPDATE_TIME" property="updateTime" />
     <result column="CREATE_TIME" property="createTime" />
   </resultMap>
+  <!--  获取博主博客分类列表-->
+  <select id="findAuthorBlogClass" resultType="com.www.myblog.blog.data.dto.ClassificationDTO">
+    SELECT F.CLASS_ID,
+           F.CLASS_NAME,
+           COUNT(F.BLOG_ID) CLASS_NUM
+    FROM (SELECT A.BLOG_ID,IFNULL(D.CLASS_ID,-1) CLASS_ID,IFNULL(D.CLASS_NAME,'未分类') CLASS_NAME FROM
+         (SELECT B.BLOG_ID FROM BLOG_ARTICLE B WHERE B.USER_ID = #{userId} AND B.STATE_CD = '1') A
+    LEFT JOIN (SELECT C.CLASS_ID,C.CLASS_NAME,BG.BLOG_ID FROM CLASSIFICATION C,BLOG_CLASS BG WHERE BG.USER_ID = #{userId} AND BG.CLASS_ID=C.CLASS_ID) D ON D.BLOG_ID=A.BLOG_ID) F
+    GROUP BY F.CLASS_ID,F.CLASS_NAME ORDER BY F.CLASS_ID DESC
+  </select>
 </mapper>

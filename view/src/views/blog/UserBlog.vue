@@ -12,12 +12,12 @@
         </el-col>
         <el-col :span="10">
           <!-- 博客列表 -->
-          <blog-list/>
+          <blog-list ref="blogListRef"/>
         </el-col>
         <el-col :span="7">
           <div class="grid-content bg-purple">
             <!-- 博客分组 -->
-            <group-blog/>
+            <group-blog @findBlogGroup="findBlogGroup" @findBlogClass="findBlogClass"/>
           </div>
         </el-col>
       </el-row>
@@ -29,7 +29,8 @@ import groupBlog from "../../components/blog/GroupBlog.vue";
 import hotBlog from "../../components/blog/HotBlog.vue";
 import author from "../../components/blog/Author.vue";
 import blogList from "../../components/blog/BlogList.vue";
-import {provide} from "vue";
+import {provide, ref} from "vue";
+import {ElMessage} from "element-plus";
 
 export default {
   components: {
@@ -37,7 +38,17 @@ export default {
   },
   setup() {
     provide("float_type","float-right");//设置hotBlog样式
-    return {};
+    //博客列表对象
+    const blogListRef = ref();
+    // 获取博主博客分组groupId的列表--供子组件调用
+    const findBlogGroup = (groupId,title) => {
+      blogListRef.value.findBlogGroup(groupId,title);
+    }
+    // 获取博主博客分类classId的列表--供子组件调用
+    const findBlogClass = (classId,title) => {
+      blogListRef.value.findBlogClass(classId,title);
+    }
+    return {blogListRef,findBlogGroup,findBlogClass};
   },
 };
 </script>

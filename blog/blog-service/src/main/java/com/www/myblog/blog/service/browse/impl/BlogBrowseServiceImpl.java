@@ -7,7 +7,12 @@ import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.dto.BlogArticleDTO;
+import com.www.myblog.blog.data.dto.BlogGroupDTO;
+import com.www.myblog.blog.data.dto.ClassificationDTO;
 import com.www.myblog.blog.data.mapper.BlogArticleMapper;
+import com.www.myblog.blog.data.mapper.BlogClassMapper;
+import com.www.myblog.blog.data.mapper.BlogGroupMapper;
+import com.www.myblog.blog.data.mapper.UserBlogGroupMapper;
 import com.www.myblog.blog.service.browse.IBlogBrowseService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +34,48 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     private IBaseFeignService baseFeignService;
     @Autowired
     private BlogArticleMapper blogArticleMapper;
+    @Autowired
+    private UserBlogGroupMapper userBlogGroupMapper;
+    @Autowired
+    private BlogClassMapper blogClassMapper;
 
+
+    /**
+     * <p>@Description 获取博主博客分类列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 21:37 </p>
+     * @param userId 博主ID
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
+     */
+    @Override
+    public ResponseDTO<List<ClassificationDTO>> findAuthorBlogClass(String userId) {
+        ResponseDTO<List<ClassificationDTO>> response = new ResponseDTO<>();
+        if(StringUtils.isBlank(userId)){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客分类列表，博主ID为空",null);
+            return response;
+        }
+        List<ClassificationDTO> list = blogClassMapper.findAuthorBlogClass(userId);
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,list);
+        return response;
+    }
+    /**
+     * <p>@Description 获取博主博客分组列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 21:37 </p>
+     * @param userId 博主ID
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
+     */
+    @Override
+    public ResponseDTO<List<BlogGroupDTO>> findAuthorBlogGroup(String userId) {
+        ResponseDTO<List<BlogGroupDTO>> response = new ResponseDTO<>();
+        if(StringUtils.isBlank(userId)){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客分组列表失败，博主ID为空",null);
+            return response;
+        }
+        List<BlogGroupDTO> list = userBlogGroupMapper.findAuthorBlogGroup(userId);
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,list);
+        return response;
+    }
     /**
      * <p>@Description 获取博主博客列表 </p>
      * <p>@Author www </p>

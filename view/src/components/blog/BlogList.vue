@@ -1,34 +1,39 @@
 <template>
   <el-card>
-    <span class="span-title"><b>最新博客</b></span>
+    <span class="span-title">{{query.title}}</span>
   </el-card>
-  <el-card class="blog-card" v-for="item in blogList">
-    <div class="blog-detail">
-      <el-link :href="item.blogId ? '/article?id=' + item.blogId : '#'" class="blog-title"
-               target="_blank" type="primary" @click="showBlogDetail(item.blogId)">{{item.blogTheme}}</el-link>
-      <div class="bottom card-header">
-        <el-row class="el-row">
-          <div>
-            {{item.blogContent}}
-          </div>
-        </el-row>
-        <el-row class="el-row">
-          <div style="width: 50%;">
-            <i class="el-icon-view color-grad">{{item.blogView}}</i>
-            <i class="el-icon-star-on color-grad padding-left10">{{item.blogLike}}</i>
-            <i class="el-icon-chat-dot-round color-grad padding-left10">{{item.blogComment}}</i>
-          </div>
-          <div style="width: 50%">
-            <span class="blog-time color-grad">{{item.createTime}}</span>
-          </div>
-        </el-row>
+  <div v-if="blogList.length > 0">
+    <el-card class="blog-card" v-for="item in blogList">
+      <div class="blog-detail">
+        <el-link :href="item.blogId ? '/article?id=' + item.blogId : '#'" class="blog-title"
+                 target="_blank" type="primary" @click="showBlogDetail(item.blogId)">{{item.blogTheme}}</el-link>
+        <div class="bottom card-header">
+          <el-row class="el-row">
+            <div>
+              {{item.blogContent}}
+            </div>
+          </el-row>
+          <el-row class="el-row">
+            <div style="width: 50%;">
+              <i class="el-icon-view color-grad">{{item.blogView}}</i>
+              <i class="el-icon-star-on color-grad padding-left10">{{item.blogLike}}</i>
+              <i class="el-icon-chat-dot-round color-grad padding-left10">{{item.blogComment}}</i>
+            </div>
+            <div style="width: 50%">
+              <span class="blog-time color-grad">{{item.createTime}}</span>
+            </div>
+          </el-row>
+        </div>
       </div>
+    </el-card>
+    <div class="pagination">
+      <el-pagination background layout="total, prev, pager, next" :current-page="query.pageNum"
+                     :page-size="query.pageSize" :total="query.pageTotal" @current-change="handlePageChange">
+      </el-pagination>
     </div>
-  </el-card>
-  <div class="pagination">
-    <el-pagination background layout="total, prev, pager, next" :current-page="query.pageNum"
-                   :page-size="query.pageSize" :total="query.pageTotal" @current-change="handlePageChange">
-    </el-pagination>
+  </div>
+  <div v-if="blogList.length == 0 " class="no-blog">
+    没有博客信息
   </div>
 </template>
 
@@ -45,9 +50,10 @@ export default {
     const authorId = utils.getUrlParam("id");
     //查询条件
     const query = reactive({
+      title: "最新博客",
       userId: authorId,
-      classId: "",
-      bgId: "",
+      classId: 0,
+      bgId: 0,
       pageNum: 1,
       pageSize: 10,
       pageTotal: 1
@@ -74,15 +80,32 @@ export default {
       query.pageNum = val;
       getBlogList();
     };
-    return { query,blogList,showBlogDetail,handlePageChange };
+    // 获取博主博客分组groupId的列表
+    const findBlogGroup = (groupId,title) => {
+      query.title = title;
+      query.bgId = groupId;
+      query.classId = 0;
+      query.pageNum = 1;
+      getBlogList();
+    };
+    // 获取博主博客分类classId的列表
+    const findBlogClass = (classId,title) => {
+      query.title = title;
+      query.bgId = 0;
+      query.classId = classId;
+      query.pageNum = 1;
+      getBlogList();
+    };
+    return { query,blogList,showBlogDetail,handlePageChange,findBlogGroup,findBlogClass};
   }
 };
 </script>
 
 <style scoped>
+.span-title{
+  font-weight: bold;
+}
 .blog-card{
-  border-radius: 8px;
-  margin-bottom: 3px;
 }
 .image{
   float: right;
@@ -115,5 +138,9 @@ export default {
 }
 .padding-left10{
   padding-left: 10px;
+}
+.no-blog{
+  text-align: center;
+  margin-top: 10px;
 }
 </style>

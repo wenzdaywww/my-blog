@@ -3,6 +3,8 @@ package com.www.myblog.blog.controller.browse;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.dto.BlogArticleDTO;
+import com.www.myblog.blog.data.dto.BlogGroupDTO;
+import com.www.myblog.blog.data.dto.ClassificationDTO;
 import com.www.myblog.blog.service.browse.IBlogBrowseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -52,5 +54,27 @@ public class BlogBrowseController {
     @PostMapping("list")
     public ResponseDTO<List<BlogArticleDTO>> findAuthorBlogList(BlogArticleDTO query){
         return blogBrowseService.findAuthorBlogList(query);
+    }
+    /**
+     * <p>@Description 获取博主博客分组列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 21:37 </p>
+     * @param userId 博主ID
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
+     */
+    @GetMapping("group/{id}")
+    public ResponseDTO<List<BlogGroupDTO>> findAuthorBlogGroup(@PathVariable("id") String userId){
+        return blogBrowseService.findAuthorBlogGroup(userId);
+    }
+    /**
+     * <p>@Description 获取博主博客分类列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 21:37 </p>
+     * @param userId 博主ID
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
+     */
+    @GetMapping("class/{id}")
+    public ResponseDTO<List<ClassificationDTO>> findAuthorBlogClass(@PathVariable("id") String userId){
+        return blogBrowseService.findAuthorBlogClass(userId);
     }
 }

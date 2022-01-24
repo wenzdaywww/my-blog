@@ -8,9 +8,10 @@
     </template>
     <el-row class="hot-row" v-for="item in hotBlog">
       <el-col>
-        <el-tooltip class="item" effect="light" :content="item.blogTheme" placement="bottom">
+        <el-tooltip v-if="item.blogTheme.length >= 30" class="item" effect="light" :content="item.blogTheme" placement="bottom">
           <el-link :href="item.blogId ? '/article?id=' + item.blogId : '#'" target="_blank" type="primary">{{ellipsis(item.blogTheme)}}</el-link>
         </el-tooltip>
+        <el-link v-if="item.blogTheme.length < 30" :href="item.blogId ? '/article?id=' + item.blogId : '#'" target="_blank" type="primary">{{ellipsis(item.blogTheme)}}</el-link>
       </el-col>
     </el-row>
   </el-card>

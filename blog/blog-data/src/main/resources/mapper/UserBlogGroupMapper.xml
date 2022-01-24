@@ -11,4 +11,14 @@
     <result column="UPDATE_TIME" property="updateTime" />
     <result column="CREATE_TIME" property="createTime" />
   </resultMap>
+  <!--  获取博主博客分组列表-->
+  <select id="findAuthorBlogGroup" resultType="com.www.myblog.blog.data.dto.BlogGroupDTO">
+    SELECT D.BG_ID,
+           D.GROUP_NAME,
+           COUNT(D.BLOG_ID) GROUP_NUM
+    FROM (SELECT A.BLOG_ID,IFNULL(C.BG_ID,-1) BG_ID,IFNULL(C.GROUP_NAME,'未分组') GROUP_NAME FROM
+         (SELECT B.BLOG_ID FROM BLOG_ARTICLE B WHERE B.USER_ID = #{userId} AND B.STATE_CD = '1') A
+    LEFT JOIN (SELECT G.BG_ID,G.GROUP_NAME,UG.BLOG_ID FROM BLOG_GROUP G,USER_BLOG_GROUP UG WHERE G.USER_ID = #{userId} AND UG.BG_ID=G.BG_ID) C ON C.BLOG_ID=A.BLOG_ID) D
+    GROUP BY D.BG_ID,D.GROUP_NAME ORDER BY D.BG_ID DESC
+  </select>
 </mapper>

@@ -25,5 +25,9 @@ public class ClassificationDTO implements Serializable {
     * 分类名称
     */
     private String className;
+    /**
+    * 分类博客数量
+    */
+    private String classNum;
 
 }

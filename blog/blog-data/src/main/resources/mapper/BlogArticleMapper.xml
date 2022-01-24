@@ -25,20 +25,26 @@
                A.BLOG_LIKE,
                IFNULL( CO.BLOG_COLLECT, 0 ) BLOG_COLLECT,
                DATE_FORMAT(A.CREATE_TIME,'%Y-%m-%d') CREATE_TIME
-        FROM (SELECT B.BLOG_ID,B.BLOG_THEME,B.BLOG_CONTENT,B.BLOG_VIEW,B.BLOG_COMMENT,B.BLOG_LIKE,B.CREATE_TIME FROM BLOG_ARTICLE B WHERE B.USER_ID = #{query.userId}) A
+        FROM (SELECT B.BLOG_ID,B.BLOG_THEME,B.BLOG_CONTENT,B.BLOG_VIEW,B.BLOG_COMMENT,B.BLOG_LIKE,B.CREATE_TIME FROM BLOG_ARTICLE B WHERE B.USER_ID = #{query.userId} AND B.STATE_CD = '1') A
         LEFT JOIN (SELECT BC.BLOG_ID,COUNT( BC.COLLECT_ID ) BLOG_COLLECT FROM BLOG_COLLECT BC GROUP BY BC.BLOG_ID) CO ON CO.BLOG_ID = A.BLOG_ID
         <where>
-            <if test="query.classId != null">
+            <if test="query.classId != null and query.classId > 0">
                AND EXISTS ( SELECT 1 FROM BLOG_CLASS C WHERE C.USER_ID = #{query.userId} AND C.CLASS_ID = #{query.classId} AND C.BLOG_ID = A.BLOG_ID )
             </if>
-            <if test="query.bgId != null">
+            <if test="query.bgId != null and query.bgId > 0">
                 AND EXISTS ( SELECT 1 FROM USER_BLOG_GROUP G WHERE G.USER_ID = #{query.userId} AND G.BG_ID = #{query.bgId} AND G.BLOG_ID = A.BLOG_ID )
+            </if>
+            <if test="query.classId != null and query.classId lt 0">
+                AND NOT EXISTS ( SELECT 1 FROM BLOG_CLASS C WHERE C.USER_ID = #{query.userId} AND C.BLOG_ID = A.BLOG_ID )
+            </if>
+            <if test="query.bgId != null and query.bgId lt 0">
+                AND NOT EXISTS ( SELECT 1 FROM USER_BLOG_GROUP G WHERE G.USER_ID = #{query.userId} AND G.BLOG_ID = A.BLOG_ID )
             </if>
         </where>
     </select>
     <!-- 获取热门博客前10名单-->
     <select id="findHotBlogRank" resultType="com.www.myblog.blog.data.dto.BlogArticleDTO">
-        SELECT B.BLOG_ID,B.BLOG_THEME FROM BLOG_ARTICLE B ORDER BY B.BLOG_VIEW DESC,B.BLOG_ID LIMIT 10
+        SELECT B.BLOG_ID,B.BLOG_THEME FROM BLOG_ARTICLE B WHERE B.STATE_CD = '1' ORDER BY B.BLOG_VIEW DESC,B.BLOG_ID LIMIT 10
     </select>
     <!--  查询博主的相关统计信息-->
     <select id="findAuthorCount" resultType="com.www.myblog.blog.data.dto.AuthorDTO">
@@ -53,7 +59,7 @@
                      LEFT JOIN (SELECT B.USER_ID,
                                        COUNT( B.BLOG_ID ) BLOGS,
                                        SUM( B.BLOG_LIKE ) LIKES,
-                                       SUM( B.BLOG_COMMENT ) COMMENTS FROM BLOG_ARTICLE B  WHERE B.USER_ID = #{userId} GROUP BY B.USER_ID) g ON g.USER_ID = U.USER_ID
+                                       SUM( B.BLOG_COMMENT ) COMMENTS FROM BLOG_ARTICLE B  WHERE B.USER_ID = #{userId} AND B.STATE_CD = '1' GROUP BY B.USER_ID) g ON g.USER_ID = U.USER_ID
                      LEFT JOIN ( SELECT C.USER_ID, COUNT( C.COLLECT_ID ) COLLECTS FROM BLOG_COLLECT C WHERE C.USER_ID = #{userId} GROUP BY C.USER_ID ) D ON D.USER_ID = u.USER_ID
                      LEFT JOIN ( SELECT L.USER_ID, COUNT( L.UF_ID ) FANS FROM USER_FANS L WHERE L.USER_ID = #{userId} GROUP BY L.USER_ID ) A ON A.USER_ID = U.USER_ID
                      LEFT JOIN ( SELECT F.USER_ID, COUNT( F.UF_ID ) FOLLOW FROM USER_FANS F WHERE F.FANS_ID = #{userId} GROUP BY F.USER_ID ) B ON B.USER_ID = U.USER_ID

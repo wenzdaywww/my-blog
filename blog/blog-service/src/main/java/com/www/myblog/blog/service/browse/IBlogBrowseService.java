@@ -3,6 +3,8 @@ package com.www.myblog.blog.service.browse;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.dto.BlogArticleDTO;
+import com.www.myblog.blog.data.dto.BlogGroupDTO;
+import com.www.myblog.blog.data.dto.ClassificationDTO;
 
 import java.util.List;
 
@@ -13,6 +15,22 @@ import java.util.List;
  * <p>@Date 2022/1/23 15:17 </p>
  */
 public interface IBlogBrowseService {
+    /**
+     * <p>@Description 获取博主博客分类列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 21:37 </p>
+     * @param userId 博主ID
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
+     */
+    ResponseDTO<List<ClassificationDTO>> findAuthorBlogClass(String userId);
+    /**
+     * <p>@Description 获取博主博客分组列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 21:37 </p>
+     * @param userId 博主ID
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
+     */
+    ResponseDTO<List<BlogGroupDTO>> findAuthorBlogGroup(String userId);
     /**
      * <p>@Description 获取博主博客列表 </p>
      * <p>@Author www </p>
