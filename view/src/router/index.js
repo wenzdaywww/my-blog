@@ -4,6 +4,9 @@ const modules = import.meta.glob("../views/**/**.vue");// 接口请求
 let homeRouter = {
     path: "/",
     name: "Admin",
+    meta: {
+        title: '个人中心'
+    },
     component: () => import ("../views/admin/Home.vue"),
     children: []
 };

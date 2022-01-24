@@ -10,97 +10,121 @@
     <el-row :gutter="20">
       <!--  基础信息-->
       <el-col :span="12">
-        <el-row class="mgb20">
-          <el-col :span="8">
-            <el-card shadow="hover" :body-style="{ padding: '0px'}" class="num-card">
-              <div class="grid-content grid-con-1">
-                <i class="el-icon-user grid-con-icon"></i>
-                <div class="grid-cont-right">
-                  <div class="grid-num">{{user.follows}}</div>
-                  <div>关注</div>
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-          <el-col :span="8">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }" class="num-card">
-              <div class="grid-content grid-con-2">
-                <i class="el-icon-s-custom grid-con-icon"></i>
-                <div class="grid-cont-right">
-                  <div class="grid-num">{{user.fans}}</div>
-                  <div>粉丝</div>
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-          <el-col :span="8">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }" class="num-card">
-              <div class="grid-content grid-con-3">
-                <i class="el-icon-tickets grid-con-icon"></i>
-                <div class="grid-cont-right">
-                  <div class="grid-num">{{user.blogs}}</div>
-                  <div>博客</div>
-                </div>
-              </div>
-            </el-card>
-          </el-col>
-        </el-row>
         <el-row>
-          <el-card shadow="hover" class="info-card">
+          <el-card class="info-card el-col-crad">
             <template #header>
               <div class="clearfix">
                 <span>基本信息</span>
               </div>
             </template>
             <div class="info">
-              <div class="user-info">
-                <div class="info-image" @click="showDialog">
-                  <img :src="user.photo" class="user-avator" alt/>
-                  <span class="info-edit">
+              <el-row>
+                <div class="user-info">
+                  <div class="info-image" @click="showDialog">
+                    <img :src="user.photo" class="user-avator" alt/>
+                    <span class="info-edit">
                   <i class="el-icon-lx-camerafill"></i>
                 </span>
+                  </div>
                 </div>
-              </div>
+              </el-row>
               <div class="user-info-list">
-                个性签名： <span>{{ user.brief }}</span>
+                <el-row>
+                  <el-col :span="4">
+                    <el-link href="#" type="primary">
+                      <div class="grid-cont-right">
+                        <div class="grid-num">{{user.blogs}}</div>
+                        博客
+                      </div>
+                    </el-link>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-link href="#" type="primary">
+                      <div class="grid-cont-right">
+                        <div class="grid-num">{{user.follows}}</div>
+                        <div>关注</div>
+                      </div>
+                    </el-link>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-link href="#" type="primary">
+                      <div class="grid-cont-right">
+                        <div class="grid-num">{{user.fans}}</div>
+                        <div>粉丝</div>
+                      </div>
+                    </el-link>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-link href="#" type="primary">
+                      <div class="grid-cont-right">
+                        <div class="grid-num">{{user.likes}}</div>
+                        <div>获赞</div>
+                      </div>
+                    </el-link>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-link href="#" type="primary">
+                      <div class="grid-cont-right">
+                        <div class="grid-num">{{user.comments}}</div>
+                        <div>评论</div>
+                      </div>
+                    </el-link>
+                  </el-col>
+                  <el-col :span="4">
+                    <el-link href="#" type="primary">
+                      <div class="grid-cont-right">
+                        <div class="grid-num">{{user.collects}}</div>
+                        <div>收藏</div>
+                      </div>
+                    </el-link>
+                  </el-col>
+                </el-row>
               </div>
             </div>
           </el-card>
         </el-row>
       </el-col>
       <!-- 账户编辑-->
-      <el-col :span="12">
-        <el-card shadow="hover">
+      <el-col :span="12" class="el-col-crad">
+        <el-card>
           <template #header>
             <div class="clearfix">
               <span>信息修改</span>
             </div>
           </template>
           <el-form label-width="90px" :model="user" :rules="editRules" ref="editForm">
-            <el-form-item label="用户ID："> {{ user.userId }} </el-form-item>
-            <el-form-item label="用户名称" prop="userName">
-              <el-input v-model="user.userName" maxlength="100" placeholder="请输入用户名称"></el-input>
+            <el-form-item label-width="20%" label="用户ID："> {{ user.userId }} </el-form-item>
+            <el-form-item label-width="20%" label="用户名称：" prop="userName">
+              <el-input v-if="openEdit" v-model="user.userName" maxlength="100" placeholder="请输入用户名称"></el-input>
+              <span v-else="openEdit">{{ user.userName }}</span>
             </el-form-item>
-            <el-form-item label="性别">
-              <el-radio v-model="user.sex" label="1">男</el-radio>
-              <el-radio v-model="user.sex" label="0">女</el-radio>
+            <el-form-item label-width="20%" label="性别：">
+              <el-radio v-if="openEdit" v-model="user.sex" label="1">男</el-radio>
+              <el-radio v-if="openEdit" v-model="user.sex" label="0">女</el-radio>
+              <span v-else="openEdit">{{ user.sex ? (user.sex === '1' ? '男' : '女') : '未知'}}</span>
             </el-form-item>
-            <el-form-item label="手机号" prop="phoneNum">
-              <el-input v-model="user.phoneNum" maxlength="11" placeholder="请输入手机号码"
+            <el-form-item label-width="20%" label="手机号：" prop="phoneNum">
+              <el-input v-if="openEdit" v-model="user.phoneNum" maxlength="11" placeholder="请输入手机号码"
                         οninput="value=value.replace(/[^\d]/g,'');if(value.length > 11)value = value.slice(0, 11)"></el-input>
+              <span v-else="openEdit">{{ user.phoneNum }}</span>
             </el-form-item>
-            <el-form-item label="生日">
-              <el-date-picker v-model="user.birthday" type="date" value-format="YYYY-MM-DD" format="YYYY年MM月DD日" placeholder="请选择出生日期" style="width: 100%">
+            <el-form-item label-width="20%" label="生日：">
+              <el-date-picker v-if="openEdit" v-model="user.birthday" type="date" value-format="YYYY-MM-DD" format="YYYY年MM月DD日" placeholder="请选择出生日期" style="width: 100%">
               </el-date-picker>
+              <span v-else="openEdit">{{ user.birthday }}</span>
             </el-form-item>
-            <el-form-item label="邮箱" prop="email">
-              <el-input v-model="user.email" maxlength="100" placeholder="请输入邮箱地址"></el-input>
+            <el-form-item label-width="20%" label="邮箱：" prop="email">
+              <el-input v-if="openEdit" v-model="user.email" maxlength="100" placeholder="请输入邮箱地址"></el-input>
+              <span v-else="openEdit">{{ user.email }}</span>
             </el-form-item>
-            <el-form-item label="个性签名：">
-              <el-input v-model="user.brief" maxlength="100" placeholder="请输入个性签名"></el-input>
+            <el-form-item label-width="20%" label="个性签名：">
+              <el-input v-if="openEdit" v-model="user.brief" maxlength="100" placeholder="请输入个性签名"></el-input>
+              <span v-else="openEdit">{{ user.brief }}</span>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="onSubmit">保存</el-button>
+              <el-button v-if="openEdit" type="primary" @click="onSubmit">保存</el-button>
+              <el-link href="javascript:void(0);" type="primary" @click="openEdit ? openEdit = false : openEdit = true"
+                       style="margin-left: 20px;" :underline=false>{{openEdit ? '取消编辑' : '编辑'}}</el-link>
             </el-form-item>
           </el-form>
         </el-card>
@@ -182,12 +206,16 @@ export default {
       brief : "",
       follows : 0,
       fans : 0,
-      blogs : 0
+      blogs : 0,
+      likes : 0,
+      comments : 0,
+      collects : 0
     });
     // 获取用户数据
     const getUserData = () => {
       request.$http.get("api/base/user/info",null).then(function (res) {
         if(res.code === 200){
+          user.userId = res.data.userId;
           user.userName = res.data.userName;
           user.phoneNum = res.data.phoneNum;
           user.birthday = res.data.birthday;
@@ -205,9 +233,12 @@ export default {
     const getUserCount = () => {
       request.$http.get("api/blog/user/count",null).then(function (res) {
         if(res.code === 200){
+          user.blogs = res.data.blogs;
           user.follows = res.data.follows;
           user.fans = res.data.fans;
-          user.blogs = res.data.blogs;
+          user.likes = res.data.likes;
+          user.comments = res.data.comments;
+          user.collects = res.data.collects;
         }
       });
     };
@@ -229,6 +260,8 @@ export default {
         }
       });
     };
+    //打开编辑
+    const openEdit = ref(false);
     //图片上传弹出控制位
     const dialogVisible = ref(false);
     //选择的图片
@@ -299,7 +332,7 @@ export default {
       }
       return new File([ia], fileName, { type: mime });
     };
-    return { editRules, editForm, user, onSubmit, cropper, imgSrc, cropImg,
+    return { openEdit,editRules, editForm, user, onSubmit, cropper, imgSrc, cropImg,
       showDialog, dialogVisible, setImage, cropImage, uploadImg
     };
   },
@@ -372,7 +405,6 @@ export default {
   flex: 1;
   text-align: center;
   font-size: 14px;
-  color: #999;
 }
 .grid-num {
   font-size: 30px;
@@ -409,8 +441,8 @@ export default {
 }
 .user-info-list {
   font-size: 14px;
-  color: #999;
   line-height: 25px;
+  margin-top: 20px;
 }
 .user-avator {
   width: 120px;
@@ -423,8 +455,14 @@ export default {
   padding-bottom: 20px;
   border-bottom: 2px solid #ccc;
   margin-bottom: 20px;
+  width: 100%;
 }
-.num-card{
-  margin-right: 5px;
+.el-col-crad{
+  height: 600px;
+}
+.grid-num {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 </style>

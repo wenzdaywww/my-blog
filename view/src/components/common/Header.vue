@@ -1,9 +1,9 @@
 <template>
-  <div class="header">
+  <div class="header header-color">
     <!-- 折叠按钮 -->
     <div v-if="isAdmin" class="collapse-btn" @click="collapseChage">
-      <i v-if="!collapse" class="el-icon-s-fold"></i>
-      <i v-else class="el-icon-s-unfold"></i>
+      <i v-if="!collapse" class="el-icon-s-fold" style="color: black"></i>
+      <i v-else class="el-icon-s-unfold" style="color: black"></i>
     </div>
     <div class="logo header-item" @click="handleCommand('blog-index')">博客</div>
     <div class="header-right">
@@ -16,14 +16,14 @@
       <!-- 已登录 -->
       <div class="header-user-con" v-if="isLogin == true">
         <!-- 消息中心 -->
-        <div class="btn-bell">
-          <el-tooltip effect="dark" :content="form.message?`有${form.message}条未读消息`:`消息中心`" placement="bottom">
-            <router-link to="/news">
-              <i class="el-icon-bell"></i>
-            </router-link>
-          </el-tooltip>
-          <span class="btn-bell-badge" v-if="form.message"></span>
-        </div>
+<!--        <div class="btn-bell">-->
+<!--          <el-tooltip effect="dark" :content="form.message?`有${form.message}条未读消息`:`消息中心`" placement="bottom">-->
+<!--            <router-link to="/news">-->
+<!--              <i class="el-icon-bell"></i>-->
+<!--            </router-link>-->
+<!--          </el-tooltip>-->
+<!--          <span class="btn-bell-badge" v-if="form.message"></span>-->
+<!--        </div>-->
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" trigger="hover" @command="handleCommand">
           <!-- 用户头像 -->
@@ -183,19 +183,32 @@ export default {
 };
 </script>
 <style scoped>
+body {
+  background-color: #f3f5f5;
+}
 .header {
   position: relative;
   box-sizing: border-box;
   width: 100%;
   height: 70px;
   font-size: 22px;
-  color: #fff;
+  color: #fffffa;
+}
+.header-color{
+  background-color: white;
 }
 .collapse-btn {
   float: left;
   padding: 0 21px;
   cursor: pointer;
   line-height: 70px;
+}
+.collapse-btn:hover {
+  float: left;
+  padding: 0 21px;
+  cursor: pointer;
+  line-height: 70px;
+  background-color: #f0f0f5;
 }
 .header .logo {
   margin-left: 10px;
@@ -254,13 +267,14 @@ export default {
   color: red;
 }
 .header-item{
+  color: black;
   font-size: 18px;
   width: auto;
   padding-left: 8px;
   padding-right: 8px;
 }
 .header-item:hover {
-  background-color: #a19f9f;
+  background-color: #f0f0f5;
 }
 .red{
   color: red;

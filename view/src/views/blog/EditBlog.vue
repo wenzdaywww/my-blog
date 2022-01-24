@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-calendar"></i> 发布博客
+          <i class="el-icon-edit"></i> 发布博客
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -193,6 +193,9 @@ export default {
 </script>
 
 <style>
+body {
+  background-color: #f3f5f5;
+}
 .w-e-text-container {
   height: 600px;
 }

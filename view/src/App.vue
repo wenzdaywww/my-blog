@@ -9,4 +9,7 @@ export default {};
 <style>
 @import "./assets/css/main.css";
 @import "./assets/css/color-dark.css";
+body {
+  background-color: #f3f5f5;
+}
 </style>

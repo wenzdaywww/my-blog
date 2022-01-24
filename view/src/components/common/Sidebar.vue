@@ -1,7 +1,6 @@
 <template>
-  <div class="sidebar">
-    <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157"
-             text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened router>
+  <div class="sidebar" style="margin-top: 5px;">
+    <el-menu class="sidebar-el-menu el-menu-vertical-demo" :collapse="collapse" :default-active="onRoutes" unique-opened router>
       <template v-for="item in items">
         <template v-if="item.subMenu">
           <el-submenu :index="item.menuUrl" :key="item.menuUrl">
@@ -87,6 +86,7 @@ export default {
   bottom: 0;
   overflow-y: scroll;
   background-color: #46a1ff;
+  margin-top: 10px;
 }
 .sidebar::-webkit-scrollbar {
   width: 0;

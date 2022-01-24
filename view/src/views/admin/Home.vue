@@ -44,3 +44,8 @@ export default {
     },
 };
 </script>
+<style>
+body {
+  background: url("src/assets/img/backgroup.webp");
+}
+</style>

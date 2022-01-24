@@ -53,5 +53,7 @@ export default {
 };
 </script>
 <style>
-
+body {
+  background-color: #f3f5f5;
+}
 </style>
