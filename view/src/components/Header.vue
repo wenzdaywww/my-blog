@@ -52,11 +52,11 @@
 import {computed, getCurrentInstance, onMounted, reactive, ref, inject, provide} from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
-import utils from '../../utils/utils';
+import utils from '../utils/utils';
 import {ElMessage} from "element-plus";
-import {initUserRouter} from "../../router";
-import Register from "../../views/admin/Register.vue";
-import Password from "../../views/admin/Password.vue";
+import {initUserRouter} from "../router";
+import Register from "../views/admin/Register.vue";
+import Password from "../views/admin/Password.vue";
 
 export default {
   name: "Header",

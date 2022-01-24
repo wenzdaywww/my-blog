@@ -62,7 +62,7 @@
 
 <script>
 import {getCurrentInstance, reactive, ref} from "vue";
-import utils from '../../utils/utils';
+import utils from '../../../utils/utils';
 import {ElMessage} from "element-plus";
 
 export default {

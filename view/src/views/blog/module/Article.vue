@@ -10,7 +10,7 @@
 <script>
 import WangEditor from "wangEditor";
 import {getCurrentInstance, onBeforeUnmount, onMounted, reactive, ref} from "vue";
-import utils from "../../utils/utils";
+import utils from "../../../utils/utils";
 
 export default {
   name: "article",

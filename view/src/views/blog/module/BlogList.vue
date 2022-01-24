@@ -40,7 +40,7 @@
 <script>
 import {getCurrentInstance, reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
-import utils from "../../utils/utils";
+import utils from "../../../utils/utils";
 export default {
   name: "blogList",
   setup() {

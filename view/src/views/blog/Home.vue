@@ -8,7 +8,7 @@
 </template>
 <script>
 import {provide} from "vue";
-import vHeader from "../../components/common/Header.vue";
+import vHeader from "../../components/Header.vue";
 
 export default {
   components: {

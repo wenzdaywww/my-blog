@@ -25,10 +25,10 @@
   </div>
 </template>
 <script>
-import groupBlog from "../../components/blog/GroupBlog.vue";
-import hotBlog from "../../components/blog/HotBlog.vue";
-import author from "../../components/blog/Author.vue";
-import blogArticle from "../../components/blog/Article.vue";
+import groupBlog from "./module/GroupBlog.vue";
+import hotBlog from "./module/HotBlog.vue";
+import author from "./module/Author.vue";
+import blogArticle from "./module/Article.vue";
 import {provide} from "vue";
 
 export default {

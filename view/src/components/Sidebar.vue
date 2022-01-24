@@ -38,7 +38,7 @@
 import {computed, ref, getCurrentInstance, reactive} from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import utils from "../../utils/utils";
+import utils from "../utils/utils";
 
 export default {
   setup() {

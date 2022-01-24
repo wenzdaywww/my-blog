@@ -20,8 +20,8 @@
   </div>
 </template>
 <script>
-import hotBlog from "../../components/blog/HotBlog.vue";
-import blogList from "../../components/blog/BlogList.vue";
+import hotBlog from "./module/HotBlog.vue";
+import blogList from "./module/BlogList.vue";
 import {provide} from "vue";
 
 export default {

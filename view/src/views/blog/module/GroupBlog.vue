@@ -49,7 +49,7 @@
 
 <script>
 import {getCurrentInstance, ref,defineEmit } from "vue";
-import utils from "../../utils/utils";
+import utils from "../../../utils/utils";
 import {ElMessage} from "element-plus";
 
 export default {
