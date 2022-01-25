@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.www.myblog.blog.data.mapper.BlogTagMapper">
+  <resultMap id="BaseResultMap" type="com.www.myblog.blog.data.entity.BlogTagEntity">
+    <!--@mbg.generated-->
+    <!--@Table BLOG_TAG-->
+    <id column="BT_ID" property="btId" />
+    <result column="BLOG_ID" property="blogId" />
+    <result column="USER_ID" property="userId" />
+    <result column="TAG_ID" property="tagId" />
+    <result column="UPDATE_TIME" property="updateTime" />
+    <result column="CREATE_TIME" property="createTime" />
+  </resultMap>
+  <!--  根据博客ID查询博客分类-->
+  <select id="findBlogTag" resultType="com.www.myblog.blog.data.dto.BlogTagDTO">
+    SELECT B.TAG_ID,C.TAG_NAME FROM BLOG_TAG B,TAG_INFO C WHERE C.TAG_ID=B.TAG_ID AND B.BLOG_ID = #{blogId}
+  </select>
+  <!--  获取博主博客分类列表-->
+  <select id="findAuthorBlogTag" resultType="com.www.myblog.blog.data.dto.TagInfoDTO">
+    SELECT F.TAG_ID,
+           F.TAG_NAME,
+           COUNT(F.BLOG_ID) TAG_NUM
+    FROM (SELECT A.BLOG_ID,IFNULL(D.TAG_ID,-1) TAG_ID,IFNULL(D.TAG_NAME,'未标记') TAG_NAME FROM
+         (SELECT B.BLOG_ID FROM BLOG_ARTICLE B WHERE B.USER_ID = #{userId} AND B.STATE_CD = '1') A
+    LEFT JOIN (SELECT C.TAG_ID,C.TAG_NAME,BG.BLOG_ID FROM TAG_INFO C,BLOG_TAG BG WHERE BG.USER_ID = #{userId} AND BG.TAG_ID=C.TAG_ID) D ON D.BLOG_ID=A.BLOG_ID) F
+    GROUP BY F.TAG_ID,F.TAG_NAME ORDER BY F.TAG_ID DESC
+  </select>
+</mapper>

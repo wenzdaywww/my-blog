@@ -4,7 +4,7 @@ import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.dto.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
-import com.www.myblog.blog.data.dto.ClassificationDTO;
+import com.www.myblog.blog.data.dto.TagInfoDTO;
 
 import java.util.List;
 
@@ -16,6 +16,14 @@ import java.util.List;
  */
 public interface IBlogBrowseService {
     /**
+     * <p>@Description 根据博客ID查询博客信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/25 21:21 </p>
+     * @param blogId 博客ID
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     */
+    ResponseDTO<BlogArticleDTO> findAriticle(Long blogId);
+    /**
      * <p>@Description 获取博主博客分类列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
@@ -23,7 +31,7 @@ public interface IBlogBrowseService {
      * @param blogId 博客ID
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
      */
-    ResponseDTO<List<ClassificationDTO>> findAuthorBlogClass(String userId,Long blogId);
+    ResponseDTO<List<TagInfoDTO>> findAuthorBlogTag(String userId, Long blogId);
     /**
      * <p>@Description 获取博主博客分组列表 </p>
      * <p>@Author www </p>

@@ -1,6 +1,6 @@
 <template>
   <el-card>
-    <span class="span-title">{{query.title}}</span>
+    <span class="span-title">{{ query.listTitle }}</span>
   </el-card>
   <div v-if="blogList.length > 0">
     <el-card class="blog-card" v-for="item in blogList">
@@ -21,7 +21,7 @@
               <i class="el-icon-lx-comment color-grad padding-left10">{{item.comment}}</i>
             </div>
             <div style="width: 50%">
-              <span class="blog-time color-grad">{{item.createTime}}</span>
+              <span class="blog-time color-grad">{{item.createDate}}</span>
             </div>
           </el-row>
         </div>
@@ -51,10 +51,10 @@ export default {
     const authorId = utils.getUrlParam("id");
     //查询条件
     const query = reactive({
-      title: "最新博客",
+      listTitle: "最新博客",
       userId: authorId,
-      classId: 0,
-      bgId: 0,
+      tagId: 0,
+      groupId: 0,
       pageNum: 1,
       pageSize: 10,
       pageTotal: 1
@@ -83,21 +83,21 @@ export default {
     };
     // 获取博主博客分组groupId的列表
     const findBlogGroup = (groupId,title) => {
-      query.title = title;
-      query.bgId = groupId;
-      query.classId = 0;
+      query.listTitle = title;
+      query.groupId = groupId;
+      query.tagId = 0;
       query.pageNum = 1;
       getBlogList();
     };
-    // 获取博主博客分类classId的列表
-    const findBlogClass = (classId,title) => {
-      query.title = title;
-      query.bgId = 0;
-      query.classId = classId;
+    // 获取博主博客分类tagId的列表
+    const findBlogTag = (tagId,title) => {
+      query.listTitle = title;
+      query.groupId = 0;
+      query.tagId = tagId;
       query.pageNum = 1;
       getBlogList();
     };
-    return { query,blogList,showBlogDetail,handlePageChange,findBlogGroup,findBlogClass};
+    return { query,blogList,showBlogDetail,handlePageChange,findBlogGroup,findBlogTag};
   }
 };
 </script>

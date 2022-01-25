@@ -4,7 +4,7 @@ import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.dto.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
-import com.www.myblog.blog.data.dto.ClassificationDTO;
+import com.www.myblog.blog.data.dto.TagInfoDTO;
 import com.www.myblog.blog.service.browse.IBlogBrowseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +23,17 @@ public class BlogBrowseController {
     @Autowired
     private IBlogBrowseService blogBrowseService;
 
+    /**
+     * <p>@Description 根据博客ID查询博客信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/25 21:21 </p>
+     * @param blogId 博客ID
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     */
+    @GetMapping("article/{bid}")
+    public ResponseDTO<BlogArticleDTO> findAriticle(@PathVariable("bid") Long blogId){
+        return blogBrowseService.findAriticle(blogId);
+    }
     /**
      * <p>@Description 查询博主信息 </p>
      * <p>@Author www </p>
@@ -69,15 +80,15 @@ public class BlogBrowseController {
         return blogBrowseService.findAuthorBlogGroup(id,bid);
     }
     /**
-     * <p>@Description 获取博主博客分类列表 </p>
+     * <p>@Description 获取博主博客标签列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param id 博主ID
      * @param bid 博客ID
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.TagInfoDTO>>
      */
-    @GetMapping("class")
-    public ResponseDTO<List<ClassificationDTO>> findAuthorBlogClass(String id,Long bid){
-        return blogBrowseService.findAuthorBlogClass(id,bid);
+    @GetMapping("tag")
+    public ResponseDTO<List<TagInfoDTO>> findAuthorBlogTag(String id, Long bid){
+        return blogBrowseService.findAuthorBlogTag(id,bid);
     }
 }

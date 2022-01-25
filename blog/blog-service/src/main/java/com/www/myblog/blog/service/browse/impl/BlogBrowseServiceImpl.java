@@ -5,14 +5,11 @@ import com.www.common.feign.base.IBaseFeignService;
 import com.www.common.pojo.dto.feign.UserInfoDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.utils.DateUtils;
-import com.www.myblog.blog.data.dto.AuthorDTO;
-import com.www.myblog.blog.data.dto.BlogArticleDTO;
-import com.www.myblog.blog.data.dto.BlogGroupDTO;
-import com.www.myblog.blog.data.dto.ClassificationDTO;
+import com.www.myblog.blog.data.dto.*;
 import com.www.myblog.blog.data.entity.BlogArticleEntity;
 import com.www.myblog.blog.data.mapper.BlogArticleMapper;
-import com.www.myblog.blog.data.mapper.BlogClassMapper;
-import com.www.myblog.blog.data.mapper.UserBlogGroupMapper;
+import com.www.myblog.blog.data.mapper.BlogTagMapper;
+import com.www.myblog.blog.data.mapper.BlogGroupMapper;
 import com.www.myblog.blog.service.browse.IBlogBrowseService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -34,10 +31,36 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     @Autowired
     private BlogArticleMapper blogArticleMapper;
     @Autowired
-    private UserBlogGroupMapper userBlogGroupMapper;
+    private BlogGroupMapper userBlogGroupMapper;
     @Autowired
-    private BlogClassMapper blogClassMapper;
+    private BlogTagMapper blogClassMapper;
 
+
+    /**
+     * <p>@Description 根据博客ID查询博客信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/25 21:21 </p>
+     * @param blogId 博客ID
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     */
+    @Override
+    public ResponseDTO<BlogArticleDTO> findAriticle(Long blogId) {
+        ResponseDTO<BlogArticleDTO> response = new ResponseDTO<>();
+        if(blogId == null){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"根据博客ID查询博客信息，博客ID为空",null);
+            return response;
+        }
+        BlogArticleDTO articleDTO = blogArticleMapper.findArticle(blogId);
+        if(articleDTO == null){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"根据博客ID查询博客信息，博客不存在",null);
+            return response;
+        }
+        //根据博客ID查询博客分类
+        List<BlogTagDTO> classList = blogClassMapper.findBlogTag(blogId);
+        articleDTO.setBlogTag(classList);
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,articleDTO);
+        return response;
+    }
 
     /**
      * <p>@Description 获取博主博客分类列表 </p>
@@ -48,8 +71,8 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
      */
     @Override
-    public ResponseDTO<List<ClassificationDTO>> findAuthorBlogClass(String userId,Long blogId) {
-        ResponseDTO<List<ClassificationDTO>> response = new ResponseDTO<>();
+    public ResponseDTO<List<TagInfoDTO>> findAuthorBlogTag(String userId, Long blogId) {
+        ResponseDTO<List<TagInfoDTO>> response = new ResponseDTO<>();
         if(StringUtils.isBlank(userId) && blogId == null){
             response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客分类列表，博主ID或博客ID为空",null);
             return response;
@@ -62,7 +85,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
             }
             userId = articleEntity.getUserId();
         }
-        List<ClassificationDTO> list = blogClassMapper.findAuthorBlogClass(userId);
+        List<TagInfoDTO> list = blogClassMapper.findAuthorBlogTag(userId);
         response.setResponse(ResponseDTO.RespEnum.SUCCESS,list);
         return response;
     }
@@ -127,12 +150,6 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     @Override
     public ResponseDTO<List<BlogArticleDTO>> findHotBlogRank() {
         List<BlogArticleDTO> list = blogArticleMapper.findHotBlogRank();
-        if(CollectionUtils.isNotEmpty(list)){
-            for (int i = 0; i < list.size(); i++){
-                BlogArticleDTO dto = list.get(i);
-                dto.setTitle((i+1) + "、" + dto.getTitle());
-            }
-        }
         return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,list);
     }
 

@@ -19,6 +19,14 @@ import java.util.List;
 @Mapper
 public interface BlogArticleMapper extends BaseMapper<BlogArticleEntity> {
     /**
+     * <p>@Description 根据博客ID查询博客信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/25 21:21 </p>
+     * @param blogId 博客ID
+     * @return com.www.myblog.blog.data.dto.BlogArticleDTO
+     */
+    BlogArticleDTO findArticle(Long blogId);
+    /**
      * <p>@Description 获取博主博客列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>

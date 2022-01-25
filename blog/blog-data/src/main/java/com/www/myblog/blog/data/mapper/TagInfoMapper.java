@@ -1,8 +1,8 @@
 package com.www.myblog.blog.data.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.www.myblog.blog.data.dto.ClassificationDTO;
-import com.www.myblog.blog.data.entity.ClassificationEntity;
+import com.www.myblog.blog.data.dto.TagInfoDTO;
+import com.www.myblog.blog.data.entity.TagInfoEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -14,12 +14,12 @@ import java.util.List;
  * <p>@Date 2021/11/10 23:07 </p>
  */
 @Mapper
-public interface ClassificationMapper extends BaseMapper<ClassificationEntity> {
+public interface TagInfoMapper extends BaseMapper<TagInfoEntity> {
     /**
-     * <p>@Description 查询所有博客分类 </p>
+     * <p>@Description 查询所有博客标签 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/22 19:12 </p>
      * @return java.util.List<com.www.myblog.blog.data.dto.ClassificationDTO>
      */
-    List<ClassificationDTO> findAllBlogClass();
+    List<TagInfoDTO> findAllBlogTag();
 }

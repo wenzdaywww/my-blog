@@ -11,7 +11,7 @@
         <el-tooltip v-if="item.title.length >= 30" class="item" effect="light" :content="item.title" placement="bottom">
           <el-link :href="item.blogId ? '/article?bid=' + item.blogId : '#'" target="_blank" type="primary">{{ellipsis(item.title)}}</el-link>
         </el-tooltip>
-        <el-link v-if="item.title.length < 30" :href="item.blogId ? '/article?bid=' + item.blogId : '#'" target="_blank" type="primary">{{ellipsis(item.title)}}</el-link>
+        <el-link v-if="item.title.length < 30" :href="item.blogId ? '/article?bid=' + item.blogId : '#'" target="_blank" type="primary">{{ ellipsis(item.title)}}</el-link>
       </el-col>
     </el-row>
   </el-card>
@@ -31,8 +31,8 @@ export default {
     // 文字超长设置省略号
     const ellipsis = (value) => {
       if (!value) return "";
-      if (value.length > 30) {
-        return value.slice(0, 30) + "...";
+      if (value.length > 22) {
+        return value.slice(0, 22) + "...";
       }
       return value;
     }

@@ -10,20 +10,20 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
- * <p>@Description 博客分类信息 </p>
+ * <p>@Description 博客标签信息 </p>
  * <p>@Version 1.0 </p>
  * <p>@Author www </p>
  * <p>@Date 2021/11/10 23:07 </p>
  */
 @Data
-@TableName("BLOG_CLASS")
-public class BlogClassEntity implements Serializable {
+@TableName("BLOG_TAG")
+public class BlogTagEntity implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
-    * 博客分类主键
+    * 博客标签主键
     */
-    @TableId(value = "BC_ID",type = IdType.AUTO)
-    private Long bcId;
+    @TableId(value = "BT_ID",type = IdType.AUTO)
+    private Long btId;
     /**
     * 博客ID
     */
@@ -35,10 +35,10 @@ public class BlogClassEntity implements Serializable {
     @TableField("USER_ID")
     private String userId;
     /**
-    * 分类ID
+    * 标签ID
     */
-    @TableField("CLASS_ID")
-    private Long classId;
+    @TableField("TAG_ID")
+    private Long tagId;
     /**
     * 更新时间
     */

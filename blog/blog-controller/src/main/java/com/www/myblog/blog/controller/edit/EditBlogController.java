@@ -5,6 +5,8 @@ import com.www.common.pojo.constant.AuthorityContant;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
+import com.www.myblog.blog.data.dto.TagInfoDTO;
+import com.www.myblog.blog.service.classify.ITagInfoService;
 import com.www.myblog.blog.service.edit.IEditBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,7 +30,8 @@ public class EditBlogController {
     private JwtTokenConverter jwtTokenConverter;
     @Autowired
     private IEditBlogService editBlogService;
-
+    @Autowired
+    private ITagInfoService tagInfoService;
 
     /**
      * <p>@Description 查询当前登录的用户的博客分组列表 </p>
@@ -62,5 +65,15 @@ public class EditBlogController {
             blogText.setUserId(jwtTokenConverter.getUserId());
         }
         return editBlogService.createBlogArticle(blogText);
+    }
+    /**
+     * <p>@Description 查询所有博客分类 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/22 19:07 </p>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
+     */
+    @PostMapping("tag")
+    public ResponseDTO<List<TagInfoDTO>> findAllBlogClass(){
+        return tagInfoService.findAllBlogTag();
     }
 }

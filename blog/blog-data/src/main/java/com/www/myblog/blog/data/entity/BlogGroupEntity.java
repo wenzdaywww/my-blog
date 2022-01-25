@@ -25,15 +25,20 @@ public class BlogGroupEntity implements Serializable {
     @TableId(value = "BG_ID",type = IdType.AUTO)
     private Long bgId;
     /**
-    * 博客分组名称
-    */
-    @TableField("GROUP_NAME")
-    private String groupName;
+     * 分组ID
+     */
+    @TableField("GROUP_ID")
+    private Long groupId;
     /**
-    * 用户ID
-    */
+     * 用户ID
+     */
     @TableField("USER_ID")
     private String userId;
+    /**
+    * 博客ID
+    */
+    @TableField("BLOG_ID")
+    private Long blogId;
     /**
     * 更新时间
     */

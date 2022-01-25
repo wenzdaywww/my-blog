@@ -14,11 +14,11 @@ import java.io.Serializable;
 public class BlogGroupDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
-    * 博客分组主键
+    * 分组ID
     */
-    private Long bgId;
+    private Long groupId;
     /**
-    * 博客分组名称
+    * 分组名称
     */
     private String groupName;
     /**

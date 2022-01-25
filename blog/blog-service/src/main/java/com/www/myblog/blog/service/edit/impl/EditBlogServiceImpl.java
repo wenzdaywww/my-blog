@@ -27,15 +27,15 @@ import java.util.List;
 @Service
 public class EditBlogServiceImpl implements IEditBlogService {
     @Autowired
-    private BlogGroupMapper blogGroupMapper;
+    private GroupInfoMapper blogGroupMapper;
     @Autowired
     private BlogArticleMapper blogArticleMapper;
     @Autowired
-    private BlogClassMapper blogClassMapper;
+    private BlogTagMapper blogClassMapper;
     @Autowired
-    private ClassificationMapper classificationMapper;
+    private TagInfoMapper classificationMapper;
     @Autowired
-    private UserBlogGroupMapper userBlogGroupMapper;
+    private BlogGroupMapper userBlogGroupMapper;
 
     /**
      * <p>@Description 当前登录的用户创建博客文章 </p>
@@ -51,18 +51,18 @@ public class EditBlogServiceImpl implements IEditBlogService {
             response.setResponse(ResponseDTO.RespEnum.FAIL,"发布博客失败，信息不完整",null);
             return response;
         }
-        if(blog.getBgId() != null){
-            BlogGroupEntity groupEntity = blogGroupMapper.selectById(blog.getBgId());
+        if(blog.getGroupId() != null){
+            GroupInfoEntity groupEntity = blogGroupMapper.selectById(blog.getGroupId());
             if(groupEntity == null){
                 response.setResponse(ResponseDTO.RespEnum.FAIL,"发布博客失败，分组信息不存在",null);
                 return response;
             }
         }
-        if(CollectionUtils.isNotEmpty(blog.getClassIds())){
-            QueryWrapper<ClassificationEntity> wrapper = new QueryWrapper<>();
-            wrapper.lambda().in(ClassificationEntity::getClassId,blog.getClassIds());
-            List<ClassificationEntity> classList = classificationMapper.selectList(wrapper);
-            if(CollectionUtils.isEmpty(classList) || classList.size() != blog.getClassIds().size()){
+        if(CollectionUtils.isNotEmpty(blog.getTagIds())){
+            QueryWrapper<TagInfoEntity> wrapper = new QueryWrapper<>();
+            wrapper.lambda().in(TagInfoEntity::getTagId,blog.getTagIds());
+            List<TagInfoEntity> classList = classificationMapper.selectList(wrapper);
+            if(CollectionUtils.isEmpty(classList) || classList.size() != blog.getTagIds().size()){
                 response.setResponse(ResponseDTO.RespEnum.FAIL,"发布博客失败，分类信息不存在",null);
                 return response;
             }
@@ -80,22 +80,26 @@ public class EditBlogServiceImpl implements IEditBlogService {
         blogEntity.setCreateTime(DateUtils.getCurrentDateTime());
         blogArticleMapper.insert(blogEntity);
         //创建博客分组
-        UserBlogGroupEntity blogGroupEntity = new UserBlogGroupEntity();
-        blogGroupEntity.setBgId(blog.getBgId());
-        blogGroupEntity.setUserId(blog.getUserId());
-        blogGroupEntity.setBlogId(blogEntity.getBlogId());
-        blogGroupEntity.setUpdateTime(DateUtils.getCurrentDateTime());
-        blogGroupEntity.setCreateTime(DateUtils.getCurrentDateTime());
-        userBlogGroupMapper.insert(blogGroupEntity);
+        if(blog.getGroupId() != null){
+            BlogGroupEntity blogGroupEntity = new BlogGroupEntity();
+            blogGroupEntity.setGroupId(blog.getGroupId());
+            blogGroupEntity.setUserId(blog.getUserId());
+            blogGroupEntity.setBlogId(blogEntity.getBlogId());
+            blogGroupEntity.setUpdateTime(DateUtils.getCurrentDateTime());
+            blogGroupEntity.setCreateTime(DateUtils.getCurrentDateTime());
+            userBlogGroupMapper.insert(blogGroupEntity);
+        }
         //创建博客分类
-        for (Long classId : blog.getClassIds()){
-            BlogClassEntity blogClassEntity = new BlogClassEntity();
-            blogClassEntity.setBlogId(blogEntity.getBlogId());
-            blogClassEntity.setUserId(blog.getUserId());
-            blogClassEntity.setClassId(classId);
-            blogClassEntity.setUpdateTime(DateUtils.getCurrentDateTime());
-            blogClassEntity.setCreateTime(DateUtils.getCurrentDateTime());
-            blogClassMapper.insert(blogClassEntity);
+        if(CollectionUtils.isNotEmpty(blog.getTagIds())){
+            for (Long tagId : blog.getTagIds()){
+                BlogTagEntity blogClassEntity = new BlogTagEntity();
+                blogClassEntity.setBlogId(blogEntity.getBlogId());
+                blogClassEntity.setUserId(blog.getUserId());
+                blogClassEntity.setTagId(tagId);
+                blogClassEntity.setUpdateTime(DateUtils.getCurrentDateTime());
+                blogClassEntity.setCreateTime(DateUtils.getCurrentDateTime());
+                blogClassMapper.insert(blogClassEntity);
+            }
         }
         response.setResponse(ResponseDTO.RespEnum.SUCCESS,"发布博客成功",blogEntity.getBlogId());
         return response;
@@ -117,7 +121,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
             response.setMsg("新增分组失败，用户ID或分组名称为空");
             return response;
         }
-        BlogGroupEntity groupEntity = new BlogGroupEntity();
+        GroupInfoEntity groupEntity = new GroupInfoEntity();
         groupEntity.setUserId(userId);
         groupEntity.setGroupName(name);
         groupEntity.setUpdateTime(DateUtils.getCurrentDateTime());

@@ -17,7 +17,7 @@
         <el-col :span="7">
           <div class="grid-content bg-purple">
             <!-- 博客分组 -->
-            <group-blog @findBlogGroup="findBlogGroup" @findBlogClass="findBlogClass"/>
+            <group-blog @findBlogGroup="findBlogGroup" @findBlogTag="findBlogTag"/>
           </div>
         </el-col>
       </el-row>
@@ -43,11 +43,11 @@ export default {
     const findBlogGroup = (groupId,title) => {
       blogListRef.value.findBlogGroup(groupId,title);
     }
-    // 获取博主博客分类classId的列表--供子组件调用
-    const findBlogClass = (classId,title) => {
-      blogListRef.value.findBlogClass(classId,title);
+    // 获取博主博客分类tagId的列表--供子组件调用
+    const findBlogTag = (tagId,title) => {
+      blogListRef.value.findBlogTag(tagId,title);
     }
-    return {blogListRef,findBlogGroup,findBlogClass};
+    return {blogListRef,findBlogGroup,findBlogTag};
   },
 };
 </script>

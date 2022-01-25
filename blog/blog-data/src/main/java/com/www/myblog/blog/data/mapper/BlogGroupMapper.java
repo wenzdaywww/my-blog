@@ -17,11 +17,11 @@ import java.util.List;
 @Mapper
 public interface BlogGroupMapper extends BaseMapper<BlogGroupEntity> {
     /**
-     * <p>@Description 查询用户的博客分组列表 </p>
+     * <p>@Description 获取博主博客分组列表 </p>
      * <p>@Author www </p>
-     * <p>@Date 2022/1/22 18:34 </p>
-     * @param userId 用户ID
-     * @return java.util.List<com.www.myblog.blog.data.dto.BlogGroupDTO>
+     * <p>@Date 2022/1/23 21:37 </p>
+     * @param userId 博主ID
+     * @return java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>
      */
-    List<BlogGroupDTO> findBlogGroup(@Param("userId") String userId);
+    List<BlogGroupDTO> findAuthorBlogGroup(@Param("userId") String userId);
 }

@@ -20,16 +20,16 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="分类：">
-              <el-select v-model="blogText.classIds" placeholder="分类" multiple="true" class="handle-select mr10 blog-class">
-                <el-option v-for="item in classArr" :key="item.classId" :label="item.className" :value="item.classId"></el-option>
+            <el-form-item label="标签：">
+              <el-select v-model="blogText.tagIds" placeholder="分类" multiple="true" class="handle-select mr10 blog-class">
+                <el-option v-for="item in tagArr" :key="item.tagId" :label="item.tagName" :value="item.tagId"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="分组：">
-              <el-select v-model="blogText.bgId" placeholder="分组" class="handle-select mr10 blog-group">
-                <el-option v-for="item in groupArr" :key="item.bgId" :label="item.groupName" :value="item.bgId"></el-option>
+              <el-select v-model="blogText.groupId" placeholder="分组" class="handle-select mr10 blog-group">
+                <el-option v-for="item in groupArr" :key="item.groupId" :label="item.groupName" :value="item.groupId"></el-option>
               </el-select>
               <span class="add-group" @click="groupVisible=true">新增分组</span>
             </el-form-item>
@@ -68,8 +68,8 @@ export default {
   setup() {
     // 接口请求
     const request = getCurrentInstance().appContext.config.globalProperties;
-    // 博客分类列表
-    const classArr = ref([]);
+    // 标签列表
+    const tagArr = ref([]);
     // 博客分组列表
     const groupArr = ref([]);
     //博客编辑器对象
@@ -91,8 +91,8 @@ export default {
     //博客对象
     const blogText = reactive({
       title: "",
-      classIds:"",
-      bgId:"",
+      tagIds:"",
+      groupId:"",
       content: ""
     });
     // 是否显示新增分组弹窗
@@ -122,9 +122,9 @@ export default {
     });
     // 获取博客分类
     const getBlogClass = () => {
-      request.$http.post("api/blog/class/all",null).then(function (res) {
+      request.$http.post("api/blog/edit/tag",null).then(function (res) {
         if(res.code === 200){
-            classArr.value = res.data;
+            tagArr.value = res.data;
           }
       });
     }
@@ -185,7 +185,7 @@ export default {
       });
     };
     return {
-      submitDisabled,classArr,groupArr,editor,blogText,blogRules,blogForm,groupVisible,group,groupRules,groupForm,
+      submitDisabled,tagArr,groupArr,editor,blogText,blogRules,blogForm,groupVisible,group,groupRules,groupForm,
       submitBlog,addGroup
     };
   },

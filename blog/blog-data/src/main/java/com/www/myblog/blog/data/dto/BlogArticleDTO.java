@@ -3,6 +3,7 @@ package com.www.myblog.blog.data.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,15 +26,23 @@ public class BlogArticleDTO implements Serializable {
     /**
      * 博客分组主键
      */
-    private Long bgId;
+    private Long groupId;
     /**
-     * 博客分类主键集合
+     * 博客分组名称
      */
-    private List<Long> classIds;
+    private String groupName;
     /**
-     * 博客分类主键
+     * 标签ID集合
      */
-    private Long classId;
+    private List<Long> tagIds;
+    /**
+     * 博客分类集合
+     */
+    private List<BlogTagDTO> blogTag;
+    /**
+     * 标签ID
+     */
+    private Long tagId;
     /**
     * 用户ID
     */
@@ -55,9 +64,9 @@ public class BlogArticleDTO implements Serializable {
     */
     private Long praise;
     /**
-    * 博客创建时间
+    * 博客创建日期
     */
-    private String createTime;
+    private String createDate;
     /**
     * 博客评论数
     */
@@ -66,5 +75,8 @@ public class BlogArticleDTO implements Serializable {
     * 博客评论数
     */
     private Long collect;
-
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 }
