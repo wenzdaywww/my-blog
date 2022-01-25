@@ -6,18 +6,19 @@
     <el-card class="blog-card" v-for="item in blogList">
       <div class="blog-detail">
         <el-link :href="item.blogId ? '/article?id=' + item.blogId : '#'" class="blog-title"
-                 target="_blank" type="primary" @click="showBlogDetail(item.blogId)">{{item.blogTheme}}</el-link>
+                 target="_blank" type="primary" @click="showBlogDetail(item.blogId)">{{item.title}}</el-link>
         <div class="bottom card-header">
           <el-row class="el-row">
             <div>
-              {{item.blogContent}}
+              {{item.content}}
             </div>
           </el-row>
           <el-row class="el-row">
             <div style="width: 50%;">
-              <i class="el-icon-view color-grad">{{item.blogView}}</i>
-              <i class="el-icon-star-on color-grad padding-left10">{{item.blogLike}}</i>
-              <i class="el-icon-chat-dot-round color-grad padding-left10">{{item.blogComment}}</i>
+              <i class="el-icon-view color-grad">{{item.browse}}</i>
+              <i class="el-icon-lx-like color-grad padding-left10">{{item.praise}}</i>
+              <i class="el-icon-lx-favor color-grad padding-left10">{{item.collect}}</i>
+              <i class="el-icon-lx-comment color-grad padding-left10">{{item.comment}}</i>
             </div>
             <div style="width: 50%">
               <span class="blog-time color-grad">{{item.createTime}}</span>

@@ -1,6 +1,6 @@
 <template>
   <el-card>
-    <span class="span-title">{{ blog.blogTheme }}</span>
+    <span class="span-title">{{ blog.title }}</span>
   </el-card>
   <el-card class="blog-card">
     <div class="editor-div" ref="articleRef"></div>
@@ -24,8 +24,8 @@ export default {
     //博客文章信息
     let blog = reactive({
       blogId: 0,
-      blogTheme: "1234",
-      blogContent: ""
+      title: "1234",
+      content: ""
     });
     // 博客内容
     let articleEditor;

@@ -20,7 +20,7 @@
         <el-col :span="1"></el-col>
         <el-col :span="4">
           <div class="grid-cont-right">
-            <div class="grid-num">{{author.blogs}}</div>
+            <div class="grid-num">{{author.blog}}</div>
             <div>博客</div>
           </div>
         </el-col>
@@ -32,19 +32,19 @@
         </el-col>
         <el-col :span="4">
           <div class="grid-cont-right">
-            <div class="grid-num">{{author.likes}}</div>
+            <div class="grid-num">{{author.praise}}</div>
             <div>获赞</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="grid-cont-right">
-            <div class="grid-num">{{author.comments}}</div>
+            <div class="grid-num">{{author.comment}}</div>
             <div>评论</div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="grid-cont-right">
-            <div class="grid-num">{{author.collects}}</div>
+            <div class="grid-num">{{author.collect}}</div>
             <div>收藏</div>
           </div>
         </el-col>
@@ -77,11 +77,11 @@ export default {
       userName : "",
       photo : "src/assets/img/img.jpg",
       age : "",
-      blogs : 0,
+      blog : 0,
       fans : 0,
-      likes : 0,
-      comments : 0,
-      collects : 0
+      praise : 0,
+      comment : 0,
+      collect : 0
     });
     // 是否显示关注
     let followFlag = ref(false);
@@ -96,11 +96,11 @@ export default {
             author.userName = res.data.userName;
             author.photo = res.data.photo;
             author.age = res.data.age;
-            author.blogs = res.data.blogs;
+            author.blog = res.data.blog;
             author.fans = res.data.fans;
-            author.likes = res.data.likes;
-            author.comments = res.data.comments;
-            author.collects = res.data.collects;
+            author.praise = res.data.praise;
+            author.comment = res.data.comment;
+            author.collect = res.data.collect;
           }
         });
       }

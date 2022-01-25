@@ -22,7 +22,7 @@
             <el-col :span="4">
               <el-link href="#" type="primary">
                 <div class="grid-cont-right">
-                  <div class="grid-num">{{user.blogs}}</div>
+                  <div class="grid-num">{{user.blog}}</div>
                   博客
                 </div>
               </el-link>
@@ -30,7 +30,7 @@
             <el-col :span="4">
               <el-link href="#" type="primary">
                 <div class="grid-cont-right">
-                  <div class="grid-num">{{user.follows}}</div>
+                  <div class="grid-num">{{user.follow}}</div>
                   <div>关注</div>
                 </div>
               </el-link>
@@ -46,7 +46,7 @@
             <el-col :span="4">
               <el-link href="#" type="primary">
                 <div class="grid-cont-right">
-                  <div class="grid-num">{{user.likes}}</div>
+                  <div class="grid-num">{{user.praise}}</div>
                   <div>获赞</div>
                 </div>
               </el-link>
@@ -54,7 +54,7 @@
             <el-col :span="4">
               <el-link href="#" type="primary">
                 <div class="grid-cont-right">
-                  <div class="grid-num">{{user.comments}}</div>
+                  <div class="grid-num">{{user.comment}}</div>
                   <div>评论</div>
                 </div>
               </el-link>
@@ -62,7 +62,7 @@
             <el-col :span="4">
               <el-link href="#" type="primary">
                 <div class="grid-cont-right">
-                  <div class="grid-num">{{user.collects}}</div>
+                  <div class="grid-num">{{user.collect}}</div>
                   <div>收藏</div>
                 </div>
               </el-link>
@@ -103,12 +103,12 @@ export default {
     // 用户信息
     let user = reactive({
       photo : "src/assets/img/img.jpg",
-      follows : 0,
+      follow : 0,
       fans : 0,
-      blogs : 0,
-      likes : 0,
-      comments : 0,
-      collects : 0
+      blog : 0,
+      praise : 0,
+      comment : 0,
+      collect : 0
     });
     // 获取用户数据
     const getUserData = () => {
@@ -125,12 +125,12 @@ export default {
     const getUserCount = () => {
       request.$http.get("api/blog/user/count",null).then(function (res) {
         if(res.code === 200){
-          user.blogs = res.data.blogs;
-          user.follows = res.data.follows;
+          user.blog = res.data.blog;
+          user.follow = res.data.follow;
           user.fans = res.data.fans;
-          user.likes = res.data.likes;
-          user.comments = res.data.comments;
-          user.collects = res.data.collects;
+          user.praise = res.data.praise;
+          user.comment = res.data.comment;
+          user.collect = res.data.collect;
         }
       });
     };

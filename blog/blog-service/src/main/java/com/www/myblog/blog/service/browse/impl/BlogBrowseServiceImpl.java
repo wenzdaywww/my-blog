@@ -11,14 +11,12 @@ import com.www.myblog.blog.data.dto.BlogGroupDTO;
 import com.www.myblog.blog.data.dto.ClassificationDTO;
 import com.www.myblog.blog.data.mapper.BlogArticleMapper;
 import com.www.myblog.blog.data.mapper.BlogClassMapper;
-import com.www.myblog.blog.data.mapper.BlogGroupMapper;
 import com.www.myblog.blog.data.mapper.UserBlogGroupMapper;
 import com.www.myblog.blog.service.browse.IBlogBrowseService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 
@@ -113,7 +111,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
         if(CollectionUtils.isNotEmpty(list)){
             for (int i = 0; i < list.size(); i++){
                 BlogArticleDTO dto = list.get(i);
-                dto.setBlogTheme((i+1) + "、" + dto.getBlogTheme());
+                dto.setTitle((i+1) + "、" + dto.getTitle());
             }
         }
         return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,list);

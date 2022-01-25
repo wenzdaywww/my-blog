@@ -7,7 +7,7 @@
     <id column="COMMENT_ID" property="commentId" />
     <result column="BLOG_ID" property="blogId" />
     <result column="USER_ID" property="userId" />
-    <result column="LIKE_NUM" property="likeNum" />
+    <result column="PRAISE" property="praise" />
     <result column="COMMENT" property="comment" />
     <result column="PARENT_COM_ID" property="parentComId" />
     <result column="UPDATE_TIME" property="updateTime" />

@@ -47,7 +47,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
     @Override
     public ResponseDTO<Long> createBlogArticle(BlogArticleDTO blog) {
         ResponseDTO<Long> response = new ResponseDTO<>();
-        if(blog == null || StringUtils.isAnyBlank(blog.getUserId(),blog.getBlogTheme(),blog.getBlogContent())){
+        if(blog == null || StringUtils.isAnyBlank(blog.getUserId(),blog.getTitle(),blog.getContent())){
             response.setResponse(ResponseDTO.RespEnum.FAIL,"发布博客失败，信息不完整",null);
             return response;
         }
@@ -70,11 +70,11 @@ public class EditBlogServiceImpl implements IEditBlogService {
         //创建博客
         BlogArticleEntity blogEntity = new BlogArticleEntity();
         blogEntity.setUserId(blog.getUserId());
-        blogEntity.setBlogTheme(blog.getBlogTheme());
-        blogEntity.setBlogContent(blog.getBlogContent());
-        blogEntity.setBlogLike(0L);
-        blogEntity.setBlogComment(0L);
-        blogEntity.setBlogView(0L);
+        blogEntity.setTitle(blog.getTitle());
+        blogEntity.setContent(blog.getContent());
+        blogEntity.setPraise(0L);
+        blogEntity.setComment(0L);
+        blogEntity.setBrowse(0L);
         blogEntity.setStateCd(CodeDict.getValue(CodeTypeEnum.BLOG_STATUS.getCodeType(), CodeKeyEnum.K1.getKey()));
         blogEntity.setUpdateTime(DateUtils.getCurrentDateTime());
         blogEntity.setCreateTime(DateUtils.getCurrentDateTime());

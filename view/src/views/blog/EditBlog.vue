@@ -11,8 +11,8 @@
       <el-form label-width="120px" :model="blogText" :rules="blogRules" ref="blogForm">
         <el-row>
           <el-col :span="16">
-            <el-form-item label="主题：" prop="blogTheme">
-              <el-input v-model="blogText.blogTheme" maxlength="300"></el-input>
+            <el-form-item label="主题：" prop="title">
+              <el-input v-model="blogText.title" maxlength="300"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="4"></el-col>
@@ -76,7 +76,7 @@ export default {
     const editor = ref(null);
     // 新增博客的规则校验
     const blogRules = {
-      blogTheme : [
+      title : [
         { required: true, message: "主题不能为空", trigger: "blur" }
       ]
     };
@@ -90,10 +90,10 @@ export default {
     const blogForm = ref(null);
     //博客对象
     const blogText = reactive({
-      blogTheme: "",
+      title: "",
       classIds:"",
       bgId:"",
-      blogContent: ""
+      content: ""
     });
     // 是否显示新增分组弹窗
     const groupVisible = ref(false);
@@ -142,17 +142,17 @@ export default {
     const submitBlog = () => {
       blogForm.value.validate((valid) => {
         if (valid) {
-          blogText.blogContent = instance.txt.html();
-          if(blogText.blogContent){
+          blogText.content = instance.txt.html();
+          if(blogText.content){
             submitDisabled.value = true;
             request.$http.post("api/blog/edit/new",blogText).then(function (res) {
               if(res.code === 200){
                 ElMessage.success('发布博客成功');
                 instance.txt.clear();
-                blogText.blogTheme = null;
+                blogText.title = null;
                 blogText.classIds = null;
                 blogText.bgId = null;
-                blogText.blogContent = null;
+                blogText.content = null;
               }else {
                 ElMessage.error('发布博客失败');
               }

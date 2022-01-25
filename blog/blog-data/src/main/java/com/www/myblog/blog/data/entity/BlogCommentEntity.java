@@ -37,8 +37,8 @@ public class BlogCommentEntity implements Serializable {
     /**
     * 评论点赞数
     */
-    @TableField("LIKE_NUM")
-    private Long likeNum;
+    @TableField("PRAISE")
+    private Long praise;
     /**
     * 评论内容
     */

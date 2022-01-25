@@ -32,23 +32,23 @@ public class BlogArticleEntity implements Serializable {
     /**
     * 博客主题
     */
-    @TableField("BLOG_THEME")
-    private String blogTheme;
+    @TableField("TITLE")
+    private String title;
     /**
     * 博客内容
     */
-    @TableField("BLOG_CONTENT")
-    private String blogContent;
+    @TableField("CONTENT")
+    private String content;
     /**
     * 博客浏览量
     */
-    @TableField("BLOG_VIEW")
-    private Long blogView;
+    @TableField("BROWSE")
+    private Long browse;
     /**
     * 博客点赞数
     */
-    @TableField("BLOG_LIKE")
-    private Long blogLike;
+    @TableField("PRAISE")
+    private Long praise;
     /**
     * 博客状态：1有效，2删除
     */
@@ -57,8 +57,8 @@ public class BlogArticleEntity implements Serializable {
     /**
     * 博客评论数
     */
-    @TableField("BLOG_COMMENT")
-    private Long blogComment;
+    @TableField("COMMENT")
+    private Long comment;
     /**
     * 更新时间
     */

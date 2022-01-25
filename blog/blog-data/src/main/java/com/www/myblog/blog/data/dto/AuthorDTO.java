@@ -35,7 +35,7 @@ public class AuthorDTO implements Serializable {
     /**
     * 博客数量
     */
-    private Integer blogs;
+    private Integer blog;
     /**
     * 粉丝数量
     */
@@ -43,18 +43,18 @@ public class AuthorDTO implements Serializable {
     /**
     * 获赞数量
     */
-    private Integer likes;
+    private Integer praise;
     /**
     * 关注数
     */
-    private Integer follows;
+    private Integer follow;
     /**
     * 评论数量
     */
-    private Integer comments;
+    private Integer comment;
     /**
     * 收藏数量
     */
-    private Integer collects;
+    private Integer collect;
 
 }

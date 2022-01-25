@@ -41,19 +41,19 @@ public class BlogArticleDTO implements Serializable {
     /**
     * 博客主题
     */
-    private String blogTheme;
+    private String title;
     /**
     * 博客内容
     */
-    private String blogContent;
+    private String content;
     /**
     * 博客浏览量
     */
-    private Long blogView;
+    private Long browse;
     /**
     * 博客点赞数
     */
-    private Long blogLike;
+    private Long praise;
     /**
     * 博客创建时间
     */
@@ -61,10 +61,10 @@ public class BlogArticleDTO implements Serializable {
     /**
     * 博客评论数
     */
-    private Long blogComment;
+    private Long comment;
     /**
     * 博客评论数
     */
-    private Long blogCollect;
+    private Long collect;
 
 }
