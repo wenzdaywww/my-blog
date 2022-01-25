@@ -6,6 +6,7 @@ import com.www.common.config.oauth2.util.RedisTokenHandler;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.pojo.dto.token.TokenInfoDTO;
 import com.www.common.utils.TokenUtils;
+import com.www.uaa.controller.OauthController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -26,10 +27,6 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class Oauth2LogoutSuccessHandler implements LogoutSuccessHandler {
-    /** 保存到cookie的access_token的key **/
-    public static final String COOKIES_ACCESS_TOKEN = "access_token";
-    /** 保存到cookie的refresh_token的key **/
-    public static final String COOKIES_REFRESH_TOKEN = "refresh_token";
     /** 自定义jwt的token转换器 **/
     @Autowired
     private JwtTokenConverter jwtTokenConverter;
@@ -52,7 +49,7 @@ public class Oauth2LogoutSuccessHandler implements LogoutSuccessHandler {
         RedisTokenHandler.deleteUserIdToken(tokenInfoDTO);
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,"退出成功");
         //清除token
-        TokenUtils.clearResponseToken(httpServletResponse,COOKIES_ACCESS_TOKEN,COOKIES_REFRESH_TOKEN);
+        TokenUtils.clearResponseToken(httpServletResponse, OauthController.COOKIES_ACCESS_TOKEN,OauthController.COOKIES_REFRESH_TOKEN,OauthController.COOKIES_USER);
         httpServletResponse.setContentType("application/json;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(responseDTO));
     }

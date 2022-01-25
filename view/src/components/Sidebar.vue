@@ -52,7 +52,7 @@ export default {
     const items = ref([]);
     // 获取菜单
     const getData = () => {
-      if(utils.getToken()){
+      if(utils.isLogin()){
         request.$http.get("api/base/user/menu", null).then(function (res) {
           if(res.code === 200){
             items.value = res.data;

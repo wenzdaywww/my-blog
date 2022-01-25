@@ -92,7 +92,7 @@ export default {
       if(authorId){
         request.$http.get("api/blog/browse/author/"+authorId,null).then(function (res) {
           if(res.code === 200){
-            followFlag.value = authorId != localStorage.getItem("userId");
+            followFlag.value = authorId !== utils.getUserId();
             author.userName = res.data.userName;
             author.photo = res.data.photo;
             author.age = res.data.age;

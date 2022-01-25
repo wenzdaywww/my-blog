@@ -1,5 +1,6 @@
 package com.www.uaa.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.www.common.config.oauth2.token.JwtTokenConverter;
 import com.www.common.config.oauth2.util.RedisTokenHandler;
 import com.www.common.pojo.constant.CharConstant;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -34,6 +37,12 @@ public class OauthController {
     public static final String COOKIES_ACCESS_TOKEN = "access_token";
     /** 保存到cookie的refresh_token的key **/
     public static final String COOKIES_REFRESH_TOKEN = "refresh_token";
+    /** 保存到cookie的user的key **/
+    public static final String COOKIES_USER = "user";
+    /** 保存到cookie的user的ID的key **/
+    public static final String COOKIES_USER_ID = "userId";
+    /** 保存到cookie的user的角色的key **/
+    public static final String COOKIES_USER_ROLES = "roles";
     @Autowired
     private TokenEndpoint tokenEndpoint;
     @Autowired
@@ -83,6 +92,16 @@ public class OauthController {
             Cookie refreshCookie = new Cookie(COOKIES_REFRESH_TOKEN,tokenDTO.getRefreshToken());
             refreshCookie.setPath(CharConstant.LEFT_SLASH);
             response.addCookie(refreshCookie);
+        }
+        //将用户ID和角色信息保存到cookies中
+        if(tokenInfoDTO != null){
+            Map<String,Object> userMap = new HashMap<>();
+            userMap.put(COOKIES_USER_ID,tokenInfoDTO.getUser_name());
+            userMap.put(COOKIES_USER_ROLES,tokenInfoDTO.getAuthorities());
+            Cookie userCookie = new Cookie(COOKIES_USER, URLEncoder.encode(JSONObject.toJSONString(userMap),"UTF-8"));
+            userCookie.setMaxAge(tokenDTO.getExpiresSeconds());
+            userCookie.setPath(CharConstant.LEFT_SLASH);
+            response.addCookie(userCookie);
         }
         responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,tokenDTO);
         //保存用户登录的token到redis中

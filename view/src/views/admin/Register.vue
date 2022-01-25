@@ -45,7 +45,8 @@ import {ElMessage} from "element-plus";
 
 export default {
   name: "Register",
-  setup(){
+  emits: ['toLogin'], //父组件中引用子组件定义的方法
+  setup(props,{emit}){
     // 接口请求
     const request = getCurrentInstance().appContext.config.globalProperties;
     //弹窗控制
@@ -121,7 +122,7 @@ export default {
             if(res.code === 200){
               ElMessage.success('新增成功');
               registVisible.value = false;
-              router.push("/index");
+              emit('toLogin',null);//调用父组件方法跳转登录页面
             }else {
               ElMessage.error(res.data);
             }

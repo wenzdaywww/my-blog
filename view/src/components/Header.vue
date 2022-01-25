@@ -43,7 +43,7 @@
       <!-- 修改密码弹出框 -->
       <password ref="passwordDialog" v-if="isLogin == true"/>
       <!-- 用户注册弹出框 -->
-      <register ref="registerDialog" v-if="isLogin == false"/>
+      <register ref="registerDialog" v-if="isLogin == false" @toLogin="toLogin"/>
     </div>
   </div>
 </template>
@@ -128,7 +128,8 @@ export default {
     };
     //获取token
     const getToken = () => {
-      if (utils.getToken()){
+      let user = utils.getUser();
+      if (utils.isLogin()){
         isLogin.value = true;
         //加载用户拥有的路由权限
         request.$http.get("api/base/user/router", null).then(function (res) {
@@ -144,7 +145,6 @@ export default {
           clientInfo.code = code;
           request.$http.post("api/uaa/oauth/token", clientInfo).then(function (res) {
             if(res && res.data){
-              localStorage.setItem("userId",res.data.userId);
               router.go(0);//重新跳转当前页面
             }
           });
@@ -169,15 +169,19 @@ export default {
       } else if (command == "user") { // 个人中心
         router.push("/user");
       }else if (command == "blog") { // 我的博客
-        router.push("/blog?id="+localStorage.getItem("userId"));
+        router.push("/blog?id="+utils.getUserId());
       } else if (command == "pwd") { // 修改密码
         passwordDialog.value.shwoDialog();
       }else if(command == "blog-index"){ //博客首页
         router.push("/index");
       }
     };
+    // 跳转登录页面
+    const toLogin = () => {
+      window.location.href = loginUrl;
+    }
     return { isAdmin,loginUrl,isLogin,form, collapse,
-      collapseChage, handleCommand,passwordDialog,shwoRegist,registerDialog
+      collapseChage, handleCommand,passwordDialog,shwoRegist,registerDialog,toLogin
     };
   }
 };
