@@ -60,7 +60,8 @@
     </select>
     <!--  查询用户菜单列表-->
     <select id="findUserMenu" resultType="com.www.myblog.base.data.dto.SysMenuDTO">
-        SELECT  M.MENU_ID,
+        SELECT DISTINCT
+                M.MENU_ID,
                 M.MENU_CODE,
                 M.MENU_URL,
                 M.MENU_NAME,
