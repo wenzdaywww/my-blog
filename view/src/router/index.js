@@ -87,7 +87,7 @@ const hanleChilden = function (parent,children) {
 }
 // 路由跳转前的处理
 router.beforeEach((to, from, next) => {
-    document.title = "my-blog";
+    document.title = to.meta.title;
     if (router.getRoutes().length === 5 && localStorage.getItem('userId')){
         if(localStorage.getItem("router")){
             const routerList = JSON.parse(localStorage.getItem("router"));

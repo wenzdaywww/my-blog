@@ -34,7 +34,7 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticleEntity> {
      */
     List<BlogArticleDTO> findHotBlogRank();
     /**
-     * <p>@Description 查询博主的相关统计信息 </p>
+     * <p>@Description 根据博主ID查询博主的相关统计信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 16:42 </p>
      * @param userId 博主ID

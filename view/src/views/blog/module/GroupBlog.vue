@@ -60,6 +60,8 @@ export default {
     const request = getCurrentInstance().appContext.config.globalProperties;
     //博主id
     const authorId = utils.getUrlParam("id");
+    //博客id
+    const blogId = utils.getUrlParam("bid");
     // 博客分组数据
     let groupBlog = ref([
       {
@@ -86,7 +88,7 @@ export default {
     }
     // 获取博主博客分组列表
     const getBlogGroup = () => {
-      request.$http.get("api/blog/browse/group/" + authorId,null).then(function (res) {
+      request.$http.get("api/blog/browse/group",{id:authorId,bid:blogId}).then(function (res) {
         if(res.code === 200){
           groupBlog.value = res.data;
         }
@@ -95,7 +97,7 @@ export default {
     getBlogGroup();
     // 获取博主博客分类列表
     const getBlogClass = () => {
-      request.$http.get("api/blog/browse/class/" + authorId,null).then(function (res) {
+      request.$http.get("api/blog/browse/class",{id:authorId,bid:blogId}).then(function (res) {
         if(res.code === 200){
           classBlog.value = res.data;
         }

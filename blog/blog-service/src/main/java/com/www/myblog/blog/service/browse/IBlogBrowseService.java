@@ -20,17 +20,19 @@ public interface IBlogBrowseService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param userId 博主ID
+     * @param blogId 博客ID
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
      */
-    ResponseDTO<List<ClassificationDTO>> findAuthorBlogClass(String userId);
+    ResponseDTO<List<ClassificationDTO>> findAuthorBlogClass(String userId,Long blogId);
     /**
      * <p>@Description 获取博主博客分组列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param userId 博主ID
+     * @param blogId 博客ID
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
      */
-    ResponseDTO<List<BlogGroupDTO>> findAuthorBlogGroup(String userId);
+    ResponseDTO<List<BlogGroupDTO>> findAuthorBlogGroup(String userId,Long blogId);
     /**
      * <p>@Description 获取博主博客列表 </p>
      * <p>@Author www </p>
@@ -44,9 +46,10 @@ public interface IBlogBrowseService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:14 </p>
      * @param userId 博主ID
+     * @param blogId 博客ID
      * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.AuthorDTO>
      */
-    ResponseDTO<AuthorDTO> findAuthorInfo(String userId);
+    ResponseDTO<AuthorDTO> findAuthorInfo(String userId,Long blogId);
     /**
      * <p>@Description 获取热门博客前10名单 </p>
      * <p>@Author www </p>

@@ -9,6 +9,7 @@ import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.dto.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
 import com.www.myblog.blog.data.dto.ClassificationDTO;
+import com.www.myblog.blog.data.entity.BlogArticleEntity;
 import com.www.myblog.blog.data.mapper.BlogArticleMapper;
 import com.www.myblog.blog.data.mapper.BlogClassMapper;
 import com.www.myblog.blog.data.mapper.UserBlogGroupMapper;
@@ -43,14 +44,23 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param userId 博主ID
+     * @param blogId 博客ID
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
      */
     @Override
-    public ResponseDTO<List<ClassificationDTO>> findAuthorBlogClass(String userId) {
+    public ResponseDTO<List<ClassificationDTO>> findAuthorBlogClass(String userId,Long blogId) {
         ResponseDTO<List<ClassificationDTO>> response = new ResponseDTO<>();
-        if(StringUtils.isBlank(userId)){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客分类列表，博主ID为空",null);
+        if(StringUtils.isBlank(userId) && blogId == null){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客分类列表，博主ID或博客ID为空",null);
             return response;
+        }
+        if(StringUtils.isBlank(userId)){
+            BlogArticleEntity articleEntity = blogArticleMapper.selectById(blogId);
+            if(articleEntity == null){
+                response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客分类列表，博客ID不存在",null);
+                return response;
+            }
+            userId = articleEntity.getUserId();
         }
         List<ClassificationDTO> list = blogClassMapper.findAuthorBlogClass(userId);
         response.setResponse(ResponseDTO.RespEnum.SUCCESS,list);
@@ -61,14 +71,23 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param userId 博主ID
+     * @param blogId 博客ID
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
      */
     @Override
-    public ResponseDTO<List<BlogGroupDTO>> findAuthorBlogGroup(String userId) {
+    public ResponseDTO<List<BlogGroupDTO>> findAuthorBlogGroup(String userId,Long blogId) {
         ResponseDTO<List<BlogGroupDTO>> response = new ResponseDTO<>();
-        if(StringUtils.isBlank(userId)){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客分组列表失败，博主ID为空",null);
+        if(StringUtils.isBlank(userId) && blogId == null){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客分组列表失败，博主ID或博客ID为空",null);
             return response;
+        }
+        if(StringUtils.isBlank(userId)){
+            BlogArticleEntity articleEntity = blogArticleMapper.selectById(blogId);
+            if(articleEntity == null){
+                response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客分组列表失败，博客ID不存在",null);
+                return response;
+            }
+            userId = articleEntity.getUserId();
         }
         List<BlogGroupDTO> list = userBlogGroupMapper.findAuthorBlogGroup(userId);
         response.setResponse(ResponseDTO.RespEnum.SUCCESS,list);
@@ -122,14 +141,23 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:14 </p>
      * @param userId 博主ID
+     * @param blogId 博客ID
      * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.AuthorDTO>
      */
     @Override
-    public ResponseDTO<AuthorDTO> findAuthorInfo(String userId) {
+    public ResponseDTO<AuthorDTO> findAuthorInfo(String userId,Long blogId) {
         ResponseDTO<AuthorDTO> responseDTO = new ResponseDTO<>();
-        if(StringUtils.isBlank(userId)){
-            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"查询失败，博主ID为空",null);
+        if(StringUtils.isBlank(userId) && blogId == null){
+            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"查询失败，博主ID或博客ID为空",null);
             return responseDTO;
+        }
+        if(StringUtils.isBlank(userId)){
+            BlogArticleEntity articleEntity = blogArticleMapper.selectById(blogId);
+            if(articleEntity == null){
+                responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"查询失败，博客ID不存在",null);
+                return responseDTO;
+            }
+            userId = articleEntity.getUserId();
         }
         UserInfoDTO userInfoDTO = ResponseDTO.getBackData(baseFeignService.findUserInfo(userId));
         if(userInfoDTO == null){

@@ -72,6 +72,8 @@ export default {
     const request = getCurrentInstance().appContext.config.globalProperties;
     //博主id
     const authorId = utils.getUrlParam("id");
+    //博客id
+    const blogId = utils.getUrlParam("bid");
     // 博主信息
     let author = reactive({
       userName : "",
@@ -89,21 +91,19 @@ export default {
     const isFan = ref(false);
     // 获取博主信息
     const getAuthorInfo = () => {
-      if(authorId){
-        request.$http.get("api/blog/browse/author/"+authorId,null).then(function (res) {
-          if(res.code === 200){
-            followFlag.value = authorId !== utils.getUserId();
-            author.userName = res.data.userName;
-            author.photo = res.data.photo;
-            author.age = res.data.age;
-            author.blog = res.data.blog;
-            author.fans = res.data.fans;
-            author.praise = res.data.praise;
-            author.comment = res.data.comment;
-            author.collect = res.data.collect;
-          }
-        });
-      }
+      request.$http.get("api/blog/browse/author", {id:authorId,bid:blogId}).then(function (res) {
+        if(res.code === 200){
+          followFlag.value = authorId !== utils.getUserId();
+          author.userName = res.data.userName;
+          author.photo = res.data.photo;
+          author.age = res.data.age;
+          author.blog = res.data.blog;
+          author.fans = res.data.fans;
+          author.praise = res.data.praise;
+          author.comment = res.data.comment;
+          author.collect = res.data.collect;
+        }
+      });
     }
     getAuthorInfo();
     // 关注博主

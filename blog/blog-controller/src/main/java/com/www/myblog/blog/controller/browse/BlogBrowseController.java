@@ -27,12 +27,13 @@ public class BlogBrowseController {
      * <p>@Description 查询博主信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:14 </p>
-     * @param userId 博主ID
+     * @param id 博主ID
+     * @param bid 博客ID
      * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.AuthorDTO>
      */
-    @GetMapping("author/{id}")
-    public ResponseDTO<AuthorDTO> findAuthorInfo(@PathVariable("id") String userId){
-        return blogBrowseService.findAuthorInfo(userId);
+    @GetMapping("author")
+    public ResponseDTO<AuthorDTO> findAuthorInfo(String id,Long bid){
+        return blogBrowseService.findAuthorInfo(id,bid);
     }
     /**
      * <p>@Description 获取热门博客前10名单 </p>
@@ -59,22 +60,24 @@ public class BlogBrowseController {
      * <p>@Description 获取博主博客分组列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
-     * @param userId 博主ID
+     * @param id 博主ID
+     * @param bid 博客ID
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
      */
-    @GetMapping("group/{id}")
-    public ResponseDTO<List<BlogGroupDTO>> findAuthorBlogGroup(@PathVariable("id") String userId){
-        return blogBrowseService.findAuthorBlogGroup(userId);
+    @GetMapping("group")
+    public ResponseDTO<List<BlogGroupDTO>> findAuthorBlogGroup(String id,Long bid){
+        return blogBrowseService.findAuthorBlogGroup(id,bid);
     }
     /**
      * <p>@Description 获取博主博客分类列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
-     * @param userId 博主ID
+     * @param id 博主ID
+     * @param bid 博客ID
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
      */
-    @GetMapping("class/{id}")
-    public ResponseDTO<List<ClassificationDTO>> findAuthorBlogClass(@PathVariable("id") String userId){
-        return blogBrowseService.findAuthorBlogClass(userId);
+    @GetMapping("class")
+    public ResponseDTO<List<ClassificationDTO>> findAuthorBlogClass(String id,Long bid){
+        return blogBrowseService.findAuthorBlogClass(id,bid);
     }
 }

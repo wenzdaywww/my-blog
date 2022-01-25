@@ -5,7 +5,7 @@
   <div v-if="blogList.length > 0">
     <el-card class="blog-card" v-for="item in blogList">
       <div class="blog-detail">
-        <el-link :href="item.blogId ? '/article?id=' + item.blogId : '#'" class="blog-title"
+        <el-link :href="item.blogId ? '/article?bid=' + item.blogId : '#'" class="blog-title"
                  target="_blank" type="primary" @click="showBlogDetail(item.blogId)">{{item.title}}</el-link>
         <div class="bottom card-header">
           <el-row class="el-row">

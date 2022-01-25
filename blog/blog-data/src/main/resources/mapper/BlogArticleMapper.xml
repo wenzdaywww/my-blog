@@ -46,7 +46,7 @@
     <select id="findHotBlogRank" resultType="com.www.myblog.blog.data.dto.BlogArticleDTO">
         SELECT B.BLOG_ID,B.TITLE FROM BLOG_ARTICLE B WHERE B.STATE_CD = '1' ORDER BY B.BROWSE DESC,B.BLOG_ID LIMIT 10
     </select>
-    <!--  查询博主的相关统计信息-->
+    <!--  根据博主ID查询博主的相关统计信息-->
     <select id="findAuthorCount" resultType="com.www.myblog.blog.data.dto.AuthorDTO">
         SELECT U.USER_ID,
                G.BLOG,
