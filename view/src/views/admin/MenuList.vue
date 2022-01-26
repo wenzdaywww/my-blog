@@ -1,159 +1,161 @@
 <template>
   <div>
-    <div class="crumbs">
+    <div class="crumb-title">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <i class="el-icon-menu"></i> 菜单管理
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <!-- 用户信息列表-->
-    <div class="container">
-      <div class="handle-box">
-        <el-select v-model="query.menuType" placeholder="菜单类型" class="handle-select mr10">
-          <el-option key="1" label="页面菜单" value="1"></el-option>
-          <el-option key="2" label="请求路径" value="2"></el-option>
-          <el-option key="3" label="VUE路由" value="3"></el-option>
-        </el-select>
-        <el-select v-model="query.roleCode" placeholder="角色名称" class="handle-select mr10">
-          <el-option v-for="item in rolesArr" :key="item.roleCode" :label="item.roleName" :value="item.roleCode"></el-option>
-        </el-select>
-        <el-input v-model="query.menuCode" placeholder="菜单编码" class="handle-input mr10"></el-input>
-        <el-input v-model="query.menuUrl" placeholder="菜单路径" class="handle-input mr10"></el-input>
-        <el-input v-model="query.vuePath" placeholder="vue页面路径" class="handle-input mr10"></el-input>
-        <el-input v-model="query.module" placeholder="菜单归属模块" class="handle-input mr10"></el-input>
-        <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
-        <el-button type="primary" icon="el-icon-refresh-left" @click="handleReset">重置</el-button>
-        <el-button type="primary" icon="el-icon-plus" @click="handleAdd">新增菜单</el-button>
+    <el-card>
+      <!-- 用户信息列表-->
+      <div>
+        <div class="handle-box">
+          <el-select v-model="query.menuType" placeholder="菜单类型" class="handle-select mr10">
+            <el-option key="1" label="页面菜单" value="1"></el-option>
+            <el-option key="2" label="请求路径" value="2"></el-option>
+            <el-option key="3" label="VUE路由" value="3"></el-option>
+          </el-select>
+          <el-select v-model="query.roleCode" placeholder="角色名称" class="handle-select mr10">
+            <el-option v-for="item in rolesArr" :key="item.roleCode" :label="item.roleName" :value="item.roleCode"></el-option>
+          </el-select>
+          <el-input v-model="query.menuCode" placeholder="菜单编码" class="handle-input mr10"></el-input>
+          <el-input v-model="query.menuUrl" placeholder="菜单路径" class="handle-input mr10"></el-input>
+          <el-input v-model="query.vuePath" placeholder="vue页面路径" class="handle-input mr10"></el-input>
+          <el-input v-model="query.module" placeholder="菜单归属模块" class="handle-input mr10"></el-input>
+          <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+          <el-button type="primary" icon="el-icon-refresh-left" @click="handleReset">重置</el-button>
+          <el-button type="primary" icon="el-icon-plus" @click="handleAdd">新增菜单</el-button>
+        </div>
+        <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
+          <el-table-column prop="menuId" label="菜单ID" align="center"></el-table-column>
+          <el-table-column prop="parentId" label="父菜单ID" align="center"></el-table-column>
+          <el-table-column prop="menuCode" label="菜单编码" align="center"></el-table-column>
+          <el-table-column prop="menuName" label="菜单名称" align="center"></el-table-column>
+          <el-table-column prop="menuIcon" label="菜单图标" align="center">
+            <template #default="scope">
+              <i :class="scope.row.menuIcon"></i>
+            </template>
+          </el-table-column>
+          <el-table-column prop="menuUrl" label="菜单路径" align="center"></el-table-column>
+          <el-table-column prop="vuePath" label="vue页面路径" align="center"></el-table-column>
+          <el-table-column prop="menuOrder" label="菜单序号" align="center"></el-table-column>
+          <el-table-column prop="menuType" label="菜单类型" align="center">
+            <template #default="scope">
+              {{ scope.row.menuType === '1' ? '页面菜单' : (scope.row.menuType === '2' ? '请求路径' : 'VUE路由')}}
+            </template>
+          </el-table-column>
+          <el-table-column prop="module" label="菜单归属模块" align="center"></el-table-column>
+          <el-table-column prop="roleCode" label="权限角色" align="center"></el-table-column>
+          <el-table-column prop="isDelete" label="是否有效" align="center">
+            <template #default="scope">
+              {{ scope.row.isDelete === '1' ? '否' : '是'}}
+            </template>
+          </el-table-column>
+          <el-table-column prop="createTime" label="注册时间" align="center"></el-table-column>
+          <el-table-column prop="updateTime" label="更新时间" align="center"></el-table-column>
+          <el-table-column label="操作" width="180" align="center">
+            <template #default="scope">
+              <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑 </el-button>
+              <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.row)">删除 </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="pagination">
+          <el-pagination background layout="total, prev, pager, next" :current-page="query.pageNum"
+                         :page-size="query.pageSize" :total="query.pageTotal" @current-change="handlePageChange">
+          </el-pagination>
+        </div>
       </div>
-      <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
-        <el-table-column prop="menuId" label="菜单ID" align="center"></el-table-column>
-        <el-table-column prop="parentId" label="父菜单ID" align="center"></el-table-column>
-        <el-table-column prop="menuCode" label="菜单编码" align="center"></el-table-column>
-        <el-table-column prop="menuName" label="菜单名称" align="center"></el-table-column>
-        <el-table-column prop="menuIcon" label="菜单图标" align="center">
-          <template #default="scope">
-            <i :class="scope.row.menuIcon"></i>
-          </template>
-        </el-table-column>
-        <el-table-column prop="menuUrl" label="菜单路径" align="center"></el-table-column>
-        <el-table-column prop="vuePath" label="vue页面路径" align="center"></el-table-column>
-        <el-table-column prop="menuOrder" label="菜单序号" align="center"></el-table-column>
-        <el-table-column prop="menuType" label="菜单类型" align="center">
-          <template #default="scope">
-            {{ scope.row.menuType === '1' ? '页面菜单' : (scope.row.menuType === '2' ? '请求路径' : 'VUE路由')}}
-          </template>
-        </el-table-column>
-        <el-table-column prop="module" label="菜单归属模块" align="center"></el-table-column>
-        <el-table-column prop="roleCode" label="权限角色" align="center"></el-table-column>
-        <el-table-column prop="isDelete" label="是否有效" align="center">
-          <template #default="scope">
-            {{ scope.row.isDelete === '1' ? '否' : '是'}}
-          </template>
-        </el-table-column>
-        <el-table-column prop="createTime" label="注册时间" align="center"></el-table-column>
-        <el-table-column prop="updateTime" label="更新时间" align="center"></el-table-column>
-        <el-table-column label="操作" width="180" align="center">
-          <template #default="scope">
-            <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑 </el-button>
-            <el-button type="text" icon="el-icon-delete" class="red" @click="handleDelete(scope.row)">删除 </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div class="pagination">
-        <el-pagination background layout="total, prev, pager, next" :current-page="query.pageNum"
-                       :page-size="query.pageSize" :total="query.pageTotal" @current-change="handlePageChange">
-        </el-pagination>
-      </div>
-    </div>
-    <!-- 新增/编辑弹出框 -->
-    <el-dialog :title="editVisible ? '编辑菜单' :'新增菜单'" v-model="dialogVisible" width="40%">
-      <el-form label-width="120px" :model="form" :rules="editRules" ref="editForm">
-        <el-row>
-          <el-col :span="100">
-            <el-form-item label="菜单ID：" prop="menuId">
-              <el-input v-model="form.menuId" class="el-input-custom" disabled="true"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="100">
-            <el-form-item label="父菜单ID：" prop="parentId">
-              <el-input v-model="form.parentId" placeholder="请输入父菜单ID" class="el-input-custom"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="100">
-            <el-form-item label="菜单编码：" prop="menuCode">
-              <el-input v-model="form.menuCode" maxlength="40" placeholder="请输入菜单编码" class="el-input-custom"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="100">
-            <el-form-item label="权限角色：" prop="roleCode">
-              <el-select v-model="form.roleArr" placeholder="请选择角色" multiple class="handle-select mr10 el-input-custom">
-                <el-option v-for="item in rolesArr" :key="item.roleCode" :label="item.roleName" :value="item.roleCode"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="100">
-            <el-form-item label="菜单名称：" prop="menuName">
-              <el-input v-model="form.menuName" maxlength="100" placeholder="请输入菜单名称" class="el-input-custom"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="100">
-            <el-form-item label="菜单归属模块：" prop="module">
-              <el-input v-model="form.module" maxlength="100" placeholder="请输入菜单归属模块" class="el-input-custom"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="100">
-            <el-form-item label="菜单图标：" prop="menuIcon">
-              <el-input v-model="form.menuIcon" maxlength="100" placeholder="请输入ElementUI图标名称" class="el-input-custom"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="100">
-            <el-form-item label="菜单路径：" prop="menuUrl">
-              <el-input v-model="form.menuUrl" maxlength="256" placeholder="请输入菜单路径" class="el-input-custom"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="100">
-            <el-form-item label="vue页面路径：" prop="vuePath">
-              <el-input v-model="form.vuePath" maxlength="256" placeholder="请输入vue页面路径" class="el-input-custom"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="100">
-            <el-form-item label="菜单序号：" prop="menuOrder">
-              <el-input v-model="form.menuOrder" placeholder="请输入菜单序号" class="el-input-custom"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="100">
-            <el-form-item label="菜单类型：" prop="menuType">
-              <el-radio v-model="form.menuType" label="1" style="width: 125px;">页面菜单</el-radio>
-              <el-radio v-model="form.menuType" label="2" style="width: 125px;">请求路径</el-radio>
-              <el-radio v-model="form.menuType" label="3" style="width: 125px;">VUE路由</el-radio>
-            </el-form-item>
-          </el-col>
-          <el-col :span="100">
-            <el-form-item label="是否有效：" prop="isDelete" v-show="editVisible">
-              <el-radio v-model="form.isDelete" label="1" style="width: 125px;">否</el-radio>
-              <el-radio v-model="form.isDelete" label="0" style="width: 125px;">是</el-radio>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <template #footer>
+      <!-- 新增/编辑弹出框 -->
+      <el-dialog :title="editVisible ? '编辑菜单' :'新增菜单'" v-model="dialogVisible" width="40%">
+        <el-form label-width="120px" :model="form" :rules="editRules" ref="editForm">
+          <el-row>
+            <el-col :span="100">
+              <el-form-item label="菜单ID：" prop="menuId">
+                <el-input v-model="form.menuId" class="el-input-custom" disabled="true"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="100">
+              <el-form-item label="父菜单ID：" prop="parentId">
+                <el-input v-model="form.parentId" placeholder="请输入父菜单ID" class="el-input-custom"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="100">
+              <el-form-item label="菜单编码：" prop="menuCode">
+                <el-input v-model="form.menuCode" maxlength="40" placeholder="请输入菜单编码" class="el-input-custom"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="100">
+              <el-form-item label="权限角色：" prop="roleCode">
+                <el-select v-model="form.roleArr" placeholder="请选择角色" multiple class="handle-select mr10 el-input-custom">
+                  <el-option v-for="item in rolesArr" :key="item.roleCode" :label="item.roleName" :value="item.roleCode"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="100">
+              <el-form-item label="菜单名称：" prop="menuName">
+                <el-input v-model="form.menuName" maxlength="100" placeholder="请输入菜单名称" class="el-input-custom"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="100">
+              <el-form-item label="菜单归属模块：" prop="module">
+                <el-input v-model="form.module" maxlength="100" placeholder="请输入菜单归属模块" class="el-input-custom"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="100">
+              <el-form-item label="菜单图标：" prop="menuIcon">
+                <el-input v-model="form.menuIcon" maxlength="100" placeholder="请输入ElementUI图标名称" class="el-input-custom"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="100">
+              <el-form-item label="菜单路径：" prop="menuUrl">
+                <el-input v-model="form.menuUrl" maxlength="256" placeholder="请输入菜单路径" class="el-input-custom"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="100">
+              <el-form-item label="vue页面路径：" prop="vuePath">
+                <el-input v-model="form.vuePath" maxlength="256" placeholder="请输入vue页面路径" class="el-input-custom"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="100">
+              <el-form-item label="菜单序号：" prop="menuOrder">
+                <el-input v-model="form.menuOrder" placeholder="请输入菜单序号" class="el-input-custom"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="100">
+              <el-form-item label="菜单类型：" prop="menuType">
+                <el-radio v-model="form.menuType" label="1" style="width: 125px;">页面菜单</el-radio>
+                <el-radio v-model="form.menuType" label="2" style="width: 125px;">请求路径</el-radio>
+                <el-radio v-model="form.menuType" label="3" style="width: 125px;">VUE路由</el-radio>
+              </el-form-item>
+            </el-col>
+            <el-col :span="100">
+              <el-form-item label="是否有效：" prop="isDelete" v-show="editVisible">
+                <el-radio v-model="form.isDelete" label="1" style="width: 125px;">否</el-radio>
+                <el-radio v-model="form.isDelete" label="0" style="width: 125px;">是</el-radio>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <template #footer>
         <span class="dialog-footer">
           <el-button type="primary" @click="saveSure">确 定</el-button>
           <el-button @click="dialogVisible = false">取 消</el-button>
         </span>
-      </template>
-    </el-dialog>
+        </template>
+      </el-dialog>
+    </el-card>
   </div>
 </template>
 
@@ -349,9 +351,9 @@ export default {
       if(row.roleCode){
         let roles = row.roleCode.split(",");
         rolesArr.value.forEach (temp => {
-            if(roles.indexOf(temp.roleName) !== -1 ){
-              form.roleArr.push(temp.roleCode);
-            }
+          if(roles.indexOf(temp.roleName) !== -1 ){
+            form.roleArr.push(temp.roleCode);
+          }
         });
       }
       form.isDelete = row.isDelete;
@@ -404,11 +406,9 @@ export default {
 .handle-box {
   margin-bottom: 20px;
 }
-
 .handle-select {
   width: 120px;
 }
-
 .handle-input {
   width: 200px;
   display: inline-block;
@@ -419,12 +419,6 @@ export default {
 }
 .mr10 {
   margin-right: 10px;
-}
-.table-td-thumb {
-  display: block;
-  margin: auto;
-  width: 40px;
-  height: 40px;
 }
 .red {
   color: #ff0000;

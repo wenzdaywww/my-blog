@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-card class="info-card">
+    <el-card>
       <template #header>
-        <div class="clearfix">
+        <div>
           <span>基本信息</span>
         </div>
       </template>
@@ -264,14 +264,6 @@ export default {
   opacity: 0;
   cursor: pointer;
 }
-.grid-content {
-  display: flex;
-  align-items: center;
-  height: 100px;
-}
-.mgb20 {
-  margin-bottom: 10px;
-}
 .grid-cont-right {
   flex: 1;
   text-align: center;
@@ -280,35 +272,6 @@ export default {
 .grid-num {
   font-size: 30px;
   font-weight: bold;
-}
-.grid-con-icon {
-  font-size: 50px;
-  width: 100px;
-  height: 100px;
-  text-align: center;
-  line-height: 100px;
-  color: #fff;
-}
-.grid-con-1 .grid-con-icon {
-  background: rgb(45, 140, 240);
-}
-.grid-con-1 .grid-num {
-  color: rgb(45, 140, 240);
-}
-.grid-con-2 .grid-con-icon {
-  background: rgb(100, 213, 114);
-}
-.grid-con-2 .grid-num {
-  color: rgb(45, 140, 240);
-}
-.grid-con-3 .grid-con-icon {
-  background: rgb(242, 94, 67);
-}
-.grid-con-3 .grid-num {
-  color: rgb(242, 94, 67);
-}
-.info-card{
-  width: 100%;
 }
 .user-info-list {
   font-size: 14px;
@@ -327,9 +290,6 @@ export default {
   border-bottom: 2px solid #ccc;
   margin-bottom: 20px;
   width: 100%;
-}
-.el-col-crad{
-  height: 600px;
 }
 .grid-num {
   font-size: 18px;

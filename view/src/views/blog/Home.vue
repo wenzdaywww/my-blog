@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <v-header />
-    <div class="blog-content">
+  <v-header />
+  <div class="control-box">
+    <div class="content">
       <router-view v-slot="{ Component }"></router-view>
     </div>
   </div>
@@ -23,10 +23,4 @@ export default {
 </script>
 
 <style>
-.blog-content{
-  margin-top: 5px;
-}
-body {
-  background-color: #f3f5f5;
-}
 </style>

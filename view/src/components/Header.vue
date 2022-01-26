@@ -1,5 +1,5 @@
 <template>
-  <div class="header header-color">
+  <div class="header">
     <!-- 折叠按钮 -->
     <div v-if="isAdmin" class="collapse-btn" @click="collapseChage">
       <i v-if="!collapse" class="el-icon-s-fold" style="color: black"></i>
@@ -187,9 +187,6 @@ export default {
 };
 </script>
 <style scoped>
-body {
-  background-color: #f0f0f0;
-}
 .header {
   position: relative;
   box-sizing: border-box;
@@ -197,8 +194,6 @@ body {
   height: 70px;
   font-size: 22px;
   color: #fffffa;
-}
-.header-color{
   background-color: white;
 }
 .collapse-btn {
@@ -228,33 +223,6 @@ body {
   height: 70px;
   align-items: center;
 }
-.btn-fullscreen {
-  transform: rotate(45deg);
-  margin-right: 5px;
-  font-size: 24px;
-}
-.btn-bell,
-.btn-fullscreen {
-  position: relative;
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  border-radius: 15px;
-  cursor: pointer;
-}
-.btn-bell-badge {
-  position: absolute;
-  right: 0;
-  top: -2px;
-  width: 8px;
-  height: 8px;
-  border-radius: 4px;
-  background: #f56c6c;
-  color: #fff;
-}
-.btn-bell .el-icon-bell {
-  color: #fff;
-}
 .user-name {
   margin-left: 10px;
 }
@@ -278,7 +246,7 @@ body {
   padding-right: 8px;
 }
 .header-item:hover {
-  background-color: #f0f0f5;
+  background-color: #f0f0f0;
 }
 .red{
   color: red;

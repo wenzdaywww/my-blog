@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar" style="margin-top: 5px;">
+  <div class="content">
     <el-menu class="sidebar-el-menu el-menu-vertical-demo" :collapse="collapse" :default-active="onRoutes" unique-opened router>
       <template v-for="item in items">
         <template v-if="item.subMenu">
@@ -78,20 +78,11 @@ export default {
 </script>
 
 <style scoped>
-.sidebar {
-  display: block;
-  position: absolute;
-  left: 0;
-  top: 70px;
-  bottom: 0;
-  overflow-y: scroll;
-  background-color: #f0f0f0;
-  margin-top: 10px;
-}
 .sidebar::-webkit-scrollbar {
   width: 0;
 }
 .sidebar-el-menu:not(.el-menu--collapse) {
+  float: right;
   width: 250px;
 }
 .sidebar > ul {

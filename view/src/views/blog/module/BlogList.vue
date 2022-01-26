@@ -145,6 +145,7 @@ export default {
 .no-blog{
   text-align: center;
   margin-top: 10px;
+  color: #999697;
 }
 .ellipsis-text{
   display: -webkit-box;/*作为弹性伸缩盒子模型显示*/

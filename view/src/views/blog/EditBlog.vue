@@ -1,61 +1,64 @@
 <template>
   <div>
-    <div class="crumbs">
+    <div class="crumb-title">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <i class="el-icon-edit"></i> 发布博客
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-    <div class="container">
-      <el-form label-width="120px" :model="blogText" :rules="blogRules" ref="blogForm">
-        <el-row>
-          <el-col :span="16">
-            <el-form-item label="主题：" prop="title">
-              <el-input v-model="blogText.title" maxlength="300"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="4"></el-col>
-          <el-col :span="4"></el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="标签：">
-              <el-select v-model="blogText.tagIds" placeholder="分类" multiple="true" class="handle-select mr10 blog-class">
-                <el-option v-for="item in tagArr" :key="item.tagId" :label="item.tagName" :value="item.tagId"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="分组：">
-              <el-select v-model="blogText.groupId" placeholder="分组" class="handle-select mr10 blog-group">
-                <el-option v-for="item in groupArr" :key="item.groupId" :label="item.groupName" :value="item.groupId"></el-option>
-              </el-select>
-              <span class="add-group" @click="groupVisible=true">新增分组</span>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8"></el-col>
-        </el-row>
-      </el-form>
-      <!-- 博客内容编辑 -->
-      <span class="blog-text-title">博客内容</span>
-      <div class="mgb20 editor-div" ref='editor'></div>
-      <el-button type="primary" @click="submitBlog" :disabled="submitDisabled">提交</el-button>
-    </div>
-    <!-- 新增/编辑弹出框 -->
-    <el-dialog title="新增分组" v-model="groupVisible" width="20%">
-      <el-form label-width="120px" :model="group" :rules="groupRules" ref="groupForm">
-        <el-form-item label="分组名称：" prop="name">
-          <el-input v-model="group.name" class="el-input-custom"></el-input>
-        </el-form-item>
-        <div class="btn-save">
-          <span class="dialog-footer">
-            <el-button type="primary" @click="addGroup">确 定</el-button>
-            <el-button @click="groupVisible = false">取 消</el-button>
-          </span>
-        </div>
-      </el-form>
-    </el-dialog>
+    <el-row>
+      <el-col :span="20">
+        <el-card>
+          <div>
+            <el-form label-width="120px" :model="blogText" :rules="blogRules" ref="blogForm">
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label="主题：" prop="title">
+                    <el-input v-model="blogText.title" maxlength="300"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="标签：">
+                    <el-select v-model="blogText.tagIds" placeholder="分类" multiple="true" class="handle-select mr10 blog-class">
+                      <el-option v-for="item in tagArr" :key="item.tagId" :label="item.tagName" :value="item.tagId"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="分组：">
+                    <el-select v-model="blogText.groupId" placeholder="分组" class="handle-select mr10 blog-group">
+                      <el-option v-for="item in groupArr" :key="item.groupId" :label="item.groupName" :value="item.groupId"></el-option>
+                    </el-select>
+                    <span class="add-group" @click="groupVisible=true">新增分组</span>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+            <!-- 博客内容编辑 -->
+            <span class="blog-text-title">博客内容</span>
+            <div class="mgb20 editor-div" ref='editor'></div>
+            <el-button type="primary" @click="submitBlog" :disabled="submitDisabled">提交</el-button>
+          </div>
+          <!-- 新增/编辑弹出框 -->
+          <el-dialog title="新增分组" v-model="groupVisible" width="20%">
+            <el-form label-width="120px" :model="group" :rules="groupRules" ref="groupForm">
+              <el-form-item label="分组名称：" prop="name">
+                <el-input v-model="group.name" class="el-input-custom"></el-input>
+              </el-form-item>
+              <div class="btn-save">
+                <span class="dialog-footer">
+                  <el-button type="primary" @click="addGroup">确 定</el-button>
+                  <el-button @click="groupVisible = false">取 消</el-button>
+                </span>
+              </div>
+            </el-form>
+          </el-dialog>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -110,7 +113,7 @@ export default {
     onMounted(() => {
       instance = new WangEditor(editor.value);
       instance.config.zIndex = 1;
-      instance.config.height = 600;
+      instance.config.height = 200;
       instance.config.showLinkImg = false;
       instance.config.showLinkVideo = false;
       instance.config.uploadImgShowBase64 = true;
@@ -124,8 +127,8 @@ export default {
     const getBlogClass = () => {
       request.$http.post("api/blog/edit/tag",null).then(function (res) {
         if(res.code === 200){
-            tagArr.value = res.data;
-          }
+          tagArr.value = res.data;
+        }
       });
     }
     getBlogClass();
@@ -195,9 +198,6 @@ export default {
 <style>
 body {
   background-color: #f3f5f5;
-}
-.w-e-text-container {
-  height: 600px;
 }
 .blog-class{
   width: 100%;
