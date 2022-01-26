@@ -79,7 +79,7 @@
           AND UR.ROLE_ID = RM.ROLE_ID
           AND UR.SU_ID = U.SU_ID
           AND U.USER_ID = #{userId}
-        ORDER BY M.MENU_ID,M.PARENT_ID,M.MENU_ORDER
+        ORDER BY M.MENU_ORDER,M.MENU_ID,M.PARENT_ID
     </select>
     <!--    查询所有菜单-->
     <select id="findAllMenu" resultType="com.www.myblog.base.data.dto.SysMenuDTO">

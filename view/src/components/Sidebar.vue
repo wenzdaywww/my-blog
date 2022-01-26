@@ -85,7 +85,7 @@ export default {
   top: 70px;
   bottom: 0;
   overflow-y: scroll;
-  background-color: #46a1ff;
+  background-color: #f0f0f0;
   margin-top: 10px;
 }
 .sidebar::-webkit-scrollbar {
@@ -95,6 +95,6 @@ export default {
   width: 250px;
 }
 .sidebar > ul {
-  height: 100%;
+  /*height: 50%;*/
 }
 </style>

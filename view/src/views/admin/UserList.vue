@@ -134,7 +134,7 @@ export default {
     const request = getCurrentInstance().appContext.config.globalProperties;
     // 获取表格数据
     const getData = () => {
-      request.$http.get("api/base/user/all",query).then(function (res) {
+      request.$http.get("api/base/admin/users",query).then(function (res) {
         if(res.code === 200){
           tableData.value = res.data;
           pageTotal.value = res.totalNum;
@@ -188,7 +188,7 @@ export default {
     };
     // 编辑页面的保存按钮
     const saveEdit = () => {
-      request.$http.post("api/base/user/state",form).then(function (res) {
+      request.$http.post("api/base/admin/state",form).then(function (res) {
         if(res.code === 200){
           editVisible.value = false;
           ElMessage.success('修改成功');

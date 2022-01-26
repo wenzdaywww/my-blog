@@ -48,7 +48,6 @@
               U.USER_NAME,
               U.PHONE_NUM,
               U.BIRTHDAY,
-              IR.ROLE_CODE,
               U.SEX,
               U.PHOTO,
               U.EMAIL,
@@ -59,8 +58,6 @@
               U.CREDENTIALS_NOT_EXPIRED,
               U.UPDATE_TIME,
               U.CREATE_TIME
-      FROM SYS_USER U
-        LEFT JOIN (SELECT DISTINCT UR.SU_ID,R.ROLE_CODE FROM SYS_ROLE R,SYS_USER_ROLE UR,sys_user su WHERE R.ROLE_ID=UR.ROLE_ID and SU.USER_ID = #{userId} and UR.SU_ID = SU.SU_ID ) IR ON IR.SU_ID=U.SU_ID
-      WHERE U.USER_ID = #{userId}
+      FROM SYS_USER U WHERE U.USER_ID = #{userId}
   </select>
 </mapper>

@@ -1,6 +1,6 @@
 <template>
   <!-- 博客分组 -->
-  <el-card v-if="blogGroup.length > 0" class="group-card">
+  <el-card v-if="blogGroup != null && blogGroup.length > 0" class="group-card">
     <template #header>
       <div class="clearfix card-title">
         <span>分组</span>
@@ -8,14 +8,11 @@
     </template>
     <el-row class="group-row" v-for="item in blogGroup">
       <el-col :span="16">
-        <el-tooltip v-if="item.groupName.length > 14" class="item" effect="light" :content="item.groupName" placement="bottom">
+        <el-tooltip class="item" effect="light" :content="item.groupName" placement="bottom">
           <el-tag size="small" class="group-name">
-            <el-link @click="findBlogGroup(item.groupId,item.groupName)" type="primary" href="javascript:void(0);" >{{ellipsis(item.groupName)}}</el-link>
+            <el-link @click="findBlogGroup(item.groupId,item.groupName)" type="primary" href="javascript:void(0);" class="ellipsis-text">{{item.groupName}}</el-link>
           </el-tag>
         </el-tooltip>
-        <el-tag v-if="item.groupName.length <= 14" size="small" class="group-name">
-          <el-link @click="findBlogGroup(item.groupId,item.groupName)" type="primary" href="javascript:void(0);" >{{ellipsis(item.groupName)}}</el-link>
-        </el-tag>
       </el-col>
       <el-col :span="8">
         <el-tag type="danger" size="mini">{{item.groupNum}}</el-tag>
@@ -23,7 +20,7 @@
     </el-row>
   </el-card>
   <!-- 博客分类 -->
-  <el-card v-if="blogTag.length > 0" class="class-card">
+  <el-card v-if="blogTag != null && blogTag.length > 0" class="class-card">
     <template #header>
       <div class="clearfix card-title">
         <span>标签专栏</span>
@@ -31,14 +28,11 @@
     </template>
     <el-row class="class-row" v-for="item in blogTag">
       <el-col :span="16">
-        <el-tooltip v-if="item.tagName.length > 14" class="item" effect="light" :content="item.tagName" placement="bottom">
+        <el-tooltip class="item" effect="light" :content="item.tagName" placement="bottom">
           <el-tag type="success" size="small" class="group-name">
-            <el-link @click="findBlogTag(item.tagId,item.tagName)" type="success" href="javascript:void(0);" >{{ellipsis(item.tagName)}}</el-link>
+            <el-link @click="findBlogTag(item.tagId,item.tagName)" type="success" href="javascript:void(0);" class="ellipsis-text">{{item.tagName}}</el-link>
           </el-tag>
         </el-tooltip>
-        <el-tag v-if="item.tagName.length <= 14" type="success" size="small" class="group-name">
-          <el-link @click="findBlogTag(item.tagId,item.tagName)" type="success" href="javascript:void(0);" >{{item.tagName}}</el-link>
-        </el-tag>
       </el-col>
       <el-col :span="8">
         <el-tag type="danger" size="mini">{{item.tagNum}}</el-tag>
@@ -66,14 +60,6 @@ export default {
     let blogGroup = ref([]);
     // 博客分类数据
     let blogTag = ref([]);
-    // 文字超长设置省略号
-    const ellipsis = (value) => {
-      if (!value) return "";
-      if (value.length > 14) {
-        return value.slice(0, 14) + "...";
-      }
-      return value;
-    }
     // 获取博主博客分组列表
     const getBlogGroup = () => {
       request.$http.get("api/blog/browse/group",{id:authorId,bid:blogId}).then(function (res) {
@@ -100,7 +86,7 @@ export default {
     const findBlogTag = (tagId,className) => {
       emit('findBlogTag',tagId,"分类：" + className);//调用父组件的findBlogTag方法
     }
-    return {authorId,blogGroup,blogTag,ellipsis,findBlogGroup,findBlogTag};
+    return {authorId,blogGroup,blogTag,findBlogGroup,findBlogTag};
   }
 }
 </script>
@@ -147,5 +133,12 @@ export default {
 }
 .group-name{
   margin-bottom: 5px;
+}
+.ellipsis-text{
+  display: -webkit-box;/*作为弹性伸缩盒子模型显示*/
+  -webkit-line-clamp: 1; /*显示的行数；如果要设置2行加...则设置为2*/
+  overflow: hidden; /*超出的文本隐藏*/
+  text-overflow: ellipsis; /* 溢出用省略号*/
+  -webkit-box-orient: vertical;/*伸缩盒子的子元素排列：从上到下*/
 }
 </style>

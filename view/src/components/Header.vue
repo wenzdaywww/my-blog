@@ -188,7 +188,7 @@ export default {
 </script>
 <style scoped>
 body {
-  background-color: #f3f5f5;
+  background-color: #f0f0f0;
 }
 .header {
   position: relative;

@@ -275,7 +275,7 @@ export default {
     const editForm = ref(null);
     // 查询所有角色
     const getRoleList = () => {
-      request.$http.get("api/base/user/role",null).then(function (res) {
+      request.$http.get("api/base/admin/role",null).then(function (res) {
         if(res.code === 200){
           rolesArr.value = res.data;
         }
@@ -286,7 +286,7 @@ export default {
     const tableData = ref([]);
     // 获取表格数据
     const getData = () => {
-      request.$http.get("api/base/menu/all",query).then(function (res) {
+      request.$http.get("api/base/admin/menus",query).then(function (res) {
         if(res.code === 200){
           tableData.value = res.data;
           query.pageTotal = res.totalNum;

@@ -8,10 +8,9 @@
     </template>
     <el-row class="hot-row" v-for="item in hotBlog">
       <el-col>
-        <el-tooltip v-if="item.title.length >= 30" class="item" effect="light" :content="item.title" placement="bottom">
-          <el-link :href="item.blogId ? '/article?bid=' + item.blogId : '#'" target="_blank" type="primary">{{ellipsis(item.title)}}</el-link>
+        <el-tooltip class="item" effect="light" :content="item.title" placement="bottom">
+          <el-link :href="item.blogId ? '/article?bid=' + item.blogId : '#'" target="_blank" type="primary" class="ellipsis-text">{{item.title}}</el-link>
         </el-tooltip>
-        <el-link v-if="item.title.length < 30" :href="item.blogId ? '/article?bid=' + item.blogId : '#'" target="_blank" type="primary">{{ ellipsis(item.title)}}</el-link>
       </el-col>
     </el-row>
   </el-card>
@@ -28,14 +27,6 @@ export default {
     const request = getCurrentInstance().appContext.config.globalProperties;
     // 热门博客数据
     let hotBlog = ref([]);
-    // 文字超长设置省略号
-    const ellipsis = (value) => {
-      if (!value) return "";
-      if (value.length > 22) {
-        return value.slice(0, 22) + "...";
-      }
-      return value;
-    }
     // 获取热门博客排行
     const getHotRank = () => {
       request.$http.get("api/blog/browse/hot-rank",null).then(function (res) {
@@ -45,7 +36,7 @@ export default {
       });
     }
     getHotRank();
-    return {hotBlog,float_type,ellipsis};
+    return {hotBlog,float_type};
   }
 }
 </script>
@@ -76,5 +67,12 @@ export default {
 .card-title{
   font-size: 18px;
   font-weight: bold;
+}
+.ellipsis-text{
+  display: -webkit-box;/*作为弹性伸缩盒子模型显示*/
+  -webkit-line-clamp: 1; /*显示的行数；如果要设置2行加...则设置为2*/
+  overflow: hidden; /*超出的文本隐藏*/
+  text-overflow: ellipsis; /* 溢出用省略号*/
+  -webkit-box-orient: vertical;/*伸缩盒子的子元素排列：从上到下*/
 }
 </style>

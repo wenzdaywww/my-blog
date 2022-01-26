@@ -64,12 +64,12 @@
     <!--  根据博主ID查询博主的相关统计信息-->
     <select id="findAuthorCount" resultType="com.www.myblog.blog.data.dto.AuthorDTO">
         SELECT U.USER_ID,
-               G.BLOG,
-               G.PRAISE,
-               G.COMMENT,
-               IFNULL( D.COLLECTS, 0 ) COLLECT,
-               IFNULL( A.FANS, 0 ) FANS,
-               IFNULL( B.FOLLOW, 0 ) FOLLOW
+               IFNULL(G.BLOG,0) BLOG,
+               IFNULL(G.PRAISE,0) PRAISE,
+               IFNULL(G.COMMENT,0) COMMENT,
+               IFNULL(D.COLLECTS,0) COLLECT,
+               IFNULL(A.FANS,0) FANS,
+               IFNULL(B.FOLLOW,0) FOLLOW
         FROM ( SELECT #{userId} USER_ID FROM DUAL ) U
                      LEFT JOIN (SELECT B.USER_ID,
                                        COUNT( B.BLOG_ID ) BLOG,

@@ -2,11 +2,13 @@
   <el-card>
     <span class="span-title">{{ query.listTitle }}</span>
   </el-card>
-  <div v-if="blogList.length > 0">
+  <div v-if="blogList != null && blogList.length > 0">
     <el-card class="blog-card" v-for="item in blogList">
       <div class="blog-detail">
-        <el-link :href="item.blogId ? '/article?bid=' + item.blogId : '#'" class="blog-title"
-                 target="_blank" type="primary" @click="showBlogDetail(item.blogId)">{{item.title}}</el-link>
+        <el-tooltip class="item" effect="light" :content="item.title" placement="bottom">
+          <el-link :href="item.blogId ? '/article?bid=' + item.blogId : '#'" class="blog-title ellipsis-text"
+                   target="_blank" type="primary" @click="showBlogDetail(item.blogId)">{{item.title}}</el-link>
+        </el-tooltip>
         <div class="bottom card-header">
           <el-row class="el-row">
             <div>
@@ -33,7 +35,7 @@
       </el-pagination>
     </div>
   </div>
-  <div v-if="blogList.length == 0 " class="no-blog">
+  <div v-if="blogList == null || blogList.length == 0 " class="no-blog">
     没有博客信息
   </div>
 </template>
@@ -143,5 +145,12 @@ export default {
 .no-blog{
   text-align: center;
   margin-top: 10px;
+}
+.ellipsis-text{
+  display: -webkit-box;/*作为弹性伸缩盒子模型显示*/
+  -webkit-line-clamp: 1; /*显示的行数；如果要设置2行加...则设置为2*/
+  overflow: hidden; /*超出的文本隐藏*/
+  text-overflow: ellipsis; /* 溢出用省略号*/
+  -webkit-box-orient: vertical;/*伸缩盒子的子元素排列：从上到下*/
 }
 </style>
