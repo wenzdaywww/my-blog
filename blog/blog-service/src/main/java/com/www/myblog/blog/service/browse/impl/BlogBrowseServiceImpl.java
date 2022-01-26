@@ -1,5 +1,6 @@
 package com.www.myblog.blog.service.browse.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.feign.base.IBaseFeignService;
 import com.www.common.pojo.dto.feign.UserInfoDTO;
@@ -7,7 +8,9 @@ import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.dto.*;
 import com.www.myblog.blog.data.entity.BlogArticleEntity;
+import com.www.myblog.blog.data.entity.BlogCollectEntity;
 import com.www.myblog.blog.data.mapper.BlogArticleMapper;
+import com.www.myblog.blog.data.mapper.BlogCollectMapper;
 import com.www.myblog.blog.data.mapper.BlogTagMapper;
 import com.www.myblog.blog.data.mapper.BlogGroupMapper;
 import com.www.myblog.blog.service.browse.IBlogBrowseService;
@@ -34,6 +37,8 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     private BlogGroupMapper userBlogGroupMapper;
     @Autowired
     private BlogTagMapper blogClassMapper;
+    @Autowired
+    private BlogCollectMapper blogCollectMapper;
 
 
     /**
@@ -55,6 +60,10 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
             response.setResponse(ResponseDTO.RespEnum.FAIL,"根据博客ID查询博客信息，博客不存在",null);
             return response;
         }
+        QueryWrapper<BlogCollectEntity> colWrapper = new QueryWrapper<>();
+        colWrapper.lambda().eq(BlogCollectEntity::getBlogId,blogId);
+        int collectNum = blogCollectMapper.selectCount(colWrapper);
+        articleDTO.setCollect(collectNum);
         //根据博客ID查询博客分类
         List<BlogTagDTO> classList = blogClassMapper.findBlogTag(blogId);
         articleDTO.setBlogTag(classList);

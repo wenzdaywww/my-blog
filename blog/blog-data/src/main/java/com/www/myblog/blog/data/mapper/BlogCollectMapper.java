@@ -1,7 +1,7 @@
 package com.www.myblog.blog.data.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.www.myblog.blog.data.entity.BlogCommentEntity;
+import com.www.myblog.blog.data.entity.BlogCollectEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,5 +11,5 @@ import org.apache.ibatis.annotations.Mapper;
  * <p>@Date 2021/11/10 23:07 </p>
  */
 @Mapper
-public interface BlogCollectMapper extends BaseMapper<BlogCommentEntity> {
+public interface BlogCollectMapper extends BaseMapper<BlogCollectEntity> {
 }

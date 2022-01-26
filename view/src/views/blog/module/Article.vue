@@ -19,17 +19,17 @@
       <el-col :span="6"><span class="blog-time color-grad">{{blog.createTime}}</span></el-col>
     </el-row>
     <el-row>
-
+      <span class="color-grad mag-top">分组：</span><el-tag size="mini" class="tag-name">{{blog.groupName}}</el-tag>
+      <span class="color-grad mag-top">标签：</span><el-tag v-for="item in blog.blogTag" size="mini" type="success" class="tag-name">{{item.tagName}}</el-tag>
     </el-row>
   </el-card>
   <el-card class="blog-card">
-    <div class="editor-div" ref="articleRef"></div>
+      <div class="artitle-div" v-html="blog.content"></div>
   </el-card>
 </template>
 
 <script>
-import WangEditor from "wangEditor";
-import {getCurrentInstance, onBeforeUnmount, onMounted, reactive, ref} from "vue";
+import {getCurrentInstance, reactive, ref} from "vue";
 import utils from "../../../utils/utils";
 
 export default {
@@ -37,45 +37,42 @@ export default {
   setup() {
     // 接口请求
     const request = getCurrentInstance().appContext.config.globalProperties;
-    //博客文章富文本编辑器
-    const articleRef = ref(null);
     //博客id
-    const blogId = utils.getUrlParam("id");
+    const blogId = utils.getUrlParam("bid");
     //博客文章信息
     let blog = reactive({
       blogId: 0,
-      title: "python和java的相爱相杀，数据可视化告诉你该学哪一个？",
-      content: "",
-      browse:0,
-      praise:1,
-      collect:0,
-      comment:2,
-      createTime:"2021-01-01 12:12:30"
-    });
-    // 博客内容
-    let articleEditor;
-    onMounted(() => {
-      articleEditor = new WangEditor(articleRef.value);
-      articleEditor.config.zIndex = 1;
-      articleEditor.config.height = 600;
-      articleEditor.create();
-    });
-    onBeforeUnmount(() => {
-      articleEditor.destroy();
-      articleEditor = null;
+      title: "",
+      groupName: "",
+      blogTag:[],
+      content: '',
+      browse:-1,
+      praise:-1,
+      collect:-1,
+      comment:-1,
+      createTime:""
     });
     //查询博客文章信息
     const getBlogArticle = () => {
       if(blogId){
-      //   request.$http.post("api/blog/browse/article/"+blogId,null).then(function (res) {
-      //     if(res.code === 200){
-      //
-      //     }
-      //   });
+          request.$http.get("api/blog/browse/article/"+blogId,null).then(function (res) {
+            if(res.code === 200){
+              blog.blogId = res.data.blogId;
+              blog.title = res.data.title;
+              blog.groupName = res.data.groupName;
+              blog.blogTag = res.data.blogTag;
+              blog.content = res.data.content;
+              blog.browse = res.data.browse;
+              blog.praise = res.data.praise;
+              blog.collect = res.data.collect;
+              blog.comment = res.data.comment;
+              blog.createTime = res.data.createTime;
+            }
+          });
       }
     }
     getBlogArticle();
-    return {blog,articleRef};
+    return {blog};
   }
 };
 </script>
@@ -99,5 +96,16 @@ export default {
   color: #999697;
   float: right;
   margin-right: 5px;
+}
+.tag-name{
+  margin-right: 10px;
+  margin-top: 8px;
+}
+.mag-top{
+  margin-top: 5px;
+}
+.artitle-div{
+  margin-left: 10px;
+  margin-right: 10px;
 }
 </style>

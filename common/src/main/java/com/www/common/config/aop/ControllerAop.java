@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.www.common.pojo.constant.CharConstant;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -90,6 +91,7 @@ public class ControllerAop {
             }else {
                 value = JSON.toJSONString(paramValue[i]);
             }
+            value = StringUtils.length(value) > 256 ? "<longText>" : value;
             if(i != paramName.length -1){
                 requestText += paramName[i].getName() + CharConstant.EQUAL + value + CharConstant.COMMA;
             }else {

@@ -74,7 +74,7 @@ public class BlogArticleDTO implements Serializable {
     /**
     * 博客评论数
     */
-    private Long collect;
+    private Integer collect;
     /**
      * 创建时间
      */
