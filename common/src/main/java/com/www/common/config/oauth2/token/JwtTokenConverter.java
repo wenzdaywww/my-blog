@@ -1,6 +1,7 @@
 package com.www.common.config.oauth2.token;
 
 import com.alibaba.fastjson.JSON;
+import com.www.common.config.oauth2.util.RedisTokenHandler;
 import com.www.common.pojo.dto.token.TokenInfoDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,12 @@ public class JwtTokenConverter extends JwtAccessTokenConverter {
      * @return java.lang.String 用户ID
      */
     public String getUserId(HttpServletRequest request){
-        TokenInfoDTO tokenDTO = this.decodeToken(request);
+        String token = oauth2TokenExtractor.getToken(request);
+        TokenInfoDTO tokenDTO = this.decodeToken(token);
+        //token无效则返回空
+        if(RedisTokenHandler.isInvalidToken(tokenDTO,token)){
+            return null;
+        }
         return tokenDTO != null ? tokenDTO.getUser_name() : null;
     }
     /**

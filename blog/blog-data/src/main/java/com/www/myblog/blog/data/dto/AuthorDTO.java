@@ -56,5 +56,8 @@ public class AuthorDTO implements Serializable {
     * 收藏数量
     */
     private Integer collect;
-
+    /** 是否关注博主 **/
+    private boolean fan;
+    /** 是否显示关注按钮 **/
+    private boolean flag;
 }

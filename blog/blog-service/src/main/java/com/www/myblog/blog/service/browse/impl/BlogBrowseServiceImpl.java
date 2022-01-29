@@ -9,10 +9,8 @@ import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.dto.*;
 import com.www.myblog.blog.data.entity.BlogArticleEntity;
 import com.www.myblog.blog.data.entity.BlogCollectEntity;
-import com.www.myblog.blog.data.mapper.BlogArticleMapper;
-import com.www.myblog.blog.data.mapper.BlogCollectMapper;
-import com.www.myblog.blog.data.mapper.BlogTagMapper;
-import com.www.myblog.blog.data.mapper.BlogGroupMapper;
+import com.www.myblog.blog.data.entity.UserFansEntity;
+import com.www.myblog.blog.data.mapper.*;
 import com.www.myblog.blog.service.browse.IBlogBrowseService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +37,8 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     private BlogTagMapper blogClassMapper;
     @Autowired
     private BlogCollectMapper blogCollectMapper;
+    @Autowired
+    private UserFansMapper userFansMapper;
 
 
     /**
@@ -166,31 +166,32 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
      * <p>@Description 查询博主信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:14 </p>
-     * @param userId 博主ID
+     * @param userId 当前登录用户ID
+     * @param authorId 博主ID
      * @param blogId 博客ID
      * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.AuthorDTO>
      */
     @Override
-    public ResponseDTO<AuthorDTO> findAuthorInfo(String userId,Long blogId) {
+    public ResponseDTO<AuthorDTO> findAuthorInfo(String userId,String authorId,Long blogId) {
         ResponseDTO<AuthorDTO> responseDTO = new ResponseDTO<>();
-        if(StringUtils.isBlank(userId) && blogId == null){
+        if(StringUtils.isBlank(authorId) && blogId == null){
             responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"查询失败，博主ID或博客ID为空",null);
             return responseDTO;
         }
-        if(StringUtils.isBlank(userId)){
+        if(StringUtils.isBlank(authorId)){
             BlogArticleEntity articleEntity = blogArticleMapper.selectById(blogId);
             if(articleEntity == null){
                 responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"查询失败，博客ID不存在",null);
                 return responseDTO;
             }
-            userId = articleEntity.getUserId();
+            authorId = articleEntity.getUserId();
         }
-        UserInfoDTO userInfoDTO = ResponseDTO.getBackData(baseFeignService.findUserInfo(userId));
+        UserInfoDTO userInfoDTO = ResponseDTO.getBackData(baseFeignService.findUserInfo(authorId));
         if(userInfoDTO == null){
             responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"查询失败，博主信息不存在",null);
             return responseDTO;
         }
-        AuthorDTO authorDTO = blogArticleMapper.findAuthorCount(userId);
+        AuthorDTO authorDTO = blogArticleMapper.findAuthorCount(authorId);
         authorDTO = authorDTO != null ? authorDTO : new AuthorDTO().setUserId(userInfoDTO.getUserId());
         authorDTO.setUserName(userInfoDTO.getUserName()).setPhoto(userInfoDTO.getPhoto());
         //计算码龄
@@ -200,6 +201,12 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
         }else {
             authorDTO.setAge("1个月");
         }
+        authorDTO.setFlag(StringUtils.isNotBlank(userId));//判断是否登录
+        QueryWrapper<UserFansEntity> fansWrapper = new QueryWrapper<>();
+        fansWrapper.lambda().eq(UserFansEntity::getUserId,authorId);
+        fansWrapper.lambda().eq(UserFansEntity::getFansId,userId);
+        int count = userFansMapper.selectCount(fansWrapper);
+        authorDTO.setFan(count > 0);//判断是否已关注
         responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,authorDTO);
         return responseDTO;
     }

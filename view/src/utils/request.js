@@ -43,7 +43,7 @@ export default {
     //查询博主信息
     author: "api/blog/browse/author",
     //关注博主
-    follow: "api/blog/browse/follow/",
+    follow: "api/blog/user/follow/",
     //查询博主的博客列表
     bloList: "api/blog/browse/list",
     //查询博主的博客分组列表

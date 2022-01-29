@@ -8,10 +8,7 @@ import com.www.myblog.blog.data.dto.TagInfoDTO;
 import com.www.myblog.blog.service.user.IUserBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,4 +37,16 @@ public class UserBlogController {
     public ResponseDTO<AuthorDTO> findUserCount(){
         return userBlogService.findUserCount(jwtTokenConverter.getUserId());
     }
+    /**
+     * <p>@Description 关注或取消关注博主 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/29 15:15 </p>
+     * @param id 博主ID
+     * @param bid 博客ID
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Boolean>
+     */
+    @GetMapping("follow")
+    public ResponseDTO<Boolean> followAuthor(String id,Long bid){
+        return userBlogService.followAuthor(jwtTokenConverter.getUserId(),id,bid);
+    };
 }

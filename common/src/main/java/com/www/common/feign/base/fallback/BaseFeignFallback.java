@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * <p>@Description base应用的服务降级处理 </p>
  * <p>@Version 1.0 </p>
@@ -29,6 +31,18 @@ public class BaseFeignFallback implements FallbackFactory<IBaseFeignService> {
     public IBaseFeignService create(Throwable throwable) {
         log.error("base服务降级,失败原因:",throwable);
         return new IBaseFeignService() {
+            /**
+             * <p>@Description 校验用户是否存在 </p>
+             * <p>@Author www </p>
+             * <p>@Date 2022/1/23 15:43 </p>
+             * @param userList 用户id集合
+             * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean>
+             */
+            @Override
+            public ResponseDTO<Boolean> validateUserExist(List<String> userList) {
+                log.error("base服务降级：校验用户是否存在");
+                return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,false);
+            }
             /**
              * <p>@Description 查询用户信息 </p>
              * <p>@Author www </p>

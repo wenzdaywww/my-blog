@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * <p>@Description 博客文章 </p>
@@ -16,6 +17,7 @@ import lombok.Data;
  * <p>@Date 2021/11/10 23:05 </p>
  */
 @Data
+@Accessors(chain = true)//开启链式编程
 @TableName("BLOG_ARTICLE")
 public class BlogArticleEntity implements Serializable {
     private static final long serialVersionUID = 1L;

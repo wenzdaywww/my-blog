@@ -19,4 +19,14 @@ public interface IUserBlogService {
      * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.AuthorDTO>
      */
     ResponseDTO<AuthorDTO> findUserCount(String userId);
+    /**
+     * <p>@Description 关注或取消关注博主 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/29 15:16 </p>
+     * @param userId 当前登录的用户ID
+     * @param authorId 博主ID
+     * @param blogId 博客ID
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Boolean>
+     */
+    ResponseDTO<Boolean> followAuthor(String userId,String authorId,Long blogId);
 }

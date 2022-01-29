@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -14,6 +15,7 @@ import java.io.Serializable;
  * <p>@Date 2021/11/10 22:21 </p>
  */
 @Data
+@Accessors(chain = true)//开启链式编程
 @TableName("CODE_DATA")
 public class CodeDataEntity implements Serializable {
     private static final long serialVersionUID = 1L;

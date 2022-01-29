@@ -53,11 +53,12 @@ public interface IBlogBrowseService {
      * <p>@Description 查询博主信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:14 </p>
-     * @param userId 博主ID
+     * @param userId 当前登录用户ID
+     * @param authorId 博主ID
      * @param blogId 博客ID
      * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.AuthorDTO>
      */
-    ResponseDTO<AuthorDTO> findAuthorInfo(String userId,Long blogId);
+    ResponseDTO<AuthorDTO> findAuthorInfo(String userId,String authorId,Long blogId);
     /**
      * <p>@Description 获取热门博客前10名单 </p>
      * <p>@Author www </p>

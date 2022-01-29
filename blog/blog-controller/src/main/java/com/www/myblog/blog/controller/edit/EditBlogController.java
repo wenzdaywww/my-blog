@@ -6,7 +6,7 @@ import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
 import com.www.myblog.blog.data.dto.TagInfoDTO;
-import com.www.myblog.blog.service.classify.ITagInfoService;
+import com.www.myblog.blog.service.tag.ITagInfoService;
 import com.www.myblog.blog.service.edit.IEditBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

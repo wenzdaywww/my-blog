@@ -1,4 +1,4 @@
-package com.www.myblog.blog.service.classify;
+package com.www.myblog.blog.service.tag;
 
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.TagInfoDTO;

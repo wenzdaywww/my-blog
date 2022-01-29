@@ -18,6 +18,14 @@ import java.util.List;
  */
 public interface IUserInfoService {
     /**
+     * <p>@Description 校验用户是否存在 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 15:43 </p>
+     * @param userList 用户id集合
+     * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean>
+     */
+    ResponseDTO<Boolean> validateUserExist(List<String> userList);
+    /**
      * <p>@Description 查询用户信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>

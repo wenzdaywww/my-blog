@@ -1,5 +1,6 @@
 package com.www.myblog.blog.controller.browse;
 
+import com.www.common.config.oauth2.token.JwtTokenConverter;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.dto.BlogArticleDTO;
@@ -20,6 +21,8 @@ import java.util.List;
 @RestController
 @RequestMapping("browse")
 public class BlogBrowseController {
+    @Autowired
+    private JwtTokenConverter jwtTokenConverter;
     @Autowired
     private IBlogBrowseService blogBrowseService;
 
@@ -44,7 +47,7 @@ public class BlogBrowseController {
      */
     @GetMapping("author")
     public ResponseDTO<AuthorDTO> findAuthorInfo(String id,Long bid){
-        return blogBrowseService.findAuthorInfo(id,bid);
+        return blogBrowseService.findAuthorInfo(jwtTokenConverter.getUserId(),id,bid);
     }
     /**
      * <p>@Description 获取热门博客前10名单 </p>

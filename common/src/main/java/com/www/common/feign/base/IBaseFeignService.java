@@ -8,6 +8,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 /**
  * <p>@Description base应用提供的对外服务接口，匿名访问 </p>
@@ -19,6 +22,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(value = "${com.www.common.feign.base}",fallbackFactory = BaseFeignFallback.class)//服务提供者名称
 @ConditionalOnProperty(prefix = "com.www.common.feign",name = {"base"})
 public interface IBaseFeignService {
+    /**
+     * <p>@Description 校验用户是否存在 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 15:43 </p>
+     * @param userList 用户id集合
+     * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean>
+     */
+    @PostMapping("/feign/oauth/exist")
+    ResponseDTO<Boolean> validateUserExist(List<String> userList);
     /**
      * <p>@Description 查询用户信息 </p>
      * <p>@Author www </p>

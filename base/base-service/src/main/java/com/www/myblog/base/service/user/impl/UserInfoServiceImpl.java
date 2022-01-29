@@ -1,5 +1,6 @@
 package com.www.myblog.base.service.user.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.config.code.CodeDict;
@@ -64,6 +65,28 @@ public class UserInfoServiceImpl implements IUserInfoService {
     private String serverPort;
     @Value("${eureka.instance.ip-address}")
     private String ip;
+
+
+    /**
+     * <p>@Description 校验用户是否存在 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 15:43 </p>
+     * @param userList 用户id集合
+     * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean>
+     */
+    @Override
+    public ResponseDTO<Boolean> validateUserExist(List<String> userList) {
+        ResponseDTO<Boolean> response = new ResponseDTO<>();
+        if(CollectionUtils.isEmpty(userList)){
+            response.setResponse(ResponseDTO.RespEnum.SUCCESS,"校验用户是否存在失败，查询用户ID为空",false);
+            return response;
+        }
+        QueryWrapper<SysUserEntity> wrapper = new QueryWrapper<>();
+        wrapper.lambda().in(SysUserEntity::getUserId,userList);
+        int count = sysUserMapper.selectCount(wrapper);
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,count>0);
+        return response;
+    }
 
     /**
      * <p>@Description 查询用户信息 </p>
