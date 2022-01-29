@@ -66,11 +66,13 @@
 import WangEditor from "wangEditor";
 import {ref, reactive, onMounted, onBeforeUnmount, getCurrentInstance} from "vue";
 import {ElMessage} from "element-plus";
+import request from "../../utils/request";
+
 export default {
   name: "EditBlog",
   setup() {
     // 接口请求
-    const request = getCurrentInstance().appContext.config.globalProperties;
+    const axios = getCurrentInstance().appContext.config.globalProperties;
     // 标签列表
     const tagArr = ref([]);
     // 博客分组列表
@@ -125,7 +127,7 @@ export default {
     });
     // 获取博客分类
     const getBlogClass = () => {
-      request.$http.post("api/blog/edit/tag",null).then(function (res) {
+      axios.$http.post(request.tagList,null).then(function (res) {
         if(res.code === 200){
           tagArr.value = res.data;
         }
@@ -134,7 +136,7 @@ export default {
     getBlogClass();
     // 获取博客分组
     const getBlogGroup = () => {
-      request.$http.post("api/blog/edit/group",null).then(function (res) {
+      axios.$http.post(request.groupList,null).then(function (res) {
         if(res.code === 200){
           groupArr.value = res.data;
         }
@@ -148,7 +150,7 @@ export default {
           blogText.content = instance.txt.html();
           if(blogText.content){
             submitDisabled.value = true;
-            request.$http.post("api/blog/edit/new",blogText).then(function (res) {
+            axios.$http.post(request.publishBlog,blogText).then(function (res) {
               if(res.code === 200){
                 ElMessage.success('发布博客成功');
                 instance.txt.clear();
@@ -173,7 +175,7 @@ export default {
     const addGroup = () => {
       groupForm.value.validate((valid) => {
         if (valid) {
-          request.$http.post("api/blog/edit/new-group",group).then(function (res) {
+          axios.$http.post(request.addGroup,group).then(function (res) {
             if(res.code === 200){
               groupVisible.value = false;
               ElMessage.success('新增分组成功');

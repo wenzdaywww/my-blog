@@ -5,7 +5,7 @@
       <i v-if="!collapse" class="el-icon-s-fold" style="color: black"></i>
       <i v-else class="el-icon-s-unfold" style="color: black"></i>
     </div>
-    <div class="logo header-item" @click="handleCommand('blog-index')">博客</div>
+    <div class="logo header-item" @click="handleCommand('blog-index')">{{$t('i18n.blog')}}</div>
     <div class="header-right">
       <!-- 未登录 -->
       <div v-if="isLogin == false" style="margin-top: 20px">
@@ -53,6 +53,7 @@ import {computed, getCurrentInstance, onMounted, reactive, ref, inject, provide}
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import utils from '../utils/utils';
+import request from '../utils/request';
 import {ElMessage} from "element-plus";
 import {initUserRouter} from "../router";
 import Register from "../views/admin/Register.vue";
@@ -63,7 +64,7 @@ export default {
   components: {Register,Password},
   setup() {
     // 接口请求
-    const request = getCurrentInstance().appContext.config.globalProperties;
+    const axios = getCurrentInstance().appContext.config.globalProperties;
     // 路由
     const router = useRouter();
     //store存储对象
@@ -117,7 +118,7 @@ export default {
     });
     // 获取用户数据
     const getUserData = () => {
-      request.$http.get("api/base/user/info", null).then(function (res) {
+      axios.$http.get(request.userInfo, null).then(function (res) {
         if(res.code === 200){
           isLogin.value = true;
           if(res.data.photo){
@@ -132,7 +133,7 @@ export default {
       if (utils.isLogin()){
         isLogin.value = true;
         //加载用户拥有的路由权限
-        request.$http.get("api/base/user/router", null).then(function (res) {
+        axios.$http.get(request.userRouter, null).then(function (res) {
           if(res.code === 200){
             initUserRouter(res.data);
           }
@@ -143,7 +144,7 @@ export default {
         const code = utils.getUrlParam("code");
         if(code){
           clientInfo.code = code;
-          request.$http.post("api/uaa/oauth/token", clientInfo).then(function (res) {
+          axios.$http.post(request.getToken, clientInfo).then(function (res) {
             if(res && res.data){
               router.go(0);//重新跳转当前页面
             }
@@ -156,7 +157,7 @@ export default {
     const handleCommand = (command) => {
       // 退出
       if (command == "loginout") {
-        request.$http.post("api/uaa/logout",null).then(function (res) {
+        axios.$http.post(request.logout,null).then(function (res) {
           if(res.code === 200){
             ElMessage.success("退出成功");
             //TODO 2021/12/28 22:35 router.push路由跳转页面不刷新，待处理

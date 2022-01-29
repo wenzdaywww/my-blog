@@ -1,88 +1,57 @@
-import axios from "axios";
-import qs from "qs";
-import router from '../router';
-import {ElMessage, ElMessageBox} from 'element-plus';
-import {getCurrentInstance} from "vue";
-//设置超时
-axios.defaults.timeout = 10000;
-axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded;charset=UTF-8";
-axios.interceptors.request.use(
-    config => {
-        config.withCredentials = true;
-        return config;
-    },
-    error => {
-        return Promise.reject(error);
-    }
-);
-axios.interceptors.response.use(
-    response => {
-        //接口返回403
-        if ((response.data && (response.data.code == 401 || response.data.code == 403)) || response.status == 401 || response.status == 403) {
-            localStorage.clear();
-            router.push("/index");//跳转登录页面
-        }else if(response.status == 200){
-            return Promise.resolve(response);
-        }else {
-            return Promise.reject();
-        }
-    },
-    error => {
-        ElMessage.error("请求失败");
-        return Promise.reject();
-    }
-);
+// 配置请求地址信息
 export default {
-    post(url, data) {
-        return new Promise((resolve, reject) => {
-            axios({
-                method: 'post',
-                url,
-                data: qs.stringify(data)
-            })
-                .then(res => {
-                    if(res && res.data){
-                        resolve(res.data);
-                    }
-                })
-                .catch(err => {
-                    reject(err);
-                });
-        });
-    },
-    upload(url, data,headers) {
-        return new Promise((resolve, reject) => {
-            axios({
-                method: 'post',
-                url,
-                data: data,
-                headers : headers
-            })
-                .then(res => {
-                    if(res && res.data){
-                        resolve(res.data);
-                    }
-                })
-                .catch(err => {
-                    reject(err);
-                });
-        });
-    },
-    get(url,data) {
-        return new Promise((resolve, reject) => {
-            axios({
-                method: 'get',
-                url,
-                params: data,
-            })
-                .then(res => {
-                    if(res && res.data){
-                        resolve(res.data);
-                    }
-                })
-                .catch(err => {
-                    reject(err);
-                })
-        });
-    }
-};
+    //查询用户信息
+    userInfo: "api/base/user/info",
+    //查询用户路由权限
+    userRouter: "api/base/user/router",
+    //查询用户菜单列表
+    userMenu: "api/base/user/menu",
+    //获取token信息
+    getToken: "api/uaa/oauth/token",
+    //查询所有角色
+    roleList: "api/base/admin/role",
+    //查询所有菜单信息
+    menuList: "api/base/admin/menus",
+    //删除菜单信息
+    deleteMenu: "api/base/menu/down",
+    //编辑菜单信息
+    editMenu: "api/base/menu/edit",
+    //修改密码
+    modifyPwd: "api/base/user/pwd",
+    //注册用户
+    register: "api/base/new/user",
+    //查询用户列表信息
+    userList: "api/base/admin/users",
+    //修改用户状态
+    userState: "api/base/admin/state",
+    //修改用户信息
+    editInfo: "api/base/user/edit",
+    //查询用户统计信息
+    userCount: "api/blog/user/count",
+    //上传头像
+    uploadPhoto: "api/base/user/photo",
+    //获取所有博客标签
+    tagList: "api/blog/edit/tag",
+    //获取所有博客分组
+    groupList: "api/blog/edit/group",
+    //发布博客
+    publishBlog: "api/blog/edit/new",
+    //添加博客分组
+    addGroup: "api/blog/edit/new-group",
+    //查询博客文章
+    article: "api/blog/browse/article/",
+    //查询博主信息
+    author: "api/blog/browse/author",
+    //关注博主
+    follow: "api/blog/browse/follow/",
+    //查询博主的博客列表
+    bloList: "api/blog/browse/list",
+    //查询博主的博客分组列表
+    browseGroup: "api/blog/browse/group",
+    //查询博主的博客标签列表
+    browseTag: "api/blog/browse/tag",
+    //查询热门博客列表
+    hotRank: "api/blog/browse/hot-rank",
+    //退出
+    logout: "api/uaa/logout"
+}

@@ -18,18 +18,19 @@
 
 <script>
 import {getCurrentInstance, inject, ref} from "vue";
+import request from "../../../utils/request";
 
 export default {
   name: "HotBlog",
   setup() {
     const float_type = inject("float_type"); //样式控制
     // 接口请求
-    const request = getCurrentInstance().appContext.config.globalProperties;
+    const axios = getCurrentInstance().appContext.config.globalProperties;
     // 热门博客数据
     let hotBlog = ref([]);
     // 获取热门博客排行
     const getHotRank = () => {
-      request.$http.get("api/blog/browse/hot-rank",null).then(function (res) {
+      axios.$http.get(request.hotRank,null).then(function (res) {
         if(res.code === 200){
           hotBlog.value = res.data;
         }

@@ -44,14 +44,14 @@
 <script>
 import {getCurrentInstance, ref,defineEmit } from "vue";
 import utils from "../../../utils/utils";
-import {ElMessage} from "element-plus";
+import request from "../../../utils/request";
 
 export default {
   name: "GroupBlog",
   emits: ['findBlogGroup','findBlogTag'], //父组件中引用子组件定义的方法
   setup(props,{emit}) { //调用父组件方法，必须有props,{emit}。否则调用失败
     // 接口请求
-    const request = getCurrentInstance().appContext.config.globalProperties;
+    const axios = getCurrentInstance().appContext.config.globalProperties;
     //博主id
     const authorId = utils.getUrlParam("id");
     //博客id
@@ -62,7 +62,7 @@ export default {
     let blogTag = ref([]);
     // 获取博主博客分组列表
     const getBlogGroup = () => {
-      request.$http.get("api/blog/browse/group",{id:authorId,bid:blogId}).then(function (res) {
+      axios.$http.get(request.browseGroup,{id:authorId,bid:blogId}).then(function (res) {
         if(res.code === 200){
           blogGroup.value = res.data;
         }
@@ -71,7 +71,7 @@ export default {
     getBlogGroup();
     // 获取博主博客分类列表
     const getBlogClass = () => {
-      request.$http.get("api/blog/browse/tag",{id:authorId,bid:blogId}).then(function (res) {
+      axios.$http.get(request.browseTag,{id:authorId,bid:blogId}).then(function (res) {
         if(res.code === 200){
           blogTag.value = res.data;
         }

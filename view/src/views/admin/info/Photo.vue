@@ -91,6 +91,7 @@ import {getCurrentInstance, reactive, ref} from "vue";
 import "cropperjs/dist/cropper.css";
 import {ElMessage} from "element-plus";
 import VueCropper from "vue-cropperjs";
+import request from "../../../utils/request";
 
 export default {
   name: "Photo",
@@ -99,7 +100,7 @@ export default {
   },
   setup() {
     // 接口请求
-    const request = getCurrentInstance().appContext.config.globalProperties;
+    const axios = getCurrentInstance().appContext.config.globalProperties;
     // 用户信息
     let user = reactive({
       photo : "src/assets/img/img.jpg",
@@ -112,7 +113,7 @@ export default {
     });
     // 获取用户数据
     const getUserData = () => {
-      request.$http.get("api/base/user/info",null).then(function (res) {
+      axios.$http.get(request.userInfo,null).then(function (res) {
         if(res.code === 200){
           if(res.data.photo){
             user.photo = res.data.photo;
@@ -123,7 +124,7 @@ export default {
     getUserData();
     // 获取用户统计数据
     const getUserCount = () => {
-      request.$http.get("api/blog/user/count",null).then(function (res) {
+      axios.$http.get(request.userCount,null).then(function (res) {
         if(res.code === 200){
           user.blog = res.data.blog;
           user.follow = res.data.follow;
@@ -180,7 +181,7 @@ export default {
     const uploadImg = () => {
       let fd = new FormData();//通过form数据格式来传
       fd.append("photo", base64ToFile(cropImg.value,file.name)); //传文件
-      request.$http.upload("api/base/user/photo",fd,{'Content-Type': 'multipart/form-data'}).then(function (res){
+      axios.$http.upload(request.uploadPhoto,fd,{'Content-Type': 'multipart/form-data'}).then(function (res){
         if(res.code === 200){
           ElMessage.success('上传成功');
           dialogVisible.value = false;

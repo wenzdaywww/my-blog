@@ -42,13 +42,14 @@
 
 import {getCurrentInstance,  reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
+import request from '../../utils/request';
 
 export default {
   name: "Register",
   emits: ['toLogin'], //父组件中引用子组件定义的方法
   setup(props,{emit}){
     // 接口请求
-    const request = getCurrentInstance().appContext.config.globalProperties;
+    const axios = getCurrentInstance().appContext.config.globalProperties;
     //弹窗控制
     const registVisible = ref(false);
     // 新增用户的规则校验
@@ -118,7 +119,7 @@ export default {
     const saveAdd = () => {
       addForm.value.validate((valid) => {
         if (valid) {
-          request.$http.post("api/base/new/user", form).then(function (res) {
+          axios.$http.post(request.register, form).then(function (res) {
             if(res.code === 200){
               ElMessage.success('新增成功');
               registVisible.value = false;

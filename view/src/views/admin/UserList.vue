@@ -116,6 +116,7 @@
 <script>
 import { ref, reactive, getCurrentInstance } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
+import request from '../../utils/request';
 
 export default {
   name: "userList",
@@ -133,10 +134,10 @@ export default {
     // 页数
     const pageTotal = ref(0);
     // 接口请求
-    const request = getCurrentInstance().appContext.config.globalProperties;
+    const axios = getCurrentInstance().appContext.config.globalProperties;
     // 获取表格数据
     const getData = () => {
-      request.$http.get("api/base/admin/users",query).then(function (res) {
+      axios.$http.get(request.userList,query).then(function (res) {
         if(res.code === 200){
           tableData.value = res.data;
           pageTotal.value = res.totalNum;
@@ -190,7 +191,7 @@ export default {
     };
     // 编辑页面的保存按钮
     const saveEdit = () => {
-      request.$http.post("api/base/admin/state",form).then(function (res) {
+      axios.$http.post(request.userState,form).then(function (res) {
         if(res.code === 200){
           editVisible.value = false;
           ElMessage.success('修改成功');

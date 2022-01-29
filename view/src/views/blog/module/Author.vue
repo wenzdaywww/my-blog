@@ -63,13 +63,14 @@
 <script>
 import {getCurrentInstance, reactive, ref} from "vue";
 import utils from '../../../utils/utils';
+import request from "../../../utils/request";
 import {ElMessage} from "element-plus";
 
 export default {
   name: "Author",
   setup(){
     // 接口请求
-    const request = getCurrentInstance().appContext.config.globalProperties;
+    const axios = getCurrentInstance().appContext.config.globalProperties;
     //博主id
     const authorId = utils.getUrlParam("id");
     //博客id
@@ -91,7 +92,7 @@ export default {
     const isFan = ref(false);
     // 获取博主信息
     const getAuthorInfo = () => {
-      request.$http.get("api/blog/browse/author", {id:authorId,bid:blogId}).then(function (res) {
+      axios.$http.get(request.author, {id:authorId,bid:blogId}).then(function (res) {
         if(res.code === 200){
           followFlag.value = authorId !== utils.getUserId();
           author.userName = res.data.userName;
@@ -110,7 +111,7 @@ export default {
     const followAuthor = () => {
       if(utils.isLogin()){
         if(authorId){
-          request.$http.get("api/blog/user/follow/"+authorId,null).then(function (res) {
+          axios.$http.get(request.follow+authorId,null).then(function (res) {
             if(res.code === 200){
               //TODO 2022/1/23 19:17 关注/取消博主待后面开放
               ElMessage.success('关注成功');

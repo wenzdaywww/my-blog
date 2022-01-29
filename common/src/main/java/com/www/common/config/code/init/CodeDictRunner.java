@@ -46,12 +46,14 @@ public class CodeDictRunner implements ApplicationRunner {
             Map<String,Map<String, CodeDTO>> codeMap = (Map<String,Map<String, CodeDTO>>)RedisOperation.hashGet(RedisCommonContant.CODE_DATA);
             if(MapUtils.isNotEmpty(codeMap)){
                 CodeDict.initCode(codeMap);
-                log.info("加载code_type数据{}条",codeMap.size());
+                log.info("加载code_data数据{}条",codeMap.size());
             }else {
-                log.info("加载code_type失败，redis中不存在数据");
+                log.info("加载code_data失败，redis中不存在数据");
+                throw new RuntimeException("加载code_data失败，redis中不存在数据");
             }
         }catch (Exception e){
-            log.error("加载code_type失败，失败原因：{}",e.getMessage());
+            log.error("加载code_data失败，失败原因：{}",e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

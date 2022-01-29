@@ -31,12 +31,13 @@
 <script>
 import {getCurrentInstance, reactive, ref} from "vue";
 import utils from "../../../utils/utils";
+import request from "../../../utils/request";
 
 export default {
   name: "article",
   setup() {
     // 接口请求
-    const request = getCurrentInstance().appContext.config.globalProperties;
+    const axios = getCurrentInstance().appContext.config.globalProperties;
     //博客id
     const blogId = utils.getUrlParam("bid");
     //博客文章信息
@@ -55,7 +56,7 @@ export default {
     //查询博客文章信息
     const getBlogArticle = () => {
       if(blogId){
-          request.$http.get("api/blog/browse/article/"+blogId,null).then(function (res) {
+          axios.$http.get(request.article+blogId,null).then(function (res) {
             if(res.code === 200){
               blog.blogId = res.data.blogId;
               blog.title = res.data.title;

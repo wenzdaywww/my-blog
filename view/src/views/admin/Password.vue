@@ -23,12 +23,13 @@
 <script>
 import {getCurrentInstance, reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
+import request from '../../utils/request';
 
 export default {
   name: "Password",
   setup(){
     // 接口请求
-    const request = getCurrentInstance().appContext.config.globalProperties;
+    const axios = getCurrentInstance().appContext.config.globalProperties;
     //修改密码弹出框控制位
     const editVisible = ref(false);
     // 修改密码的规则校验
@@ -67,7 +68,7 @@ export default {
     const savePwd = () => {
       editForm.value.validate((valid) => {
         if (valid) {
-          request.$http.post("api/base/user/pwd",form).then(function (res) {
+          axios.$http.post(request.modifyPwd,form).then(function (res) {
             if(res.code === 200){
               ElMessage.success('修改成功');
               editVisible.value = false;

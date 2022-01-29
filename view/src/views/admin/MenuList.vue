@@ -162,12 +162,13 @@
 <script>
 import { ref, reactive, getCurrentInstance } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
+import request from '../../utils/request';
 
 export default {
   name: "menuList",
   setup() {
     // 接口请求
-    const request = getCurrentInstance().appContext.config.globalProperties;
+    const axios = getCurrentInstance().appContext.config.globalProperties;
     // 查询条件
     const query = reactive({
       menuType: "",
@@ -277,7 +278,7 @@ export default {
     const editForm = ref(null);
     // 查询所有角色
     const getRoleList = () => {
-      request.$http.get("api/base/admin/role",null).then(function (res) {
+      axios.$http.get(request.roleList,null).then(function (res) {
         if(res.code === 200){
           rolesArr.value = res.data;
         }
@@ -288,7 +289,7 @@ export default {
     const tableData = ref([]);
     // 获取表格数据
     const getData = () => {
-      request.$http.get("api/base/admin/menus",query).then(function (res) {
+      axios.$http.get(request.menuList,query).then(function (res) {
         if(res.code === 200){
           tableData.value = res.data;
           query.pageTotal = res.totalNum;
@@ -363,7 +364,7 @@ export default {
       // 二次确认删除
       ElMessageBox.confirm("确定要删除吗？", "提示", {type: "warning"}).then(() => {
         form.menuId= row.menuId;
-        request.$http.post("api/base/menu/down", form).then(function (res) {
+        axios.$http.post(request.deleteMenu, form).then(function (res) {
           if(res.code === 200){
             ElMessage.success('删除成功');
             getData();
@@ -382,7 +383,7 @@ export default {
             form.roleCode += temp + ",";
           });
           form.roleCode = form.roleCode ? form.roleCode.substring(0,form.roleCode.length-1) : "";
-          request.$http.post("api/base/menu/edit", form).then(function (res) {
+          axios.$http.post(request.editMenu, form).then(function (res) {
             if(res.code === 200){
               dialogVisible.value = false;
               ElMessage.success('保存成功');

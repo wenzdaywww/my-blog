@@ -39,6 +39,7 @@ import {computed, ref, getCurrentInstance, reactive} from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import utils from "../utils/utils";
+import request from "../utils/request";
 
 export default {
   setup() {
@@ -47,13 +48,13 @@ export default {
     const store = useStore();
     const collapse = computed(() => store.state.collapse);
     // 接口请求
-    const request = getCurrentInstance().appContext.config.globalProperties;
+    const axios = getCurrentInstance().appContext.config.globalProperties;
     //菜单列表
     const items = ref([]);
     // 获取菜单
     const getData = () => {
       if(utils.isLogin()){
-        request.$http.get("api/base/user/menu", null).then(function (res) {
+        axios.$http.get(request.userMenu, null).then(function (res) {
           if(res.code === 200){
             items.value = res.data;
           }

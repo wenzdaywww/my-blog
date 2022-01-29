@@ -44,11 +44,13 @@
 import {getCurrentInstance, reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
 import utils from "../../../utils/utils";
+import request from "../../../utils/request";
+
 export default {
   name: "blogList",
   setup() {
     // 接口请求
-    const request = getCurrentInstance().appContext.config.globalProperties;
+    const axios = getCurrentInstance().appContext.config.globalProperties;
     //博主id
     const authorId = utils.getUrlParam("id");
     //查询条件
@@ -65,7 +67,7 @@ export default {
     let blogList = ref([]);
     const getBlogList = () => {
       if(query.userId){
-        request.$http.post("api/blog/browse/list/",query).then(function (res) {
+        axios.$http.post(request.bloList,query).then(function (res) {
           if(res.code === 200){
             blogList.value = res.data;
             query.pageTotal = res.totalNum;

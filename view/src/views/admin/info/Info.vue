@@ -48,12 +48,13 @@
 <script>
 import {getCurrentInstance, reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
+import request from "../../../utils/request";
 
 export default {
   name: "Info",
   setup() {
     // 接口请求
-    const request = getCurrentInstance().appContext.config.globalProperties;
+    const axios = getCurrentInstance().appContext.config.globalProperties;
     // 编辑用户的规则校验
     const editRules = {
       userName : [
@@ -105,7 +106,7 @@ export default {
     const openEdit = ref(false);
     // 获取用户数据
     const getUserData = () => {
-      request.$http.get("api/base/user/info",null).then(function (res) {
+      axios.$http.get(request.userInfo,null).then(function (res) {
         if(res.code === 200){
           user.userId = res.data.userId;
           user.userName = res.data.userName;
@@ -125,7 +126,7 @@ export default {
     const onSubmit = () => {
       editForm.value.validate((valid) => {
         if (valid) {
-          request.$http.post("api/base/user/edit",user).then(function (res) {
+          axios.$http.post(request.editInfo,user).then(function (res) {
             if(res.code === 200){
               ElMessage.success('修改成功');
               getUserData();
