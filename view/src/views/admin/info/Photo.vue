@@ -13,7 +13,7 @@
               <img :src="user.photo" class="user-avator" alt/>
               <span class="info-edit">
                   <i class="el-icon-lx-camerafill"></i>
-                </span>
+              </span>
             </div>
           </div>
         </el-row>

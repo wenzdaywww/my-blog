@@ -5,8 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.config.code.CodeDict;
 import com.www.common.config.mvc.upload.IFileUpload;
-import com.www.common.feign.blog.IBlogFeignService;
-import com.www.common.pojo.constant.CharConstant;
 import com.www.common.pojo.dto.feign.UserInfoDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.pojo.enums.CodeTypeEnum;
@@ -28,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,12 +56,6 @@ public class UserInfoServiceImpl implements IUserInfoService {
     private ISysUserService sysUserService;
     @Autowired
     private ISysRoleService sysRoleService;
-    @Autowired
-    private IBlogFeignService blogFeignService;
-    @Value("${server.port}")
-    private String serverPort;
-    @Value("${eureka.instance.ip-address}")
-    private String ip;
 
 
     /**
@@ -226,13 +217,11 @@ public class UserInfoServiceImpl implements IUserInfoService {
             responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"查询不到该用户");
             return responseDTO;
         }
-        String path = fileService.uploadFileBackPath(photo,userId);
+        String path = fileService.uploadFileBackURL(photo,"photo",userId);
         if(StringUtils.isBlank(path)){
             responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新用户头像失败");
             return responseDTO;
         }
-        path += CharConstant.QUESTION_MARK + DateUtils.format(DateUtils.getCurrentDateTime(), DateUtils.DateFormatEnum.YYYYMMDDHHMMSSSSS);
-        path = "http://" + ip + CharConstant.COLON + serverPort + path;
         UpdateWrapper<SysUserEntity> userWrapper = new UpdateWrapper<>();
         userWrapper.lambda().eq(SysUserEntity::getUserId,userEntity.getUserId());
         userWrapper.lambda().set(SysUserEntity::getPhoto,path);

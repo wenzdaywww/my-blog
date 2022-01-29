@@ -3,6 +3,7 @@ package com.www.myblog.blog.service.edit;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,9 +19,10 @@ public interface IEditBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/22 18:31 </p>
      * @param blog 博客信息
+     * @param img 博客封面图片
      * @return com.www.common.pojo.dto.response.ResponseDTO<String> 博客文章主键
      */
-    ResponseDTO<Long> createBlogArticle(BlogArticleDTO blog);
+    ResponseDTO<Long> createBlogArticle(BlogArticleDTO blog, MultipartFile img);
     /**
      * <p>@Description 当前登录用户新增分组信息 </p>
      * <p>@Author www </p>

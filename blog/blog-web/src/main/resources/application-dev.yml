@@ -26,6 +26,7 @@ eureka:
       #配置eureka集群地址
       defaultZone : http://www:www362412@localhost:8002/eureka/ #注册中心地址
   instance:
+    ip-address: ${spring.cloud.client.ip-address}
     instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port} #该实例注册到服务中心的唯一ID
     prefer-ip-address: true #该实例，相较于hostname是否优先使用IP
 #自定义common配置
@@ -36,6 +37,13 @@ com:
         enable: true #开启数据字典加载
       ctl-aop:
         enable: true #开启controller的AOP日志拦截
+      #配置文件路径
+      file:
+        enable: true #开启上传文件配置
+        imgUrlPath: /imgs/** #配置访问图片的相对路径
+        imgSavePath: D:\WorkSpaces\temp\${spring.application.name}\img\ #图片保存的绝对路径，window的路径必须是\且路径最后也需要\
+        otherUrlPath: /file/** #配置访问图片外其他文件的相对路径
+        otherSavePath: D:\WorkSpaces\temp\${spring.application.name}\file\ #图片外其他文件保存的绝对路径，window的路径必须是\且路径最后也需要\
       oauth2:
         enable: true #开启统一认证资源服务方配置
         signing-key: wenzday #JWT令牌签名

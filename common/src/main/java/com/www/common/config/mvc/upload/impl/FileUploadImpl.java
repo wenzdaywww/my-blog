@@ -1,15 +1,18 @@
 package com.www.common.config.mvc.upload.impl;
 
 import com.www.common.config.mvc.upload.IFileUpload;
-import com.www.common.pojo.dto.response.ResponseDTO;
+import com.www.common.pojo.constant.CharConstant;
 import com.www.common.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -38,6 +41,13 @@ public class FileUploadImpl implements IFileUpload {
     /** 图片外其他文件保存的绝对路径 **/
     @Value("${com.www.common.file.otherSavePath}")
     private String otherSavePath;
+    /** 端口 **/
+    @Value("${server.port}")
+    private String serverPort;
+    /** ip地址 **/
+    private String ip;
+    @Autowired
+    private Environment environment;
 
     /**
      * <p>@Description 构造方法 </p>
@@ -48,33 +58,35 @@ public class FileUploadImpl implements IFileUpload {
     public FileUploadImpl(){
         log.info("配置文件上传");
     }
+
     /**
-     * <p>@Description 上传文件 </p>
+     * <p>@Description 初始化数据 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/30 01:20 </p>
+     * @return void
+     */
+    @PostConstruct
+    public void init(){
+        ip = environment.getProperty("eureka.instance.ip-address"); //获取ip
+    }
+    /**
+     * <p>@Description 上传文件并返回url地址 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/4 15:03 </p>
-     * @param file   文件
+     * @param file     文件
+     * @param prevPath 上一级文件夹，可设置多级，如temp、temp/test
      * @param fileName 保存的文件名，不含文件格式
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
     @Override
-    public ResponseDTO<String> uploadFile(MultipartFile file, String fileName) {
-        String path = this.uploadFileBackPath(file,fileName);
-        if(path == null){
-            return new ResponseDTO<>(ResponseDTO.RespEnum.FAIL,"上传文件失败");
+    public String uploadFileBackURL(MultipartFile file, String prevPath, String fileName) {
+        String path = this.uploadFileBackPath(file,prevPath,fileName);
+        if(StringUtils.isNotBlank(path)){
+            path = CharConstant.HTTP + ip + CharConstant.COLON + serverPort + path;
+            return path;
+        }else {
+            return null;
         }
-        return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,path);
-    }
-
-    /**
-     * <p>@Description 上传文件 </p>
-     * <p>@Author www </p>
-     * <p>@Date 2021/12/4 15:03 </p>
-     * @param file 文件
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
-     */
-    @Override
-    public ResponseDTO<String> uploadFile(MultipartFile file) {
-        return this.uploadFile(file,null);
     }
 
     /**
@@ -82,34 +94,24 @@ public class FileUploadImpl implements IFileUpload {
      * <p>@Author www </p>
      * <p>@Date 2021/12/4 15:03 </p>
      * @param file 文件
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
-     */
-    @Override
-    public String uploadFileBackPath(MultipartFile file) {
-        return uploadFileBackPath(file,null);
-    }
-
-    /**
-     * <p>@Description 上传文件并返回地址 </p>
-     * <p>@Author www </p>
-     * <p>@Date 2021/12/4 15:03 </p>
-     * @param file 文件
+     * @param prevPath 上一级文件夹，可设置多级，如temp、temp/test
      * @param fileName 保存的文件名，不含文件格式
      * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
      */
     @Override
-    public String uploadFileBackPath(MultipartFile file, String fileName){
-        return this.saveFile(file,fileName);
+    public String uploadFileBackPath(MultipartFile file, String prevPath, String fileName){
+        return this.saveFile(file,prevPath,fileName);
     }
     /**
      * <p>@Description 保存上传的文件 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/10 22:28 </p>
      * @param file 文件
+     * @param prevPath 上一级文件夹，可设置多级，如temp、temp/test
      * @param fileName 保存的文件名，不含文件格式
      * @return java.lang.String 返回文件的相对路径
      */
-    private String saveFile(MultipartFile file, String fileName){
+    private String saveFile(MultipartFile file, String prevPath,String fileName){
         if(file == null){
             return null;
         }
@@ -129,6 +131,9 @@ public class FileUploadImpl implements IFileUpload {
             urlPath = otherUrlPath;
             savePath = otherSavePath + DateUtils.format(DateUtils.getCurrentDateTime(), DateUtils.DateFormatEnum.YYYYMMDD);
         }
+        //添加上一级路径
+        urlPath = StringUtils.isNotBlank(prevPath) ? urlPath.replace("**",prevPath + CharConstant.LEFT_SLASH) : urlPath.replace("**","");
+        savePath = StringUtils.isNotBlank(prevPath) ? savePath + prevPath + CharConstant.LEFT_SLASH : savePath;
         //判断文件夹是否存在，不存在则创建
         File filePath = new File(savePath);
         if (!filePath.exists() && !filePath.isDirectory()) {
@@ -152,6 +157,6 @@ public class FileUploadImpl implements IFileUpload {
             log.info("上传失败,失败信息：{}",e.getMessage());
             return null;
         }
-        return urlPath.replace("**",fileName);
+        return urlPath + fileName;
     }
 }

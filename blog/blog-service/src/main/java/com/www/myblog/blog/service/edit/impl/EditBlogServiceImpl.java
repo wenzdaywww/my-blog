@@ -1,7 +1,10 @@
 package com.www.myblog.blog.service.edit.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.www.common.config.code.CodeDict;
+import com.www.common.config.mvc.upload.IFileUpload;
+import com.www.common.pojo.constant.CharConstant;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.pojo.enums.CodeKeyEnum;
 import com.www.common.pojo.enums.CodeTypeEnum;
@@ -14,7 +17,9 @@ import com.www.myblog.blog.service.edit.IEditBlogService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -36,16 +41,19 @@ public class EditBlogServiceImpl implements IEditBlogService {
     private TagInfoMapper classificationMapper;
     @Autowired
     private BlogGroupMapper userBlogGroupMapper;
+    @Autowired
+    private IFileUpload fileService;
 
     /**
      * <p>@Description 当前登录的用户创建博客文章 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/22 18:31 </p>
      * @param blog 博客信息
+     * @param img 博客封面图片
      * @return com.www.common.pojo.dto.response.ResponseDTO<Long> 博客文章主键
      */
     @Override
-    public ResponseDTO<Long> createBlogArticle(BlogArticleDTO blog) {
+    public ResponseDTO<Long> createBlogArticle(BlogArticleDTO blog, MultipartFile img) {
         ResponseDTO<Long> response = new ResponseDTO<>();
         if(blog == null || StringUtils.isAnyBlank(blog.getUserId(),blog.getTitle(),blog.getContent())){
             response.setResponse(ResponseDTO.RespEnum.FAIL,"发布博客失败，信息不完整",null);
@@ -72,6 +80,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
         blogEntity.setUserId(blog.getUserId());
         blogEntity.setTitle(blog.getTitle());
         blogEntity.setContent(blog.getContent());
+        blogEntity.setSummary(blog.getSummary());
         blogEntity.setPraise(0L);
         blogEntity.setComment(0L);
         blogEntity.setBrowse(0L);
@@ -79,6 +88,15 @@ public class EditBlogServiceImpl implements IEditBlogService {
         blogEntity.setUpdateTime(DateUtils.getCurrentDateTime());
         blogEntity.setCreateTime(DateUtils.getCurrentDateTime());
         blogArticleMapper.insert(blogEntity);
+        //保存封面图片
+        if(img != null){
+            String path = fileService.uploadFileBackURL(img,"blogCover","coverImg_" + blogEntity.getBlogId());
+            if(StringUtils.isNotBlank(path)){
+                //更新博客封面图片
+                blogEntity.setCoverImg(path);
+                blogArticleMapper.updateById(blogEntity);
+            }
+        }
         //创建博客分组
         if(blog.getGroupId() != null){
             BlogGroupEntity blogGroupEntity = new BlogGroupEntity();

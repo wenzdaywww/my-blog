@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -60,11 +62,11 @@ public class EditBlogController {
      * @return com.www.common.pojo.dto.response.ResponseDTO<String> 博客文章主键
      */
     @PostMapping("new")
-    public ResponseDTO<Long> createBlogArticle(BlogArticleDTO blogText){
-        if(blogText != null){
-            blogText.setUserId(jwtTokenConverter.getUserId());
+    public ResponseDTO<Long> createBlogArticle(BlogArticleDTO blog,MultipartFile img){
+        if(blog != null){
+            blog.setUserId(jwtTokenConverter.getUserId());
         }
-        return editBlogService.createBlogArticle(blogText);
+        return editBlogService.createBlogArticle(blog,img);
     }
     /**
      * <p>@Description 查询所有博客分类 </p>

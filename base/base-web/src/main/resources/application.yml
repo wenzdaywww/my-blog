@@ -42,11 +42,6 @@ hystrix:
         isolation:
           thread:
             timeoutInMilliseconds: 60000 #配置超时时间
-com:
-  www:
-    common:
-      feign: #配置需要调用的应用服务
-        blog: my-blog #需要的调用的应用服务
 #配置eureka注册中心服务的status信息
 info:
   name: my blog administrator server

@@ -27,4 +27,6 @@ public class CharConstant {
     public static final String QUESTION_MARK = "?";
     /** 左斜杆 **/
     public static final String LEFT_SLASH = "/";
+    /** http **/
+    public static final String HTTP = "http://";
 }

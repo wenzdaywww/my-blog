@@ -22,7 +22,7 @@
               <el-row>
                 <el-col :span="12">
                   <el-form-item label="标签：">
-                    <el-select v-model="blogText.tagIds" placeholder="分类" multiple="true" class="handle-select mr10 blog-class">
+                    <el-select v-model="blogText.tagIds" placeholder="分类" :multiple="true" class="handle-select mr10 blog-class">
                       <el-option v-for="item in tagArr" :key="item.tagId" :label="item.tagName" :value="item.tagId"></el-option>
                     </el-select>
                   </el-form-item>
@@ -33,6 +33,30 @@
                       <el-option v-for="item in groupArr" :key="item.groupId" :label="item.groupName" :value="item.groupId"></el-option>
                     </el-select>
                     <span class="add-group" @click="groupVisible=true">新增分组</span>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="12">
+                  <el-form-item label="摘要：">
+                    <el-input v-model="blogText.summary" type="textarea" placeholder="(选填)：会在推荐、列表等场景外露，帮助读者快速了解内容，如不填写则默认抓取正文前256字符"
+                              maxlength="256" :rows="7"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="封面：">
+                    <el-tooltip class="item" effect="light" content="只能选择一张图片" placement="bottom">
+                      <el-upload action="#" ref="coverUpload"
+                                 list-type="picture-card" :multiple="false"
+                                 :auto-upload="false"
+                                 :on-preview="handlePreview"
+                                 :before-remove="beforeRemove"
+                                 :on-change="uploadSectionFile"
+                                 :on-exceed="onExceedHandle"
+                                 :limit="1">
+                        <i class="el-icon-plus"></i>
+                      </el-upload>
+                    </el-tooltip>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -79,6 +103,10 @@ export default {
     const groupArr = ref([]);
     //博客编辑器对象
     const editor = ref(null);
+    //选中的图片文件
+    let coverFile = ref({});
+    // 上传图片对象
+    const coverUpload = ref(null);
     // 新增博客的规则校验
     const blogRules = {
       title : [
@@ -96,6 +124,8 @@ export default {
     //博客对象
     const blogText = reactive({
       title: "",
+      summary: "",
+      img: null,
       tagIds:"",
       groupId:"",
       content: ""
@@ -115,7 +145,7 @@ export default {
     onMounted(() => {
       instance = new WangEditor(editor.value);
       instance.config.zIndex = 1;
-      instance.config.height = 600;
+      instance.config.height = 470;
       instance.config.showLinkImg = false;
       instance.config.showLinkVideo = false;
       instance.config.uploadImgShowBase64 = true;
@@ -125,6 +155,36 @@ export default {
       instance.destroy();
       instance = null;
     });
+    //文件列表移除文件时的钩子
+    const beforeRemove = (file, fileList) => {
+      coverFile = null;
+    }
+    //点击文件列表中已上传的文件时的钩子
+    const handlePreview = (file) => {
+    }
+    //文件超出个数限制时的钩子
+    const onExceedHandle = (file, fileList) => {
+      ElMessage.error('只能上传一张图片！');
+    }
+    //文件状态改变时的钩子，添加文件、上传成功和上传失败时都会被调用
+    const uploadSectionFile = (file) =>{
+      const typeArr = ['image/png', 'image/jpeg', 'image/jpg'];
+      const isJPG = typeArr.indexOf(file.raw.type) !== -1;
+      const isLt3M = file.size / 1024 / 1024 < 3;
+      if (!isJPG) {
+        ElMessage.error('请选择图片!');
+        coverFile = null;
+        coverUpload.value.clearFiles();
+        return;
+      }
+      if (!isLt3M) {
+        ElMessage.error('上传图片大小不能超过 3MB!');
+        coverFile = null;
+        coverUpload.value.clearFiles();
+        return;
+      }
+      coverFile = file.raw;
+    }
     // 获取博客分类
     const getBlogClass = () => {
       axios.$http.post(request.tagList,null).then(function (res) {
@@ -149,15 +209,28 @@ export default {
         if (valid) {
           blogText.content = instance.txt.html();
           if(blogText.content){
+            let fd = new FormData();//通过form数据格式来传
+            fd.append("img", coverFile); //传文件
+            fd.append("title",blogText.title);
+            if(blogText.summary){
+              fd.append("summary",blogText.summary);
+            }else {
+              fd.append("summary",instance.txt.text().slice(0, 256));
+            }
+            fd.append("tagIds",blogText.tagIds);
+            fd.append("groupId",blogText.groupId);
+            fd.append("content",blogText.content);
             submitDisabled.value = true;
-            axios.$http.post(request.publishBlog,blogText).then(function (res) {
+            axios.$http.upload(request.publishBlog,fd,{'Content-Type': 'multipart/form-data'}).then(function (res) {
               if(res.code === 200){
-                ElMessage.success('发布博客成功');
                 instance.txt.clear();
                 blogText.title = null;
-                blogText.classIds = null;
-                blogText.bgId = null;
+                blogText.summary = null;
+                blogText.tagIds = null;
+                blogText.groupId = null;
                 blogText.content = null;
+                coverUpload.value.clearFiles();
+                ElMessage.success('发布博客成功');
               }else {
                 ElMessage.error('发布博客失败');
               }
@@ -189,9 +262,9 @@ export default {
         }
       });
     };
-    return {
+    return {coverUpload,
       submitDisabled,tagArr,groupArr,editor,blogText,blogRules,blogForm,groupVisible,group,groupRules,groupForm,
-      submitBlog,addGroup
+      submitBlog,addGroup,beforeRemove,handlePreview,uploadSectionFile,onExceedHandle
     };
   },
 };
@@ -222,4 +295,15 @@ body {
 .blog-text-title{
   color: #606266;
 }
+.avatar-uploader /deep/ .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  background-color: #fff;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  width: 180px;
+  height: 180px;
+}
+
 </style>
