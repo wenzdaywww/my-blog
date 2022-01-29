@@ -4,6 +4,7 @@
   </el-card>
   <div v-if="blogList != null && blogList.length > 0">
     <el-card class="blog-card" v-for="item in blogList">
+      <img v-if="item.coverImg" :src="item.coverImg" class="image" />
       <div class="blog-detail">
         <el-tooltip class="item" effect="light" :content="item.title" placement="bottom">
           <el-link :href="item.blogId ? '/article?bid=' + item.blogId : '#'" class="blog-title ellipsis-text"
@@ -12,7 +13,7 @@
         <div class="bottom card-header">
           <el-row class="el-row">
             <div>
-              {{item.content}}
+              {{item.summary}}
             </div>
           </el-row>
           <el-row class="el-row">
@@ -133,6 +134,14 @@ export default {
 }
 .blog-article{
   color: #686264;
+}
+.image{
+  float: right;
+  width: 160px;
+  height: 120px;
+  border-radius: 8%;
+  margin-top: 40px;
+  margin-left: 5px;
 }
 .blog-time{
   float: right;

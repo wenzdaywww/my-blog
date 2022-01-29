@@ -37,6 +37,16 @@ public class BlogArticleEntity implements Serializable {
     @TableField("TITLE")
     private String title;
     /**
+    * 博客摘要
+    */
+    @TableField("SUMMARY")
+    private String summary;
+    /**
+    * 博客封面图片
+    */
+    @TableField("COVER_IMG")
+    private String coverImg;
+    /**
     * 博客内容
     */
     @TableField("CONTENT")

@@ -52,6 +52,14 @@ public class BlogArticleDTO implements Serializable {
     */
     private String title;
     /**
+     * 博客摘要
+     */
+    private String summary;
+    /**
+     * 博客封面图片
+     */
+    private String coverImg;
+    /**
     * 博客内容
     */
     private String content;

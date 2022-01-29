@@ -140,7 +140,6 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
             return response;
         }
         Page<BlogArticleDTO> page = new Page<>(queryDTO.getPageNum(),queryDTO.getPageSize());
-        //TODO 2022/1/23 23:07 博客内容返回待处理，mapper暂注释
         page = blogArticleMapper.findAuthorBlogList(page,queryDTO);
         List<BlogArticleDTO> blogList =  page.getRecords();
         response.setPageNum(queryDTO.getPageNum());
@@ -201,7 +200,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
         }else {
             authorDTO.setAge("1个月");
         }
-        authorDTO.setFlag(StringUtils.isNotBlank(userId));//判断是否登录
+        authorDTO.setFlag(StringUtils.isNotBlank(userId) && !StringUtils.equals(userId,authorId));//判断是否展示关注
         QueryWrapper<UserFansEntity> fansWrapper = new QueryWrapper<>();
         fansWrapper.lambda().eq(UserFansEntity::getUserId,authorId);
         fansWrapper.lambda().eq(UserFansEntity::getFansId,userId);

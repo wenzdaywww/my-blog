@@ -3,6 +3,8 @@ CREATE TABLE IF NOT EXISTS BLOG_ARTICLE (
 	BLOG_ID BIGINT AUTO_INCREMENT comment '博客主键',
 	USER_ID VARCHAR(40) comment '用户ID',
 	TITLE TEXT(1024) comment '博客题目',
+    SUMMARY TEXT(256) comment '博客摘要',
+    COVER_IMG VARCHAR(256) comment '博客封面图片',
 	CONTENT LONGTEXT comment '博客内容',
 	BROWSE BIGINT comment '博客浏览量',
 	PRAISE BIGINT comment '博客点赞数',

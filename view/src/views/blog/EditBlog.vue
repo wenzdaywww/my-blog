@@ -115,7 +115,7 @@ export default {
     onMounted(() => {
       instance = new WangEditor(editor.value);
       instance.config.zIndex = 1;
-      instance.config.height = 200;
+      instance.config.height = 600;
       instance.config.showLinkImg = false;
       instance.config.showLinkVideo = false;
       instance.config.uploadImgShowBase64 = true;
