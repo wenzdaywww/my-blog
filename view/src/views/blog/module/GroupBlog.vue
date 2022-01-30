@@ -10,7 +10,7 @@
       <el-col :span="16">
         <el-tooltip class="item" effect="light" :content="item.groupName" placement="bottom">
           <el-tag size="small" class="group-name">
-            <el-link @click="findBlogGroup(item.groupId,item.groupName)" type="primary" href="javascript:void(0);" class="ellipsis-text">{{item.groupName}}</el-link>
+            <el-link @click="findBlogGroup(item.groupId,item.groupName)" type="primary" href="javascript:void(0);" class="ellipsis-line1">{{item.groupName}}</el-link>
           </el-tag>
         </el-tooltip>
       </el-col>
@@ -30,7 +30,7 @@
       <el-col :span="16">
         <el-tooltip class="item" effect="light" :content="item.tagName" placement="bottom">
           <el-tag type="success" size="small" class="group-name">
-            <el-link @click="findBlogTag(item.tagId,item.tagName)" type="success" href="javascript:void(0);" class="ellipsis-text">{{item.tagName}}</el-link>
+            <el-link @click="findBlogTag(item.tagId,item.tagName)" type="success" href="javascript:void(0);" class="ellipsis-line1">{{item.tagName}}</el-link>
           </el-tag>
         </el-tooltip>
       </el-col>
@@ -92,9 +92,6 @@ export default {
 </script>
 
 <style scoped>
-.text-center{
-  text-align: center;
-}
 .class-card{
   margin-left: 10px;
   margin-bottom: 20px;
@@ -123,10 +120,6 @@ export default {
   height: 30px;
   border-radius: 5px;
 }
-.span-title{
-  font-size: 20px;
-  margin-bottom: 10px;
-}
 .card-title{
   font-weight: bold;
   font-size: 18px;
@@ -134,7 +127,7 @@ export default {
 .group-name{
   margin-bottom: 5px;
 }
-.ellipsis-text{
+.ellipsis-line1{
   display: -webkit-box;/*作为弹性伸缩盒子模型显示*/
   -webkit-line-clamp: 1; /*显示的行数；如果要设置2行加...则设置为2*/
   overflow: hidden; /*超出的文本隐藏*/

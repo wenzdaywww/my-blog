@@ -52,6 +52,8 @@ export default {
     browseTag: "api/blog/browse/tag",
     //查询热门博客列表
     hotRank: "api/blog/browse/hot-rank",
+    //新增评论
+    addComment: "api/blog/user/comment",
     //退出
     logout: "api/uaa/logout"
 }

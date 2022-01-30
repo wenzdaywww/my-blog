@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS BLOG_COMMENT (
 	BLOG_ID BIGINT(40) UNIQUE comment '博客ID',
 	USER_ID VARCHAR(40) comment '评论用户ID',
 	PRAISE BIGINT comment '评论点赞数',
-	COMMENT TEXT(1024) comment '评论内容',
+	COMMENT TEXT(256) comment '评论内容',
 	PARENT_COM_ID BIGINT comment '父评论ID',
 	UPDATE_TIME DATETIME comment '更新时间',
 	CREATE_TIME DATETIME comment '创建时间',

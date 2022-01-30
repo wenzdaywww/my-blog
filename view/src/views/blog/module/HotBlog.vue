@@ -9,7 +9,7 @@
     <el-row class="hot-row" v-for="item in hotBlog">
       <el-col>
         <el-tooltip class="item" effect="light" :content="item.title" placement="bottom">
-          <el-link :href="item.blogId ? '/article?bid=' + item.blogId : '#'" target="_blank" type="primary" class="ellipsis-text">{{item.title}}</el-link>
+          <el-link :href="item.blogId ? '/article?bid=' + item.blogId : '#'" target="_blank" type="primary" class="ellipsis-line1">{{item.title}}</el-link>
         </el-tooltip>
       </el-col>
     </el-row>
@@ -69,7 +69,7 @@ export default {
   font-size: 18px;
   font-weight: bold;
 }
-.ellipsis-text{
+.ellipsis-line1{
   display: -webkit-box;/*作为弹性伸缩盒子模型显示*/
   -webkit-line-clamp: 1; /*显示的行数；如果要设置2行加...则设置为2*/
   overflow: hidden; /*超出的文本隐藏*/

@@ -26,15 +26,18 @@
   <el-card class="blog-card">
       <div class="artitle-div" v-html="blog.content"></div>
   </el-card>
+  <blog-comment/>
 </template>
 
 <script>
 import {getCurrentInstance, reactive, ref} from "vue";
 import utils from "../../../utils/utils";
 import request from "../../../utils/request";
+import blogComment from "./Comment.vue";
 
 export default {
   name: "article",
+  components: { blogComment },
   setup() {
     // 接口请求
     const axios = getCurrentInstance().appContext.config.globalProperties;

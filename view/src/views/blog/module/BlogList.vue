@@ -7,12 +7,12 @@
       <img v-if="item.coverImg" :src="item.coverImg" class="image" />
       <div class="blog-detail">
         <el-tooltip class="item" effect="light" :content="item.title" placement="bottom">
-          <el-link :href="item.blogId ? '/article?bid=' + item.blogId : '#'" class="blog-title ellipsis-text"
+          <el-link :href="item.blogId ? '/article?bid=' + item.blogId : '#'" class="ellipsis-line1 blog-title"
                    target="_blank" type="primary" @click="showBlogDetail(item.blogId)">{{item.title}}</el-link>
         </el-tooltip>
         <div class="bottom card-header">
           <el-row class="el-row">
-            <div>
+            <div class="ellipsis-line4">
               {{item.summary}}
             </div>
           </el-row>
@@ -132,15 +132,12 @@ export default {
   margin-top: 5px;
   margin-bottom: 5px;
 }
-.blog-article{
-  color: #686264;
-}
 .image{
   float: right;
   width: 160px;
   height: 120px;
   border-radius: 8%;
-  margin-top: 40px;
+  margin-top: 30px;
   margin-left: 5px;
 }
 .blog-time{
@@ -158,9 +155,16 @@ export default {
   margin-top: 10px;
   color: #999697;
 }
-.ellipsis-text{
+.ellipsis-line1{
   display: -webkit-box;/*作为弹性伸缩盒子模型显示*/
   -webkit-line-clamp: 1; /*显示的行数；如果要设置2行加...则设置为2*/
+  overflow: hidden; /*超出的文本隐藏*/
+  text-overflow: ellipsis; /* 溢出用省略号*/
+  -webkit-box-orient: vertical;/*伸缩盒子的子元素排列：从上到下*/
+}
+.ellipsis-line4{
+  display: -webkit-box;/*作为弹性伸缩盒子模型显示*/
+  -webkit-line-clamp: 4; /*显示的行数；如果要设置2行加...则设置为2*/
   overflow: hidden; /*超出的文本隐藏*/
   text-overflow: ellipsis; /* 溢出用省略号*/
   -webkit-box-orient: vertical;/*伸缩盒子的子元素排列：从上到下*/
