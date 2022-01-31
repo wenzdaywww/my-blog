@@ -1,10 +1,7 @@
 package com.www.myblog.blog.service.browse;
 
 import com.www.common.pojo.dto.response.ResponseDTO;
-import com.www.myblog.blog.data.dto.AuthorDTO;
-import com.www.myblog.blog.data.dto.BlogArticleDTO;
-import com.www.myblog.blog.data.dto.BlogGroupDTO;
-import com.www.myblog.blog.data.dto.TagInfoDTO;
+import com.www.myblog.blog.data.dto.*;
 
 import java.util.List;
 
@@ -15,6 +12,16 @@ import java.util.List;
  * <p>@Date 2022/1/23 15:17 </p>
  */
 public interface IBlogBrowseService {
+    /**
+     * <p>@Description 查询评论列表，包括父评论和子评论 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/30 22:34 </p>
+     * @param pageNum 页码
+     * @param blogId 博客id,不等于null，则是父评论
+     * @param parentComId 父评论id，不等于null，则是子评论
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.CommentDTO>>
+     */
+    ResponseDTO<List<CommentDTO>> findCommentList(int pageNum,Long blogId, Long parentComId);
     /**
      * <p>@Description 根据博客ID查询博客信息 </p>
      * <p>@Author www </p>

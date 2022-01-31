@@ -39,10 +39,10 @@ public class BaseFeignOauthController {
      * <p>@Description 校验用户是否存在-服务熔断处理 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/21 19:57 </p>
-     * @param userId 用户id
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     * @param userList 用户id集合
+     * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean>
      */
-    public ResponseDTO<Boolean> validateUserExistFallback(String userId,Throwable throwable){
+    public ResponseDTO<Boolean> validateUserExistFallback(List<String> userList,Throwable throwable){
         log.error("服务熔断处理: 校验用户是否存在,异常信息:",throwable);
         return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,false);
     }

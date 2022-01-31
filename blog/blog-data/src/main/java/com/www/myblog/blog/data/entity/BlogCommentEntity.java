@@ -52,6 +52,11 @@ public class BlogCommentEntity implements Serializable {
     @TableField("PARENT_COM_ID")
     private Long parentComId;
     /**
+    * 回复评论ID
+    */
+    @TableField("REPLY_COM_ID")
+    private Long replyComId;
+    /**
     * 更新时间
     */
     @TableField("UPDATE_TIME")

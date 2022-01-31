@@ -17,11 +17,12 @@ public interface IUserBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/30 21:13 </p>
      * @param userId 用户ID
-     * @param blogId 博客ID
+     * @param blogId 博客ID，不等于null，则是新增的评论
+     * @param replyComId 回复的评论ID，不等于null，则是回复评论
      * @param text 评论内容
      * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.CommentDTO>
      */
-    ResponseDTO<CommentDTO> addBlogComment(String userId,Long blogId, String text);
+    ResponseDTO<CommentDTO> addBlogComment(String userId,Long blogId,Long replyComId, String text);
     /**
      * <p>@Description 获取用户博客相关统计信息 </p>
      * <p>@Author www </p>

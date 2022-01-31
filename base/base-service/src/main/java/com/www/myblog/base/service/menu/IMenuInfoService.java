@@ -37,5 +37,5 @@ public interface IMenuInfoService {
      * @param pageSize 页面条数
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.SysMenuDTO>>
      */
-    ResponseDTO<List<SysMenuDTO>> findAllMenu(SysMenuDTO menuDTO,int pageNum, int pageSize);
+    ResponseDTO<List<SysMenuDTO>> findAllMenu(SysMenuDTO menuDTO,int pageNum, long pageSize);
 }

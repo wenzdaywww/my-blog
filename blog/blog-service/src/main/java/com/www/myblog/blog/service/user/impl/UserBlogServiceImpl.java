@@ -14,6 +14,7 @@ import com.www.myblog.blog.data.mapper.BlogCommentMapper;
 import com.www.myblog.blog.data.mapper.UserFansMapper;
 import com.www.myblog.blog.service.entity.IUserFansService;
 import com.www.myblog.blog.service.user.IUserBlogService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,36 +46,74 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/30 21:13 </p>
      * @param userId 用户ID
-     * @param blogId 博客ID
+     * @param blogId 博客ID，不等于null，则是新增的评论
+     * @param replyComId 回复的评论ID，不等于null，则是回复评论
      * @param text   评论内容
      * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.CommentDTO>
      */
     @Override
-    public ResponseDTO<CommentDTO> addBlogComment(String userId, Long blogId, String text) {
+    public ResponseDTO<CommentDTO> addBlogComment(String userId, Long blogId, Long replyComId, String text) {
         ResponseDTO<CommentDTO> response = new ResponseDTO<>();
-        if(StringUtils.isAnyBlank(userId,text) || blogId == null){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"新增评论失败，用户ID或博客ID或评论内容为空",null);
+        if(StringUtils.isAnyBlank(userId,text) || (blogId == null && replyComId == null) || (blogId != null && replyComId != null)){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"评论失败，信息不全",null);
             return response;
         }
-        BlogArticleEntity articleEntity = blogArticleMapper.selectById(blogId);
-        if(articleEntity == null){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"新增评论失败，博客不存在",null);
-            return response;
+        Long parentComId = null;//父评论id
+        String replyUserId = null;//回复评论人ID
+        if(blogId == null){//博客id为空，则是回复评论
+            BlogCommentEntity parentCommentEntity = blogCommentMapper.selectById(replyComId);
+            if(parentCommentEntity == null){
+                response.setResponse(ResponseDTO.RespEnum.FAIL,"评论失败，评论不存在",null);
+                return response;
+            }
+            replyUserId = parentCommentEntity.getUserId();
+            //回复的评论的父评论id为空，则说明改评论是父评论
+            if(parentCommentEntity.getParentComId() == null){
+                parentComId = replyComId;
+                replyComId = null;
+            }else {//回复的评论的父评论id不为空，则说明改评论是子评论
+                parentComId = parentCommentEntity.getParentComId();
+            }
+            blogId = parentCommentEntity.getBlogId();
+        }else { //博客id不为空，则是新增评论
+            BlogArticleEntity articleEntity = blogArticleMapper.selectById(blogId);
+            if(articleEntity == null){
+                response.setResponse(ResponseDTO.RespEnum.FAIL,"评论失败，博客不存在",null);
+                return response;
+            }
         }
         //新增评论
         BlogCommentEntity commentEntity = new BlogCommentEntity();
-        commentEntity.setBlogId(articleEntity.getBlogId()).setUserId(userId).setComment(text).setPraise(0L);
+        commentEntity.setBlogId(blogId).setUserId(userId).setComment(text).setPraise(0L).setParentComId(parentComId).setReplyComId(replyComId);
         commentEntity.setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
         blogCommentMapper.insert(commentEntity);
-        //查询用户信息
-        UserInfoDTO userInfoDTO = ResponseDTO.getBackData(baseFeignService.findUserInfo(userId));
         //返回评论信息
         CommentDTO commentDTO = new CommentDTO();
-        if(userInfoDTO != null){
-            commentDTO.setUserName(userInfoDTO.getUserName()).setPhoto(userInfoDTO.getPhoto());
+        //查询用户信息
+        if(StringUtils.isNotBlank(replyUserId)){
+            //查询评论人和回复人用户信息
+            List<String> userIdList = new ArrayList<>();
+            userIdList.add(userId);
+            userIdList.add(replyUserId);
+            List<UserInfoDTO> userList = ResponseDTO.getBackData(baseFeignService.findUserInfoList(userIdList));
+            if(CollectionUtils.isNotEmpty(userList)){
+                for (UserInfoDTO userInfoDTO : userList){
+                    if(StringUtils.equals(userInfoDTO.getUserId(),replyUserId)){
+                        commentDTO.setReplyName(userInfoDTO.getUserName());//设置回复人名称
+                    }
+                    if(StringUtils.equals(userInfoDTO.getUserId(),userId)){//设置评论人名称和头像
+                        commentDTO.setUserName(userInfoDTO.getUserName()).setPhoto(userInfoDTO.getPhoto());
+                    }
+                }
+            }
+        }else {
+            UserInfoDTO userInfoDTO = ResponseDTO.getBackData(baseFeignService.findUserInfo(userId));
+            if(userInfoDTO != null){//设置评论人名称和头像
+                commentDTO.setUserName(userInfoDTO.getUserName()).setPhoto(userInfoDTO.getPhoto());
+            }
         }
-        commentDTO.setBlogId(articleEntity.getBlogId()).setCommentId(commentEntity.getBlogId())
-                .setComment(text).setUserId(userId).setMore(false).setPraise(0L).setOpen(false)
+        commentDTO.setBlogId(blogId).setCommentId(commentEntity.getCommentId())
+                .setComment(text).setUserId(userId).setMore(0L).setPraise(0L).setOpen(false)
                 .setCreateDate(DateUtils.format(commentEntity.getCreateTime(), DateUtils.DateFormatEnum.YYYY_MM_DD));
         response.setResponse(ResponseDTO.RespEnum.SUCCESS,commentDTO);
         return response;

@@ -68,7 +68,7 @@ public class AdminController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.SysMenuDTO>>
      */
     @GetMapping("menus")
-    public ResponseDTO<List<SysMenuDTO>> findAllMenu(String module,String menuType, String roleCode, String menuCode, String menuUrl,String vuePath, int pageNum, int pageSize){
+    public ResponseDTO<List<SysMenuDTO>> findAllMenu(String module,String menuType, String roleCode, String menuCode, String menuUrl,String vuePath, int pageNum, long pageSize){
         SysMenuDTO menuDTO = new SysMenuDTO();
         menuDTO.setModule(module);
         menuDTO.setMenuType(menuType);
@@ -90,7 +90,7 @@ public class AdminController {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.SysUserDTO>>
      */
     @GetMapping("users")
-    public ResponseDTO<List<SysUserDTO>> findAllUser(String stateCd, String userId, String userName, int pageNum, int pageSize){
+    public ResponseDTO<List<SysUserDTO>> findAllUser(String stateCd, String userId, String userName, int pageNum, long pageSize){
         return userInfoService.findAllUser(stateCd,userId,userName,pageNum,pageSize);
     }
     /**

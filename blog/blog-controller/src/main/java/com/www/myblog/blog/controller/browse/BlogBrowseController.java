@@ -2,10 +2,7 @@ package com.www.myblog.blog.controller.browse;
 
 import com.www.common.config.oauth2.token.JwtTokenConverter;
 import com.www.common.pojo.dto.response.ResponseDTO;
-import com.www.myblog.blog.data.dto.AuthorDTO;
-import com.www.myblog.blog.data.dto.BlogArticleDTO;
-import com.www.myblog.blog.data.dto.BlogGroupDTO;
-import com.www.myblog.blog.data.dto.TagInfoDTO;
+import com.www.myblog.blog.data.dto.*;
 import com.www.myblog.blog.service.browse.IBlogBrowseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +23,19 @@ public class BlogBrowseController {
     @Autowired
     private IBlogBrowseService blogBrowseService;
 
+    /**
+     * <p>@Description 查询评论列表，包括父评论和子评论 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/30 22:34 </p>
+     * @param pageNum 页码
+     * @param bid 博客id,不等于null，则是父评论
+     * @param pid 父评论id，不等于null，则是子评论
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.CommentDTO>>
+     */
+    @GetMapping("cmt-list")
+    public ResponseDTO<List<CommentDTO>> findCommentList(int pageNum,Long bid,Long pid){
+        return blogBrowseService.findCommentList(pageNum,bid,pid);
+    }
     /**
      * <p>@Description 根据博客ID查询博客信息 </p>
      * <p>@Author www </p>

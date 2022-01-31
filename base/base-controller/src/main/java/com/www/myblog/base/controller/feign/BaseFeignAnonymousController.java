@@ -5,11 +5,12 @@ import com.www.common.pojo.dto.feign.UserInfoDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.base.service.user.IUserInfoService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>@Description base应用对外服务controller,匿名访问 </p>
@@ -24,6 +25,37 @@ public class BaseFeignAnonymousController {
     @Autowired
     private IUserInfoService userInfoService;
 
+    /**
+     * <p>@Description 查询多个用户信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 15:43 </p>
+     * @param userList 用户id集合
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     */
+    @GetMapping("users")
+    @HystrixCommand(fallbackMethod = "findUserInfoListFallback")//设置备选方案
+    public ResponseDTO<List<UserInfoDTO>> findUserInfoList(@RequestParam("list") List<String> userList){
+        return userInfoService.findUserInfoList(userList);
+    }
+    /**
+     * <p>@Description 查询多个用户信息-服务熔断处理 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/21 19:57 </p>
+     * @param userList 用户id集合
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     */
+    public ResponseDTO<List<UserInfoDTO>> findUserInfoListFallback(List<String> userList,Throwable throwable){
+        log.error("服务熔断处理: 查询多个用户信息,异常信息:",throwable);
+        List<UserInfoDTO> list = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(userList)){
+            for (String userId : userList){
+                UserInfoDTO userInfoDTO = new UserInfoDTO();
+                userInfoDTO.setUserId(userId);
+                list.add(userInfoDTO);
+            }
+        }
+        return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,list);
+    }
     /**
      * <p>@Description 查询用户信息 </p>
      * <p>@Author www </p>

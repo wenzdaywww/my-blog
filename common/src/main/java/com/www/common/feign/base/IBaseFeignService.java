@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -22,6 +23,15 @@ import java.util.List;
 @FeignClient(value = "${com.www.common.feign.base}",fallbackFactory = BaseFeignFallback.class)//服务提供者名称
 @ConditionalOnProperty(prefix = "com.www.common.feign",name = {"base"})
 public interface IBaseFeignService {
+    /**
+     * <p>@Description 查询多个用户信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 15:43 </p>
+     * @param userList 用户id集合
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     */
+    @GetMapping("/feign/anonymous/users")
+    ResponseDTO<List<UserInfoDTO>> findUserInfoList(@RequestParam("list") List<String> userList);
     /**
      * <p>@Description 校验用户是否存在 </p>
      * <p>@Author www </p>

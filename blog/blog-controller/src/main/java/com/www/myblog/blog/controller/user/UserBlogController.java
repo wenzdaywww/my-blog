@@ -32,13 +32,14 @@ public class UserBlogController {
      * <p>@Description 新增评论 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/30 21:12 </p>
-     * @param bid 博客ID
+     * @param bid 博客ID，不等于null，则是新增的评论
+     * @param rid 回复的评论ID，不等于null，则是回复评论
      * @param text 评论内容
      * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.CommentDTO>
      */
     @PostMapping("comment")
-    public ResponseDTO<CommentDTO> addBlogComment(Long bid,String text){
-        return userBlogService.addBlogComment(jwtTokenConverter.getUserId(),bid,text);
+    public ResponseDTO<CommentDTO> addBlogComment(Long bid,Long rid,String text){
+        return userBlogService.addBlogComment(jwtTokenConverter.getUserId(),bid,rid,text);
     }
     /**
      * <p>@Description 获取用户博客相关统计信息 </p>

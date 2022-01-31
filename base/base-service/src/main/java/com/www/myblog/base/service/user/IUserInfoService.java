@@ -18,6 +18,14 @@ import java.util.List;
  */
 public interface IUserInfoService {
     /**
+     * <p>@Description 查询多个用户信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 15:43 </p>
+     * @param userList 用户id集合
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     */
+    ResponseDTO<List<UserInfoDTO>> findUserInfoList(List<String> userList);
+    /**
      * <p>@Description 校验用户是否存在 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
@@ -120,5 +128,5 @@ public interface IUserInfoService {
      * @param pageSize 页面条数
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.SysUserDTO>>
      */
-    ResponseDTO<List<SysUserDTO>> findAllUser(String stateCd, String userId,String userName, int pageNum, int pageSize);
+    ResponseDTO<List<SysUserDTO>> findAllUser(String stateCd, String userId,String userName, int pageNum, long pageSize);
 }

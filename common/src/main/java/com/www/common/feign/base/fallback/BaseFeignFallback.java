@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,6 +32,20 @@ public class BaseFeignFallback implements FallbackFactory<IBaseFeignService> {
     public IBaseFeignService create(Throwable throwable) {
         log.error("base服务降级,失败原因:",throwable);
         return new IBaseFeignService() {
+            /**
+             * <p>@Description 查询多个用户信息 </p>
+             * <p>@Author www </p>
+             * <p>@Date 2022/1/23 15:43 </p>
+             * @param userList 用户id集合
+             * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+             */
+            @Override
+            public ResponseDTO<List<UserInfoDTO>> findUserInfoList(List<String> userList) {
+                log.error("base服务降级：查询多个用户信息");
+                List<UserInfoDTO> list = new ArrayList<>();
+                return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,list);
+            }
+
             /**
              * <p>@Description 校验用户是否存在 </p>
              * <p>@Author www </p>

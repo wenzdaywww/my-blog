@@ -1,14 +1,9 @@
 package com.www.myblog.blog.data.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,6 +16,8 @@ import java.util.List;
 @Accessors(chain = true)//开启链式编程
 public class CommentDTO implements Serializable {
     private static final long serialVersionUID = 1L;
+    /** 当前页数 **/
+    private Integer pageNum;
     /**
     * 评论主键
     */
@@ -38,6 +35,10 @@ public class CommentDTO implements Serializable {
     */
     private String userName;
     /**
+    * 评论回复的用户Id
+    */
+    private String replyUserId;
+    /**
     * 评论回复的用户名称
     */
     private String replyName;
@@ -54,9 +55,9 @@ public class CommentDTO implements Serializable {
     */
     private boolean open;
     /**
-    * 是否有更多
+    * 子评论是否有更多
     */
-    private boolean more;
+    private long more;
     /**
     * 评论内容
     */

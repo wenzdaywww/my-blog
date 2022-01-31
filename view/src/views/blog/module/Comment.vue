@@ -18,7 +18,7 @@
       <div>
         <ul class="list" v-infinite-scroll="loadParentData"  :infinite-scroll-distance="10" :infinite-scroll-delay="800" :infinite-scroll-immediate="true" style="overflow:auto">
           <el-collapse v-model="activeNames">
-            <el-collapse-item v-for="item in list" :name="item.commentId">
+            <el-collapse-item v-for="item in commentList" :name="item.commentId">
               <!-- 父评论 -->
               <template #title>
                 <div class="comment-div">
@@ -51,7 +51,7 @@
                 <el-row v-if="activeNames.indexOf(item.commentId) != -1 && item.open">
                   <el-col :span="3"></el-col>
                   <el-col :span="10">
-                    <el-button size="mini" type="primary" plain class="submit-comment" @click="submitComment(item.commentId,item.input)">确定</el-button>
+                    <el-button size="mini" type="primary" plain class="submit-comment" @click="submitComment(item,item.commentId,item)">确定</el-button>
                     <el-button size="mini" type="danger" plain class="submit-comment" @click="item.open = false">取消回复</el-button>
                   </el-col>
                 </el-row>
@@ -65,7 +65,7 @@
                     <el-tooltip class="item" effect="light" :content="subItem.userName" placement="bottom">
                       <el-link :href="subItem.userId ? '/blog?id=' + subItem.userId : '#'" target="_blank" type="primary" class="sub-comment-name ellipsis-line1">{{subItem.userName}}</el-link>
                     </el-tooltip>
-                    <div class="sub-comment-reply">回复</div>
+                    <div v-if="subItem.replyName" class="sub-comment-reply">回复</div>
                     <el-tooltip class="item" effect="light" :content="subItem.replyName" placement="bottom">
                       <div class="ellipsis-line1">{{subItem.replyName}}</div>
                     </el-tooltip>
@@ -92,13 +92,13 @@
                 <el-row v-if="subItem.open">
                   <el-col :span="4"></el-col>
                   <el-col :span="10">
-                    <el-button size="mini" type="primary" plain class="submit-comment" @click="submitComment(subItem.commentId,subItem.input)">确定</el-button>
+                    <el-button size="mini" type="primary" plain class="submit-comment" @click="submitComment(item,subItem.commentId,subItem)">确定</el-button>
                     <el-button size="mini" type="danger" plain class="submit-comment" @click="subItem.open = false">取消回复</el-button>
                   </el-col>
                 </el-row>
               </div>
-              <div v-if="item.more" class="parent-more">
-                <el-link href="javascript:void(0);" type="primary" @click="loadChildrenData(item.commentId,item.subList)">查看更多</el-link>
+              <div v-if="item.more > 0" class="parent-more">
+                <el-link href="javascript:void(0);" type="primary" @click="loadChildrenData(item)">查看更多{{item.more}}条评论</el-link>
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -125,7 +125,7 @@ export default {
     //博客id
     const blogId = utils.getUrlParam("bid");
     //评论列表
-    const list = ref([]);
+    let commentList = ref([]);
     //展开面板对象
     const activeNames = ref([]);
     //是否打开评论
@@ -134,65 +134,54 @@ export default {
     const inputContent = ref(null);
     //父评论是否还有更多
     const parentMore = ref(false);
-    let index = 0;
+    //父评论当前页码
+    let parentPageNum = 1;
     //加载父评论数据
     const loadParentData = () =>{
-      if (index < 10){
-        list.value.push({
-          commentId:index++,
-          userId:"admin",
-          userName:"超级管理员",
-          praise: "0",
-          input:"",
-          open:false,
-          photo:"src/assets/img/img.jpg",
-          comment:"在界面中一致：所有的元素和结构需保持一比如：设计样式、图标和文本、元素的位置等。在界面中一致：所有的元素和结构需保持文本、元素的位置等。在界面中一致：所有的元素和结构需保持文本、元素的位置等。在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。",
-          createDate:"2020-01-01",
-          more:true,
-          subList: [
-            {
-              commentId:index++,
-              userId:"www",
-              userName:"wenzday",
-              praise: "0",
-              input:"",
-              open:false,
-              replyName:"超级管理员的元素和结构需保持一致",
-              photo:"src/assets/img/img.jpg",
-              comment:"在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和设需保持一致，比如：设计样式、，比如：设计样式、图标和设需保持一致，比如：设计样式、图标和文本、元素的位置，比如：设计样式、图标和设需保持一致，比如：设计样式、图标和文本、元素的位置，比如：设计样式、图标和设需保持一致，比如：设计样式、图标和文本、元素的位置，比如：设计样式、图标和设需保持一致，比如：设计样式、图标和文本、元素的位置图标和文本、元素的位置等。在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。",
-              createDate:"2020-01-01",
-            },{
-              commentId:index++,
-              userId:"test",
-              userName:"test",
-              praise: "0",
-              input:"",
-              open:false,
-              replyName:"wenzday的元素和结构需保持一致",
-              photo:"src/assets/img/img.jpg",
-              comment:"在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和设需保持一致，比如：设计样式、图标和文本、元素的位置等。在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。",
-              createDate:"2020-01-01",
+      if (parentMore){
+        axios.$http.get(request.commentList, {pageNum:parentPageNum,bid:blogId}).then(function (res) {
+          if(res.code === 200){
+            if (res.data){
+              parentPageNum++;
+              parentMore.value = res.data.length >= res.pageSize;
+              res.data.forEach (temp => {
+                commentList.value.push(temp);
+              });
+            }else {//没有数据
+              parentMore.value = false;
             }
-          ]
+          }
         });
       }
     }
-    //加载子评论数据
-    const loadChildrenData = (parentId,subList) =>{
-      subList.push({
-        commentId:index++,
-        userId:"test",
-        userName:"test",
-        praise: "0",
-        input:"",
-        open:false,
-        replyName:"wenzday的元素和结构需保持一致",
-        photo:"src/assets/img/img.jpg",
-        comment:"在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和设需保持一致，比如：设计样式、图标和文本、元素的位置等。在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。",
-        createDate:"2020-01-01",
-      });
+    /*
+     * 加载子评论数据
+     * @param parentItem 父评论对象
+     */
+    const loadChildrenData = (parentItem) =>{
+      if (parentItem.more > 0){
+        axios.$http.get(request.commentList, {pageNum:parentItem.pageNum,pid:parentItem.commentId}).then(function (res) {
+          if(res.code === 200){
+            if (res.data){
+              parentItem.pageNum++;
+              parentItem.more = res.totalNum >= res.pageSize ? res.totalNum - res.pageSize : 0;
+              res.data.forEach (temp => {
+                if(!parentItem.subList){
+                  parentItem.subList = [];
+                }
+                parentItem.subList.push(temp);
+              });
+            }else {//没有数据
+              parentItem.more = 0;
+            }
+          }
+        });
+      }
     }
-    // 点击回复按钮处理
+    /*
+     * 点击回复按钮处理
+     * @param item 父评论或子评论对象
+     */
     const replyHandle = (item) =>{
       if(utils.isLogin()){
         item.open = true;
@@ -208,18 +197,23 @@ export default {
         ElMessage.info('请登录');
       }
     }
-    // 评论提交
-    const submitComment = (cmtId,text) => {
-      ElMessage.info("cmtId="+cmtId+",text="+text);
-    }
-    // 评论新增
-    const addComment = () => {
-      if(inputContent.value){
-        axios.$http.post(request.addComment, {text:inputContent.value,bid:blogId}).then(function (res) {
+    /*
+     * 评论提交
+     * @param item 父评论对象
+     * @param replyId 回复的评论id
+     * @param textItem 父评论或子评论对象
+     */
+    const submitComment = (item,replyId,textItem) => {
+      if(textItem.input){
+        axios.$http.post(request.addComment, {text:textItem.input,rid:replyId}).then(function (res) {
           if(res.code === 200){
             if(res.data){
-              inputContent.value = null;
-              list.value.unshift(res.data);
+              textItem.input = null;//清空回复框
+              textItem.open = false;//关闭回复框
+              if(!item.subList){
+                item.subList = [];
+              }
+              item.subList.unshift(res.data);
             }
             ElMessage.success('评论成功');
           }else {
@@ -230,16 +224,31 @@ export default {
         ElMessage.error('评论内容不能为空');
       }
     }
-    return {list,inputContent,openInput,activeNames,parentMore,openInputHandle,loadParentData,submitComment,loadChildrenData,replyHandle,addComment}
+    // 评论新增
+    const addComment = () => {
+      if(inputContent.value){
+        axios.$http.post(request.addComment, {text:inputContent.value,bid:blogId}).then(function (res) {
+          if(res.code === 200){
+            if(res.data){
+              inputContent.value = null;
+              commentList.value.unshift(res.data);
+            }
+            ElMessage.success('评论成功');
+          }else {
+            ElMessage.error('评论失败');
+          }
+        });
+      }else {
+        ElMessage.error('评论内容不能为空');
+      }
+    }
+    return {commentList,inputContent,openInput,activeNames,parentMore,openInputHandle,loadParentData,submitComment,loadChildrenData,replyHandle,addComment}
   }
 }
 </script>
 
 <style scoped>
 .list{
-  height: 500px;
-}
-.list-children{
   height: 300px;
 }
 ::-webkit-scrollbar {

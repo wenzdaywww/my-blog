@@ -57,6 +57,39 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Autowired
     private ISysRoleService sysRoleService;
 
+    /**
+     * <p>@Description 查询多个用户信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 15:43 </p>
+     * @param userList 用户id集合
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     */
+    @Override
+    public ResponseDTO<List<UserInfoDTO>> findUserInfoList(List<String> userList) {
+        ResponseDTO<List<UserInfoDTO>> response = new ResponseDTO<>();
+        if(CollectionUtils.isEmpty(userList)){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询多个用户信息失败，用户ID集合为空",null);
+            return response;
+        }
+        QueryWrapper<SysUserEntity> wrapper = new QueryWrapper<>();
+        wrapper.lambda().in(SysUserEntity::getUserId,userList);
+        List<SysUserEntity> entityList = sysUserMapper.selectList(wrapper);
+        if(CollectionUtils.isEmpty(entityList)){
+            response.setResponse(ResponseDTO.RespEnum.SUCCESS,"查询多个用户信息失败，查询不到用户信息",null);
+            return response;
+        }
+        List<UserInfoDTO> dtoList = new ArrayList<>();
+        for (SysUserEntity entity : entityList){
+            UserInfoDTO userInfoDTO = new UserInfoDTO();
+            userInfoDTO.setSuId(entity.getSuId()).setUserId(entity.getUserId()).setUserName(entity.getUserName())
+                    .setPhoneNum(entity.getPhoneNum()).setBirthday(entity.getBirthday()).setSex(entity.getSex())
+                    .setPhoto(entity.getPhoto()).setEmail(entity.getEmail()).setBrief(entity.getBrief())
+                    .setUpdateTime(entity.getUpdateTime()).setCreateTime(entity.getCreateTime());
+            dtoList.add(userInfoDTO);
+        }
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,dtoList);
+        return response;
+    }
 
     /**
      * <p>@Description 校验用户是否存在 </p>
@@ -394,7 +427,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.SysUserDTO>>
      */
     @Override
-    public ResponseDTO<List<SysUserDTO>> findAllUser(String stateCd, String userId,String userName, int pageNum, int pageSize) {
+    public ResponseDTO<List<SysUserDTO>> findAllUser(String stateCd, String userId,String userName, int pageNum, long pageSize) {
         SysUserDTO userDTO = new SysUserDTO();
         userDTO.setUserId(userId);
         userDTO.setUserName(userName);

@@ -213,7 +213,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
      * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.SysMenuDTO>>
      */
     @Override
-    public ResponseDTO<List<SysMenuDTO>> findAllMenu(SysMenuDTO menuDTO,int pageNum, int pageSize) {
+    public ResponseDTO<List<SysMenuDTO>> findAllMenu(SysMenuDTO menuDTO,int pageNum, long pageSize) {
         if (menuDTO == null){
             menuDTO = new SysMenuDTO();
         }

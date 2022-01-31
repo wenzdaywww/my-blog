@@ -18,7 +18,7 @@ public class BlogArticleDTO implements Serializable {
     /** 当前页数 **/
     private Integer pageNum;
     /** 页面条数 **/
-    private Integer pageSize;
+    private Long pageSize;
     /**
     * 博客主键
     */

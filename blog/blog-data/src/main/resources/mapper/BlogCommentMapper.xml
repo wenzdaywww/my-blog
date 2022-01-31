@@ -10,7 +10,33 @@
     <result column="PRAISE" property="praise" />
     <result column="COMMENT" property="comment" />
     <result column="PARENT_COM_ID" property="parentComId" />
+    <result column="REPLY_COM_ID" property="replyComId" />
     <result column="UPDATE_TIME" property="updateTime" />
     <result column="CREATE_TIME" property="createTime" />
   </resultMap>
+  <!--  查询评论列表-->
+  <select id="findCommentList" resultType="com.www.myblog.blog.data.dto.CommentDTO">
+    SELECT  C.COMMENT_ID,
+            C.USER_ID,
+            <if test="parentComId != null">
+              RP.USER_ID REPLY_USER_ID,
+            </if>
+            C.PRAISE,
+            C.COMMENT,
+            DATE_FORMAT(C.CREATE_TIME,'%Y-%m-%d') CREATE_DATE
+    FROM BLOG_COMMENT C
+    <if test="parentComId != null">
+      LEFT JOIN (SELECT R.COMMENT_ID,R.REPLY_COM_ID,U.USER_ID  FROM BLOG_COMMENT R,BLOG_COMMENT U WHERE R.PARENT_COM_ID = #{parentComId} AND R.REPLY_COM_ID=U.COMMENT_ID ) RP ON RP.COMMENT_ID=C.COMMENT_ID
+    </if>
+    <where>
+      <if test="blogId != null">
+        AND C.BLOG_ID = #{blogId}
+        AND C.PARENT_COM_ID IS NULL
+      </if>
+      <if test="parentComId != null">
+        AND C.PARENT_COM_ID = #{parentComId}
+      </if>
+    </where>
+    ORDER BY C.COMMENT_ID DESC
+  </select>
 </mapper>
