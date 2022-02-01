@@ -7,7 +7,6 @@
         </el-col>
         <el-col :span="14">
           <!-- 博客列表 -->
-          <blog-list/>
         </el-col>
         <el-col :span="7">
           <div class="grid-content bg-purple">
@@ -20,13 +19,12 @@
   </div>
 </template>
 <script>
-import hotBlog from "./module/HotBlog.vue";
-import blogList from "./module/BlogList.vue";
+import hotBlog from "../module/HotBlog.vue";
 import {provide} from "vue";
 
 export default {
   components: {
-    hotBlog,blogList
+    hotBlog
   },
   setup() {
     provide("float_type","float-left");//设置hotBlog样式

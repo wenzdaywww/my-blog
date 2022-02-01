@@ -26,21 +26,21 @@ let routes = [
                 meta: {
                     title: '博客首页'
                 },
-                component: () => import ("../views/blog/Index.vue")
+                component: () => import ("../views/blog/index/Index.vue")
             },{
                 path: "/blog",
                 name: "userBlog",
                 meta: {
                     title: '我的博客'
                 },
-                component: () => import ("../views/blog/UserBlog.vue")
+                component: () => import ("../views/blog/blogger/UserBlog.vue")
             },{
                 path: "/article",
                 name: "BlogArticle",
                 meta: {
                     title: '博客文章'
                 },
-                component: () => import ("../views/blog/Blog.vue")
+                component: () => import ("../views/blog/article/Blog.vue")
             }
         ]
     },{
