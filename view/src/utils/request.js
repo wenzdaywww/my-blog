@@ -54,6 +54,8 @@ export default {
     hotRank: "api/blog/browse/hot-rank",
     //新增/回复评论
     addComment: "api/blog/user/comment",
+    //博客添加收藏
+    addCollect: "api/blog/user/collect/",
     //评论列表
     commentList: "api/blog/browse/cmt-list",
     //退出

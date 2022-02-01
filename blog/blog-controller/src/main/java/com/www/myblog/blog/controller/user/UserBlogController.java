@@ -29,6 +29,17 @@ public class UserBlogController {
     private IUserBlogService userBlogService;
 
     /**
+     * <p>@Description 博客添加收藏 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/1 10:44 </p>
+     * @param bid
+     * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean> true添加收藏，false取消收藏
+     */
+    @PostMapping("collect/{bid}")
+    public ResponseDTO<Boolean> addCollect(@PathVariable("bid") Long bid){
+        return userBlogService.addCollect(jwtTokenConverter.getUserId(),bid);
+    }
+    /**
      * <p>@Description 新增评论 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/30 21:12 </p>

@@ -7,11 +7,14 @@ import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.dto.CommentDTO;
 import com.www.myblog.blog.data.entity.BlogArticleEntity;
+import com.www.myblog.blog.data.entity.BlogCollectEntity;
 import com.www.myblog.blog.data.entity.BlogCommentEntity;
 import com.www.myblog.blog.data.entity.UserFansEntity;
 import com.www.myblog.blog.data.mapper.BlogArticleMapper;
+import com.www.myblog.blog.data.mapper.BlogCollectMapper;
 import com.www.myblog.blog.data.mapper.BlogCommentMapper;
 import com.www.myblog.blog.data.mapper.UserFansMapper;
+import com.www.myblog.blog.service.entity.IBlogCollectService;
 import com.www.myblog.blog.service.entity.IUserFansService;
 import com.www.myblog.blog.service.user.IUserBlogService;
 import org.apache.commons.collections4.CollectionUtils;
@@ -40,6 +43,43 @@ public class UserBlogServiceImpl implements IUserBlogService {
     private BlogCommentMapper blogCommentMapper;
     @Autowired
     private IUserFansService userFansService;
+    @Autowired
+    private IBlogCollectService blogCollectService;
+
+    /**
+     * <p>@Description 添加/取消博客收藏 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/1 10:45 </p>
+     * @param userId 用户id
+     * @param blogId 博客id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean> true添加收藏，false取消收藏
+     */
+    @Override
+    public ResponseDTO<Boolean> addCollect(String userId, Long blogId) {
+        ResponseDTO<Boolean> response = new ResponseDTO<>();
+        if(StringUtils.isBlank(userId) || blogId == null){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"添加/取消博客收藏失败，信息不全",null);
+            return response;
+        }
+        BlogArticleEntity articleEntity = blogArticleMapper.selectById(blogId);
+        if(articleEntity == null){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"添加/取消博客收藏失败，博客不存在",null);
+            return response;
+        }
+        BlogCollectEntity collectEntity = blogCollectService.findBlogCollectEntity(userId,blogId);
+        boolean isAdd = true;
+        if (collectEntity == null){
+            collectEntity = new BlogCollectEntity();
+            collectEntity.setUserId(userId).setBlogId(blogId)
+                    .setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
+            blogCollectService.createBlogCollectEntity(collectEntity);
+        }else {
+            isAdd = false;
+            blogCollectService.deleteBlogCollectEntity(collectEntity.getCollectId());
+        }
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,isAdd);
+        return response;
+    }
 
     /**
      * <p>@Description 新增评论 </p>
@@ -60,7 +100,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
         }
         Long parentComId = null;//父评论id
         String replyUserId = null;//回复评论人ID
-        if(blogId == null){//博客id为空，则是回复评论
+        if(blogId == null){//博客id为空，则是回复评论,博客id不为空，则是新增评论
             BlogCommentEntity parentCommentEntity = blogCommentMapper.selectById(replyComId);
             if(parentCommentEntity == null){
                 response.setResponse(ResponseDTO.RespEnum.FAIL,"评论失败，评论不存在",null);
@@ -75,18 +115,20 @@ public class UserBlogServiceImpl implements IUserBlogService {
                 parentComId = parentCommentEntity.getParentComId();
             }
             blogId = parentCommentEntity.getBlogId();
-        }else { //博客id不为空，则是新增评论
-            BlogArticleEntity articleEntity = blogArticleMapper.selectById(blogId);
-            if(articleEntity == null){
-                response.setResponse(ResponseDTO.RespEnum.FAIL,"评论失败，博客不存在",null);
-                return response;
-            }
+        }
+        BlogArticleEntity articleEntity = blogArticleMapper.selectById(blogId);
+        if(articleEntity == null){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"评论失败，博客不存在",null);
+            return response;
         }
         //新增评论
         BlogCommentEntity commentEntity = new BlogCommentEntity();
         commentEntity.setBlogId(blogId).setUserId(userId).setComment(text).setPraise(0L).setParentComId(parentComId).setReplyComId(replyComId);
         commentEntity.setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
         blogCommentMapper.insert(commentEntity);
+        //更新博客评论数量
+        articleEntity.setComment(articleEntity.getComment() + 1).setUpdateTime(DateUtils.getCurrentDateTime());
+        blogArticleMapper.updateById(articleEntity);
         //返回评论信息
         CommentDTO commentDTO = new CommentDTO();
         //查询用户信息

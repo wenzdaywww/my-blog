@@ -26,10 +26,11 @@ public interface IBlogBrowseService {
      * <p>@Description 根据博客ID查询博客信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/25 21:21 </p>
+     * @param userId 当前登录用户ID
      * @param blogId 博客ID
      * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
      */
-    ResponseDTO<BlogArticleDTO> findAriticle(Long blogId);
+    ResponseDTO<BlogArticleDTO> findAriticle(String userId,Long blogId);
     /**
      * <p>@Description 获取博主博客分类列表 </p>
      * <p>@Author www </p>

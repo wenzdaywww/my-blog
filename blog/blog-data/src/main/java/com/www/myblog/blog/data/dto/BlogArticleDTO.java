@@ -80,9 +80,13 @@ public class BlogArticleDTO implements Serializable {
     */
     private Long comment;
     /**
-    * 博客评论数
+    * 博客收藏数
     */
     private Integer collect;
+    /**
+    * 当前用户是否收藏该博客
+    */
+    private boolean collection;
     /**
      * 创建时间
      */

@@ -1,6 +1,7 @@
 package com.www.myblog.blog.service.entity.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.www.myblog.blog.data.entity.UserFansEntity;
 import com.www.myblog.blog.data.mapper.UserFansMapper;
 import com.www.myblog.blog.service.entity.IUserFansService;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
  * <p>@Date 2022/1/29 15:45 </p>
  */
 @Service
-public class UserFansServiceImpl implements IUserFansService {
+public class UserFansServiceImpl extends ServiceImpl<UserFansMapper, UserFansEntity> implements IUserFansService {
     @Autowired
     private UserFansMapper userFansMapper;
 

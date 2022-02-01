@@ -3,7 +3,6 @@ package com.www.myblog.blog.service.user;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.dto.CommentDTO;
-import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * <p>@Description 当前登录用户博客信息service接口 </p>
@@ -12,6 +11,15 @@ import org.springframework.web.bind.annotation.GetMapping;
  * <p>@Date 2022/1/23 18:21 </p>
  */
 public interface IUserBlogService {
+    /**
+     * <p>@Description 添加/取消博客收藏 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/1 10:45 </p>
+     * @param userId 用户id
+     * @param blogId 博客id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean> true添加收藏，false取消收藏
+     */
+    ResponseDTO<Boolean> addCollect(String userId,Long blogId);
     /**
      * <p>@Description 新增评论 </p>
      * <p>@Author www </p>

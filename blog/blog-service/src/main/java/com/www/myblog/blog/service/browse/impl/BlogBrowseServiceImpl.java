@@ -12,6 +12,7 @@ import com.www.myblog.blog.data.entity.BlogCollectEntity;
 import com.www.myblog.blog.data.entity.UserFansEntity;
 import com.www.myblog.blog.data.mapper.*;
 import com.www.myblog.blog.service.browse.IBlogBrowseService;
+import com.www.myblog.blog.service.entity.IBlogCollectService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,8 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     private UserFansMapper userFansMapper;
     @Autowired
     private BlogCommentMapper blogCommentMapper;
+    @Autowired
+    private IBlogCollectService blogCollectService;
 
     /**
      * <p>@Description 查询评论列表，包括父评论和子评论 </p>
@@ -152,11 +155,12 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
      * <p>@Description 根据博客ID查询博客信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/25 21:21 </p>
+     * @param userId 当前登录用户ID
      * @param blogId 博客ID
      * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
      */
     @Override
-    public ResponseDTO<BlogArticleDTO> findAriticle(Long blogId) {
+    public ResponseDTO<BlogArticleDTO> findAriticle(String userId,Long blogId) {
         ResponseDTO<BlogArticleDTO> response = new ResponseDTO<>();
         if(blogId == null){
             response.setResponse(ResponseDTO.RespEnum.FAIL,"根据博客ID查询博客信息，博客ID为空",null);
@@ -166,6 +170,12 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
         if(articleDTO == null){
             response.setResponse(ResponseDTO.RespEnum.FAIL,"根据博客ID查询博客信息，博客不存在",null);
             return response;
+        }
+        //判断用户是否收藏该博客
+        if(StringUtils.isBlank(userId)){
+            articleDTO.setCollection(false);
+        }else {
+            articleDTO.setCollection(blogCollectService.hasCollectBlog(userId,blogId));
         }
         QueryWrapper<BlogCollectEntity> colWrapper = new QueryWrapper<>();
         colWrapper.lambda().eq(BlogCollectEntity::getBlogId,blogId);

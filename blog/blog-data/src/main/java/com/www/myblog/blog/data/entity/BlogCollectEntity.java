@@ -35,7 +35,7 @@ public class BlogCollectEntity implements Serializable {
     * 用户ID
     */
     @TableField("USER_ID")
-    private Long userId;
+    private String userId;
     /**
     * 更新时间
     */

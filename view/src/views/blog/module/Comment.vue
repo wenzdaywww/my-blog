@@ -154,7 +154,6 @@ export default {
               commentShow.value = parentPageNum == 1 ? false : commentShow.value;
             }
           }
-          console.log("commentShow",commentShow.value);
         });
       }
     }
@@ -239,7 +238,6 @@ export default {
             }
             commentShow.value = commentShow.value == false ? true : commentShow.value;
             ElMessage.success('评论成功');
-            console.log("commentShow",commentShow.value);
           }else {
             ElMessage.error('评论失败');
           }

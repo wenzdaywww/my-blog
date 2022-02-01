@@ -45,7 +45,7 @@ public class BlogBrowseController {
      */
     @GetMapping("article/{bid}")
     public ResponseDTO<BlogArticleDTO> findAriticle(@PathVariable("bid") Long blogId){
-        return blogBrowseService.findAriticle(blogId);
+        return blogBrowseService.findAriticle(jwtTokenConverter.getUserId(),blogId);
     }
     /**
      * <p>@Description 查询博主信息 </p>
