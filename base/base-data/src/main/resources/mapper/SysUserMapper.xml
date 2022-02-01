@@ -27,19 +27,22 @@
   </select>
   <!--  查询所有用户信息-->
   <select id="findAllUser" resultType="com.www.myblog.base.data.dto.SysUserDTO">
-    SELECT SU_ID, USER_ID, USER_NAME, PHONE_NUM, BIRTHDAY, SEX, PHOTO, EMAIL,BRIEF, STATE_CD,
-        NOT_EXPIRED,NOT_LOCKED,CREDENTIALS_NOT_EXPIRED,UPDATE_TIME, CREATE_TIME
-    FROM SYS_USER
-      where 1=1
-      <if test="obj.userId != null and obj.userId != ''">
-        AND USER_ID = #{obj.userId}
-      </if>
-      <if test="obj.userName != null and obj.userName != ''">
-        AND USER_NAME = #{obj.userName}
-      </if>
-      <if test="obj.stateCd != null and obj.stateCd != ''">
-        AND STATE_CD = #{obj.stateCd}
-      </if>
+      SELECT U.SU_ID, U.USER_ID, U.USER_NAME,UR.ROLE_NAME,
+      U.PHONE_NUM, U.BIRTHDAY, U.SEX, U.PHOTO, U.EMAIL,U.BRIEF, U.STATE_CD,
+      U.NOT_EXPIRED,U.NOT_LOCKED,U.CREDENTIALS_NOT_EXPIRED,U.UPDATE_TIME, U.CREATE_TIME
+      FROM SYS_USER U
+      LEFT JOIN (SELECT U.SU_ID,GROUP_CONCAT( R.ROLE_NAME SEPARATOR ',' ) ROLE_NAME FROM SYS_ROLE R,SYS_USER_ROLE U WHERE U.ROLE_ID=R.ROLE_ID GROUP BY U.SU_ID) UR ON UR.SU_ID = U.SU_ID
+      <where>
+          <if test="obj.userId != null and obj.userId != ''">
+              AND u.USER_ID = #{obj.userId}
+          </if>
+          <if test="obj.userName != null and obj.userName != ''">
+              AND u.USER_NAME = #{obj.userName}
+          </if>
+          <if test="obj.stateCd != null and obj.stateCd != ''">
+              AND u.STATE_CD = #{obj.stateCd}
+          </if>
+      </where>
   </select>
   <!--  根据ID查询用户信息-->
   <select id="findUserInfoById" resultType="com.www.myblog.base.data.dto.SysUserDTO">

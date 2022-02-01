@@ -31,6 +31,7 @@
               </el-image>
             </template>
           </el-table-column>
+          <el-table-column prop="roleName" label="角色" align="center"></el-table-column>
           <el-table-column prop="phoneNum" label="手机号码" align="center"></el-table-column>
           <el-table-column prop="email" label="邮箱" align="center"></el-table-column>
           <el-table-column prop="birthday" label="出生日期" align="center"></el-table-column>
@@ -74,7 +75,7 @@
         </div>
       </div>
       <!-- 编辑弹出框 -->
-      <el-dialog title="编辑" v-model="editVisible" width="20%">
+      <el-dialog title="编辑" v-model="editVisible" width="450px">
         <el-form label-width="120px">
           <el-form-item label="用户ID">
             <el-input v-model="form.userId" :disabled="true" style="width: 250px"></el-input>

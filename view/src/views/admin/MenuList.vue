@@ -68,27 +68,27 @@
         </div>
       </div>
       <!-- 新增/编辑弹出框 -->
-      <el-dialog :title="editVisible ? '编辑菜单' :'新增菜单'" v-model="dialogVisible" width="40%">
+      <el-dialog :title="editVisible ? '编辑菜单' :'新增菜单'" v-model="dialogVisible" width="50%">
         <el-form label-width="120px" :model="form" :rules="editRules" ref="editForm">
           <el-row>
-            <el-col :span="100">
+            <el-col :span="12">
               <el-form-item label="菜单ID：" prop="menuId">
                 <el-input v-model="form.menuId" class="el-input-custom" disabled="true"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="100">
+            <el-col :span="12">
               <el-form-item label="父菜单ID：" prop="parentId">
                 <el-input v-model="form.parentId" placeholder="请输入父菜单ID" class="el-input-custom"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="100">
+            <el-col :span="12">
               <el-form-item label="菜单编码：" prop="menuCode">
                 <el-input v-model="form.menuCode" maxlength="40" placeholder="请输入菜单编码" class="el-input-custom"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="100">
+            <el-col :span="12">
               <el-form-item label="权限角色：" prop="roleCode">
                 <el-select v-model="form.roleArr" placeholder="请选择角色" multiple class="handle-select mr10 el-input-custom">
                   <el-option v-for="item in rolesArr" :key="item.roleCode" :label="item.roleName" :value="item.roleCode"></el-option>
@@ -97,50 +97,50 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="100">
+            <el-col :span="12">
               <el-form-item label="菜单名称：" prop="menuName">
                 <el-input v-model="form.menuName" maxlength="100" placeholder="请输入菜单名称" class="el-input-custom"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="100">
+            <el-col :span="12">
               <el-form-item label="菜单归属模块：" prop="module">
                 <el-input v-model="form.module" maxlength="100" placeholder="请输入菜单归属模块" class="el-input-custom"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="100">
+            <el-col :span="12">
               <el-form-item label="菜单图标：" prop="menuIcon">
                 <el-input v-model="form.menuIcon" maxlength="100" placeholder="请输入ElementUI图标名称" class="el-input-custom"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="100">
+            <el-col :span="12">
               <el-form-item label="菜单路径：" prop="menuUrl">
                 <el-input v-model="form.menuUrl" maxlength="256" placeholder="请输入菜单路径" class="el-input-custom"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="100">
+            <el-col :span="12">
               <el-form-item label="vue页面路径：" prop="vuePath">
                 <el-input v-model="form.vuePath" maxlength="256" placeholder="请输入vue页面路径" class="el-input-custom"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="100">
+            <el-col :span="12">
               <el-form-item label="菜单序号：" prop="menuOrder">
                 <el-input v-model="form.menuOrder" placeholder="请输入菜单序号" class="el-input-custom"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="100">
+            <el-col :span="12">
               <el-form-item label="菜单类型：" prop="menuType">
                 <el-radio v-model="form.menuType" label="1" style="width: 125px;">页面菜单</el-radio>
                 <el-radio v-model="form.menuType" label="2" style="width: 125px;">请求路径</el-radio>
                 <el-radio v-model="form.menuType" label="3" style="width: 125px;">VUE路由</el-radio>
               </el-form-item>
             </el-col>
-            <el-col :span="100">
+            <el-col :span="12">
               <el-form-item label="是否有效：" prop="isDelete" v-show="editVisible">
                 <el-radio v-model="form.isDelete" label="1" style="width: 125px;">否</el-radio>
                 <el-radio v-model="form.isDelete" label="0" style="width: 125px;">是</el-radio>
