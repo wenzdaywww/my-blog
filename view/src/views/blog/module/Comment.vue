@@ -15,7 +15,7 @@
         </el-col>
       </el-row>
       <!-- 历史评论 -->
-      <div>
+      <div v-if="commentShow">
         <ul class="list" v-infinite-scroll="loadParentData"  :infinite-scroll-distance="10" :infinite-scroll-delay="800" :infinite-scroll-immediate="true" style="overflow:auto">
           <el-collapse v-model="activeNames">
             <el-collapse-item v-for="item in commentList" :name="item.commentId">
@@ -133,24 +133,28 @@ export default {
     //新增评论内容
     const inputContent = ref(null);
     //父评论是否还有更多
-    const parentMore = ref(false);
+    const parentMore = ref(true);
+    //评论展示控制
+    let commentShow = ref(true);
     //父评论当前页码
     let parentPageNum = 1;
     //加载父评论数据
     const loadParentData = () =>{
-      if (parentMore){
+      if (parentMore.value){
         axios.$http.get(request.commentList, {pageNum:parentPageNum,bid:blogId}).then(function (res) {
           if(res.code === 200){
             if (res.data){
-              parentPageNum++;
+              parentPageNum++;//页码增加
               parentMore.value = res.data.length >= res.pageSize;
               res.data.forEach (temp => {
                 commentList.value.push(temp);
               });
             }else {//没有数据
               parentMore.value = false;
+              commentShow.value = parentPageNum == 1 ? false : commentShow.value;
             }
           }
+          console.log("commentShow",commentShow.value);
         });
       }
     }
@@ -233,7 +237,9 @@ export default {
               inputContent.value = null;
               commentList.value.unshift(res.data);
             }
+            commentShow.value = commentShow.value == false ? true : commentShow.value;
             ElMessage.success('评论成功');
+            console.log("commentShow",commentShow.value);
           }else {
             ElMessage.error('评论失败');
           }
@@ -242,7 +248,7 @@ export default {
         ElMessage.error('评论内容不能为空');
       }
     }
-    return {commentList,inputContent,openInput,activeNames,parentMore,openInputHandle,loadParentData,submitComment,loadChildrenData,replyHandle,addComment}
+    return {commentList,commentShow,inputContent,openInput,activeNames,parentMore,openInputHandle,loadParentData,submitComment,loadChildrenData,replyHandle,addComment}
   }
 }
 </script>
