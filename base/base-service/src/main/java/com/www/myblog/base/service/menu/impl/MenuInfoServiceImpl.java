@@ -1,6 +1,5 @@
 package com.www.myblog.base.service.menu.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.config.code.CodeDict;
 import com.www.common.pojo.dto.response.ResponseDTO;
@@ -12,7 +11,7 @@ import com.www.myblog.base.data.entity.SysMenuEntity;
 import com.www.myblog.base.data.entity.SysRoleEntity;
 import com.www.myblog.base.data.entity.SysRoleMenuEntity;
 import com.www.myblog.base.data.mapper.SysMenuMapper;
-import com.www.myblog.base.data.mapper.SysRoleMenuMapper;
+import com.www.myblog.base.service.entity.ISysMenuService;
 import com.www.myblog.base.service.entity.ISysRoleMenuService;
 import com.www.myblog.base.service.entity.ISysRoleService;
 import com.www.myblog.base.service.menu.IMenuInfoService;
@@ -41,11 +40,11 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
     @Autowired
     private ISysRoleService sysRoleService;
     @Autowired
-    private SysRoleMenuMapper sysRoleMenuMapper;
-    @Autowired
     private ISysRoleMenuService sysRoleMenuService;
     @Autowired
     private IUrlScopeService urlScopeService;
+    @Autowired
+    private ISysMenuService sysMenuService;
 
 
     /**
@@ -57,17 +56,15 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
      */
     @Override
     public ResponseDTO<String> deleteMenu(Long menuId) {
-        SysMenuEntity menuEntity = sysMenuMapper.selectById(menuId);
+        SysMenuEntity menuEntity = sysMenuService.findById(menuId);
         if(menuEntity != null){
             return new ResponseDTO<>(ResponseDTO.RespEnum.FAIL,"删除菜单失败，菜单不存在");
         }
-        QueryWrapper<SysMenuEntity> menuWrapper = new QueryWrapper<>();
-        menuWrapper.lambda().eq(SysMenuEntity::getMenuId,menuId);
-        sysMenuMapper.delete(menuWrapper);
-        QueryWrapper<SysRoleMenuEntity> roleWrapper = new QueryWrapper<>();
-        roleWrapper.lambda().eq(SysRoleMenuEntity::getMenuId,menuId);
-        int count = sysRoleMenuMapper.delete(roleWrapper);
-        if(count != 0){
+        //根据菜单id删除菜单信息
+        sysMenuService.deleteById(menuId);
+        //根据菜单id删除角色菜单信息
+        boolean isOk = sysRoleMenuService.deleteByMenuId(menuId);
+        if(isOk){
             if(StringUtils.equals(menuEntity.getMenuType(),CodeDict.getValue(CodeTypeEnum.MENU_TYPE, CodeKeyEnum.K2))){
                 urlScopeService.updateRedisUrlScope(menuEntity.getModule());
             }
@@ -97,12 +94,12 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         List<SysRoleEntity> roleList = null;
         // 查询菜单是否存在
         if(menu.getMenuId() != null){
-            menuEntity = sysMenuMapper.selectById(menu.getMenuId());
+            menuEntity = sysMenuService.findById(menu.getMenuId());
         }
         boolean isUpdate = menuEntity != null; //是否是更新
         // 查询父级菜单是否存在
         if(menu.getParentId() != null){
-            parentEntity = sysMenuMapper.selectById(menu.getParentId());
+            parentEntity = sysMenuService.findById(menu.getParentId());
             if(parentEntity == null){
                 responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新菜单失败，父级菜单不存在");
                 return responseDTO;
@@ -130,16 +127,14 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         menuEntity.setIsDelete(menu.getIsDelete());
         menuEntity.setUpdateTime(DateUtils.getCurrentDateTime());
         if(isUpdate){
-            sysMenuMapper.updateById(menuEntity);
+            sysMenuService.updateEntityById(menuEntity);
         }else {
             menuEntity.setIsDelete(CodeDict.getValue(CodeTypeEnum.YES_NO,CodeKeyEnum.K0));
             menuEntity.setCreateTime(isUpdate ? menuEntity.getCreateTime() : DateUtils.getCurrentDateTime());
-            sysMenuMapper.insert(menuEntity);
+            sysMenuService.createEntity(menuEntity);
         }
         // 查询是否已经存在该菜单的角色菜单配置信息
-        QueryWrapper<SysRoleMenuEntity> rmWrapper = new QueryWrapper<>();
-        rmWrapper.lambda().eq(SysRoleMenuEntity::getMenuId,menuEntity.getMenuId());
-        List<SysRoleMenuEntity> roleMenuList = sysRoleMenuMapper.selectList(rmWrapper);
+        List<SysRoleMenuEntity> roleMenuList = sysRoleMenuService.findEntityByMenuId(menuEntity.getMenuId());
         // 待插入的角色菜单数据
         List<SysRoleMenuEntity> rmAddList = new ArrayList<>();
         // 待删除的角色菜单ID
@@ -192,9 +187,8 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         }
         // 删除角色菜单数据
         if(CollectionUtils.isNotEmpty(deleteIdList)){
-            QueryWrapper<SysRoleMenuEntity> delWrapper = new QueryWrapper<>();
-            delWrapper.lambda().in(SysRoleMenuEntity::getSrmId,deleteIdList);
-            sysRoleMenuMapper.delete(delWrapper);
+            //根据主键id集合删除角色菜单信息
+            sysRoleMenuService.deleteByIds(deleteIdList);
         }
         //编辑的菜单是权限菜单，则需要更新redis中的权限菜单信息
         if(StringUtils.equals(menu.getMenuType(),CodeDict.getValue(CodeTypeEnum.MENU_TYPE, CodeKeyEnum.K2))){

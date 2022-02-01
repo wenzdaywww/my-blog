@@ -1,10 +1,8 @@
 package com.www.myblog.blog.service.edit.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.www.common.config.code.CodeDict;
 import com.www.common.config.mvc.upload.IFileUpload;
-import com.www.common.pojo.constant.CharConstant;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.pojo.enums.CodeKeyEnum;
 import com.www.common.pojo.enums.CodeTypeEnum;
@@ -12,12 +10,12 @@ import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.dto.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
 import com.www.myblog.blog.data.entity.*;
-import com.www.myblog.blog.data.mapper.*;
+import com.www.myblog.blog.data.mapper.GroupInfoMapper;
 import com.www.myblog.blog.service.edit.IEditBlogService;
+import com.www.myblog.blog.service.entity.*;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,17 +30,19 @@ import java.util.List;
 @Service
 public class EditBlogServiceImpl implements IEditBlogService {
     @Autowired
-    private GroupInfoMapper blogGroupMapper;
+    private GroupInfoMapper groupInfoMapper;
     @Autowired
-    private BlogArticleMapper blogArticleMapper;
+    private IBlogTagService blogTagService;
     @Autowired
-    private BlogTagMapper blogClassMapper;
-    @Autowired
-    private TagInfoMapper classificationMapper;
-    @Autowired
-    private BlogGroupMapper userBlogGroupMapper;
+    private IBlogGroupService blogGroupService;
     @Autowired
     private IFileUpload fileService;
+    @Autowired
+    private IBlogArticleService blogArticleService;
+    @Autowired
+    private IGroupInfoService groupInfoService;
+    @Autowired
+    private ITagInfoService tagInfoService;
 
     /**
      * <p>@Description 当前登录的用户创建博客文章 </p>
@@ -60,17 +60,16 @@ public class EditBlogServiceImpl implements IEditBlogService {
             return response;
         }
         if(blog.getGroupId() != null){
-            GroupInfoEntity groupEntity = blogGroupMapper.selectById(blog.getGroupId());
+            GroupInfoEntity groupEntity = groupInfoService.findById(blog.getGroupId());
             if(groupEntity == null){
                 response.setResponse(ResponseDTO.RespEnum.FAIL,"发布博客失败，分组信息不存在",null);
                 return response;
             }
         }
         if(CollectionUtils.isNotEmpty(blog.getTagIds())){
-            QueryWrapper<TagInfoEntity> wrapper = new QueryWrapper<>();
-            wrapper.lambda().in(TagInfoEntity::getTagId,blog.getTagIds());
-            List<TagInfoEntity> classList = classificationMapper.selectList(wrapper);
-            if(CollectionUtils.isEmpty(classList) || classList.size() != blog.getTagIds().size()){
+            //根据标签id集合查询标签信息
+            List<TagInfoEntity> tagList = tagInfoService.findByIds(blog.getTagIds());
+            if(CollectionUtils.isEmpty(tagList) || tagList.size() != blog.getTagIds().size()){
                 response.setResponse(ResponseDTO.RespEnum.FAIL,"发布博客失败，分类信息不存在",null);
                 return response;
             }
@@ -87,14 +86,16 @@ public class EditBlogServiceImpl implements IEditBlogService {
         blogEntity.setStateCd(CodeDict.getValue(CodeTypeEnum.BLOG_STATUS.getCodeType(), CodeKeyEnum.K1.getKey()));
         blogEntity.setUpdateTime(DateUtils.getCurrentDateTime());
         blogEntity.setCreateTime(DateUtils.getCurrentDateTime());
-        blogArticleMapper.insert(blogEntity);
+        blogArticleService.createEntity(blogEntity);
         //保存封面图片
         if(img != null){
             String path = fileService.uploadFileBackURL(img,"blogCover","coverImg_" + blogEntity.getBlogId());
             if(StringUtils.isNotBlank(path)){
                 //更新博客封面图片
-                blogEntity.setCoverImg(path);
-                blogArticleMapper.updateById(blogEntity);
+                UpdateWrapper<BlogArticleEntity> wrapper = new UpdateWrapper<>();
+                wrapper.lambda().eq(BlogArticleEntity::getBlogId,blogEntity.getBlogId());
+                wrapper.lambda().set(BlogArticleEntity::getCoverImg,path);
+                blogArticleService.updateEntity(wrapper);
             }
         }
         //创建博客分组
@@ -105,7 +106,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
             blogGroupEntity.setBlogId(blogEntity.getBlogId());
             blogGroupEntity.setUpdateTime(DateUtils.getCurrentDateTime());
             blogGroupEntity.setCreateTime(DateUtils.getCurrentDateTime());
-            userBlogGroupMapper.insert(blogGroupEntity);
+            blogGroupService.createEntity(blogGroupEntity);
         }
         //创建博客分类
         if(CollectionUtils.isNotEmpty(blog.getTagIds())){
@@ -116,7 +117,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
                 blogClassEntity.setTagId(tagId);
                 blogClassEntity.setUpdateTime(DateUtils.getCurrentDateTime());
                 blogClassEntity.setCreateTime(DateUtils.getCurrentDateTime());
-                blogClassMapper.insert(blogClassEntity);
+                blogTagService.createEntity(blogClassEntity);
             }
         }
         response.setResponse(ResponseDTO.RespEnum.SUCCESS,"发布博客成功",blogEntity.getBlogId());
@@ -144,7 +145,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
         groupEntity.setGroupName(name);
         groupEntity.setUpdateTime(DateUtils.getCurrentDateTime());
         groupEntity.setCreateTime(DateUtils.getCurrentDateTime());
-        blogGroupMapper.insert(groupEntity);
+        groupInfoService.createEntity(groupEntity);
         response.setResponse(ResponseDTO.RespEnum.SUCCESS,"新增分组成功");
         return response;
     }
@@ -162,7 +163,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
         if(StringUtils.isBlank(userId)){
             return response;
         }
-        List<BlogGroupDTO> list = blogGroupMapper.findBlogGroup(userId);
+        List<BlogGroupDTO> list = groupInfoMapper.findBlogGroup(userId);
         response.setResponse(ResponseDTO.RespEnum.SUCCESS,list);
         return response;
     }

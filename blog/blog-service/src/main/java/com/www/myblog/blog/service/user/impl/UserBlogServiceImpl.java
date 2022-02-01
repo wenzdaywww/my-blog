@@ -1,5 +1,7 @@
 package com.www.myblog.blog.service.user.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.www.common.feign.base.IBaseFeignService;
 import com.www.common.pojo.dto.feign.UserInfoDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
@@ -11,10 +13,9 @@ import com.www.myblog.blog.data.entity.BlogCollectEntity;
 import com.www.myblog.blog.data.entity.BlogCommentEntity;
 import com.www.myblog.blog.data.entity.UserFansEntity;
 import com.www.myblog.blog.data.mapper.BlogArticleMapper;
-import com.www.myblog.blog.data.mapper.BlogCollectMapper;
-import com.www.myblog.blog.data.mapper.BlogCommentMapper;
-import com.www.myblog.blog.data.mapper.UserFansMapper;
+import com.www.myblog.blog.service.entity.IBlogArticleService;
 import com.www.myblog.blog.service.entity.IBlogCollectService;
+import com.www.myblog.blog.service.entity.IBlogCommentService;
 import com.www.myblog.blog.service.entity.IUserFansService;
 import com.www.myblog.blog.service.user.IUserBlogService;
 import org.apache.commons.collections4.CollectionUtils;
@@ -38,13 +39,13 @@ public class UserBlogServiceImpl implements IUserBlogService {
     @Autowired
     private IBaseFeignService baseFeignService;
     @Autowired
-    private UserFansMapper userFansMapper;
-    @Autowired
-    private BlogCommentMapper blogCommentMapper;
-    @Autowired
     private IUserFansService userFansService;
     @Autowired
     private IBlogCollectService blogCollectService;
+    @Autowired
+    private IBlogArticleService blogArticleService;
+    @Autowired
+    private IBlogCommentService blogCommentService;
 
     /**
      * <p>@Description 添加/取消博客收藏 </p>
@@ -61,7 +62,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
             response.setResponse(ResponseDTO.RespEnum.FAIL,"添加/取消博客收藏失败，信息不全",null);
             return response;
         }
-        BlogArticleEntity articleEntity = blogArticleMapper.selectById(blogId);
+        BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
         if(articleEntity == null){
             response.setResponse(ResponseDTO.RespEnum.FAIL,"添加/取消博客收藏失败，博客不存在",null);
             return response;
@@ -101,7 +102,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
         Long parentComId = null;//父评论id
         String replyUserId = null;//回复评论人ID
         if(blogId == null){//博客id为空，则是回复评论,博客id不为空，则是新增评论
-            BlogCommentEntity parentCommentEntity = blogCommentMapper.selectById(replyComId);
+            BlogCommentEntity parentCommentEntity = blogCommentService.findById(replyComId);
             if(parentCommentEntity == null){
                 response.setResponse(ResponseDTO.RespEnum.FAIL,"评论失败，评论不存在",null);
                 return response;
@@ -116,7 +117,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
             }
             blogId = parentCommentEntity.getBlogId();
         }
-        BlogArticleEntity articleEntity = blogArticleMapper.selectById(blogId);
+        BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
         if(articleEntity == null){
             response.setResponse(ResponseDTO.RespEnum.FAIL,"评论失败，博客不存在",null);
             return response;
@@ -125,10 +126,13 @@ public class UserBlogServiceImpl implements IUserBlogService {
         BlogCommentEntity commentEntity = new BlogCommentEntity();
         commentEntity.setBlogId(blogId).setUserId(userId).setComment(text).setPraise(0L).setParentComId(parentComId).setReplyComId(replyComId);
         commentEntity.setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
-        blogCommentMapper.insert(commentEntity);
+        blogCommentService.createEntity(commentEntity);
         //更新博客评论数量
-        articleEntity.setComment(articleEntity.getComment() + 1).setUpdateTime(DateUtils.getCurrentDateTime());
-        blogArticleMapper.updateById(articleEntity);
+        UpdateWrapper<BlogArticleEntity> wrapper = new UpdateWrapper<>();
+        wrapper.lambda().eq(BlogArticleEntity::getBlogId,articleEntity.getBlogId());
+        wrapper.lambda().set(BlogArticleEntity::getComment,articleEntity.getComment() + 1)
+                .set(BlogArticleEntity::getUpdateTime,DateUtils.getCurrentDateTime());
+        blogArticleService.updateEntity(wrapper);
         //返回评论信息
         CommentDTO commentDTO = new CommentDTO();
         //查询用户信息
@@ -186,7 +190,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
                 return response;
             }
         }else if(blogId != null){
-            BlogArticleEntity articleEntity = blogArticleMapper.selectById(blogId);
+            BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
             if(articleEntity == null){
                 response.setResponse(ResponseDTO.RespEnum.FAIL,"关注博主，博客ID不存在",null);
                 return response;
@@ -198,10 +202,10 @@ public class UserBlogServiceImpl implements IUserBlogService {
             fansEntity = new UserFansEntity();
             fansEntity.setUserId(authorId).setFansId(userId);
             fansEntity.setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
-            userFansMapper.insert(fansEntity);
+            userFansService.createEntity(fansEntity);
             response.setResponse(ResponseDTO.RespEnum.SUCCESS,true);
         }else {
-            userFansMapper.deleteById(fansEntity.getUfId());
+            userFansService.deleteEntity(fansEntity.getUfId());
             response.setResponse(ResponseDTO.RespEnum.SUCCESS,false);
         }
         return response;

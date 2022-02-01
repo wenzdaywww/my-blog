@@ -3,7 +3,7 @@ package com.www.myblog.blog.service.tag.impl;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.TagInfoDTO;
 import com.www.myblog.blog.data.mapper.TagInfoMapper;
-import com.www.myblog.blog.service.tag.ITagInfoService;
+import com.www.myblog.blog.service.tag.ITagInformationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class TagServiceImpl implements ITagInfoService {
+public class TagInformationServiceImpl implements ITagInformationService {
     @Autowired
     private TagInfoMapper tagInfoMapper;
 

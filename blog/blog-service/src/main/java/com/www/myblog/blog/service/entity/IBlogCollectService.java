@@ -10,6 +10,14 @@ import com.www.myblog.blog.data.entity.BlogCollectEntity;
  */
 public interface IBlogCollectService {
     /**
+     * <p>@Description 根据博客id查询该博客被收藏的次数 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/1 12:58 </p>
+     * @param blogId 博客id
+     * @return int 博客被收藏的次数
+     */
+    int findBlogCollectCount(Long blogId);
+    /**
      * <p>@Description 判断该用户是否已收藏该博客 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/2/1 11:16 </p>

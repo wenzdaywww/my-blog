@@ -145,13 +145,13 @@ export default {
           if(res.code === 200){
             if (res.data){
               parentPageNum++;//页码增加
-              parentMore.value = res.data.length >= res.pageSize;
+              parentMore.value = res.data.length >= res.pageSize;//判断是否还有未加载的父评论
               res.data.forEach (temp => {
-                commentList.value.push(temp);
+                commentList.value.push(temp);//父评论列表添加
               });
             }else {//没有数据
-              parentMore.value = false;
-              commentShow.value = parentPageNum == 1 ? false : commentShow.value;
+              parentMore.value = false;//没有更多
+              commentShow.value = parentPageNum == 1 ? false : commentShow.value;//设置是否展示评论列表
             }
           }
         });
@@ -166,16 +166,16 @@ export default {
         axios.$http.get(request.commentList, {pageNum:parentItem.pageNum,pid:parentItem.commentId}).then(function (res) {
           if(res.code === 200){
             if (res.data){
-              parentItem.pageNum++;
-              parentItem.more = res.totalNum >= res.pageSize ? res.totalNum - res.pageSize : 0;
+              parentItem.pageNum++;//页码增加
+              parentItem.more = res.totalNum >= res.pageSize ? res.totalNum - res.pageSize : 0;//判断是否还有未加载的子评论
               res.data.forEach (temp => {
                 if(!parentItem.subList){
                   parentItem.subList = [];
                 }
-                parentItem.subList.push(temp);
+                parentItem.subList.push(temp);//子评论列表添加
               });
             }else {//没有数据
-              parentItem.more = 0;
+              parentItem.more = 0;//子评论没有更多
             }
           }
         });
@@ -187,7 +187,7 @@ export default {
      */
     const replyHandle = (item) =>{
       if(utils.isLogin()){
-        item.open = true;
+        item.open = true;//显示回复框
       }else {
         ElMessage.info('请登录');
       }
@@ -195,7 +195,7 @@ export default {
     // 点击评论处理
     const openInputHandle = () =>{
       if(utils.isLogin()){
-        openInput.value = true;
+        openInput.value = true;//显示评论输入框
       }else {
         ElMessage.info('请登录');
       }
@@ -216,7 +216,7 @@ export default {
               if(!item.subList){
                 item.subList = [];
               }
-              item.subList.unshift(res.data);
+              item.subList.unshift(res.data);//子列表添加评论
             }
             ElMessage.success('评论成功');
           }else {
@@ -233,10 +233,11 @@ export default {
         axios.$http.post(request.addComment, {text:inputContent.value,bid:blogId}).then(function (res) {
           if(res.code === 200){
             if(res.data){
-              inputContent.value = null;
-              commentList.value.unshift(res.data);
+              inputContent.value = null;//清空评论框
+              openInput.value = false;//隐藏评论框
+              commentList.value.unshift(res.data);//添加到父评论列表中
             }
-            commentShow.value = commentShow.value == false ? true : commentShow.value;
+            commentShow.value = commentShow.value == false ? true : commentShow.value;//设置是否展示评论列表
             ElMessage.success('评论成功');
           }else {
             ElMessage.error('评论失败');

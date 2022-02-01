@@ -21,6 +21,23 @@ public class BlogCollectServiceImpl extends ServiceImpl<BlogCollectMapper, BlogC
     private BlogCollectMapper blogCollectMapper;
 
     /**
+     * <p>@Description 根据博客id查询该博客被收藏的次数 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/1 12:58 </p>
+     * @param blogId 博客id
+     * @return int 博客被收藏的次数
+     */
+    @Override
+    public int findBlogCollectCount(Long blogId) {
+        if(blogId == null){
+            return 0;
+        }
+        QueryWrapper<BlogCollectEntity> colWrapper = new QueryWrapper<>();
+        colWrapper.lambda().eq(BlogCollectEntity::getBlogId,blogId);
+        return blogCollectMapper.selectCount(colWrapper);
+    }
+
+    /**
      * <p>@Description 判断该用户是否已收藏该博客 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/2/1 11:16 </p>
@@ -33,7 +50,6 @@ public class BlogCollectServiceImpl extends ServiceImpl<BlogCollectMapper, BlogC
         BlogCollectEntity collectEntity = this.findBlogCollectEntity(userId,blogId);
         return collectEntity != null;
     }
-
     /**
      * <p>@Description 新增博客收藏信息 </p>
      * <p>@Author www </p>

@@ -6,13 +6,12 @@ import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
 import com.www.myblog.blog.data.dto.TagInfoDTO;
-import com.www.myblog.blog.service.tag.ITagInfoService;
+import com.www.myblog.blog.service.tag.ITagInformationService;
 import com.www.myblog.blog.service.edit.IEditBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,7 +32,7 @@ public class EditBlogController {
     @Autowired
     private IEditBlogService editBlogService;
     @Autowired
-    private ITagInfoService tagInfoService;
+    private ITagInformationService tagInformationService;
 
     /**
      * <p>@Description 查询当前登录的用户的博客分组列表 </p>
@@ -76,6 +75,6 @@ public class EditBlogController {
      */
     @PostMapping("tag")
     public ResponseDTO<List<TagInfoDTO>> findAllBlogClass(){
-        return tagInfoService.findAllBlogTag();
+        return tagInformationService.findAllBlogTag();
     }
 }

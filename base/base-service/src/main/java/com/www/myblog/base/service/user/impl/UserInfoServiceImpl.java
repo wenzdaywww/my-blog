@@ -20,6 +20,7 @@ import com.www.myblog.base.data.mapper.SysRoleMapper;
 import com.www.myblog.base.data.mapper.SysUserMapper;
 import com.www.myblog.base.data.mapper.SysUserRoleMapper;
 import com.www.myblog.base.service.entity.ISysRoleService;
+import com.www.myblog.base.service.entity.ISysUserRoleService;
 import com.www.myblog.base.service.entity.ISysUserService;
 import com.www.myblog.base.service.user.IUserInfoService;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +50,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Autowired
     private SysMenuMapper sysMenuMapper;
     @Autowired
-    private SysUserRoleMapper sysUserRoleMapper;
+    private ISysUserRoleService sysUserRoleService;
     @Autowired
     private IFileUpload fileService;
     @Autowired
@@ -71,9 +72,8 @@ public class UserInfoServiceImpl implements IUserInfoService {
             response.setResponse(ResponseDTO.RespEnum.FAIL,"查询多个用户信息失败，用户ID集合为空",null);
             return response;
         }
-        QueryWrapper<SysUserEntity> wrapper = new QueryWrapper<>();
-        wrapper.lambda().in(SysUserEntity::getUserId,userList);
-        List<SysUserEntity> entityList = sysUserMapper.selectList(wrapper);
+        //根据用户ID集合查询用户信息
+        List<SysUserEntity> entityList = sysUserService.findUserEntityById(userList);
         if(CollectionUtils.isEmpty(entityList)){
             response.setResponse(ResponseDTO.RespEnum.SUCCESS,"查询多个用户信息失败，查询不到用户信息",null);
             return response;
@@ -105,9 +105,8 @@ public class UserInfoServiceImpl implements IUserInfoService {
             response.setResponse(ResponseDTO.RespEnum.SUCCESS,"校验用户是否存在失败，查询用户ID为空",false);
             return response;
         }
-        QueryWrapper<SysUserEntity> wrapper = new QueryWrapper<>();
-        wrapper.lambda().in(SysUserEntity::getUserId,userList);
-        int count = sysUserMapper.selectCount(wrapper);
+        //根据用户ID集合查询用户信息条数
+        int count = sysUserService.findUserCountById(userList);
         response.setResponse(ResponseDTO.RespEnum.SUCCESS,count>0);
         return response;
     }
@@ -170,8 +169,8 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userWrapper.lambda().eq(SysUserEntity::getUserId,user.getUserId());
         userWrapper.lambda().set(SysUserEntity::getPassword,encoder.encode(user.getNewPassWord()));
         userWrapper.lambda().set(SysUserEntity::getUpdateTime,DateUtils.getCurrentDateTime());
-        int count = sysUserMapper.update(null,userWrapper);
-        if(count == 0){
+        boolean isOk = sysUserService.updateEntity(userWrapper);
+        if(!isOk){
             responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新用户密码失败");
         }
         responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,"更新用户密码成功");
@@ -258,8 +257,8 @@ public class UserInfoServiceImpl implements IUserInfoService {
         UpdateWrapper<SysUserEntity> userWrapper = new UpdateWrapper<>();
         userWrapper.lambda().eq(SysUserEntity::getUserId,userEntity.getUserId());
         userWrapper.lambda().set(SysUserEntity::getPhoto,path);
-        int count = sysUserMapper.update(null,userWrapper);
-        if(count == 0){
+        boolean isOk = sysUserService.updateEntity(userWrapper);
+        if(!isOk){
             responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新用户头像失败");
         }
         responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,path);
@@ -295,8 +294,8 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userWrapper.lambda().set(SysUserEntity::getEmail,user.getEmail());
         userWrapper.lambda().set(SysUserEntity::getBrief,user.getBrief());
         userWrapper.lambda().set(SysUserEntity::getUpdateTime,DateUtils.getCurrentDateTime());
-        int count = sysUserMapper.update(null,userWrapper);
-        if(count == 0){
+        boolean isOk = sysUserService.updateEntity(userWrapper);
+        if(!isOk){
             responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新用户信息失败");
         }
         responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,"更新用户信息成功");
@@ -355,14 +354,14 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userEntity.setEmail(user.getEmail());
         userEntity.setCreateTime(DateUtils.getCurrentDateTime());
         userEntity.setUpdateTime(DateUtils.getCurrentDateTime());
-        sysUserMapper.insert(userEntity);
+        sysUserService.createEntity(userEntity);
         //创建用户角色
         SysUserRoleEntity userRoleEntity = new SysUserRoleEntity();
         userRoleEntity.setSuId(userEntity.getSuId());
         userRoleEntity.setRoleId(roleEntity.getRoleId());
         userRoleEntity.setCreateTime(DateUtils.getCurrentDateTime());
         userRoleEntity.setUpdateTime(DateUtils.getCurrentDateTime());
-        sysUserRoleMapper.insert(userRoleEntity);
+        sysUserRoleService.createEntity(userRoleEntity);
         responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,"创建用户成功");
         return responseDTO;
     }
@@ -406,8 +405,8 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userWrapper.lambda().set(SysUserEntity::getNotLocked,notLocked);
         userWrapper.lambda().set(SysUserEntity::getCredentialsNotExpired,credentialsNotExpired);
         userWrapper.lambda().set(SysUserEntity::getUpdateTime,DateUtils.getCurrentDateTime());
-        int count = sysUserMapper.update(null,userWrapper);
-        if(count != 0){
+        boolean isOk = sysUserService.updateEntity(userWrapper);
+        if(isOk){
             responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,"更新用户信息成功");
         }else {
             responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新用户信息失败");

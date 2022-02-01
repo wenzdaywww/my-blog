@@ -11,7 +11,7 @@ import java.util.List;
  * <p>@Author www </p>
  * <p>@Date 2022/1/22 19:10 </p>
  */
-public interface ITagInfoService {
+public interface ITagInformationService {
     /**
      * <p>@Description 查询所有博客标签 </p>
      * <p>@Author www </p>

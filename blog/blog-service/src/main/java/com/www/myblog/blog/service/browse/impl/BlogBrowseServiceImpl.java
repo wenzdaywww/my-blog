@@ -8,10 +8,10 @@ import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.dto.*;
 import com.www.myblog.blog.data.entity.BlogArticleEntity;
-import com.www.myblog.blog.data.entity.BlogCollectEntity;
 import com.www.myblog.blog.data.entity.UserFansEntity;
 import com.www.myblog.blog.data.mapper.*;
 import com.www.myblog.blog.service.browse.IBlogBrowseService;
+import com.www.myblog.blog.service.entity.IBlogArticleService;
 import com.www.myblog.blog.service.entity.IBlogCollectService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -40,15 +40,15 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     @Autowired
     private BlogGroupMapper userBlogGroupMapper;
     @Autowired
-    private BlogTagMapper blogClassMapper;
-    @Autowired
-    private BlogCollectMapper blogCollectMapper;
+    private BlogTagMapper blogTagMapper;
     @Autowired
     private UserFansMapper userFansMapper;
     @Autowired
     private BlogCommentMapper blogCommentMapper;
     @Autowired
     private IBlogCollectService blogCollectService;
+    @Autowired
+    private IBlogArticleService blogArticleService;
 
     /**
      * <p>@Description 查询评论列表，包括父评论和子评论 </p>
@@ -177,12 +177,11 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
         }else {
             articleDTO.setCollection(blogCollectService.hasCollectBlog(userId,blogId));
         }
-        QueryWrapper<BlogCollectEntity> colWrapper = new QueryWrapper<>();
-        colWrapper.lambda().eq(BlogCollectEntity::getBlogId,blogId);
-        int collectNum = blogCollectMapper.selectCount(colWrapper);
+        //根据博客id查询该博客被收藏的次数
+        int collectNum = blogCollectService.findBlogCollectCount(blogId);
         articleDTO.setCollect(collectNum);
         //根据博客ID查询博客分类
-        List<BlogTagDTO> classList = blogClassMapper.findBlogTag(blogId);
+        List<BlogTagDTO> classList = blogTagMapper.findBlogTag(blogId);
         articleDTO.setBlogTag(classList);
         response.setResponse(ResponseDTO.RespEnum.SUCCESS,articleDTO);
         return response;
@@ -204,14 +203,14 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
             return response;
         }
         if(StringUtils.isBlank(userId)){
-            BlogArticleEntity articleEntity = blogArticleMapper.selectById(blogId);
+            BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
             if(articleEntity == null){
                 response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客分类列表，博客ID不存在",null);
                 return response;
             }
             userId = articleEntity.getUserId();
         }
-        List<TagInfoDTO> list = blogClassMapper.findAuthorBlogTag(userId);
+        List<TagInfoDTO> list = blogTagMapper.findAuthorBlogTag(userId);
         response.setResponse(ResponseDTO.RespEnum.SUCCESS,list);
         return response;
     }
@@ -231,7 +230,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
             return response;
         }
         if(StringUtils.isBlank(userId)){
-            BlogArticleEntity articleEntity = blogArticleMapper.selectById(blogId);
+            BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
             if(articleEntity == null){
                 response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客分组列表失败，博客ID不存在",null);
                 return response;
@@ -295,7 +294,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
             return responseDTO;
         }
         if(StringUtils.isBlank(authorId)){
-            BlogArticleEntity articleEntity = blogArticleMapper.selectById(blogId);
+            BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
             if(articleEntity == null){
                 responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"查询失败，博客ID不存在",null);
                 return responseDTO;
