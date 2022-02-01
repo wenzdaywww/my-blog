@@ -1,3 +1,4 @@
+<!-- 密码修改 -->
 <template>
   <el-dialog title="修改密码" v-model="editVisible" width="20%" destroy-on-close="true">
     <el-form label-width="120px" :model="form" :rules="editRules" ref="editForm">

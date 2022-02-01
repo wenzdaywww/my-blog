@@ -1,3 +1,4 @@
+<!-- 用户头注册 -->
 <template>
   <div>
     <el-dialog title="用户注册" v-model="registVisible" destroy-on-close="true" width="20%">

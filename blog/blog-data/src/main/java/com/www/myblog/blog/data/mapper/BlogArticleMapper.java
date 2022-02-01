@@ -19,6 +19,14 @@ import java.util.List;
 @Mapper
 public interface BlogArticleMapper extends BaseMapper<BlogArticleEntity> {
     /**
+     * <p>@Description 获取推荐博客列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 21:37 </p>
+     * @param page 分页信息
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     */
+    Page<BlogArticleDTO> findTipBlogList(Page<BlogArticleDTO> page);
+    /**
      * <p>@Description 根据博客ID查询博客信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/25 21:21 </p>
@@ -30,6 +38,7 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticleEntity> {
      * <p>@Description 获取博主博客列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
+     * @param page 分页信息
      * @param queryDTO 查询条件
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
      */

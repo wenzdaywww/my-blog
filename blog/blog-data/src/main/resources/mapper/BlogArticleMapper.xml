@@ -17,6 +17,21 @@
         <result column="UPDATE_TIME" property="updateTime" />
         <result column="CREATE_TIME" property="createTime" />
     </resultMap>
+    <!--    获取推荐博客列表-->
+    <select id="findTipBlogList" resultType="com.www.myblog.blog.data.dto.BlogArticleDTO">
+        SELECT A.BLOG_ID,
+               A.TITLE,
+               A.SUMMARY,
+               A.COVER_IMG,
+               A.BROWSE,
+               A.COMMENT,
+               A.PRAISE,
+               IFNULL( CO.COLLECT, 0 ) COLLECT,
+               DATE_FORMAT(A.CREATE_TIME,'%Y-%m-%d') CREATE_DATE
+        FROM (SELECT B.BLOG_ID,B.TITLE,B.SUMMARY,B.COVER_IMG,B.BROWSE,B.COMMENT,B.PRAISE,B.CREATE_TIME FROM BLOG_ARTICLE B WHERE B.STATE_CD = '1') A
+           LEFT JOIN (SELECT BC.BLOG_ID,COUNT( BC.COLLECT_ID ) COLLECT FROM BLOG_COLLECT BC GROUP BY BC.BLOG_ID) CO ON CO.BLOG_ID = A.BLOG_ID
+        ORDER BY A.PRAISE DESC
+    </select>
     <!--    根据博客ID查询博客信息-->
     <select id="findArticle" resultType="com.www.myblog.blog.data.dto.BlogArticleDTO">
         SELECT B.BLOG_ID,

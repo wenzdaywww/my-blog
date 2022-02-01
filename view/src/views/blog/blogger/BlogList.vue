@@ -1,3 +1,4 @@
+<!-- 博客列表 -->
 <template>
   <el-card>
     <span class="span-title">{{ query.listTitle }}</span>
@@ -10,7 +11,7 @@
           <el-link :href="item.blogId ? '/article?bid=' + item.blogId : '#'" class="ellipsis-line1 blog-title"
                    target="_blank" type="primary" @click="showBlogDetail(item.blogId)">{{item.title}}</el-link>
         </el-tooltip>
-        <div class="bottom card-header">
+        <div>
           <el-row class="el-row">
             <div class="ellipsis-line4">
               {{item.summary}}
@@ -18,10 +19,18 @@
           </el-row>
           <el-row class="el-row">
             <div style="width: 50%;">
-              <i class="el-icon-view color-grad">{{item.browse}}</i>
-              <i class="el-icon-lx-like color-grad padding-left10">{{item.praise}}</i>
-              <i class="el-icon-lx-favor color-grad padding-left10">{{item.collect}}</i>
-              <i class="el-icon-lx-comment color-grad padding-left10">{{item.comment}}</i>
+              <el-tooltip class="item" effect="light" content="浏览量" placement="bottom">
+                <i class="el-icon-view color-grad">{{item.browse}}</i>
+              </el-tooltip>
+              <el-tooltip class="item" effect="light" content="点赞量" placement="bottom">
+                <i class="el-icon-lx-like color-grad padding-left10">{{item.praise}}</i>
+              </el-tooltip>
+              <el-tooltip class="item" effect="light" content="收藏数" placement="bottom">
+                <i class="el-icon-lx-favor color-grad padding-left10">{{item.collect}}</i>
+              </el-tooltip>
+              <el-tooltip class="item" effect="light" content="评论数" placement="bottom">
+                <i class="el-icon-lx-comment color-grad padding-left10">{{item.comment}}</i>
+              </el-tooltip>
             </div>
             <div style="width: 50%">
               <span class="blog-time color-grad">{{item.createDate}}</span>
@@ -110,8 +119,6 @@ export default {
 <style scoped>
 .span-title{
   font-weight: bold;
-}
-.blog-card{
 }
 .image{
   float: right;

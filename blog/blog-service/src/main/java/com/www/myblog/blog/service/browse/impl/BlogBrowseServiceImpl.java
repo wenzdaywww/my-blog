@@ -1,6 +1,7 @@
 package com.www.myblog.blog.service.browse.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.feign.base.IBaseFeignService;
 import com.www.common.pojo.dto.feign.UserInfoDTO;
@@ -49,6 +50,28 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     private IBlogCollectService blogCollectService;
     @Autowired
     private IBlogArticleService blogArticleService;
+
+
+    /**
+     * <p>@Description 获取推荐博客列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 21:37 </p>
+     * @param pageNum 页码
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     */
+    @Override
+    public ResponseDTO<List<BlogArticleDTO>> findTipBlogList(int pageNum) {
+        ResponseDTO<List<BlogArticleDTO>> response = new ResponseDTO<>();
+        long pageSize = 5;
+        Page<BlogArticleDTO> page = new Page<>(pageNum,pageSize);
+        page = blogArticleMapper.findTipBlogList(page);
+        List<BlogArticleDTO> blogList =  page.getRecords();
+        response.setPageNum(pageNum);
+        response.setPageSize(pageSize);
+        response.setTotalNum(page.getTotal());
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,blogList);
+        return response;
+    }
 
     /**
      * <p>@Description 查询评论列表，包括父评论和子评论 </p>

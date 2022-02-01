@@ -58,6 +58,8 @@ export default {
     addCollect: "api/blog/user/collect/",
     //评论列表
     commentList: "api/blog/browse/cmt-list",
+    //推荐博客列表
+    tipList: "api/blog/browse/tip-list",
     //退出
     logout: "api/uaa/logout"
 }

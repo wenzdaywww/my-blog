@@ -24,6 +24,17 @@ public class BlogBrowseController {
     private IBlogBrowseService blogBrowseService;
 
     /**
+     * <p>@Description 获取推荐博客列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 21:37 </p>
+     * @param pageNum 页码
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     */
+    @PostMapping("tip-list")
+    public ResponseDTO<List<BlogArticleDTO>> findTipBlogList(int pageNum){
+        return blogBrowseService.findTipBlogList(pageNum);
+    }
+    /**
      * <p>@Description 查询评论列表，包括父评论和子评论 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/30 22:34 </p>

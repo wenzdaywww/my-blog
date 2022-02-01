@@ -1,3 +1,4 @@
+<!-- 博主的博客分组及标签信息 -->
 <template>
   <!-- 博客分组 -->
   <el-card v-if="blogGroup != null && blogGroup.length > 0" class="group-card">
