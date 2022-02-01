@@ -71,6 +71,7 @@ export default {
       if(blogId){
         axios.$http.get(request.article+blogId,null).then(function (res) {
           if(res.code === 200){
+            document.title += res.data.title;//设置浏览器标题
             blog.blogId = res.data.blogId;
             blog.title = res.data.title;
             blog.groupName = res.data.groupName;

@@ -63,6 +63,7 @@ export default {
     const axios = getCurrentInstance().appContext.config.globalProperties;
     //博主id
     const authorId = utils.getUrlParam("id");
+    document.title = document.title.replace('{0}',authorId);//设置浏览器标题
     //查询条件
     const query = reactive({
       listTitle: "最新博客",
