@@ -61,6 +61,10 @@ export default {
     manageBlog: "api/blog/edit/blogs",
     //用户的博客标签列表
     userTags: "api/blog/edit/tags",
+    //查询博客的分组及标签信息
+    blogTagGroup: "api/blog/edit/btg/",
+    //修改博客的分组及标签信息
+    updateTagGroup: "api/blog/edit/newtg",
     //关注博主
     follow: "api/blog/user/follow/",
     //新增/回复评论

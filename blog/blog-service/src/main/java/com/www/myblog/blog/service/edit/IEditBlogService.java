@@ -16,6 +16,22 @@ import java.util.List;
  */
 public interface IEditBlogService {
     /**
+     * <p>@Description 修改博客的分组及标签信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/2 14:54 </p>
+     * @param blog 博客信息
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     */
+    ResponseDTO<Boolean> updateBlogTagAndGroup(BlogArticleDTO blog);
+    /**
+     * <p>@Description 查询博客的分组及标签信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/2 14:54 </p>
+     * @param blogId 博客id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     */
+    ResponseDTO<BlogArticleDTO> findBlogTagAndGroup(Long blogId);
+    /**
      * <p>@Description 查询所有博客标签 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/22 19:07 </p>

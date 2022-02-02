@@ -1,6 +1,7 @@
 package com.www.myblog.blog.data.dto;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -11,6 +12,7 @@ import java.io.Serializable;
  * <p>@Date 2021/11/10 23:07 </p>
  */
 @Data
+@Accessors(chain = true)//开启链式编程
 public class BlogGroupDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     /**

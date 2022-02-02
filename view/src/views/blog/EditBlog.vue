@@ -186,15 +186,15 @@ export default {
       }
       coverFile = file.raw;
     }
-    // 获取博客分类
-    const getBlogClass = () => {
+    // 获取所有标签
+    const getBlogTag = () => {
       axios.$http.post(request.tagList,null).then(function (res) {
         if(res.code === 200){
           tagArr.value = res.data;
         }
       });
     }
-    getBlogClass();
+    getBlogTag();
     // 获取博客分组
     const getBlogGroup = () => {
       axios.$http.post(request.groupList,null).then(function (res) {

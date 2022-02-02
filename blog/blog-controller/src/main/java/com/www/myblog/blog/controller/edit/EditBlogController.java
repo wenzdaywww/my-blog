@@ -9,10 +9,7 @@ import com.www.myblog.blog.data.dto.TagInfoDTO;
 import com.www.myblog.blog.service.edit.IEditBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -32,6 +29,29 @@ public class EditBlogController {
     @Autowired
     private IEditBlogService editBlogService;
 
+
+    /**
+     * <p>@Description 修改博客的分组及标签信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/2 14:54 </p>
+     * @param blog 博客信息
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     */
+    @PostMapping("newtg")
+    public ResponseDTO<Boolean> updateBlogTagAndGroup(BlogArticleDTO blog){
+        return editBlogService.updateBlogTagAndGroup(blog);
+    }
+    /**
+     * <p>@Description 查询博客的分组及标签信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/2 14:54 </p>
+     * @param blogId 博客id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     */
+    @GetMapping("btg/{bid}")
+    public ResponseDTO<BlogArticleDTO> findBlogTagAndGroup(@PathVariable("bid") Long blogId){
+        return editBlogService.findBlogTagAndGroup(blogId);
+    }
     /**
      * <p>@Description 获取用户博客标签列表 </p>
      * <p>@Author www </p>

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.config.code.CodeDict;
 import com.www.common.config.mvc.upload.IFileUpload;
+import com.www.common.pojo.dto.feign.UserInfoDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.pojo.enums.CodeKeyEnum;
 import com.www.common.pojo.enums.CodeTypeEnum;
@@ -24,7 +25,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * <p>@Description 博客编辑service </p>
@@ -55,7 +61,134 @@ public class EditBlogServiceImpl implements IEditBlogService {
     @Autowired
     private TagInfoMapper tagInfoMapper;
 
-
+    /**
+     * <p>@Description 修改博客的分组及标签信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/2 14:54 </p>
+     * @param blog 博客信息
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     */
+    @Override
+    public ResponseDTO<Boolean> updateBlogTagAndGroup(BlogArticleDTO blog) {
+        ResponseDTO<Boolean> response = new ResponseDTO<>();
+        if(blog == null || blog.getBlogId() == null){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"修改博客的分组及标签信息失败，信息不全",null);
+            return response;
+        }
+        BlogArticleEntity articleEntity = blogArticleService.findById(blog.getBlogId());
+        if(articleEntity == null){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询博客的分组及标签信息失败，博客不存在",null);
+            return response;
+        }
+        //修改分组信息
+        BlogGroupEntity blogGroupEntity = blogGroupService.findEntityByBlogId(blog.getBlogId());
+        if(blog.getGroupId() == null){//分组id为空，则取消分组
+            if(blogGroupEntity != null){
+                blogGroupService.deleteEntity(blogGroupEntity.getBgId());
+            }
+        }else {
+            GroupInfoEntity groupInfoEntity = groupInfoService.findById(blog.getGroupId());
+            if(groupInfoEntity == null){
+                response.setResponse(ResponseDTO.RespEnum.FAIL,"查询博客的分组及标签信息失败，分组不存在",null);
+                return response;
+            }
+            if(blogGroupEntity != null){
+                //存在分组，判断是否是同一分组，是则不更新，否则删除旧分组，新建新分组
+                if(!groupInfoEntity.getGroupId().equals(blogGroupEntity.getGroupId())){
+                    blogGroupService.deleteEntity(blogGroupEntity.getBgId());
+                    BlogGroupEntity newBlogGroupEntity = new BlogGroupEntity();
+                    newBlogGroupEntity.setBlogId(articleEntity.getBlogId()).setUserId(articleEntity.getUserId())
+                            .setGroupId(groupInfoEntity.getGroupId()).setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
+                    blogGroupService.createEntity(newBlogGroupEntity);
+                }
+            }else {
+                //不存在分组，则创建分组
+                blogGroupEntity = new BlogGroupEntity();
+                blogGroupEntity.setBlogId(articleEntity.getBlogId()).setUserId(articleEntity.getUserId())
+                        .setGroupId(groupInfoEntity.getGroupId()).setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
+                blogGroupService.createEntity(blogGroupEntity);
+            }
+        }
+        //修改标签信息
+        List<BlogTagEntity> blogTagList = blogTagService.findEntityByBlogId(blog.getBlogId());
+        //标签有值，则修改标签
+        if(CollectionUtils.isNotEmpty(blog.getTagIds())){
+            List<TagInfoEntity> tagInfoList = tagInfoService.findByIds(blog.getTagIds());
+            if(CollectionUtils.isEmpty(tagInfoList) || tagInfoList.size() != blog.getTagIds().size()){
+                response.setResponse(ResponseDTO.RespEnum.FAIL,"查询博客的分组及标签信息失败，标签不存在",null);
+                return response;
+            }
+            List<BlogTagEntity> addTagList = new ArrayList<>();//需要新增的博客标签
+            List<Long> deeteTagList = new ArrayList<>();//需要删除的博客标签
+            //博客标签的map集合
+            Map<Long, BlogTagEntity> blogTagMap = CollectionUtils.isEmpty(blogTagList) ? new HashMap<>() :
+                    blogTagList.stream().collect(Collectors.toMap(BlogTagEntity::getTagId, Function.identity(), (key1, key2) -> key2));
+            //判断博客标签是否有新加的tagId，不存在则需要新增
+            for (TagInfoEntity tagInfoEntity : tagInfoList){
+                if(!blogTagMap.containsKey(tagInfoEntity.getTagId())){
+                    BlogTagEntity addEntity= new BlogTagEntity();
+                    addEntity.setBlogId(articleEntity.getBlogId()).setTagId(tagInfoEntity.getTagId()).setUserId(articleEntity.getUserId())
+                            .setUpdateTime(DateUtils.getCurrentDateTime()).setCreateTime(DateUtils.getCurrentDateTime());
+                    addTagList.add(addEntity);
+                }
+            }
+            //判断博客标签是否有多余的tagId，多余则需要删除
+            if(CollectionUtils.isNotEmpty(blogTagList)){
+                //标签信息的map集合
+                Map<Long, TagInfoEntity> tagInfoMap = CollectionUtils.isEmpty(tagInfoList) ? new HashMap<>() :
+                        tagInfoList.stream().collect(Collectors.toMap(TagInfoEntity::getTagId, Function.identity(), (key1, key2) -> key2));
+                for (BlogTagEntity blogTagEntity : blogTagList){
+                    if(!tagInfoMap.containsKey(blogTagEntity.getTagId())){
+                        deeteTagList.add(blogTagEntity.getBtId());
+                    }
+                }
+            }
+            //删除多余的博客标签
+            blogTagService.deleteById(deeteTagList);
+            //新增博客标签
+            blogTagService.createEntityBatch(addTagList);
+        }else {
+            //删除所有标签
+            if(CollectionUtils.isNotEmpty(blogTagList)){
+                blogTagService.deleteByBlogId(blog.getBlogId());
+            }
+        }
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,true);
+        return response;
+    }
+    /**
+     * <p>@Description 查询博客的分组及标签信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/2 14:54 </p>
+     *
+     * @param blogId 博客id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     */
+    @Override
+    public ResponseDTO<BlogArticleDTO> findBlogTagAndGroup(Long blogId) {
+        ResponseDTO<BlogArticleDTO> response = new ResponseDTO<>();
+        if(blogId == null){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询博客的分组及标签信息失败，信息不全",null);
+            return response;
+        }
+        BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
+        if(articleEntity == null){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询博客的分组及标签信息失败，博客不存在",null);
+            return response;
+        }
+        BlogArticleDTO articleDTO = new BlogArticleDTO();
+        articleDTO.setBlogId(blogId).setTitle(articleEntity.getTitle());
+        //查询分组信息
+        BlogGroupEntity groupEntity = blogGroupService.findEntityByBlogId(blogId);
+        articleDTO.setGroupId(groupEntity != null ? groupEntity.getGroupId() : null);
+        //查询标签信息
+        List<BlogTagEntity> tagList = blogTagService.findEntityByBlogId(blogId);
+        List<Long> tagIds = CollectionUtils.isEmpty(tagList) ? null :
+                tagList.stream().map(BlogTagEntity::getTagId).collect(Collectors.toList());
+        articleDTO.setTagIds(tagIds);
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,articleDTO);
+        return response;
+    }
     /**
      * <p>@Description 查询所有博客标签 </p>
      * <p>@Author www </p>

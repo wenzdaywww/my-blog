@@ -1,6 +1,7 @@
 package com.www.myblog.blog.data.dto;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,6 +14,7 @@ import java.util.List;
  * <p>@Date 2021/11/10 23:05 </p>
  */
 @Data
+@Accessors(chain = true)//开启链式编程
 public class BlogArticleDTO implements Serializable {
     private static final long serialVersionUID = 1L;
     /** 当前页数 **/
@@ -90,7 +92,7 @@ public class BlogArticleDTO implements Serializable {
     /**
     * 当前用户是否收藏该博客
     */
-    private boolean collection;
+    private Boolean collection;
     /**
      * 创建时间
      */
