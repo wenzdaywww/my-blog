@@ -19,6 +19,15 @@ import java.util.List;
 @Mapper
 public interface BlogArticleMapper extends BaseMapper<BlogArticleEntity> {
     /**
+     * <p>@Description 获取用户博客列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 21:37 </p>
+     * @param page 分页信息
+     * @param queryDTO 查询条件
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     */
+    Page<BlogArticleDTO> findUserBlogList(Page<BlogArticleDTO> page, @Param("query") BlogArticleDTO queryDTO);
+    /**
      * <p>@Description 获取推荐博客列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>

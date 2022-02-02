@@ -37,5 +37,9 @@ export default {
         let user = this.getUser();
         return user ? user.userId : null;
     },
-
+    /** 判断当前登录的用户是否包含user角色 **/
+    isUser(){
+        let user = this.getUser();
+        return user.roles.indexOf("user") !== -1;
+    }
 }

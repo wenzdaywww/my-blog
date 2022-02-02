@@ -1,6 +1,7 @@
 package com.www.myblog.blog.service.edit.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.config.code.CodeDict;
 import com.www.common.config.mvc.upload.IFileUpload;
 import com.www.common.pojo.dto.response.ResponseDTO;
@@ -9,8 +10,12 @@ import com.www.common.pojo.enums.CodeTypeEnum;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.dto.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
+import com.www.myblog.blog.data.dto.TagInfoDTO;
 import com.www.myblog.blog.data.entity.*;
+import com.www.myblog.blog.data.mapper.BlogArticleMapper;
+import com.www.myblog.blog.data.mapper.BlogTagMapper;
 import com.www.myblog.blog.data.mapper.GroupInfoMapper;
+import com.www.myblog.blog.data.mapper.TagInfoMapper;
 import com.www.myblog.blog.service.edit.IEditBlogService;
 import com.www.myblog.blog.service.entity.*;
 import org.apache.commons.collections4.CollectionUtils;
@@ -43,7 +48,66 @@ public class EditBlogServiceImpl implements IEditBlogService {
     private IGroupInfoService groupInfoService;
     @Autowired
     private ITagInfoService tagInfoService;
+    @Autowired
+    private BlogArticleMapper blogArticleMapper;
+    @Autowired
+    private BlogTagMapper blogTagMapper;
+    @Autowired
+    private TagInfoMapper tagInfoMapper;
 
+
+    /**
+     * <p>@Description 查询所有博客标签 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/22 19:07 </p>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
+     */
+    @Override
+    public ResponseDTO<List<TagInfoDTO>> findAllBlogTag() {
+        List<TagInfoDTO> list = tagInfoMapper.findAllBlogTag();
+        return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,list);
+    }
+    /**
+     * <p>@Description 获取用户博客标签列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/22 19:07 </p>
+     * @param userId 用户ID
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.TagInfoDTO>>
+     */
+    @Override
+    public ResponseDTO<List<TagInfoDTO>> findUserBlogTag(String userId) {
+        ResponseDTO<List<TagInfoDTO>> response = new ResponseDTO<>();
+        if(StringUtils.isBlank(userId)){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"获取用户博客标签列表失败。信息不全",null);
+            return response;
+        }
+        List<TagInfoDTO> list = blogTagMapper.findAuthorBlogTag(userId);
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,list);
+        return response;
+    }
+    /**
+     * <p>@Description 获取博客列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 21:37 </p>
+     * @param query 查询条件
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     */
+    @Override
+    public ResponseDTO<List<BlogArticleDTO>> findBlogList(BlogArticleDTO query) {
+        ResponseDTO<List<BlogArticleDTO>> response = new ResponseDTO<>();
+        if(query == null || StringUtils.isBlank(query.getUserId())){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博客列表失败，信息不全",null);
+            return response;
+        }
+        Page<BlogArticleDTO> page = new Page<>(query.getPageNum(),query.getPageSize());
+        page = blogArticleMapper.findUserBlogList(page,query);
+        List<BlogArticleDTO> blogList =  page.getRecords();
+        response.setPageNum(query.getPageNum());
+        response.setPageSize(query.getPageSize());
+        response.setTotalNum(page.getTotal());
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,blogList);
+        return response;
+    }
     /**
      * <p>@Description 当前登录的用户创建博客文章 </p>
      * <p>@Author www </p>

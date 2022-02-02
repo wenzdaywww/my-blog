@@ -44,6 +44,10 @@ public class BlogArticleDTO implements Serializable {
      */
     private Long tagId;
     /**
+     * 博客标签名称
+     */
+    private String tagName;
+    /**
     * 用户ID
     */
     private String userId;
@@ -91,4 +95,8 @@ public class BlogArticleDTO implements Serializable {
      * 创建时间
      */
     private Date createTime;
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
 }

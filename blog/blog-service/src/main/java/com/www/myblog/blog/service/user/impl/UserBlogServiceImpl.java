@@ -1,6 +1,5 @@
 package com.www.myblog.blog.service.user.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.www.common.feign.base.IBaseFeignService;
 import com.www.common.pojo.dto.feign.UserInfoDTO;
@@ -46,6 +45,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
     private IBlogArticleService blogArticleService;
     @Autowired
     private IBlogCommentService blogCommentService;
+
 
     /**
      * <p>@Description 添加/取消博客收藏 </p>

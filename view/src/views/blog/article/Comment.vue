@@ -27,7 +27,7 @@
                     <el-col :span="1"><img :src="item.photo" class="comment-img"/></el-col>
                     <el-col :span="2">
                       <el-tooltip class="item" effect="light" :content="item.userName" placement="bottom">
-                        <el-link :href="item.userId ? '/blog?id=' + item.userId : '#'" target="_blank" type="primary" class="ellipsis-line1">{{item.userName}}</el-link>
+                        <el-link :href="item.userId ? '/blogger?id=' + item.userId : '#'" target="_blank" type="primary" class="ellipsis-line1">{{item.userName}}</el-link>
                       </el-tooltip>
                     </el-col>
                     <el-col :span="17"><div class="comment-text " :class="activeNames.indexOf(item.commentId) != -1 ? 'ellipsis-line5' : 'ellipsis-line1'">{{item.comment}}</div></el-col>
@@ -64,7 +64,7 @@
                   <el-col :span="1"><img :src="subItem.photo" class="comment-img"/></el-col>
                   <el-col :span="2">
                     <el-tooltip class="item" effect="light" :content="subItem.userName" placement="bottom">
-                      <el-link :href="subItem.userId ? '/blog?id=' + subItem.userId : '#'" target="_blank" type="primary" class="sub-comment-name ellipsis-line1">{{subItem.userName}}</el-link>
+                      <el-link :href="subItem.userId ? '/blogger?id=' + subItem.userId : '#'" target="_blank" type="primary" class="sub-comment-name ellipsis-line1">{{subItem.userName}}</el-link>
                     </el-tooltip>
                     <div v-if="subItem.replyName" class="sub-comment-reply">回复</div>
                     <el-tooltip class="item" effect="light" :content="subItem.replyName" placement="bottom">

@@ -21,7 +21,7 @@
         <div class="user-info-list">
           <el-row>
             <el-col :span="4">
-              <el-link href="#" type="primary">
+              <el-link href="javascript:void(0);" type="primary" @click="toLink('/blog')">
                 <div class="grid-cont-right">
                   <div class="grid-num">{{user.blog}}</div>
                   博客
@@ -29,7 +29,7 @@
               </el-link>
             </el-col>
             <el-col :span="4">
-              <el-link href="#" type="primary">
+              <el-link href="javascript:void(0);" type="primary" @click="toLink('/follow')">
                 <div class="grid-cont-right">
                   <div class="grid-num">{{user.follow}}</div>
                   <div>关注</div>
@@ -37,7 +37,7 @@
               </el-link>
             </el-col>
             <el-col :span="4">
-              <el-link href="#" type="primary">
+              <el-link href="javascript:void(0);" type="primary" @click="toLink('/fans')">
                 <div class="grid-cont-right">
                   <div class="grid-num">{{user.fans}}</div>
                   <div>粉丝</div>
@@ -61,7 +61,7 @@
               </el-link>
             </el-col>
             <el-col :span="4">
-              <el-link href="#" type="primary">
+              <el-link href="javascript:void(0);" type="primary" @click="toLink('/collect')">
                 <div class="grid-cont-right">
                   <div class="grid-num">{{user.collect}}</div>
                   <div>收藏</div>
@@ -93,6 +93,8 @@ import "cropperjs/dist/cropper.css";
 import {ElMessage} from "element-plus";
 import VueCropper from "vue-cropperjs";
 import request from "../../../utils/request";
+import utils from "../../../utils/utils";
+import {useRouter} from "vue-router";
 
 export default {
   name: "Photo",
@@ -102,6 +104,10 @@ export default {
   setup() {
     // 接口请求
     const axios = getCurrentInstance().appContext.config.globalProperties;
+    // 路由
+    const router = useRouter();
+    //是否有user角色
+    const isUser = utils.isUser();
     // 用户信息
     let user = reactive({
       photo : "src/assets/img/img.jpg",
@@ -149,6 +155,12 @@ export default {
     let file = reactive({
       name : user.userId + ".jpg"
     });
+    //连接跳转
+    const toLink = (path) => {
+      if (isUser){
+        router.push(path);
+      }
+    };
     //打开图片上传弹窗
     const showDialog = () => {
       dialogVisible.value = true;
@@ -207,7 +219,7 @@ export default {
       }
       return new File([ia], fileName, { type: mime });
     };
-    return {user,  cropper, imgSrc, cropImg,showDialog, dialogVisible, setImage, cropImage, uploadImg};
+    return {user,isUser, cropper, imgSrc, toLink,cropImg,showDialog, dialogVisible, setImage, cropImage, uploadImg};
   }
 }
 </script>

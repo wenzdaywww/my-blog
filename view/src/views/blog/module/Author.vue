@@ -8,7 +8,7 @@
         </div>
         <div>
           <el-row>
-            <el-link class="info-name" href="#" target="_blank">{{author.userName}}</el-link>
+            <el-link class="info-name" :href="author.userId ? '/blogger?id='+author.userId : '#'" target="_blank">{{author.userName}}</el-link>
           </el-row>
           <el-row>
             <span class="info-age">码龄:{{author.age}}</span>
@@ -81,6 +81,7 @@ export default {
     const blogId = utils.getUrlParam("bid");
     // 博主信息
     let author = reactive({
+      userId:'',
       userName : "",
       photo : "src/assets/img/img.jpg",
       age : "",
@@ -94,6 +95,7 @@ export default {
     const getAuthorInfo = () => {
       axios.$http.get(request.author, {id:authorId,bid:blogId}).then(function (res) {
         if(res.code === 200){
+          author.userId = res.data.userId;
           author.userName = res.data.userName;
           author.photo = res.data.photo;
           author.age = res.data.age;

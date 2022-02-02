@@ -28,19 +28,19 @@ let routes = [
                 },
                 component: () => import ("../views/blog/index/Index.vue")
             },{
-                path: "/blog",
+                path: "/blogger",
                 name: "userBlog",
                 meta: {
                     title: 'wWw博客-{0}的博客'
                 },
-                component: () => import ("../views/blog/blogger/UserBlog.vue")
+                component: () => import ("../views/blog/blogger/Blogger.vue")
             },{
                 path: "/article",
                 name: "BlogArticle",
                 meta: {
                     title: 'wWw博客-'
                 },
-                component: () => import ("../views/blog/article/Blog.vue")
+                component: () => import ("../views/blog/article/Article.vue")
             }
         ]
     },{

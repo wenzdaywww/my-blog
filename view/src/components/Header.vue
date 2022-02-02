@@ -170,7 +170,7 @@ export default {
       } else if (command == "user") { // 个人中心
         router.push("/user");
       }else if (command == "blog") { // 我的博客
-        router.push("/blog?id="+utils.getUserId());
+        router.push("/blogger?id="+utils.getUserId());
       } else if (command == "pwd") { // 修改密码
         passwordDialog.value.shwoDialog();
       }else if(command == "blog-index"){ //博客首页

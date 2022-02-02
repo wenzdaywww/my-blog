@@ -8,7 +8,7 @@
           <div class="blog-detail">
             <el-tooltip class="item" effect="light" :content="item.title" placement="bottom">
               <el-link :href="item.blogId ? '/article?bid=' + item.blogId : '#'" class="ellipsis-line1 blog-title"
-                       target="_blank" type="primary" @click="showBlogDetail(item.blogId)">{{item.title}}</el-link>
+                       target="_blank" @click="showBlogDetail(item.blogId)">{{item.title}}</el-link>
             </el-tooltip>
             <div>
               <el-row class="el-row">
@@ -109,6 +109,7 @@ export default {
 .blog-title{
   font-size: 20px;
   font-width: blod;
+  color: black;
 }
 .ellipsis-line1{
   display: -webkit-box;/*作为弹性伸缩盒子模型显示*/
