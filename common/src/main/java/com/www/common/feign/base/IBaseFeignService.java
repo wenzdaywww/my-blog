@@ -40,7 +40,7 @@ public interface IBaseFeignService {
      * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean>
      */
     @PostMapping("/feign/oauth/exist")
-    ResponseDTO<Boolean> validateUserExist(List<String> userList);
+    ResponseDTO<Boolean> validateUserExist(@RequestParam("list") List<String> userList);
     /**
      * <p>@Description 查询用户信息 </p>
      * <p>@Author www </p>

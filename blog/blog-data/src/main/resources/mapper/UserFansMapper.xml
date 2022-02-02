@@ -10,4 +10,15 @@
     <result column="UPDATE_TIME" property="updateTime" />
     <result column="CREATE_TIME" property="createTime" />
   </resultMap>
+  <!--  获取粉丝列表-->
+  <select id="findFansList" resultType="com.www.myblog.blog.data.dto.AuthorDTO">
+    SELECT C.FANS_ID,UF.USER_ID FROM USER_FANS C
+    LEFT JOIN (SELECT F.USER_ID FROM USER_FANS F WHERE F.FANS_ID = #{userId}) UF ON UF.USER_ID=C.FANS_ID
+    WHERE C.USER_ID = #{userId}
+  </select>
+  <!--  查询关注列表-->
+  <select id="findFollowList" resultType="com.www.myblog.blog.data.dto.AuthorDTO">
+    SELECT C.USER_ID USER_ID
+    FROM USER_FANS C WHERE C.FANS_ID = #{userId}
+  </select>
 </mapper>

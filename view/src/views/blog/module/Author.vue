@@ -115,9 +115,11 @@ export default {
     // 关注博主
     const followAuthor = () => {
       if(utils.isLogin()){
-        axios.$http.get(request.follow, {id:authorId,bid:blogId}).then(function (res) {
+        axios.$http.post(request.follow, {id:authorId,bid:blogId}).then(function (res) {
           if(res.code === 200){
             author.isFan = res.data;
+          }else {
+            ElMessage.error('取消或关注博主失败');
           }
         });
       }else {

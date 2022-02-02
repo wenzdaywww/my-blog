@@ -1,6 +1,7 @@
 package com.www.myblog.blog.service.user.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.feign.base.IBaseFeignService;
 import com.www.common.pojo.dto.feign.UserInfoDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
@@ -12,6 +13,7 @@ import com.www.myblog.blog.data.entity.BlogCollectEntity;
 import com.www.myblog.blog.data.entity.BlogCommentEntity;
 import com.www.myblog.blog.data.entity.UserFansEntity;
 import com.www.myblog.blog.data.mapper.BlogArticleMapper;
+import com.www.myblog.blog.data.mapper.UserFansMapper;
 import com.www.myblog.blog.service.entity.IBlogArticleService;
 import com.www.myblog.blog.service.entity.IBlogCollectService;
 import com.www.myblog.blog.service.entity.IBlogCommentService;
@@ -23,7 +25,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * <p>@Description 当前登录用户博客信息service </p>
@@ -45,8 +51,85 @@ public class UserBlogServiceImpl implements IUserBlogService {
     private IBlogArticleService blogArticleService;
     @Autowired
     private IBlogCommentService blogCommentService;
+    @Autowired
+    private UserFansMapper userFansMapper;
 
-
+    /**
+     * <p>@Description  获取粉丝列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/2 22:54 </p>
+     * @param pageNum 页码
+     * @param userId  用户id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>> 关注用户列表
+     */
+    @Override
+    public ResponseDTO<List<AuthorDTO>> findFansList(int pageNum, String userId) {
+        ResponseDTO<List<AuthorDTO>> response = new ResponseDTO<>();
+        if(StringUtils.isBlank(userId) || pageNum < 0){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"获取粉丝列表失败。信息不全",null);
+            return response;
+        }
+        long pageSize = 10;
+        Page<AuthorDTO> page = new Page<>(pageNum,pageSize);
+        page = userFansMapper.findFansList(page,userId);
+        List<AuthorDTO> followList =  page.getRecords();
+        if(CollectionUtils.isNotEmpty(followList)){
+            List<String> userIdList = followList.stream().map(AuthorDTO::getFansId).collect(Collectors.toList());
+            List<UserInfoDTO> userList = ResponseDTO.getBackData(baseFeignService.findUserInfoList(userIdList));
+            Map<String,UserInfoDTO> userMap = CollectionUtils.isEmpty(userList) ? new HashMap<>() :
+                    userList.stream().collect(Collectors.toMap(UserInfoDTO::getUserId, Function.identity(), (key1, key2) -> key2));
+            for (AuthorDTO authorDTO : followList){
+                UserInfoDTO userInfoDTO = userMap.get(authorDTO.getFansId());
+                if(userInfoDTO != null){
+                    authorDTO.setUserName(userInfoDTO.getUserName()).setPhoto(userInfoDTO.getPhoto()).setBrief(userInfoDTO.getBrief());
+                }
+                authorDTO.setFan(StringUtils.isNotBlank(authorDTO.getUserId()));
+            }
+        }
+        response.setPageNum(pageNum);
+        response.setPageSize(pageSize);
+        response.setTotalNum(page.getTotal());
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,followList);
+        return response;
+    }
+    /**
+     * <p>@Description  获取关注列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/2 22:54 </p>
+     * @param pageNum 页码
+     * @param userId  用户id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>> 关注用户列表
+     */
+    @Override
+    public ResponseDTO<List<AuthorDTO>> findFollowList(int pageNum, String userId) {
+        ResponseDTO<List<AuthorDTO>> response = new ResponseDTO<>();
+        if(StringUtils.isBlank(userId) || pageNum < 0){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"获取关注列表失败。信息不全",null);
+            return response;
+        }
+        long pageSize = 10;
+        Page<AuthorDTO> page = new Page<>(pageNum,pageSize);
+        page = userFansMapper.findFollowList(page,userId);
+        List<AuthorDTO> followList =  page.getRecords();
+        if(CollectionUtils.isNotEmpty(followList)){
+            List<String> userIdList = followList.stream().map(AuthorDTO::getUserId).collect(Collectors.toList());
+            List<UserInfoDTO> userList = ResponseDTO.getBackData(baseFeignService.findUserInfoList(userIdList));
+            Map<String,UserInfoDTO> userMap = CollectionUtils.isEmpty(userList) ? new HashMap<>() :
+                    userList.stream().collect(Collectors.toMap(UserInfoDTO::getUserId, Function.identity(), (key1, key2) -> key2));
+            for (AuthorDTO authorDTO : followList){
+                UserInfoDTO userInfoDTO = userMap.get(authorDTO.getUserId());
+                if(userInfoDTO != null){
+                    authorDTO.setUserName(userInfoDTO.getUserName()).setPhoto(userInfoDTO.getPhoto()).setBrief(userInfoDTO.getBrief());
+                }
+                authorDTO.setFan(true);
+            }
+        }
+        response.setPageNum(pageNum);
+        response.setPageSize(pageSize);
+        response.setTotalNum(page.getTotal());
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,followList);
+        return response;
+    }
     /**
      * <p>@Description 添加/取消博客收藏 </p>
      * <p>@Author www </p>

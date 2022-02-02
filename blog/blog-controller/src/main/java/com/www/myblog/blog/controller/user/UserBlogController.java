@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * <p>@Description 当前登录用户博客信息controller </p>
  * <p>@Version 1.0 </p>
@@ -25,6 +27,28 @@ public class UserBlogController {
     @Autowired
     private IUserBlogService userBlogService;
 
+    /**
+     * <p>@Description 获取粉丝列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/2 22:53 </p>
+     * @param pageNum 页码
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>>
+     */
+    @GetMapping("fans/{num}")
+    public ResponseDTO<List<AuthorDTO>> findFansList(@PathVariable("num") int pageNum){
+        return userBlogService.findFansList(pageNum,jwtTokenConverter.getUserId());
+    }
+    /**
+     * <p>@Description 获取关注列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/2 22:53 </p>
+     * @param pageNum 页码
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>>
+     */
+    @GetMapping("follows/{num}")
+    public ResponseDTO<List<AuthorDTO>> findFollowList(@PathVariable("num") int pageNum){
+        return userBlogService.findFollowList(pageNum,jwtTokenConverter.getUserId());
+    }
     /**
      * <p>@Description 博客添加收藏 </p>
      * <p>@Author www </p>
@@ -67,7 +91,7 @@ public class UserBlogController {
      * @param bid 博客ID
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Boolean>
      */
-    @GetMapping("follow")
+    @PostMapping("follow")
     public ResponseDTO<Boolean> followAuthor(String id,Long bid){
         return userBlogService.followAuthor(jwtTokenConverter.getUserId(),id,bid);
     };

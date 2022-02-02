@@ -32,7 +32,7 @@ public class BaseFeignOauthController {
      */
     @PostMapping("exist")
     @HystrixCommand(fallbackMethod = "validateUserExistFallback")//设置备选方案
-    public ResponseDTO<Boolean> validateUserExist(List<String> userList){
+    public ResponseDTO<Boolean> validateUserExist(@RequestParam("list") List<String> userList){
         return userInfoService.validateUserExist(userList);
     }
     /**

@@ -4,6 +4,8 @@ import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.dto.CommentDTO;
 
+import java.util.List;
+
 /**
  * <p>@Description 当前登录用户博客信息service接口 </p>
  * <p>@Version 1.0 </p>
@@ -11,6 +13,24 @@ import com.www.myblog.blog.data.dto.CommentDTO;
  * <p>@Date 2022/1/23 18:21 </p>
  */
 public interface IUserBlogService {
+    /**
+     * <p>@Description  获取粉丝列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/2 22:54 </p>
+     * @param pageNum 页码
+     * @param userId 用户id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>> 粉丝用户列表
+     */
+    ResponseDTO<List<AuthorDTO>> findFansList(int pageNum,String userId);
+    /**
+     * <p>@Description  获取关注列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/2 22:54 </p>
+     * @param pageNum 页码
+     * @param userId 用户id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>> 关注用户列表
+     */
+    ResponseDTO<List<AuthorDTO>> findFollowList(int pageNum,String userId);
     /**
      * <p>@Description 添加/取消博客收藏 </p>
      * <p>@Author www </p>

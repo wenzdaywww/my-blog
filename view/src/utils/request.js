@@ -71,6 +71,10 @@ export default {
     addComment: "api/blog/user/comment",
     //查询用户统计信息
     userCount: "api/blog/user/count",
+    //查询关注列表
+    followList: "api/blog/user/follows/",
+    //查询粉丝列表
+    fansList: "api/blog/user/fans/",
     //博客添加收藏
     addCollect: "api/blog/user/collect/"
 }

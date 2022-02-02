@@ -21,6 +21,10 @@ public class AuthorDTO implements Serializable {
     */
     private String userId;
     /**
+    * 粉丝ID
+    */
+    private String fansId;
+    /**
     * 博主名称
     */
     private String userName;
@@ -32,6 +36,10 @@ public class AuthorDTO implements Serializable {
     * 博主码龄
     */
     private String age;
+    /**
+     * 个人简介
+     */
+    private String brief;
     /**
     * 博客数量
     */
