@@ -1,12 +1,16 @@
 package com.www.myblog.base.controller.feign;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.www.common.pojo.dto.feign.UserInfoDTO;
+import com.www.common.pojo.constant.AuthorityContant;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.base.service.user.IUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -31,6 +35,7 @@ public class BaseFeignOauthController {
      * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean>
      */
     @PostMapping("exist")
+    @PreAuthorize(AuthorityContant.ALL)
     @HystrixCommand(fallbackMethod = "validateUserExistFallback")//设置备选方案
     public ResponseDTO<Boolean> validateUserExist(@RequestParam("list") List<String> userList){
         return userInfoService.validateUserExist(userList);

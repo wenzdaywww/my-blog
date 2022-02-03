@@ -13,9 +13,7 @@
       <div>
         <div class="handle-box">
           <el-select v-model="query.menuType" placeholder="菜单类型" class="handle-select mr10">
-            <el-option key="1" label="页面菜单" value="1"></el-option>
-            <el-option key="2" label="请求路径" value="2"></el-option>
-            <el-option key="3" label="VUE路由" value="3"></el-option>
+            <el-option v-for="item in menuArr" :key="item.value" :label="item.name" :value="item.value"></el-option>
           </el-select>
           <el-select v-model="query.roleCode" placeholder="角色名称" class="handle-select mr10">
             <el-option v-for="item in rolesArr" :key="item.roleCode" :label="item.roleName" :value="item.roleCode"></el-option>
@@ -41,16 +39,20 @@
           <el-table-column prop="menuUrl" label="菜单路径" align="center"></el-table-column>
           <el-table-column prop="vuePath" label="vue页面路径" align="center"></el-table-column>
           <el-table-column prop="menuOrder" label="菜单序号" align="center"></el-table-column>
-          <el-table-column prop="menuType" label="菜单类型" align="center">
+          <el-table-column prop="menuType" label="菜单类型" align="center" width="120px">
             <template #default="scope">
-              {{ scope.row.menuType === '1' ? '页面菜单' : (scope.row.menuType === '2' ? '请求路径' : 'VUE路由')}}
+              <el-select v-model="scope.row.menuType" disabled size="mini">
+                <el-option v-for="item in menuArr" :key="item.value" :label="item.name" :value="item.value"></el-option>
+              </el-select>
             </template>
           </el-table-column>
           <el-table-column prop="module" label="菜单归属模块" align="center"></el-table-column>
           <el-table-column prop="roleCode" label="权限角色" align="center"></el-table-column>
-          <el-table-column prop="isDelete" label="是否有效" align="center">
+          <el-table-column prop="isDelete" label="是否未失效" align="center">
             <template #default="scope">
-              {{ scope.row.isDelete === '1' ? '否' : '是'}}
+              <el-select v-model="scope.row.isDelete" disabled size="mini">
+                <el-option v-for="item in yesNoArr" :key="item.value" :label="item.name" :value="item.value"></el-option>
+              </el-select>
             </template>
           </el-table-column>
           <el-table-column prop="createTime" label="注册时间" align="center"></el-table-column>
@@ -136,15 +138,12 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="菜单类型：" prop="menuType">
-                <el-radio v-model="form.menuType" label="1" style="width: 125px;">页面菜单</el-radio>
-                <el-radio v-model="form.menuType" label="2" style="width: 125px;">请求路径</el-radio>
-                <el-radio v-model="form.menuType" label="3" style="width: 125px;">VUE路由</el-radio>
+                <el-radio v-for="item in menuArr" v-model="form.menuType" :label="item.value" style="width: 125px;">{{item.name}}</el-radio>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="是否有效：" prop="isDelete" v-show="editVisible">
-                <el-radio v-model="form.isDelete" label="1" style="width: 125px;">否</el-radio>
-                <el-radio v-model="form.isDelete" label="0" style="width: 125px;">是</el-radio>
+                <el-radio v-for="item in yesNoArr" v-model="form.isDelete" :label="item.value" style="width: 125px;">{{item.name}}</el-radio>
               </el-form-item>
             </el-col>
           </el-row>
@@ -269,6 +268,24 @@ export default {
         { required: true, message: "是否有效不能为空", trigger: "blur" }
       ]
     };
+    // 菜单类型
+    const menuArr = ref([]);
+    // 是否字典
+    const yesNoArr = ref([]);
+    // 查询数据字典
+    const getCodeDataArr = () => {
+      axios.$http.get(request.code + "menuType", null).then(function (res) {
+        if(res.code === 200){
+          menuArr.value = res.data.menuType;
+        }
+      });
+      axios.$http.get(request.code + "yesNo", null).then(function (res) {
+        if(res.code === 200){
+          yesNoArr.value = res.data.yesNo;
+        }
+      });
+    };
+    getCodeDataArr();
     // 角色列表
     const rolesArr = ref([]);
     // 弹窗编辑或新增标志
@@ -398,7 +415,7 @@ export default {
         }
       });
     };
-    return { query,tableData,editRules,form,rolesArr,editVisible,dialogVisible,editForm,
+    return { menuArr,yesNoArr,query,tableData,editRules,form,rolesArr,editVisible,dialogVisible,editForm,
       handleSearch,handleReset,handleEdit,handlePageChange,saveSure,handleAdd,handleDelete};
   }
 };

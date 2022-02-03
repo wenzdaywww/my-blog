@@ -1,19 +1,26 @@
 package com.www.myblog.base.controller.user;
 
 import com.www.common.config.oauth2.token.JwtTokenConverter;
+import com.www.common.config.redis.RedisOperation;
 import com.www.common.pojo.constant.AuthorityContant;
+import com.www.common.pojo.constant.RedisCommonContant;
+import com.www.common.pojo.dto.code.CodeDTO;
+import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.base.data.dto.SysMenuDTO;
-import com.www.myblog.base.data.dto.SysRoleDTO;
 import com.www.myblog.base.data.dto.SysUserDTO;
 import com.www.myblog.base.service.user.IUserInfoService;
-import com.www.common.pojo.dto.response.ResponseDTO;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>@Description 用户信息controller </p>
@@ -30,6 +37,51 @@ public class UserController {
     @Autowired
     private IUserInfoService userInfoService;
 
+    /**
+     * <p>@Description 查询多个数据字典数据 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/3 16:39 </p>
+     * @param list 字典类型集合
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.code.CodeDTO>>
+     */
+    @PostMapping("codes")
+    public ResponseDTO<Map<String,List<CodeDTO>>> findCodeDataList(@RequestParam(name = "list",required = false) List<String> list){
+        /// TODO: 2022/2/3 list传值有问题，待处理
+        ResponseDTO<Map<String,List<CodeDTO>>>response = new ResponseDTO<>();
+        if(list == null || list.size() <= 0){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询数据字典数据失败，信息不全",null);
+            return response;
+        }
+        Map<String, Map<String, CodeDTO>> codeMap = (Map<String,Map<String, CodeDTO>>) RedisOperation.hashGet(RedisCommonContant.CODE_DATA);
+        Map<String,List<CodeDTO>> typeMap = new HashMap<>();
+        for (String codeType : list){
+            Map<String, CodeDTO> valueMap = codeMap.get(codeType);
+            if(MapUtils.isNotEmpty(valueMap)){
+                List<CodeDTO> collect = valueMap.values().stream().collect(Collectors.toList());
+                typeMap.put(codeType,collect);
+            }
+        }
+        response.setResponse(typeMap);
+        return response;
+    }
+    /**
+     * <p>@Description 查询单个数据字典数据 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/3 16:39 </p>
+     * @param codeType 字典类型
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.code.CodeDTO>>
+     */
+    @GetMapping("code/{type}")
+    public ResponseDTO<Map<String,List<CodeDTO>>> findCodeData(@PathVariable("type") String codeType){
+        ResponseDTO<Map<String,List<CodeDTO>>>response = new ResponseDTO<>();
+        if(StringUtils.isBlank(codeType)){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询单个数据字典数据失败，信息不全",null);
+            return response;
+        }
+        List<String> list = new ArrayList<>();
+        list.add(codeType);
+        return this.findCodeDataList(list);
+    }
     /**
      * <p>@Description 更新当前登录的用户密码 </p>
      * <p>@Author www </p>

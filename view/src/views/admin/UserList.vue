@@ -13,9 +13,7 @@
       <div>
         <div class="handle-box">
           <el-select v-model="query.stateCd" placeholder="用户状态" class="handle-select mr10">
-            <el-option key="1" label="有效" value="1"></el-option>
-            <el-option key="2" label="注销" value="2"></el-option>
-            <el-option key="3" label="封号" value="3"></el-option>
+            <el-option v-for="item in stateCdArr" :key="item.value" :label="item.name" :value="item.value"></el-option>
           </el-select>
           <el-input v-model="query.userId" placeholder="用户ID" class="handle-input mr10"></el-input>
           <el-input v-model="query.userName" placeholder="用户名称" class="handle-input mr10"></el-input>
@@ -43,22 +41,30 @@
           </el-table-column>
           <el-table-column label="用户状态" align="center">
             <template #default="scope">
-              {{ scope.row.stateCd === '1' ? '有效' : (scope.row.stateCd === '2' ? '注销' : '封号') }}
+              <el-select v-model="scope.row.stateCd" disabled size="mini">
+                <el-option v-for="item in stateCdArr" :key="item.value" :label="item.name" :value="item.value"></el-option>
+              </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="是否过期" align="center">
+          <el-table-column label="是否未过期" align="center">
             <template #default="scope">
-              {{ scope.row.notExpired === '1' ? '否' : '是' }}
+              <el-select v-model="scope.row.notExpired" disabled size="mini">
+                <el-option v-for="item in yesNoArr" :key="item.value" :label="item.name" :value="item.value"></el-option>
+              </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="账号是否锁定" align="center">
+          <el-table-column label="账号是否未锁定" align="center">
             <template #default="scope">
-              {{ scope.row.notLocked === '1' ? '否' : '是' }}
+              <el-select v-model="scope.row.notLocked" disabled size="mini">
+                <el-option v-for="item in yesNoArr" :key="item.value" :label="item.name" :value="item.value"></el-option>
+              </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="密码是否过期" align="center">
+          <el-table-column label="密码是否未过期" align="center">
             <template #default="scope">
-              {{ scope.row.credentialsNotExpired === '1' ? '否' : '是' }}
+              <el-select v-model="scope.row.credentialsNotExpired" disabled size="mini">
+                <el-option v-for="item in yesNoArr" :key="item.value" :label="item.name" :value="item.value"></el-option>
+              </el-select>
             </template>
           </el-table-column>
           <el-table-column prop="createTime" label="注册时间" align="center"></el-table-column>
@@ -131,12 +137,30 @@ export default {
       pageNum: 1,
       pageSize: 10
     });
+    // 用户状态
+    const stateCdArr = ref([]);
+    // 是否字典
+    const yesNoArr = ref([]);
     // 表格数据
     const tableData = ref([]);
     // 页数
     const pageTotal = ref(0);
     // 接口请求
     const axios = getCurrentInstance().appContext.config.globalProperties;
+    // 查询数据字典
+    const getCodeDataArr = () => {
+      axios.$http.get(request.code + "userStatus", null).then(function (res) {
+        if(res.code === 200){
+          stateCdArr.value = res.data.userStatus;
+        }
+      });
+      axios.$http.get(request.code + "yesNo", null).then(function (res) {
+        if(res.code === 200){
+          yesNoArr.value = res.data.yesNo;
+        }
+      });
+    };
+    getCodeDataArr();
     // 获取表格数据
     const getData = () => {
       axios.$http.get(request.userList,query).then(function (res) {
@@ -203,7 +227,7 @@ export default {
         }
       })
     };
-    return { query,tableData,pageTotal,editVisible,form,
+    return { stateCdArr,yesNoArr,query,tableData,pageTotal,editVisible,form,
       handleSearch,handleReset,handlePageChange,handleEdit,saveEdit};
   }
 };

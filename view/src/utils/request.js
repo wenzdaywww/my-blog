@@ -32,6 +32,10 @@ export default {
     editInfo: "api/base/user/edit",
     //上传头像
     uploadPhoto: "api/base/user/photo",
+    //查询单个数据字典数据
+    code: "api/base/user/code/",
+    //查询多个数据字典数据
+    codes: "api/base/user/codes",
     /** blog应用 **/
     //查询博客文章
     article: "api/blog/browse/article/",

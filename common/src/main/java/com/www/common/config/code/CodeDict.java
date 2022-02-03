@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * <p>@Date 2022/1/1 13:58 </p>
  */
 public class CodeDict {
-    /** 数据字典集合 **/
+    /** 数据字典集合Map<codeType,Map<codeKey, CodeDTO>> **/
     private static Map<String,Map<String, CodeDTO>> codeMap = new HashMap<>();
 
 
