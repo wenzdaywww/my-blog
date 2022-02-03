@@ -58,8 +58,48 @@ public class UserBlogServiceImpl implements IUserBlogService {
     private CollectGroupMapper collectGroupMapper;
     @Autowired
     private BlogCollectMapper blogCollectMapper;
+    @Autowired
+    private IBlogPraiseService blogPraiseService;
 
 
+    /**
+     * <p>@Description 点赞或取消点赞 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/3 22:24 </p>
+     * @param userId 用户id
+     * @param blogId 博客id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Boolean> true点赞，fasle取消点赞
+     */
+    @Override
+    public ResponseDTO<Boolean> savePraiseInfo(String userId, Long blogId) {
+        ResponseDTO<Boolean> response = new ResponseDTO<>();
+        if(StringUtils.isBlank(userId) || blogId == null){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"点赞或取消点赞失败，信息不全",null);
+            return response;
+        }
+        BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
+        if(articleEntity == null){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"点赞或取消点赞失败，博客不存在",null);
+            return response;
+        }
+        if(StringUtils.equals(userId,articleEntity.getUserId())){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"点赞或取消点赞失败，不能点赞自己的博客",null);
+            return response;
+        }
+        BlogPraiseEntity praiseEntity = blogPraiseService.findEntity(userId,blogId);
+        if(praiseEntity == null){
+            praiseEntity = new BlogPraiseEntity();
+            praiseEntity.setBlogId(blogId).setUserId(userId)
+                    .setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
+            blogPraiseService.createEntity(praiseEntity);
+            response.setResponse(true);
+            return response;
+        }else {
+            blogPraiseService.deleteEntity(praiseEntity.getBpId());
+            response.setResponse(false);
+            return response;
+        }
+    }
     /**
      * <p>@Description 修改博客收藏夹位置 </p>
      * <p>@Author www </p>

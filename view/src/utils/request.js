@@ -88,5 +88,7 @@ export default {
     //博客收藏列表查询
     collectList: "api/blog/user/collects",
     //修改博客收藏夹位置
-    modifyCollect: "api/blog/user/newclt"
+    modifyCollect: "api/blog/user/newclt",
+    //博客点赞
+    addPraise: "api/blog/user/praise/"
 }

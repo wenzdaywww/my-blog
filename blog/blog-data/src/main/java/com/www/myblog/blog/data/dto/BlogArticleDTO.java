@@ -82,6 +82,10 @@ public class BlogArticleDTO implements Serializable {
     */
     private Long praise;
     /**
+    * 当前用户是否点赞该博客
+    */
+    private Boolean praised;
+    /**
     * 博客创建日期
     */
     private String createDate;

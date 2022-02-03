@@ -14,6 +14,7 @@ import com.www.myblog.blog.data.mapper.*;
 import com.www.myblog.blog.service.browse.IBlogBrowseService;
 import com.www.myblog.blog.service.entity.IBlogArticleService;
 import com.www.myblog.blog.service.entity.IBlogCollectService;
+import com.www.myblog.blog.service.entity.IBlogPraiseService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,8 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     private IBlogCollectService blogCollectService;
     @Autowired
     private IBlogArticleService blogArticleService;
+    @Autowired
+    private IBlogPraiseService blogPraiseService;
 
 
     /**
@@ -199,8 +202,10 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
         //判断用户是否收藏该博客
         if(StringUtils.isBlank(userId)){
             articleDTO.setCollection(false);
+            articleDTO.setPraised(false);
         }else {
             articleDTO.setCollection(blogCollectService.hasCollectBlog(userId,blogId));
+            articleDTO.setPraised(blogPraiseService.hasPraise(userId,blogId));
         }
         //根据博客id查询该博客被收藏的次数
         int collectNum = blogCollectService.findBlogCollectCount(blogId);

@@ -16,6 +16,15 @@ import java.util.List;
  */
 public interface IUserBlogService {
     /**
+     * <p>@Description 点赞或取消点赞 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/3 22:24 </p>
+     * @param userId 用户id
+     * @param blogId 博客id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Boolean> true点赞，fasle取消点赞
+     */
+    ResponseDTO<Boolean> savePraiseInfo(String userId,Long blogId);
+    /**
      * <p>@Description 修改博客收藏夹位置 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/2/1 10:45 </p>

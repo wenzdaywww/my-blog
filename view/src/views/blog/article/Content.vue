@@ -9,10 +9,10 @@
             <i class="el-icon-view color-grad">{{blog.browse}}</i>
           </el-tooltip>
           <el-tooltip class="item" effect="light" content="点赞" placement="bottom">
-            <i class="el-icon-lx-like color-grad padding-left10">{{blog.praise}}</i>
+            <i class="padding-left10" :class="blog.praised ? 'el-icon-lx-likefill color-red' : 'el-icon-lx-like'" @click="addPraise">{{blog.praise}}</i>
           </el-tooltip>
           <i class="color-grad padding-left10" :class="blog.collection ? 'el-icon-lx-favorfill color-red' : 'el-icon-lx-favor'">
-            <el-link href="javascript:void(0);" type="primary" class="item-collect" @click="addCollect()">收藏 {{blog.collect}}</el-link>
+            <el-link href="javascript:void(0);" type="primary" class="item-collect" @click="addCollect">收藏 {{blog.collect}}</el-link>
           </i>
           <el-tooltip class="item" effect="light" content="评论" placement="bottom">
             <i class="el-icon-lx-comment color-grad padding-left10">{{blog.comment}}</i>
@@ -81,6 +81,27 @@ export default {
         ElMessage.info('请登录');
       }
     }
+    //点赞
+    const addPraise = () =>{
+      if(utils.isLogin()){
+        if(blog.userId !== utils.getUserId()){
+          axios.$http.post(request.addPraise+blogId, null).then(function (res) {
+            if(res.code === 200){
+              blog.praised = res.data;
+              if(blog.praised){
+                blog.praise++;
+                ElMessage.success('点赞成功');
+              }else {
+                blog.praise--;
+                ElMessage.success('取消点赞成功');
+              }
+            }
+          });
+        }
+      }else {
+        ElMessage.info('请登录');
+      }
+    }
     //查询博客文章信息
     const getBlogArticle = () => {
       if(blogId){
@@ -95,6 +116,7 @@ export default {
             blog.content = res.data.content;
             blog.browse = res.data.browse;
             blog.praise = res.data.praise;
+            blog.praised = res.data.praised;
             blog.collect = res.data.collect;
             blog.collection = res.data.collection;
             blog.comment = res.data.comment;
@@ -109,7 +131,7 @@ export default {
       blog.collection = true;
       blog.collect++;
     }
-    return {blog,addCollect,collectDialog,blogCollectAdd};
+    return {blog,addCollect,collectDialog,blogCollectAdd,addPraise};
   }
 };
 </script>

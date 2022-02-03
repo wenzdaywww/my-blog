@@ -31,6 +31,17 @@ public class UserBlogController {
 
 
     /**
+     * <p>@Description 点赞或取消点赞 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/3 22:23 </p>
+     * @param bid 博客id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Boolean> true点赞，fasle取消点赞
+     */
+    @PostMapping("praise/{bid}")
+    public ResponseDTO<Boolean> savePraiseInfo(@PathVariable("bid") Long bid){
+        return userBlogService.savePraiseInfo(jwtTokenConverter.getUserId(),bid);
+    }
+    /**
      * <p>@Description 修改博客收藏夹位置 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/2/1 10:44 </p>
