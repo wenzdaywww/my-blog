@@ -62,6 +62,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     @Override
     public ResponseDTO<List<BlogArticleDTO>> findTipBlogList(int pageNum) {
         ResponseDTO<List<BlogArticleDTO>> response = new ResponseDTO<>();
+        pageNum = pageNum <= 0 ? 1 : pageNum;
         long pageSize = 5;
         Page<BlogArticleDTO> page = new Page<>(pageNum,pageSize);
         page = blogArticleMapper.findTipBlogList(page);
@@ -90,6 +91,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
             return response;
         }
         long pageSize = 5;//分页查询条数
+        pageNum = pageNum <= 0 ? 1 : pageNum;
         Page<CommentDTO> page = new Page<>(pageNum,pageSize);
         page = blogCommentMapper.findCommentList(page,blogId,parentComId);
         List<CommentDTO> commentList =  page.getRecords();
@@ -278,7 +280,9 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
             response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客列表失败，博主ID为空",null);
             return response;
         }
-        Page<BlogArticleDTO> page = new Page<>(queryDTO.getPageNum(),queryDTO.getPageSize());
+        int pageNum = queryDTO.getPageNum() <= 0 ? 1 : queryDTO.getPageNum();
+        long pageSize = queryDTO.getPageSize() <= 0 ? 5 : queryDTO.getPageSize();
+        Page<BlogArticleDTO> page = new Page<>(pageNum,pageSize);
         page = blogArticleMapper.findAuthorBlogList(page,queryDTO);
         List<BlogArticleDTO> blogList =  page.getRecords();
         response.setPageNum(queryDTO.getPageNum());

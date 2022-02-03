@@ -112,7 +112,9 @@ public class UserBlogServiceImpl implements IUserBlogService {
             response.setResponse(ResponseDTO.RespEnum.FAIL,"查询用户的博客收藏列表失败，信息不全",null);
             return response;
         }
-        Page<BlogArticleDTO> page = new Page<>(query.getPageNum(),query.getPageSize());
+        int pageNum = query.getPageNum() <= 0 ? 1 : query.getPageNum();
+        long pageSize = query.getPageSize() <= 0 ? 5 : query.getPageSize();
+        Page<BlogArticleDTO> page = new Page<>(pageNum,pageSize);
         page = blogCollectMapper.findCollectList(page,query.getUserId(),query.getCgId());
         List<BlogArticleDTO> blogList = page.getRecords();
         response.setPageNum(query.getPageNum());
@@ -176,6 +178,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
             return response;
         }
         long pageSize = 10;
+        pageNum = pageNum <= 0 ? 1 : pageNum;
         Page<AuthorDTO> page = new Page<>(pageNum,pageSize);
         page = userFansMapper.findFansList(page,userId);
         List<AuthorDTO> followList =  page.getRecords();
@@ -214,6 +217,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
             return response;
         }
         long pageSize = 10;
+        pageNum = pageNum <= 0 ? 1 : pageNum;
         Page<AuthorDTO> page = new Page<>(pageNum,pageSize);
         page = userFansMapper.findFollowList(page,userId);
         List<AuthorDTO> followList =  page.getRecords();

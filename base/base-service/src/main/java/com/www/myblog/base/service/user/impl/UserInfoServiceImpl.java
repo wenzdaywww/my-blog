@@ -431,6 +431,8 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userDTO.setUserId(userId);
         userDTO.setUserName(userName);
         userDTO.setStateCd(stateCd);
+        pageNum = pageNum <= 0 ? 1 : pageNum;
+        pageSize = pageSize <= 0 ? 5 : pageSize;
         Page<SysUserDTO> page = new Page<>(pageNum,pageSize);
         page = sysUserMapper.findAllUser(page,userDTO);
         List<SysUserDTO> userList =  page.getRecords();

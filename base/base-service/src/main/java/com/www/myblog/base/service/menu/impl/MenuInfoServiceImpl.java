@@ -211,6 +211,8 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         if (menuDTO == null){
             menuDTO = new SysMenuDTO();
         }
+        pageNum = pageNum <= 0 ? 1 : pageNum;
+        pageSize = pageSize <= 0 ? 5 : pageSize;
         Page<SysMenuDTO> page = new Page<>(pageNum,pageSize);
         page = sysMenuMapper.findAllMenu(page,menuDTO);
         List<SysMenuDTO> userList =  page.getRecords();

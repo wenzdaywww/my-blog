@@ -23,9 +23,12 @@
            DATE_FORMAT(A.CREATE_TIME,'%Y-%m-%d') CREATE_DATE
     FROM (SELECT G.BLOG_ID,CG.COLLECT_NAME FROM BLOG_COLLECT G
           LEFT JOIN (SELECT C.CG_ID,C.COLLECT_NAME FROM COLLECT_GROUP C WHERE C.USER_ID = #{userId}) CG ON CG.CG_ID=G.CG_ID
-            <if test="cgId != null">
-              WHERE G.CG_ID = #{cgId}
-            </if>
+            <where>
+                G.USER_ID = #{userId}
+                <if test="cgId != null">
+                    AND G.CG_ID = #{cgId}
+                </if>
+            </where>
           ) BC,
           BLOG_ARTICLE A
     WHERE BC.BLOG_ID=A.BLOG_ID
