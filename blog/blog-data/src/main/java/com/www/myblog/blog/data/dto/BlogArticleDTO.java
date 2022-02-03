@@ -34,6 +34,10 @@ public class BlogArticleDTO implements Serializable {
      */
     private String groupName;
     /**
+     * 博客收藏分组名称
+     */
+    private String collectName;
+    /**
      * 标签ID集合
      */
     private List<Long> tagIds;

@@ -2,6 +2,7 @@ package com.www.myblog.blog.service.user;
 
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.AuthorDTO;
+import com.www.myblog.blog.data.dto.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.CollectGroupDTO;
 import com.www.myblog.blog.data.dto.CommentDTO;
 
@@ -14,6 +15,24 @@ import java.util.List;
  * <p>@Date 2022/1/23 18:21 </p>
  */
 public interface IUserBlogService {
+    /**
+     * <p>@Description 修改博客收藏夹位置 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/1 10:45 </p>
+     * @param userId 用户id
+     * @param blogId 博客id
+     * @param cgId 收藏夹id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean> true修改成功，false修改失败
+     */
+    ResponseDTO<Boolean> updateCollectId(String userId,Long blogId,Long cgId);
+    /**
+     * <p>@Description 查询用户的博客收藏列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/3 19:08 </p>
+     * @param query 查询条件就
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>> 博客收藏列表
+     */
+    ResponseDTO<List<BlogArticleDTO>> findCollectList(CollectGroupDTO query);
     /**
      * <p>@Description 查询收藏夹列表 </p>
      * <p>@Author www </p>
@@ -56,9 +75,9 @@ public interface IUserBlogService {
      * @param userId 用户id
      * @param blogId 博客id
      * @param cgId 收藏夹id
-     * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean> true添加收藏，false取消收藏
+     * @return com.www.common.pojo.dto.response.ResponseDTO<BlogArticleDTO> true添加收藏，false取消收藏
      */
-    ResponseDTO<Boolean> addCollect(String userId,Long blogId,Long cgId);
+    ResponseDTO<BlogArticleDTO> addCollect(String userId,Long blogId,Long cgId);
     /**
      * <p>@Description 新增评论 </p>
      * <p>@Author www </p>

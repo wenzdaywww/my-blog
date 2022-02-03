@@ -49,7 +49,7 @@ import request from "../../../utils/request";
 
 export default {
   name: "GroupBlog",
-  emits: ['findBlogGroup','findBlogTag'], //父组件中引用子组件定义的方法
+  emits: ['findBlogGroup','findBlogTag'], //父组件中为子组件定义的@方法
   setup(props,{emit}) { //调用父组件方法，必须有props,{emit}。否则调用失败
     // 接口请求
     const axios = getCurrentInstance().appContext.config.globalProperties;

@@ -1,6 +1,7 @@
 package com.www.myblog.blog.service.entity.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.www.myblog.blog.data.entity.BlogCollectEntity;
 import com.www.myblog.blog.data.mapper.BlogCollectMapper;
@@ -20,6 +21,22 @@ public class BlogCollectServiceImpl extends ServiceImpl<BlogCollectMapper, BlogC
     @Autowired
     private BlogCollectMapper blogCollectMapper;
 
+
+    /**
+     * <p>@Description 更新博客收藏表信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/3 19:52 </p>
+     * @param wrapper 更新条件及内容
+     * @return boolean true更新成功，false更新失败
+     */
+    @Override
+    public boolean updateEntity(UpdateWrapper<BlogCollectEntity> wrapper) {
+        if(wrapper == null){
+            return false;
+        }
+        int count =blogCollectMapper.update(null,wrapper);
+        return count > 0;
+    }
     /**
      * <p>@Description 根据博客id查询该博客被收藏的次数 </p>
      * <p>@Author www </p>
@@ -36,7 +53,6 @@ public class BlogCollectServiceImpl extends ServiceImpl<BlogCollectMapper, BlogC
         colWrapper.lambda().eq(BlogCollectEntity::getBlogId,blogId);
         return blogCollectMapper.selectCount(colWrapper);
     }
-
     /**
      * <p>@Description 判断该用户是否已收藏该博客 </p>
      * <p>@Author www </p>

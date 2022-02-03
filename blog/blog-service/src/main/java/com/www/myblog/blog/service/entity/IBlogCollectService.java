@@ -1,5 +1,6 @@
 package com.www.myblog.blog.service.entity;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.www.myblog.blog.data.entity.BlogCollectEntity;
 
 /**
@@ -9,6 +10,14 @@ import com.www.myblog.blog.data.entity.BlogCollectEntity;
  * <p>@Date 2022/1/29 15:44 </p>
  */
 public interface IBlogCollectService {
+    /**
+     * <p>@Description 更新博客收藏表信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/3 19:52 </p>
+     * @param wrapper 更新条件及内容
+     * @return boolean true更新成功，false更新失败
+     */
+    boolean updateEntity(UpdateWrapper<BlogCollectEntity> wrapper);
     /**
      * <p>@Description 根据博客id查询该博客被收藏的次数 </p>
      * <p>@Author www </p>

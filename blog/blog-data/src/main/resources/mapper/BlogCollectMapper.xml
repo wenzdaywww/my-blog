@@ -11,4 +11,23 @@
     <result column="UPDATE_TIME" property="updateTime" />
     <result column="CREATE_TIME" property="createTime" />
   </resultMap>
+  <!--  查询用户的博客收藏列表-->
+  <select id="findCollectList" resultType="com.www.myblog.blog.data.dto.BlogArticleDTO">
+    SELECT A.BLOG_ID,
+           A.TITLE,
+           A.SUMMARY,
+           A.BROWSE,
+           A.COMMENT,
+           A.PRAISE,
+           bc.COLLECT_NAME,
+           DATE_FORMAT(A.CREATE_TIME,'%Y-%m-%d') CREATE_DATE
+    FROM (SELECT G.BLOG_ID,CG.COLLECT_NAME FROM BLOG_COLLECT G
+          LEFT JOIN (SELECT C.CG_ID,C.COLLECT_NAME FROM COLLECT_GROUP C WHERE C.USER_ID = #{userId}) CG ON CG.CG_ID=G.CG_ID
+            <if test="cgId != null">
+              WHERE G.CG_ID = #{cgId}
+            </if>
+          ) BC,
+          BLOG_ARTICLE A
+    WHERE BC.BLOG_ID=A.BLOG_ID
+  </select>
 </mapper>

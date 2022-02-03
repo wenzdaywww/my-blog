@@ -16,6 +16,10 @@ import java.util.Date;
 @Accessors(chain = true)//开启链式编程
 public class CollectGroupDTO implements Serializable {
     private static final long serialVersionUID = 1L;
+    /** 当前页数 **/
+    private Integer pageNum;
+    /** 页面条数 **/
+    private Long pageSize;
     /**
     * 收藏分组主键
     */

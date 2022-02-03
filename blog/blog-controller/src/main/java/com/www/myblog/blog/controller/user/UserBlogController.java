@@ -4,6 +4,7 @@ import com.www.common.config.oauth2.token.JwtTokenConverter;
 import com.www.common.pojo.constant.AuthorityContant;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.AuthorDTO;
+import com.www.myblog.blog.data.dto.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.CollectGroupDTO;
 import com.www.myblog.blog.data.dto.CommentDTO;
 import com.www.myblog.blog.service.user.IUserBlogService;
@@ -29,6 +30,32 @@ public class UserBlogController {
     private IUserBlogService userBlogService;
 
 
+    /**
+     * <p>@Description 修改博客收藏夹位置 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/1 10:44 </p>
+     * @param bid 博客id
+     * @param cgid 收藏夹id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean> true添加收藏，false取消收藏
+     */
+    @PostMapping("newclt")
+    public ResponseDTO<Boolean> updateCollectId(Long bid,Long cgid){
+        return userBlogService.updateCollectId(jwtTokenConverter.getUserId(),bid,cgid);
+    }
+    /**
+     * <p>@Description 获取博客列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/1/23 21:37 </p>
+     * @param query 查询条件
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     */
+    @GetMapping("collects")
+    public ResponseDTO<List<BlogArticleDTO>> findCollectList(CollectGroupDTO query){
+        if(query != null){
+            query.setUserId(jwtTokenConverter.getUserId());
+        }
+        return userBlogService.findCollectList(query);
+    }
     /**
      * <p>@Description 查询收藏夹列表 </p>
      * <p>@Author www </p>
@@ -78,10 +105,10 @@ public class UserBlogController {
      * <p>@Date 2022/2/1 10:44 </p>
      * @param bid 博客id
      * @param cgid 收藏夹id
-     * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean> true添加收藏，false取消收藏
+     * @return com.www.common.pojo.dto.response.ResponseDTO<BlogArticleDTO>
      */
     @PostMapping("collect")
-    public ResponseDTO<Boolean> addCollect(Long bid,Long cgid){
+    public ResponseDTO<BlogArticleDTO> addCollect(Long bid,Long cgid){
         return userBlogService.addCollect(jwtTokenConverter.getUserId(),bid,cgid);
     }
     /**

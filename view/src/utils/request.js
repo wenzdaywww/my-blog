@@ -84,5 +84,9 @@ export default {
     //查询收藏夹
     collectGroup: "api/blog/user/cltgp",
     //博客添加收藏
-    addCollect: "api/blog/user/collect"
+    addCollect: "api/blog/user/collect",
+    //博客收藏列表查询
+    collectList: "api/blog/user/collects",
+    //修改博客收藏夹位置
+    modifyCollect: "api/blog/user/newclt"
 }

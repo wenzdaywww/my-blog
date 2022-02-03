@@ -1,5 +1,6 @@
 package com.www.myblog.blog.service.user.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.feign.base.IBaseFeignService;
@@ -7,10 +8,12 @@ import com.www.common.pojo.dto.feign.UserInfoDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.dto.AuthorDTO;
+import com.www.myblog.blog.data.dto.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.CollectGroupDTO;
 import com.www.myblog.blog.data.dto.CommentDTO;
 import com.www.myblog.blog.data.entity.*;
 import com.www.myblog.blog.data.mapper.BlogArticleMapper;
+import com.www.myblog.blog.data.mapper.BlogCollectMapper;
 import com.www.myblog.blog.data.mapper.CollectGroupMapper;
 import com.www.myblog.blog.data.mapper.UserFansMapper;
 import com.www.myblog.blog.service.entity.*;
@@ -53,8 +56,71 @@ public class UserBlogServiceImpl implements IUserBlogService {
     private ICollectGroupService collectGroupService;
     @Autowired
     private CollectGroupMapper collectGroupMapper;
+    @Autowired
+    private BlogCollectMapper blogCollectMapper;
 
 
+    /**
+     * <p>@Description 修改博客收藏夹位置 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/1 10:45 </p>
+     * @param userId 用户id
+     * @param blogId 博客id
+     * @param cgId   收藏夹id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean> true修改成功，false修改失败
+     */
+    @Override
+    public ResponseDTO<Boolean> updateCollectId(String userId, Long blogId, Long cgId) {
+        ResponseDTO<Boolean> response = new ResponseDTO<>();
+        if(StringUtils.isBlank(userId) || blogId == null){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"修改博客收藏夹位置失败，信息不全",null);
+            return response;
+        }
+        BlogCollectEntity collectEntity = blogCollectService.findBlogCollectEntity(userId,blogId);
+        if(collectEntity == null){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"修改博客收藏夹位置失败，博客收藏不存在",null);
+            return response;
+        }
+        UpdateWrapper<BlogCollectEntity> wrapper = new UpdateWrapper<>();
+        wrapper.lambda().eq(BlogCollectEntity::getCollectId,collectEntity.getCollectId());
+        wrapper.lambda().set(BlogCollectEntity::getUpdateTime,DateUtils.getCurrentDateTime());
+        if(cgId == null){
+            wrapper.lambda().set(BlogCollectEntity::getCgId,null);
+        }else {
+            CollectGroupEntity groupEntity = collectGroupService.findById(cgId);
+            if(groupEntity == null){
+                response.setResponse(ResponseDTO.RespEnum.FAIL,"修改博客收藏夹位置失败，收藏夹不存在",null);
+                return response;
+            }
+            wrapper.lambda().set(BlogCollectEntity::getCgId,cgId);
+        }
+        boolean isOk = blogCollectService.updateEntity(wrapper);
+        response.setResponse(isOk);
+        return response;
+    }
+    /**
+     * <p>@Description 查询用户的博客收藏列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/3 19:08 </p>
+     * @param query 查询条件就
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>> 博客收藏列表
+     */
+    @Override
+    public ResponseDTO<List<BlogArticleDTO>> findCollectList(CollectGroupDTO query) {
+        ResponseDTO<List<BlogArticleDTO>> response = new ResponseDTO<>();
+        if(query == null || StringUtils.isBlank(query.getUserId())){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询用户的博客收藏列表失败，信息不全",null);
+            return response;
+        }
+        Page<BlogArticleDTO> page = new Page<>(query.getPageNum(),query.getPageSize());
+        page = blogCollectMapper.findCollectList(page,query.getUserId(),query.getCgId());
+        List<BlogArticleDTO> blogList = page.getRecords();
+        response.setPageNum(query.getPageNum());
+        response.setPageSize(query.getPageSize());
+        response.setTotalNum(page.getTotal());
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,blogList);
+        return response;
+    }
     /**
      * <p>@Description 查询收藏夹列表 </p>
      * <p>@Author www </p>
@@ -180,8 +246,8 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean> true添加收藏，false取消收藏
      */
     @Override
-    public ResponseDTO<Boolean> addCollect(String userId, Long blogId,Long cgId) {
-        ResponseDTO<Boolean> response = new ResponseDTO<>();
+    public ResponseDTO<BlogArticleDTO> addCollect(String userId, Long blogId,Long cgId) {
+        ResponseDTO<BlogArticleDTO> response = new ResponseDTO<>();
         if(StringUtils.isBlank(userId) || blogId == null){
             response.setResponse(ResponseDTO.RespEnum.FAIL,"添加/取消博客收藏失败，信息不全",null);
             return response;
@@ -192,7 +258,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
             return response;
         }
         BlogCollectEntity collectEntity = blogCollectService.findBlogCollectEntity(userId,blogId);
-        boolean isAdd = true;
+        BlogArticleDTO articleDTO = new BlogArticleDTO();
         //新增收藏
         if (collectEntity == null){
             if(cgId != null){
@@ -206,11 +272,12 @@ public class UserBlogServiceImpl implements IUserBlogService {
             collectEntity.setUserId(userId).setBlogId(blogId).setCgId(cgId)
                     .setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
             blogCollectService.createBlogCollectEntity(collectEntity);
+            articleDTO.setCollection(true);//已收藏
         }else {//取消收藏
-            isAdd = false;
+            articleDTO.setCollection(false);//未收藏
             blogCollectService.deleteBlogCollectEntity(collectEntity.getCollectId());
         }
-        response.setResponse(ResponseDTO.RespEnum.SUCCESS,isAdd);
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,articleDTO);
         return response;
     }
 
