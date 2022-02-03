@@ -75,6 +75,10 @@ export default {
     followList: "api/blog/user/follows/",
     //查询粉丝列表
     fansList: "api/blog/user/fans/",
+    //新增收藏夹
+    addCollectGroup: "api/blog/user/newgp",
+    //查询收藏夹
+    collectGroup: "api/blog/user/cltgp",
     //博客添加收藏
-    addCollect: "api/blog/user/collect/"
+    addCollect: "api/blog/user/collect"
 }

@@ -32,6 +32,11 @@ public class BlogCollectEntity implements Serializable {
     @TableField("BLOG_ID")
     private Long blogId;
     /**
+    * 收藏分组ID
+    */
+    @TableField("CG_ID")
+    private Long cgId;
+    /**
     * 用户ID
     */
     @TableField("USER_ID")

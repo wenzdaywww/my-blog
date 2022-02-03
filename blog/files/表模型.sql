@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS BLOG_COLLECT (
     COLLECT_ID BIGINT AUTO_INCREMENT comment '博客收藏主键',
     BLOG_ID BIGINT(40) UNIQUE comment '博客ID',
     USER_ID VARCHAR(40) comment '用户ID',
+    CG_ID BIGINT comment '收藏分组ID',
     UPDATE_TIME DATETIME comment '更新时间',
     CREATE_TIME DATETIME comment '创建时间',
     PRIMARY KEY(COLLECT_ID) );

@@ -10,4 +10,8 @@
     <result column="UPDATE_TIME" property="updateTime" />
     <result column="CREATE_TIME" property="createTime" />
   </resultMap>
+  <!--  查询收藏夹列表-->
+  <select id="findCollectGroup" resultType="com.www.myblog.blog.data.dto.CollectGroupDTO">
+        SELECT CG_ID,COLLECT_NAME FROM COLLECT_GROUP WHERE USER_ID = #{userId}
+  </select>
 </mapper>

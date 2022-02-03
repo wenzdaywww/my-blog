@@ -7,17 +7,13 @@ import com.www.common.pojo.dto.feign.UserInfoDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.dto.AuthorDTO;
+import com.www.myblog.blog.data.dto.CollectGroupDTO;
 import com.www.myblog.blog.data.dto.CommentDTO;
-import com.www.myblog.blog.data.entity.BlogArticleEntity;
-import com.www.myblog.blog.data.entity.BlogCollectEntity;
-import com.www.myblog.blog.data.entity.BlogCommentEntity;
-import com.www.myblog.blog.data.entity.UserFansEntity;
+import com.www.myblog.blog.data.entity.*;
 import com.www.myblog.blog.data.mapper.BlogArticleMapper;
+import com.www.myblog.blog.data.mapper.CollectGroupMapper;
 import com.www.myblog.blog.data.mapper.UserFansMapper;
-import com.www.myblog.blog.service.entity.IBlogArticleService;
-import com.www.myblog.blog.service.entity.IBlogCollectService;
-import com.www.myblog.blog.service.entity.IBlogCommentService;
-import com.www.myblog.blog.service.entity.IUserFansService;
+import com.www.myblog.blog.service.entity.*;
 import com.www.myblog.blog.service.user.IUserBlogService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -53,7 +49,51 @@ public class UserBlogServiceImpl implements IUserBlogService {
     private IBlogCommentService blogCommentService;
     @Autowired
     private UserFansMapper userFansMapper;
+    @Autowired
+    private ICollectGroupService collectGroupService;
+    @Autowired
+    private CollectGroupMapper collectGroupMapper;
 
+
+    /**
+     * <p>@Description 查询收藏夹列表 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/3 13:29 </p>
+     * @param userId 用户id
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Boolean> true添加成功，false取消失败
+     */
+    @Override
+    public ResponseDTO<List<CollectGroupDTO>> findCollectGroup(String userId) {
+        ResponseDTO<List<CollectGroupDTO>> response = new ResponseDTO<>();
+        if(StringUtils.isBlank(userId)){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询收藏夹列表失败，信息不全",null);
+            return response;
+        }
+        List<CollectGroupDTO> list = collectGroupMapper.findCollectGroup(userId);
+        response.setResponse(list);
+        return response;
+    }
+    /**
+     * <p>@Description 新增收藏夹 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/3 13:31 </p>
+     * @param userId 用户id
+     * @param collectName 收藏夹名称
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Boolean> true添加成功，false取消失败
+     */
+    @Override
+    public ResponseDTO<Boolean> addCollectGroup(String userId, String collectName) {
+        ResponseDTO<Boolean> response = new ResponseDTO<>();
+        if (StringUtils.isAnyBlank(userId, collectName)){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"新增收藏夹失败，信息不全",null);
+            return response;
+        }
+        CollectGroupEntity collectGroupEntity = new CollectGroupEntity();
+        collectGroupEntity.setUserId(userId).setCollectName(collectName).
+                setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
+        response.setResponse(ResponseDTO.RespEnum.SUCCESS,collectGroupService.createEntity(collectGroupEntity));
+        return response;
+    }
     /**
      * <p>@Description  获取粉丝列表 </p>
      * <p>@Author www </p>
@@ -136,10 +176,11 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * <p>@Date 2022/2/1 10:45 </p>
      * @param userId 用户id
      * @param blogId 博客id
+     * @param cgId 收藏夹id
      * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean> true添加收藏，false取消收藏
      */
     @Override
-    public ResponseDTO<Boolean> addCollect(String userId, Long blogId) {
+    public ResponseDTO<Boolean> addCollect(String userId, Long blogId,Long cgId) {
         ResponseDTO<Boolean> response = new ResponseDTO<>();
         if(StringUtils.isBlank(userId) || blogId == null){
             response.setResponse(ResponseDTO.RespEnum.FAIL,"添加/取消博客收藏失败，信息不全",null);
@@ -152,12 +193,20 @@ public class UserBlogServiceImpl implements IUserBlogService {
         }
         BlogCollectEntity collectEntity = blogCollectService.findBlogCollectEntity(userId,blogId);
         boolean isAdd = true;
+        //新增收藏
         if (collectEntity == null){
+            if(cgId != null){
+                CollectGroupEntity groupEntity = collectGroupService.findById(cgId);
+                if(groupEntity == null){
+                    response.setResponse(ResponseDTO.RespEnum.FAIL,"博客收藏失败，收藏夹不存在",null);
+                    return response;
+                }
+            }
             collectEntity = new BlogCollectEntity();
-            collectEntity.setUserId(userId).setBlogId(blogId)
+            collectEntity.setUserId(userId).setBlogId(blogId).setCgId(cgId)
                     .setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
             blogCollectService.createBlogCollectEntity(collectEntity);
-        }else {
+        }else {//取消收藏
             isAdd = false;
             blogCollectService.deleteBlogCollectEntity(collectEntity.getCollectId());
         }

@@ -66,6 +66,16 @@ public class ResponseDTO<T> implements Serializable {
         this.setResponse(code,code.getMsg(),data);
     }
     /**
+     * <p>@Description 设置响应码值及响应信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/12/2 21:14 </p>
+     * @param data 响应信息
+     * @return void
+     */
+    public void setResponse(T data){
+        this.setResponse(RespEnum.SUCCESS,RespEnum.SUCCESS.getMsg(),data);
+    }
+    /**
      * <p>@Description 设置成功响应信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/2 21:14 </p>
