@@ -1,7 +1,6 @@
 package com.www.myblog.blog.service.browse.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.feign.base.IBaseFeignService;
 import com.www.common.pojo.dto.feign.UserInfoDTO;
@@ -15,6 +14,7 @@ import com.www.myblog.blog.service.browse.IBlogBrowseService;
 import com.www.myblog.blog.service.entity.IBlogArticleService;
 import com.www.myblog.blog.service.entity.IBlogCollectService;
 import com.www.myblog.blog.service.entity.IBlogPraiseService;
+import com.www.myblog.blog.service.redis.IRedisService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +53,8 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     private IBlogArticleService blogArticleService;
     @Autowired
     private IBlogPraiseService blogPraiseService;
+    @Autowired
+    private IRedisService redisService;
 
 
     /**
@@ -194,29 +196,50 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
             response.setResponse(ResponseDTO.RespEnum.FAIL,"根据博客ID查询博客信息，博客ID为空",null);
             return response;
         }
-        BlogArticleDTO articleDTO = blogArticleMapper.findArticle(blogId);
+        //先从redis中获取数据，查询不到再查询数据库
+        BlogArticleDTO articleDTO = redisService.getArticleInfo(blogId);
+        if(articleDTO != null){
+            //判断用户是否收藏和点赞该博客
+            this.handleLoginForArticle(userId,articleDTO);
+            response.setResponse(articleDTO);
+            return response;
+        }
+        articleDTO = blogArticleMapper.findArticle(blogId);
         if(articleDTO == null){
             response.setResponse(ResponseDTO.RespEnum.FAIL,"根据博客ID查询博客信息，博客不存在",null);
             return response;
         }
-        //判断用户是否收藏该博客
-        if(StringUtils.isBlank(userId)){
-            articleDTO.setCollection(false);
-            articleDTO.setPraised(false);
-        }else {
-            articleDTO.setCollection(blogCollectService.hasCollectBlog(userId,blogId));
-            articleDTO.setPraised(blogPraiseService.hasPraise(userId,blogId));
-        }
+        //判断用户是否收藏和点赞该博客
+        this.handleLoginForArticle(userId,articleDTO);
         //根据博客id查询该博客被收藏的次数
         int collectNum = blogCollectService.findBlogCollectCount(blogId);
         articleDTO.setCollect(collectNum);
         //根据博客ID查询博客分类
         List<BlogTagDTO> classList = blogTagMapper.findBlogTag(blogId);
         articleDTO.setBlogTag(classList);
-        response.setResponse(ResponseDTO.RespEnum.SUCCESS,articleDTO);
+        response.setResponse(articleDTO);
+        //保存数据都redis中
+        redisService.saveArticleInfo(articleDTO);
         return response;
     }
-
+    /**
+     * <p>@Description 查询博客信息时判断是否已登录，处理登录后判断用户是否收藏和点赞该博客 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/3 23:25 </p>
+     * @param userId 用户id
+     * @param articleDTO 博客信息
+     * @return void
+     */
+    private void handleLoginForArticle(String userId,BlogArticleDTO articleDTO){
+        //判断用户是否收藏该博客
+        if(StringUtils.isBlank(userId)){
+            articleDTO.setCollection(false);
+            articleDTO.setPraised(false);
+        }else {
+            articleDTO.setCollection(blogCollectService.hasCollectBlog(userId,articleDTO.getBlogId()));
+            articleDTO.setPraised(blogPraiseService.hasPraise(userId,articleDTO.getBlogId()));
+        }
+    }
     /**
      * <p>@Description 获取博主博客分类列表 </p>
      * <p>@Author www </p>

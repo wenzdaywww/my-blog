@@ -8,6 +8,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -41,6 +44,29 @@ public final class RedisOperation {
      */
     public static RedisTemplate<String,Object> getRedisTemplate(){
         return redisTemplate;
+    }
+    /**
+     * <p>@Description 设置key失效时间(秒) </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/8/1 21:07 </p>
+     * @param key 键值
+     * @param seconds 失效时间(秒)
+     * @return boolean true设置成功，false设置失败
+     */
+    public static boolean keyExpire(String key,long seconds){
+        return redisTemplate.expire(key,seconds,TimeUnit.SECONDS);
+    }
+    /**
+     * <p>@Description 设置key失效时间(秒) </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/8/1 21:07 </p>
+     * @param key 键值
+     * @param timeout 失效时间
+     * @param unit 时间单位
+     * @return boolean true设置成功，false设置失败
+     */
+    public static boolean keyExpire(String key,long timeout, TimeUnit unit){
+        return redisTemplate.expire(key,timeout,TimeUnit.SECONDS);
     }
     /**
      * <p>@Description 判断key值是否存在 </p>
@@ -189,6 +215,79 @@ public final class RedisOperation {
         return value;
     }
     /**
+     * <p>@Description 将对象保存Hash数据 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/8/1 21:08 </p>
+     * @param key 键值
+     * @param obj 待保存的对象
+     * @return java.lang.Object
+     */
+    public static Object hashSet(String key, Object obj){
+        return hashSet(key,obj,null);
+    }
+    /**
+     * <p>@Description 将对象保存Hash数据 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/8/1 21:08 </p>
+     * @param key 键值
+     * @param obj 待保存的对象
+     * @param fieldArr 待保存的对象中的字段名数组，null则保存对象所有字段
+     * @return java.lang.Object
+     */
+    public static Object hashSet(String key, Object obj,String[] fieldArr){
+        return hashSet(key,obj,fieldArr,null,null);
+    }
+    /**
+     * <p>@Description 将对象保存Hash数据,并设置失效时间  </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/8/1 21:08 </p>
+     * @param key 键值
+     * @param obj 待保存的对象
+     * @param fieldArr 待保存的对象中的字段名数组，null则保存对象所有字段
+     * @param seconds 失效时间(秒),null则不设置失效时间
+     * @return java.lang.Object
+     */
+    public static Object hashSet(String key, Object obj,String[] fieldArr,Long seconds){
+        return hashSet(key,obj,fieldArr,seconds,TimeUnit.SECONDS);
+    }
+    /**
+     * <p>@Description 将对象保存Hash数据,并设置失效时间 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/8/1 21:08 </p>
+     * @param key 键值
+     * @param obj 待保存的对象
+     * @param fieldArr 待保存的对象中的字段名数组，null则保存对象所有字段
+     * @param timeout 失效时间,null则不设置失效时间
+     * @param unit 失效时间单位
+     * @return java.lang.Object
+     */
+    public static Object hashSet(String key, Object obj,String[] fieldArr,Long timeout, TimeUnit unit){
+        if(obj == null){
+            return null;
+        }
+        //需要保存到redis的字段名称
+        List<String> list = Arrays.asList(fieldArr);
+        boolean isAllField = CollectionUtils.isEmpty(list);//是否保存所有字段
+        Field[] fields = obj.getClass().getDeclaredFields();
+        for (Field field : fields){
+            field.setAccessible(true);//可以获取到私有属性
+            try {
+                if(isAllField){
+                    hashSet(key,field.getName(),field.get(obj));
+                }else if(list.contains(field.getName())){
+                    hashSet(key,field.getName(),field.get(obj));
+                }
+            } catch (IllegalAccessException e) {
+                log.error("将对象保存Hash数据异常，异常信息：{}",e.getMessage());
+            }
+        }
+        //设置失效时间
+        if(timeout != null){
+            keyExpire(key,timeout,unit);
+        }
+        return obj;
+    }
+    /**
      * <p>@Description 获取存储在哈希表中指定字段的值 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/8/1 21:08 </p>
@@ -208,6 +307,71 @@ public final class RedisOperation {
      */
     public static Object hashGet(String key){
         return redisTemplate.opsForHash().entries(key);
+    }
+    /**
+     * <p>@Description 获取在哈希表中指定key的所有字段和值并转为Class<T>类对象  </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/8/1 21:08 </p>
+     * @param key 键值
+     * @param clazz 查询返回的对象类名
+     * @return Class<T> 返回的对象数据
+     */
+    public static <T> T hashGet(String key,Class<T> clazz){
+        return hashGet(key,clazz,null);
+    }
+    /**
+     * <p>@Description 获取在哈希表中指定key的所有字段和值并转为Class<T>类对象 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/8/1 21:08 </p>
+     * @param key 键值
+     * @param clazz 查询返回的对象类名
+     * @param fieldArr 查询需要返回的对象的字段数组,null则返回所有字段
+     * @return Class<T> 返回的对象数据
+     */
+    public static <T> T hashGet(String key,Class<T> clazz,String[] fieldArr){
+        try {
+            List<String> list = Arrays.asList(fieldArr);
+            boolean isAllField = CollectionUtils.isEmpty(list);//是否获取所有字段
+            T resultObj = clazz.newInstance();
+            Field[] fields = resultObj.getClass().getDeclaredFields();
+            for (Field field : fields){
+                field.setAccessible(true);//可以获取到私有属性
+                if(isAllField){//获取所有字段
+                    Object obj = hashGet(key,field.getName());
+                    //将obj值保存到field中
+                    setObjValue(obj,field,resultObj);
+                }else if(list.contains(field.getName())){//获取指定字段
+                    Object obj = hashGet(key,field.getName());
+                    //将obj值保存到field中
+                    setObjValue(obj,field,resultObj);
+                }
+            }
+            return resultObj;
+        } catch (Exception e) {
+            log.error("获取在哈希表值发生异常，异常信息：{}",e.getMessage());
+        }
+        return null;
+    }
+    /**
+     * <p>@Description 将obj值保存到field中 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/4 01:02 </p>
+     * @param obj 值对象
+     * @param field 字段对象
+     * @param resultObj 对象
+     * @return void
+     */
+    private static void setObjValue(Object obj,Field field,Object resultObj){
+        try {
+            //由于Long数据保存后取出为Integer，所以需要强转为Long
+            if(obj instanceof Integer && (field.getGenericType().toString().equals("class java.lang.Long"))){
+                field.set(resultObj,((Integer)obj).longValue());
+            }else {
+                field.set(resultObj,obj);
+            }
+        } catch (Exception e) {
+            log.error("获取在哈希表值发生异常，异常信息：{}",e.getMessage());
+        }
     }
     /**
      * <p>@Description 从左边保存List数据 </p>
@@ -240,7 +404,7 @@ public final class RedisOperation {
      * @return java.lang.Object
      */
     public static Object setSet(String key, Object value){
-       redisTemplate.opsForSet().add(key,value);
+        redisTemplate.opsForSet().add(key,value);
         return value;
     }
     /**

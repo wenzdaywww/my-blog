@@ -1,0 +1,28 @@
+package com.www.myblog.blog.service.redis;
+
+import com.www.myblog.blog.data.dto.BlogArticleDTO;
+
+/**
+ * <p>@Description redis的service接口 </p>
+ * <p>@Version 1.0 </p>
+ * <p>@Author www </p>
+ * <p>@Date 2022/2/3 23:12 </p>
+ */
+public interface IRedisService {
+    /**
+     * <p>@Description 从redis中获取博客信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/3 23:18 </p>
+     * @param blogId 博客id
+     * @return com.www.myblog.blog.data.dto.BlogArticleDTO 博客信息
+     */
+    BlogArticleDTO getArticleInfo(Long blogId);
+    /**
+     * <p>@Description 保存博客信息到redis中 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/3 23:18 </p>
+     * @param articleDTO 博客id
+     * @return true保存成功，false保存失败
+     */
+    boolean saveArticleInfo(BlogArticleDTO articleDTO);
+}

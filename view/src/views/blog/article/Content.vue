@@ -68,7 +68,7 @@ export default {
                   blog.collect++;
                   ElMessage.success('收藏成功');
                 }else {
-                  blog.collect--;
+                  blog.collect = blog.collect == 0 ? 0 :  blog.collect - 1;
                   ElMessage.success('取消收藏成功');
                 }
               }
@@ -92,7 +92,7 @@ export default {
                 blog.praise++;
                 ElMessage.success('点赞成功');
               }else {
-                blog.praise--;
+                blog.praise = blog.praise == 0 ? 0 :  blog.praise - 1;
                 ElMessage.success('取消点赞成功');
               }
             }
