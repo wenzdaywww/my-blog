@@ -261,6 +261,10 @@ public class UserBlogServiceImpl implements IUserBlogService {
             response.setResponse(ResponseDTO.RespEnum.FAIL,"添加/取消博客收藏失败，博客不存在",null);
             return response;
         }
+        if(StringUtils.equals(userId,articleEntity.getUserId())){
+            response.setResponse(ResponseDTO.RespEnum.FAIL,"添加/取消博客收藏失败，不能收藏自己的博客",null);
+            return response;
+        }
         BlogCollectEntity collectEntity = blogCollectService.findBlogCollectEntity(userId,blogId);
         BlogArticleDTO articleDTO = new BlogArticleDTO();
         //新增收藏

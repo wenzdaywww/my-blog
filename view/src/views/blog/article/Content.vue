@@ -58,22 +58,24 @@ export default {
     //收藏博客
     const addCollect = () => {
       if(utils.isLogin()){
-        //已收藏，则取消收藏
-        if(blog.collection){
-          axios.$http.post(request.addCollect, {bid:blogId}).then(function (res) {
-            if(res.code === 200){
-              blog.collection = res.data.collection;
-              if(blog.collection){
-                blog.collect++;
-                ElMessage.success('收藏成功');
-              }else {
-                blog.collect--;
-                ElMessage.success('取消收藏成功');
+        if(blog.userId !== utils.getUserId()){
+          //已收藏，则取消收藏
+          if(blog.collection){
+            axios.$http.post(request.addCollect, {bid:blogId}).then(function (res) {
+              if(res.code === 200){
+                blog.collection = res.data.collection;
+                if(blog.collection){
+                  blog.collect++;
+                  ElMessage.success('收藏成功');
+                }else {
+                  blog.collect--;
+                  ElMessage.success('取消收藏成功');
+                }
               }
-            }
-          });
-        }else {//未收藏，则添加收藏
-          collectDialog.value.openCollectDialog(blogId,false);//调用子组件方法
+            });
+          }else {//未收藏，则添加收藏
+            collectDialog.value.openCollectDialog(blogId,false);//调用子组件方法
+          }
         }
       }else {
         ElMessage.info('请登录');
@@ -86,6 +88,7 @@ export default {
           if(res.code === 200){
             document.title += res.data.title;//设置浏览器标题
             blog.blogId = res.data.blogId;
+            blog.userId = res.data.userId;
             blog.title = res.data.title;
             blog.groupName = res.data.groupName;
             blog.blogTag = res.data.blogTag;

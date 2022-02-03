@@ -73,9 +73,10 @@ export default {
     }
     //添加收藏
     const saveCollect = () => {
+      let cgId = selectCgId.value > 0 ? selectCgId.value : "";
       //修改博客收藏夹位置
       if (updateFlag.value){
-        axios.$http.post(request.modifyCollect, {bid:blogId.value,cgid:selectCgId.value}).then(function (res) {
+        axios.$http.post(request.modifyCollect, {bid:blogId.value,cgid:cgId}).then(function (res) {
           if(res.code === 200){
             if(res.data){
               emit('findBlogList',null);//调用父组件Collect.vue的findBlogList方法
@@ -87,7 +88,7 @@ export default {
           }
         });
       }else {//添加到收藏夹
-        axios.$http.post(request.addCollect, {bid:blogId.value,cgid:selectCgId.value}).then(function (res) {
+        axios.$http.post(request.addCollect, {bid:blogId.value,cgid:cgId}).then(function (res) {
           if(res.code === 200){
             if(res.data){
               emit('blogCollectAdd',null);//调用父组件Content.vue的blogCollectAdd方法

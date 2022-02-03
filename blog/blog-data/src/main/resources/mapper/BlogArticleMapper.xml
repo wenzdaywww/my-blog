@@ -68,6 +68,7 @@
     <!--    根据博客ID查询博客信息-->
     <select id="findArticle" resultType="com.www.myblog.blog.data.dto.BlogArticleDTO">
         SELECT B.BLOG_ID,
+               B.USER_ID,
                B.TITLE,
                B.CONTENT,
                B.BROWSE,
