@@ -1,6 +1,7 @@
 package com.www.myblog.base.task;
 
 import com.www.myblog.base.init.CodeDictRunnerImpl;
+import com.www.myblog.base.service.redis.IRedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -39,7 +40,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ScheduledTask {
     @Autowired
-    private CodeDictRunnerImpl codeDictRunnerImpl;
+    private IRedisService redisService;
 
     /**
      * <p>@Description 整点重新加载code数据 </p>
@@ -50,6 +51,6 @@ public class ScheduledTask {
     @Scheduled(cron = "0 0 * * * ?")
     public void reloadCodeData() {
         log.info("整点定时任务");
-        codeDictRunnerImpl.initCodeData();
+        redisService.initCodeData();
     }
 }

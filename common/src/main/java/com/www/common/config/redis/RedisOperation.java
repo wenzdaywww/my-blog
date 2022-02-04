@@ -162,7 +162,7 @@ public final class RedisOperation {
     public static boolean unlock(String key,String value){
         // 判断是否是当前线程获取分布式锁，是则删除key
         if (StringUtils.equals(value,get(key))){
-            RedisOperation.deleteKey(key);
+            deleteKey(key);
             return true;
         }
         return false;

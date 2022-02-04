@@ -1,11 +1,10 @@
 package com.www.common.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.www.common.config.redis.RedisOperation;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
@@ -29,8 +28,9 @@ import java.util.Map;
 @Component
 @ConditionalOnProperty(prefix = "com.www.common.securuty",name = "enable") //是否开启Security安全
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
-    @Value("${com.www.common.securuty.user-prefix}")
-    private String redisUserPrefix;
+    @Autowired
+    private SecurityRedisHandler securityRedisHandler;
+
 
     /**
      * <p>@Description 构造方法 </p>
@@ -59,7 +59,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
         //获取token，删除redis中的token
         if(map != null && map.size() > 0) {
             String userId = String.valueOf(map.get(TokenUtils.USERID));
-            RedisOperation.deleteKey(redisUserPrefix + ":" + userId);
+            securityRedisHandler.deleteToken(userId);
         }
         ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,"退出成功");
         TokenUtils.clearResponseToken(httpServletResponse,LoginSuccessHandler.COOKIE_TOKEN);

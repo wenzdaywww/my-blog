@@ -9,6 +9,8 @@ package com.www.myblog.blog.data.constants;
  * <p>@Date 2021/12/14 21:53 </p>
  */
 public class RedisKeyConstant {
+    /** 博客文章的redis的分布式锁key前缀 **/
+    public static final String BLOG_ARTICLE_LOCK = "MY-BLOG:BLOG_ARTICLE:BLOG_ID_LOCK:";
     /** 博客文章的redis的key前缀 **/
     public static final String BLOG_ARTICLE = "MY-BLOG:BLOG_ARTICLE:BLOG_ID:";
     /** 博客文章浏览量的redis的key前缀 **/

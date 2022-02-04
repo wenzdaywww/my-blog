@@ -1,7 +1,7 @@
 package com.www.common.config.security.filter;
 
-import com.www.common.config.redis.RedisOperation;
 import com.www.common.config.security.handler.LoginSuccessHandler;
+import com.www.common.config.security.handler.SecurityRedisHandler;
 import com.www.common.config.security.impl.UserDetailsServiceImpl;
 import com.www.common.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -37,9 +37,8 @@ import java.util.Map;
 public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
-    /** 使用redis保存用户的token的key前缀 **/
-    @Value("${com.www.common.securuty.user-prefix}")
-    private String redisUserPrefix;
+    @Autowired
+    private SecurityRedisHandler securityRedisHandler;
     /** jwt令牌签名 */
     @Value("${com.www.common.securuty.secret-key}")
     private String SECRET_KEY ;
@@ -78,10 +77,9 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
         Map<String,Object> map = TokenUtils.validateTokenAndGetClaims(token);
         if(map != null && map.size() > 0){
             String userId = String.valueOf(map.get(TokenUtils.USERID));
-            String tokenKey = redisUserPrefix + ":" + userId;
             //判断redis中的token是否存在且token值相等，存在则说明token有效
-            if(RedisOperation.hasKey(tokenKey)
-                    && StringUtils.equals((String)map.get(TokenUtils.AUTHORIZATION), RedisOperation.get(tokenKey))
+            if(securityRedisHandler.hasToken(userId)
+                    && StringUtils.equals((String)map.get(TokenUtils.AUTHORIZATION), securityRedisHandler.getToken(userId))
                     && SecurityContextHolder.getContext().getAuthentication() == null){
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
                 if(userDetails != null){

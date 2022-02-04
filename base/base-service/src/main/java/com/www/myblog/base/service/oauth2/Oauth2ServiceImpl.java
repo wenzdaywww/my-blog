@@ -1,11 +1,10 @@
 package com.www.myblog.base.service.oauth2;
 
 import com.www.common.config.oauth2.IOauth2Service;
-import com.www.common.pojo.constant.RedisCommonContant;
 import com.www.common.pojo.dto.security.ScopeDTO;
-import com.www.common.config.redis.RedisOperation;
+import com.www.myblog.base.service.redis.IRedisService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,9 +18,8 @@ import java.util.List;
 @Slf4j
 @Service
 public class Oauth2ServiceImpl implements IOauth2Service {
-    /** 资源服务id **/
-    @Value("${spring.application.name}")
-    private String resourceId;
+    @Autowired
+    private IRedisService redisService;
     /**
      * <p>@Description 查询当前资源服务器的请求路径允许的scope范围 </p>
      * <p>@Author www </p>
@@ -30,7 +28,6 @@ public class Oauth2ServiceImpl implements IOauth2Service {
      */
     @Override
     public List<ScopeDTO> findUrlScope() {
-        List<ScopeDTO> list = (List<ScopeDTO>) RedisOperation.listGet(RedisCommonContant.URL_SCOPE_PREFIX + resourceId);
-        return list;
+        return redisService.findUrlScope();
     }
 }

@@ -1,6 +1,6 @@
 package com.www.myblog.base.init;
 
-import com.www.myblog.base.service.menu.IUrlScopeService;
+import com.www.myblog.base.service.redis.IRedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedisRunnerImpl implements ApplicationRunner {
     @Autowired
-    private IUrlScopeService urlScopeService;
+    private IRedisService redisService;
 
     /**
      * <p>@Description 启动执行方法 </p>
@@ -28,6 +28,6 @@ public class RedisRunnerImpl implements ApplicationRunner {
      */
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        urlScopeService.initRedisUrlScope();
+        redisService.initRedisUrlScope();
     }
 }

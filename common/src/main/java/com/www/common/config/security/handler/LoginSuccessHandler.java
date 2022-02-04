@@ -1,12 +1,12 @@
 package com.www.common.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.www.common.config.redis.RedisOperation;
 import com.www.common.pojo.constant.CharConstant;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.core.Authentication;
@@ -32,9 +32,8 @@ import java.util.Map;
 @Component
 @ConditionalOnProperty(prefix = "com.www.common.securuty",name = "enable") //是否开启Security安全
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
-    /** 使用redis保存用户的token的key前缀 **/
-    @Value("${com.www.common.securuty.user-prefix}")
-    private String redisUserPrefix;
+    @Autowired
+    private SecurityRedisHandler securityRedisHandler;
     /**  返回客户段cookie中的token的name **/
     public static final String COOKIE_TOKEN = "token";
     /** 是否免登录 **/
@@ -74,8 +73,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
                 : TokenUtils.getExpirationTime(); //秒
         //生成token
         Map<String,String> tokenMap = TokenUtils.generateToken(chaims);
-        //将token添加到redis中
-        RedisOperation.set(redisUserPrefix + ":" + user.getUsername(),tokenMap.get(TokenUtils.TOKEN), expirationTime);
+        //将token保存到redis中
+        securityRedisHandler.saveToken(user.getUsername(),tokenMap.get(TokenUtils.TOKEN),expirationTime);
         //数据返回
         ResponseDTO<Map> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,tokenMap);
         Cookie cookie = new Cookie(COOKIE_TOKEN,tokenMap.get(TokenUtils.TOKEN));

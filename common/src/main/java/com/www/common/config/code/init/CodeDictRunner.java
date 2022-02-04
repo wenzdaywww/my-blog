@@ -1,11 +1,11 @@
 package com.www.common.config.code.init;
 
 import com.www.common.config.code.CodeDict;
-import com.www.common.config.redis.RedisOperation;
-import com.www.common.pojo.constant.RedisCommonContant;
+import com.www.common.config.code.CodeRedisHandler;
 import com.www.common.pojo.dto.code.CodeDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -23,6 +23,9 @@ import java.util.Map;
 @Component
 @ConditionalOnProperty(prefix = "com.www.common.code",name = "enable")
 public class CodeDictRunner implements ApplicationRunner {
+    @Autowired
+    private CodeRedisHandler codeRedisHandler;
+
     /**
      * <p>@Description 启动自加载数据字典数据 </p>
      * <p>@Author www </p>
@@ -43,7 +46,7 @@ public class CodeDictRunner implements ApplicationRunner {
      */
     public void initCodeData(){
         try {
-            Map<String,Map<String, CodeDTO>> codeMap = (Map<String,Map<String, CodeDTO>>)RedisOperation.hashGet(RedisCommonContant.CODE_DATA);
+            Map<String,Map<String, CodeDTO>> codeMap = codeRedisHandler.getCodeData();
             if(MapUtils.isNotEmpty(codeMap)){
                 CodeDict.initCode(codeMap);
                 log.info("加载code_data数据{}条",codeMap.size());

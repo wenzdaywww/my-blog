@@ -15,7 +15,7 @@ import com.www.myblog.base.service.entity.ISysMenuService;
 import com.www.myblog.base.service.entity.ISysRoleMenuService;
 import com.www.myblog.base.service.entity.ISysRoleService;
 import com.www.myblog.base.service.menu.IMenuInfoService;
-import com.www.myblog.base.service.menu.IUrlScopeService;
+import com.www.myblog.base.service.redis.IRedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -42,7 +42,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
     @Autowired
     private ISysRoleMenuService sysRoleMenuService;
     @Autowired
-    private IUrlScopeService urlScopeService;
+    private IRedisService redisService;
     @Autowired
     private ISysMenuService sysMenuService;
 
@@ -66,7 +66,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         boolean isOk = sysRoleMenuService.deleteByMenuId(menuId);
         if(isOk){
             if(StringUtils.equals(menuEntity.getMenuType(),CodeDict.getValue(CodeTypeEnum.MENU_TYPE, CodeKeyEnum.K2))){
-                urlScopeService.updateRedisUrlScope(menuEntity.getModule());
+                redisService.updateRedisUrlScope(menuEntity.getModule());
             }
             return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,"删除菜单成功");
         }else {
@@ -192,7 +192,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         }
         //编辑的菜单是权限菜单，则需要更新redis中的权限菜单信息
         if(StringUtils.equals(menu.getMenuType(),CodeDict.getValue(CodeTypeEnum.MENU_TYPE, CodeKeyEnum.K2))){
-            urlScopeService.updateRedisUrlScope(menu.getModule());
+            redisService.updateRedisUrlScope(menu.getModule());
         }
         responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,"更新菜单成功");
         return responseDTO;

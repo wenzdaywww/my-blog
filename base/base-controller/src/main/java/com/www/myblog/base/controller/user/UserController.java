@@ -1,13 +1,12 @@
 package com.www.myblog.base.controller.user;
 
 import com.www.common.config.oauth2.token.JwtTokenConverter;
-import com.www.common.config.redis.RedisOperation;
 import com.www.common.pojo.constant.AuthorityContant;
-import com.www.common.pojo.constant.RedisCommonContant;
 import com.www.common.pojo.dto.code.CodeDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysUserDTO;
+import com.www.myblog.base.service.redis.IRedisService;
 import com.www.myblog.base.service.user.IUserInfoService;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +35,8 @@ public class UserController {
     private JwtTokenConverter jwtTokenConverter;
     @Autowired
     private IUserInfoService userInfoService;
+    @Autowired
+    private IRedisService redisService;
 
     /**
      * <p>@Description 查询多个数据字典数据 </p>
@@ -52,7 +53,7 @@ public class UserController {
             response.setResponse(ResponseDTO.RespEnum.FAIL,"查询数据字典数据失败，信息不全",null);
             return response;
         }
-        Map<String, Map<String, CodeDTO>> codeMap = (Map<String,Map<String, CodeDTO>>) RedisOperation.hashGet(RedisCommonContant.CODE_DATA);
+        Map<String, Map<String, CodeDTO>> codeMap = redisService.getCodeData();
         Map<String,List<CodeDTO>> typeMap = new HashMap<>();
         for (String codeType : list){
             Map<String, CodeDTO> valueMap = codeMap.get(codeType);
