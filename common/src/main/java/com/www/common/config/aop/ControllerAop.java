@@ -60,7 +60,7 @@ public class ControllerAop {
     @Autowired
     private Environment environment;
     /**
-     * <p>@Description 构造方法 </p>
+     * <p>@Description 初始化方法 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/1 17:59 </p>
      * @return

@@ -1,7 +1,5 @@
 package com.www.common.config.druid.interfaces;
 
-import javax.sql.DataSource;
-
 /**
  * <p>@Description 写权限数据源 </p>
  * <p>@Version 1.0 </p>

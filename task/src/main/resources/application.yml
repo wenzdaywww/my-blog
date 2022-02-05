@@ -1,0 +1,26 @@
+#服务器配置
+server:
+  servlet:
+    #访问路径设置
+    context-path: /
+spring:
+  profiles:
+    #配置环境文件
+    active: @profileActive@
+  application:
+    name: my-task
+  # 返回报文json配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss #配置返回日期格式
+    time-zone: GMT+8 #配置时间区
+    default-property-inclusion: non_empty #非空属性才返回
+#mybatis配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #日志输出
+  global-config:
+    db-config:
+      update-strategy: ignored #字段更新忽略null判断
+#配置eureka注册中心服务的status信息
+info:
+  name: my task server

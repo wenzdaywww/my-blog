@@ -1,19 +1,14 @@
 #生产环境配置
 #服务器配置
 server:
-  port: 8091
+  port: 8004
 #日志配置
 logging:
-  config: classpath:logback-prod.xml
+  config: classpath:logback-test.xml
   file:
     path: /home/ap/logs/${spring.application.name}/  #日志路径
 #spring配置
 spring:
-  servlet:
-    #文件上传配置
-    multipart:
-      max-file-size: 100MB
-      max-request-size: 100MB
   #redis配置
   redis:
     password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
@@ -34,22 +29,11 @@ eureka:
 com:
   www:
     common:
-      code:
-        enable: true #开启数据字典加载
-      ctl-aop:
-        enable: true #开启controller的AOP日志拦截
-      #配置文件路径
-      file:
-        enable: true #开启上传文件配置
-        imgUrlPath: /imgs/** #配置访问图片的相对路径
-        imgSavePath: /home/www/upload/${spring.application.name}/img/ #图片保存的绝对路径，window的路径必须是\且路径最后也需要\
-        otherUrlPath: /file/** #配置访问图片外其他文件的相对路径
-        otherSavePath: /home/www/upload/${spring.application.name}/other/ #图片外其他文件保存的绝对路径，window的路径必须是\且路径最后也需要\
-      oauth2:
-        enable: true #开启统一认证资源服务方配置
-        signing-key: wenzday #JWT令牌签名
+      my-task:
+        blog:
+          article: * 1/30 * * * ? #半小时触发
       druid:
-        enable: true  #开启druid数据源配置
+        enable: true #开启controller的AOP日志拦截
         #写数据库
         write:
           url: jdbc:mysql://192.168.0.130:3306/blog?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8

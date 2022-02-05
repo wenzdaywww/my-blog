@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.www.myblog</groupId>
@@ -11,18 +10,11 @@
     </parent>
 
     <groupId>com.www.myblog</groupId>
-    <artifactId>blog</artifactId>
+    <artifactId>task</artifactId>
     <version>1.0.0</version>
-    <packaging>pom</packaging>
-    <name>blog</name>
-    <description>博客服务</description>
-
-    <modules>
-        <module>blog-controller</module>
-        <module>blog-service</module>
-        <module>blog-data</module>
-        <module>blog-web</module>
-    </modules>
+    <packaging>jar</packaging>
+    <name>task</name>
+    <description>定时任务</description>
 
     <dependencies>
         <!-- springboot框架web项目起步依赖 -->
@@ -46,55 +38,30 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        <!-- mysql数据库依赖 -->
+<!--        &lt;!&ndash; mysql数据库依赖 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>mysql</groupId>-->
+<!--            <artifactId>mysql-connector-java</artifactId>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; mybatis插件依赖 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.baomidou</groupId>-->
+<!--            <artifactId>mybatis-plus-boot-starter</artifactId>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; druid数据连接池 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba</groupId>-->
+<!--            <artifactId>druid-spring-boot-starter</artifactId>-->
+<!--        </dependency>-->
+        <!-- springboot的redis依赖 -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <!-- druid数据连接池 -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
         <!-- application加密包 -->
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
             <artifactId>jasypt-spring-boot-starter</artifactId>
-        </dependency>
-        <!-- mybatis插件依赖 -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-        </dependency>
-        <!-- security安全认证依赖 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-security</artifactId>
-        </dependency>
-        <!-- oauth2认证-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-oauth2</artifactId>
-        </dependency>
-        <!-- ribbon负载均衡依赖 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
-        </dependency>
-        <!-- feign服务调用依赖-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-        <!-- hystrix服务熔断依赖 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-        </dependency>
-        <!-- springboot的redis依赖 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
         <!-- 公共API包依赖-->
         <dependency>
@@ -102,12 +69,11 @@
             <artifactId>common</artifactId>
         </dependency>
     </dependencies>
-
     <!--配置环境的profile-->
     <profiles>
         <!--dev默认激活，使用idea Spring Boot 配置启动工程，需要dev的配置-->
         <profile>
-            <id>blog-dev</id>
+            <id>task-dev</id>
             <properties>
                 <profileActive>dev</profileActive>
             </properties>
@@ -116,13 +82,13 @@
             </activation>
         </profile>
         <profile>
-            <id>blog-test</id>
+            <id>task-test</id>
             <properties>
                 <profileActive>test</profileActive>
             </properties>
         </profile>
         <profile>
-            <id>blog-prod</id>
+            <id>task-prod</id>
             <properties>
                 <profileActive>prod</profileActive>
             </properties>
@@ -135,7 +101,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.www.BlogApplication</mainClass>
+                    <classifier>exec</classifier>
+                    <mainClass>com.www.myblog.task.TaskApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

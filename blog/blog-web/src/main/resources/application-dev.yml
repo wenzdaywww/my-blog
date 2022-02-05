@@ -48,7 +48,7 @@ com:
         enable: true #开启统一认证资源服务方配置
         signing-key: wenzday #JWT令牌签名
       druid:
-        enable: true #开启controller的AOP日志拦截
+        enable: true #开启druid数据源配置
         #写数据库
         write:
           url: jdbc:mysql://192.168.0.130:3306/blog?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
