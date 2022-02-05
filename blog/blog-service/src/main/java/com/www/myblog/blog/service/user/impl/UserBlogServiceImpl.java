@@ -1,12 +1,13 @@
 package com.www.myblog.blog.service.user.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.feign.base.IBaseFeignService;
 import com.www.common.pojo.dto.feign.UserInfoDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.utils.DateUtils;
+import com.www.myblog.blog.data.constants.CommenConstant;
+import com.www.myblog.blog.data.constants.RedisKeyConstant;
 import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.dto.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.CollectGroupDTO;
@@ -17,6 +18,7 @@ import com.www.myblog.blog.data.mapper.BlogCollectMapper;
 import com.www.myblog.blog.data.mapper.CollectGroupMapper;
 import com.www.myblog.blog.data.mapper.UserFansMapper;
 import com.www.myblog.blog.service.entity.*;
+import com.www.myblog.blog.service.redis.IRedisService;
 import com.www.myblog.blog.service.user.IUserBlogService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -60,6 +62,8 @@ public class UserBlogServiceImpl implements IUserBlogService {
     private BlogCollectMapper blogCollectMapper;
     @Autowired
     private IBlogPraiseService blogPraiseService;
+    @Autowired
+    private IRedisService redisService;
 
 
     /**
@@ -87,16 +91,21 @@ public class UserBlogServiceImpl implements IUserBlogService {
             return response;
         }
         BlogPraiseEntity praiseEntity = blogPraiseService.findEntity(userId,blogId);
+        //点赞
         if(praiseEntity == null){
             praiseEntity = new BlogPraiseEntity();
             praiseEntity.setBlogId(blogId).setUserId(userId)
                     .setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
             blogPraiseService.createEntity(praiseEntity);
             response.setResponse(true);
+            //更新博客点赞量
+            redisService.updateBlogNum(CommenConstant.PRAISE, RedisKeyConstant.ARTICLE_PRAISE_LOCK,blogId,true);
             return response;
-        }else {
+        }else {//取消点赞
             blogPraiseService.deleteEntity(praiseEntity.getBpId());
             response.setResponse(false);
+            //更新博客点赞量
+            redisService.updateBlogNum(CommenConstant.PRAISE, RedisKeyConstant.ARTICLE_PRAISE_LOCK,blogId,false);
             return response;
         }
     }
@@ -321,8 +330,12 @@ public class UserBlogServiceImpl implements IUserBlogService {
                     .setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
             blogCollectService.createBlogCollectEntity(collectEntity);
             articleDTO.setCollection(true);//已收藏
+            //更新博客收藏量
+            redisService.updateBlogNum(CommenConstant.COLLECT, RedisKeyConstant.ARTICLE_COLLECT_LOCK,blogId,true);
         }else {//取消收藏
             articleDTO.setCollection(false);//未收藏
+            //更新博客收藏量
+            redisService.updateBlogNum(CommenConstant.COLLECT,RedisKeyConstant.ARTICLE_COLLECT_LOCK,blogId,false);
             blogCollectService.deleteBlogCollectEntity(collectEntity.getCollectId());
         }
         response.setResponse(ResponseDTO.RespEnum.SUCCESS,articleDTO);
@@ -375,11 +388,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
         commentEntity.setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
         blogCommentService.createEntity(commentEntity);
         //更新博客评论数量
-        UpdateWrapper<BlogArticleEntity> wrapper = new UpdateWrapper<>();
-        wrapper.lambda().eq(BlogArticleEntity::getBlogId,articleEntity.getBlogId());
-        wrapper.lambda().set(BlogArticleEntity::getComment,articleEntity.getComment() + 1)
-                .set(BlogArticleEntity::getUpdateTime,DateUtils.getCurrentDateTime());
-        blogArticleService.updateEntity(wrapper);
+        redisService.updateBlogNum(CommenConstant.COMMENT, RedisKeyConstant.ARTICLE_COMMENT_LOCK,blogId,true);
         //返回评论信息
         CommentDTO commentDTO = new CommentDTO();
         //查询用户信息

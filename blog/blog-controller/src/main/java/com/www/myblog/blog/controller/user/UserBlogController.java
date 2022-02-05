@@ -54,7 +54,7 @@ public class UserBlogController {
         return userBlogService.updateCollectId(jwtTokenConverter.getUserId(),bid,cgid);
     }
     /**
-     * <p>@Description 获取博客列表 </p>
+     * <p>@Description 获取博客收藏列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param query 查询条件

@@ -30,7 +30,49 @@ public class RedisServiceImpl implements IRedisService {
     private String resourceId;
 
 
-
+    /**
+     * <p>@Description 更新博客统计量 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/5 11:59 </p>
+     * @param name 更新的名称。如收藏量，点赞量，评论数，浏览量
+     * @param lockKey 分布式锁key
+     * @param blogId 博客id
+     * @param isAdd 是否增加，true增加，false减少
+     * @return boolean true更新成功，false失败
+     */
+    @Override
+    public boolean updateBlogNum(String name,String lockKey,Long blogId, boolean isAdd) {
+        String key = RedisKeyConstant.BLOG_ARTICLE + blogId;//博客文章的key
+        lockKey += blogId;//分布式锁key
+        String value = UUID.randomUUID().toString();
+        long stepVal = isAdd ? 1 : -1;//判断是自增还是自减
+        boolean isOk = true;//是否更新成功
+        boolean isWait = true; //是否等待获取分布式锁
+        while (isWait){
+            try {
+                //添加分布式锁，实现同一时间只有一个现场操作
+                if(RedisOperation.lock(lockKey, value,10)){
+                    isWait = false;
+                    if(RedisOperation.hasKey(key)){
+                        //判断是否为0，则不自减
+                        Integer num = (Integer) RedisOperation.hashGet(key,name);
+                        if(num == 0 && stepVal == -1){
+                            return false;
+                        }
+                        RedisOperation.hashIncrement(key,name,stepVal);
+                    }
+                }
+            }catch (Exception e){
+                isOk = false;
+                isWait = false;
+                log.error("更新博客统计量异常，异常信息：{}",e.getMessage());
+            }finally {
+                // 释放锁
+                RedisOperation.unlock(lockKey,value);
+            }
+        }
+        return isOk;
+    }
     /**
      * <p>@Description 查询当前资源服务器的请求路径允许的scope范围 </p>
      * <p>@Author www </p>

@@ -374,6 +374,19 @@ public final class RedisOperation {
         }
     }
     /**
+     * <p>@Description Hash数据的okey的值自增value </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/8/1 21:08 </p>
+     * @param key 键值
+     * @param okey 对象键值
+     * @param value 自增值，正数为自增，负数为自减
+     * @return java.lang.Object
+     */
+    public static Object hashIncrement(String key, String okey, long value){
+        redisTemplate.opsForHash().increment(key,okey,value);
+        return value;
+    }
+    /**
      * <p>@Description 从左边保存List数据 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/8/1 21:08 </p>
