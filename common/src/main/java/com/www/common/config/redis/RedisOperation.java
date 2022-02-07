@@ -46,6 +46,46 @@ public final class RedisOperation {
         return redisTemplate;
     }
     /**
+     * <p>@Description 获取key的剩余有效时间 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/7 20:58 </p>
+     * @param key key值
+     * @param timeUnit 时间单位
+     * @return long 剩余有效时间
+     */
+    public static long getExpireTime(String key,TimeUnit timeUnit){
+        if(StringUtils.isBlank(key)){
+            return 0L;
+        }
+        return redisTemplate.getExpire(key,timeUnit);
+    }
+    /**
+     * <p>@Description 获取key的剩余有效时间 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/7 20:58 </p>
+     * @param key key值
+     * @return long 剩余有效时间(秒)
+     */
+    public static long getExpireTime(String key){
+        if(StringUtils.isBlank(key)){
+            return 0L;
+        }
+        return redisTemplate.getExpire(key,TimeUnit.SECONDS);
+    }
+    /**
+     * <p>@Description 获取所有模糊匹配的key值 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/7 20:48 </p>
+     * @param key 模糊匹配的key前缀，需包含*
+     * @return java.util.Set<java.lang.String> 所有模糊匹配的key值
+     */
+    public static Set<String> getAllKeys(String key){
+        if(StringUtils.isBlank(key)){
+            return null;
+        }
+        return redisTemplate.keys(key);
+    }
+    /**
      * <p>@Description 设置key失效时间(秒) </p>
      * <p>@Author www </p>
      * <p>@Date 2021/8/1 21:07 </p>
@@ -66,7 +106,7 @@ public final class RedisOperation {
      * @return boolean true设置成功，false设置失败
      */
     public static boolean keyExpire(String key,long timeout, TimeUnit unit){
-        return redisTemplate.expire(key,timeout,TimeUnit.SECONDS);
+        return redisTemplate.expire(key,timeout,unit);
     }
     /**
      * <p>@Description 判断key值是否存在 </p>
@@ -96,7 +136,7 @@ public final class RedisOperation {
      * @return boolean true删除成功，false失败
      */
     public static boolean deleteFuzzyKey(String key){
-        Set<String> keys = redisTemplate.keys(key);
+        Set<String> keys = getAllKeys(key);
         if(CollectionUtils.isNotEmpty(keys)){
             redisTemplate.delete(keys);
             return true;

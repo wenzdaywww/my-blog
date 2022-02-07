@@ -3,7 +3,7 @@ package com.www.myblog.blog.data.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.myblog.blog.data.dto.AuthorDTO;
-import com.www.myblog.blog.data.dto.BlogArticleDTO;
+import com.www.common.pojo.dto.redis.BlogArticleDTO;
 import com.www.myblog.blog.data.entity.BlogArticleEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -24,7 +24,7 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticleEntity> {
      * <p>@Date 2022/1/23 21:37 </p>
      * @param page 分页信息
      * @param queryDTO 查询条件
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.redis.BlogArticleDTO>>
      */
     Page<BlogArticleDTO> findUserBlogList(Page<BlogArticleDTO> page, @Param("query") BlogArticleDTO queryDTO);
     /**
@@ -32,7 +32,7 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticleEntity> {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param page 分页信息
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.redis.BlogArticleDTO>>
      */
     Page<BlogArticleDTO> findTipBlogList(Page<BlogArticleDTO> page);
     /**
@@ -40,7 +40,7 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticleEntity> {
      * <p>@Author www </p>
      * <p>@Date 2022/1/25 21:21 </p>
      * @param blogId 博客ID
-     * @return com.www.myblog.blog.data.dto.BlogArticleDTO
+     * @return com.www.common.pojo.dto.redis.BlogArticleDTO
      */
     BlogArticleDTO findArticle(Long blogId);
     /**
@@ -49,14 +49,14 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticleEntity> {
      * <p>@Date 2022/1/23 21:37 </p>
      * @param page 分页信息
      * @param queryDTO 查询条件
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.redis.BlogArticleDTO>>
      */
     Page<BlogArticleDTO> findAuthorBlogList(Page<BlogArticleDTO> page, @Param("query") BlogArticleDTO queryDTO);
     /**
      * <p>@Description 获取热门博客前10名单 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 19:24 </p>
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.redis.BlogArticleDTO>
      */
     List<BlogArticleDTO> findHotBlogRank();
     /**

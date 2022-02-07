@@ -19,6 +19,8 @@ public class CharConstant {
     public static final String EQUAL = "=";
     /** 逗号 **/
     public static final String COMMA = ",";
+    /** 星号 **/
+    public static final String STAR = "*";
     /** 分号 **/
     public static final String SEMICOLON = ";";
     /** 冒号 **/

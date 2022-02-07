@@ -1,4 +1,4 @@
-package com.www.myblog.blog.data.dto;
+package com.www.common.pojo.dto.redis;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

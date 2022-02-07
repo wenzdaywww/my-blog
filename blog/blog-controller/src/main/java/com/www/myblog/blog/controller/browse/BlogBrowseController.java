@@ -1,6 +1,7 @@
 package com.www.myblog.blog.controller.browse;
 
 import com.www.common.config.oauth2.token.JwtTokenConverter;
+import com.www.common.pojo.dto.redis.BlogArticleDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.*;
 import com.www.myblog.blog.service.browse.IBlogBrowseService;
@@ -28,7 +29,7 @@ public class BlogBrowseController {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param pageNum 页码
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.redis.BlogArticleDTO>>
      */
     @PostMapping("tip-list")
     public ResponseDTO<List<BlogArticleDTO>> findTipBlogList(int pageNum){
@@ -52,7 +53,7 @@ public class BlogBrowseController {
      * <p>@Author www </p>
      * <p>@Date 2022/1/25 21:21 </p>
      * @param blogId 博客ID
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.redis.BlogArticleDTO>
      */
     @GetMapping("article/{bid}")
     public ResponseDTO<BlogArticleDTO> findAriticle(@PathVariable("bid") Long blogId){
@@ -74,7 +75,7 @@ public class BlogBrowseController {
      * <p>@Description 获取热门博客前10名单 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 19:24 </p>
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.redis.BlogArticleDTO>
      */
     @GetMapping("hot-rank")
     public ResponseDTO<List<BlogArticleDTO>> findHotBlogRank(){
@@ -85,7 +86,7 @@ public class BlogBrowseController {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param query 查询条件
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.redis.BlogArticleDTO>>
      */
     @PostMapping("list")
     public ResponseDTO<List<BlogArticleDTO>> findAuthorBlogList(BlogArticleDTO query){

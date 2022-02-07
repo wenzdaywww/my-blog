@@ -14,6 +14,7 @@
         <result column="PRAISE" property="praise" />
         <result column="STATE_CD" property="stateCd" />
         <result column="COMMENT" property="comment" />
+        <result column="COLLECT" property="collect" />
         <result column="UPDATE_TIME" property="updateTime" />
         <result column="CREATE_TIME" property="createTime" />
     </resultMap>

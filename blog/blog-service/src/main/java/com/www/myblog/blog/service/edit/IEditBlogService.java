@@ -1,7 +1,7 @@
 package com.www.myblog.blog.service.edit;
 
 import com.www.common.pojo.dto.response.ResponseDTO;
-import com.www.myblog.blog.data.dto.BlogArticleDTO;
+import com.www.common.pojo.dto.redis.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
 import com.www.myblog.blog.data.dto.TagInfoDTO;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +20,7 @@ public interface IEditBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/2/2 14:54 </p>
      * @param blog 博客信息
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.redis.BlogArticleDTO>
      */
     ResponseDTO<Boolean> updateBlogTagAndGroup(BlogArticleDTO blog);
     /**
@@ -28,7 +28,7 @@ public interface IEditBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/2/2 14:54 </p>
      * @param blogId 博客id
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.redis.BlogArticleDTO>
      */
     ResponseDTO<BlogArticleDTO> findBlogTagAndGroup(Long blogId);
     /**
@@ -51,7 +51,7 @@ public interface IEditBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param query 查询条件
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.redis.BlogArticleDTO>>
      */
     ResponseDTO<List<BlogArticleDTO>> findBlogList(BlogArticleDTO query);
     /**

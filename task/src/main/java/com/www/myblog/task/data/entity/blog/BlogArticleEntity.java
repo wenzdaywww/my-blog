@@ -72,6 +72,11 @@ public class BlogArticleEntity implements Serializable {
     @TableField("COMMENT")
     private Long comment;
     /**
+    * 博客收藏数
+    */
+    @TableField("COLLECT")
+    private Long collect;
+    /**
     * 更新时间
     */
     @TableField("UPDATE_TIME")

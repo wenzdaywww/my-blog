@@ -9,7 +9,7 @@ import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.constants.CommenConstant;
 import com.www.myblog.blog.data.constants.RedisKeyConstant;
 import com.www.myblog.blog.data.dto.AuthorDTO;
-import com.www.myblog.blog.data.dto.BlogArticleDTO;
+import com.www.common.pojo.dto.redis.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.CollectGroupDTO;
 import com.www.myblog.blog.data.dto.CommentDTO;
 import com.www.myblog.blog.data.entity.*;
@@ -99,13 +99,13 @@ public class UserBlogServiceImpl implements IUserBlogService {
             blogPraiseService.createEntity(praiseEntity);
             response.setResponse(true);
             //更新博客点赞量
-            redisService.updateBlogNum(CommenConstant.PRAISE, RedisKeyConstant.ARTICLE_PRAISE_LOCK,blogId,true);
+            redisService.updateBlogNum(CommenConstant.PRAISE, blogId,true);
             return response;
         }else {//取消点赞
             blogPraiseService.deleteEntity(praiseEntity.getBpId());
             response.setResponse(false);
             //更新博客点赞量
-            redisService.updateBlogNum(CommenConstant.PRAISE, RedisKeyConstant.ARTICLE_PRAISE_LOCK,blogId,false);
+            redisService.updateBlogNum(CommenConstant.PRAISE, blogId,false);
             return response;
         }
     }
@@ -152,7 +152,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 19:08 </p>
      * @param query 查询条件就
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>> 博客收藏列表
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.redis.BlogArticleDTO>> 博客收藏列表
      */
     @Override
     public ResponseDTO<List<BlogArticleDTO>> findCollectList(CollectGroupDTO query) {
@@ -331,11 +331,11 @@ public class UserBlogServiceImpl implements IUserBlogService {
             blogCollectService.createBlogCollectEntity(collectEntity);
             articleDTO.setCollection(true);//已收藏
             //更新博客收藏量
-            redisService.updateBlogNum(CommenConstant.COLLECT, RedisKeyConstant.ARTICLE_COLLECT_LOCK,blogId,true);
+            redisService.updateBlogNum(CommenConstant.COLLECT, blogId,true);
         }else {//取消收藏
             articleDTO.setCollection(false);//未收藏
             //更新博客收藏量
-            redisService.updateBlogNum(CommenConstant.COLLECT,RedisKeyConstant.ARTICLE_COLLECT_LOCK,blogId,false);
+            redisService.updateBlogNum(CommenConstant.COLLECT,blogId,false);
             blogCollectService.deleteBlogCollectEntity(collectEntity.getCollectId());
         }
         response.setResponse(ResponseDTO.RespEnum.SUCCESS,articleDTO);
@@ -388,7 +388,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
         commentEntity.setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
         blogCommentService.createEntity(commentEntity);
         //更新博客评论数量
-        redisService.updateBlogNum(CommenConstant.COMMENT, RedisKeyConstant.ARTICLE_COMMENT_LOCK,blogId,true);
+        redisService.updateBlogNum(CommenConstant.COMMENT, blogId,true);
         //返回评论信息
         CommentDTO commentDTO = new CommentDTO();
         //查询用户信息

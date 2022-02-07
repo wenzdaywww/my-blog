@@ -1,4 +1,4 @@
-package com.www.myblog.blog.data.constants;
+package com.www.myblog.task.data.constants;
 
 /**
  * <p>@Description redis的key前缀常量

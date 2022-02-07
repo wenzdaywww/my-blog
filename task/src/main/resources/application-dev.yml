@@ -30,7 +30,8 @@ com:
     common:
       my-task:
         blog:
-          article: "* 1/30 * * * ?" #半小时触发
+          enable: true
+          article: "0 0/3 * * * ?" #半小时触发
       multi-database:
         #blog数据库
         blog:

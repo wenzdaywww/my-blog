@@ -2,8 +2,10 @@ package com.www.myblog.task.scheduled;
 
 import com.www.common.config.filter.TraceIdFilter;
 import com.www.common.utils.UUIDUtils;
+import com.www.myblog.task.service.IRedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -39,8 +41,11 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@ConditionalOnProperty(prefix = "com.www.common.my-task",name = "blog")
+@ConditionalOnProperty(prefix = "com.www.common.my-task.blog",name = "enable")
 public class BlogApplicationTask {
+    @Autowired
+    private IRedisService redisService;
+
     /**
      * <p>@Description 构造方法 </p>
      * <p>@Author www </p>
@@ -59,7 +64,8 @@ public class BlogApplicationTask {
     @Scheduled(cron = "${com.www.common.my-task.blog.article}")
     public void updateBlogNum() {
         MDC.put(TraceIdFilter.TRACE_ID, UUIDUtils.getTraceId());
-        log.info("定时更新博客统计量数据");
+        log.info("开始定时更新博客统计量数据");
+        redisService.updateBlogNum();
         MDC.remove(TraceIdFilter.TRACE_ID);
     }
 }

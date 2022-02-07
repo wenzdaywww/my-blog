@@ -2,6 +2,7 @@ package com.www.myblog.task;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @EnableScheduling //开启定时任务
 @SpringBootApplication
+@ComponentScan(basePackages = {"com.www.common","com.www.myblog.task"}) //配置要扫描的包路径
 public class TaskApplication {
     /**
      * <p>@Description 启动方法 </p>

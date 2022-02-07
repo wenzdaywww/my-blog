@@ -4,7 +4,7 @@ import com.www.common.config.redis.RedisOperation;
 import com.www.common.pojo.constant.RedisCommonContant;
 import com.www.common.pojo.dto.security.ScopeDTO;
 import com.www.myblog.blog.data.constants.RedisKeyConstant;
-import com.www.myblog.blog.data.dto.BlogArticleDTO;
+import com.www.common.pojo.dto.redis.BlogArticleDTO;
 import com.www.myblog.blog.service.redis.IRedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,15 +35,14 @@ public class RedisServiceImpl implements IRedisService {
      * <p>@Author www </p>
      * <p>@Date 2022/2/5 11:59 </p>
      * @param name 更新的名称。如收藏量，点赞量，评论数，浏览量
-     * @param lockKey 分布式锁key
      * @param blogId 博客id
      * @param isAdd 是否增加，true增加，false减少
      * @return boolean true更新成功，false失败
      */
     @Override
-    public boolean updateBlogNum(String name,String lockKey,Long blogId, boolean isAdd) {
+    public boolean updateBlogNum(String name,Long blogId, boolean isAdd) {
         String key = RedisKeyConstant.BLOG_ARTICLE + blogId;//博客文章的key
-        lockKey += blogId;//分布式锁key
+        String lockKey = RedisKeyConstant.BLOG_ARTICLE_LOCK + blogId;//分布式锁key
         String value = UUID.randomUUID().toString();
         long stepVal = isAdd ? 1 : -1;//判断是自增还是自减
         boolean isOk = true;//是否更新成功
@@ -88,7 +87,7 @@ public class RedisServiceImpl implements IRedisService {
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 23:18 </p>
      * @param blogId 博客id
-     * @return com.www.myblog.blog.data.dto.BlogArticleDTO 博客信息
+     * @return com.www.common.pojo.dto.redis.BlogArticleDTO 博客信息
      */
     @Override
     public BlogArticleDTO getArticleInfo(Long blogId) {

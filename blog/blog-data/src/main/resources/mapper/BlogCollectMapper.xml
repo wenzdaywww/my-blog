@@ -12,7 +12,7 @@
     <result column="CREATE_TIME" property="createTime" />
   </resultMap>
   <!--  查询用户的博客收藏列表-->
-  <select id="findCollectList" resultType="com.www.myblog.blog.data.dto.BlogArticleDTO">
+  <select id="findCollectList" resultType="com.www.common.pojo.dto.redis.BlogArticleDTO">
     SELECT A.BLOG_ID,
            A.TITLE,
            A.SUMMARY,

@@ -1,7 +1,7 @@
 package com.www.myblog.blog.service.redis;
 
 import com.www.common.pojo.dto.security.ScopeDTO;
-import com.www.myblog.blog.data.dto.BlogArticleDTO;
+import com.www.common.pojo.dto.redis.BlogArticleDTO;
 
 import java.util.List;
 
@@ -17,12 +17,11 @@ public interface IRedisService {
      * <p>@Author www </p>
      * <p>@Date 2022/2/5 11:59 </p>
      * @param name 更新的名称。如收藏量，点赞量，评论数，浏览量
-     * @param lockKey 分布式锁key
      * @param blogId 博客id
      * @param isAdd 是否增加，true增加，false减少
      * @return boolean true更新成功，false失败
      */
-    boolean updateBlogNum(String name,String lockKey,Long blogId, boolean isAdd);
+    boolean updateBlogNum(String name,Long blogId, boolean isAdd);
     /**
      * <p>@Description 查询当前资源服务器的请求路径允许的scope范围 </p>
      * <p>@Author www </p>
@@ -35,7 +34,7 @@ public interface IRedisService {
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 23:18 </p>
      * @param blogId 博客id
-     * @return com.www.myblog.blog.data.dto.BlogArticleDTO 博客信息
+     * @return com.www.common.pojo.dto.redis.BlogArticleDTO 博客信息
      */
     BlogArticleDTO getArticleInfo(Long blogId);
     /**

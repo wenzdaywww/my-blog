@@ -14,11 +14,12 @@
         <result column="PRAISE" property="praise" />
         <result column="STATE_CD" property="stateCd" />
         <result column="COMMENT" property="comment" />
+        <result column="COLLECT" property="collect" />
         <result column="UPDATE_TIME" property="updateTime" />
         <result column="CREATE_TIME" property="createTime" />
     </resultMap>
     <!--    获取用户博客列表-->
-    <select id="findUserBlogList" resultType="com.www.myblog.blog.data.dto.BlogArticleDTO">
+    <select id="findUserBlogList" resultType="com.www.common.pojo.dto.redis.BlogArticleDTO">
         SELECT A.BLOG_ID,
         A.TITLE,
         A.SUMMARY,
@@ -28,11 +29,10 @@
         A.PRAISE,
         BGI.GROUP_NAME,
         BTI.TAG_NAME,
-        IFNULL( CO.COLLECT, 0 ) COLLECT,
+        A.COLLECT,
         A.CREATE_TIME,
         A.UPDATE_TIME
-        FROM (SELECT B.BLOG_ID,B.TITLE,B.SUMMARY,B.COVER_IMG,B.BROWSE,B.COMMENT,B.PRAISE,B.UPDATE_TIME,B.CREATE_TIME FROM BLOG_ARTICLE B WHERE B.USER_ID = #{query.userId} AND B.STATE_CD = '1') A
-        LEFT JOIN (SELECT BC.BLOG_ID,COUNT( BC.COLLECT_ID ) COLLECT FROM BLOG_COLLECT BC GROUP BY BC.BLOG_ID) CO ON CO.BLOG_ID = A.BLOG_ID
+        FROM (SELECT B.BLOG_ID,B.TITLE,B.SUMMARY,B.COVER_IMG,B.BROWSE,B.COMMENT,B.COLLECT,B.PRAISE,B.UPDATE_TIME,B.CREATE_TIME FROM BLOG_ARTICLE B WHERE B.USER_ID = #{query.userId} AND B.STATE_CD = '1') A
         LEFT JOIN (SELECT BG.BLOG_ID,GI.GROUP_NAME FROM BLOG_GROUP BG,GROUP_INFO GI WHERE BG.GROUP_ID=GI.GROUP_ID) BGI ON BGI.BLOG_ID = A.BLOG_ID
         LEFT JOIN (SELECT BT.BLOG_ID,GROUP_CONCAT( TI.TAG_NAME SEPARATOR ',' ) TAG_NAME FROM TAG_INFO TI,BLOG_TAG BT WHERE TI.TAG_ID = BT.TAG_ID  GROUP BY BT.BLOG_ID) BTI ON BTI.BLOG_ID=A.BLOG_ID
         <where>
@@ -50,8 +50,8 @@
             </if>
         </where>
     </select>
-    <!--    获取推荐博客列表-->
-    <select id="findTipBlogList" resultType="com.www.myblog.blog.data.dto.BlogArticleDTO">
+    <!-- 获取推荐博客列表-->
+    <select id="findTipBlogList" resultType="com.www.common.pojo.dto.redis.BlogArticleDTO">
         SELECT A.BLOG_ID,
                A.TITLE,
                A.SUMMARY,
@@ -59,14 +59,13 @@
                A.BROWSE,
                A.COMMENT,
                A.PRAISE,
-               IFNULL( CO.COLLECT, 0 ) COLLECT,
+               A.COLLECT,
                DATE_FORMAT(A.CREATE_TIME,'%Y-%m-%d') CREATE_DATE
-        FROM (SELECT B.BLOG_ID,B.TITLE,B.SUMMARY,B.COVER_IMG,B.BROWSE,B.COMMENT,B.PRAISE,B.CREATE_TIME FROM BLOG_ARTICLE B WHERE B.STATE_CD = '1') A
-           LEFT JOIN (SELECT BC.BLOG_ID,COUNT( BC.COLLECT_ID ) COLLECT FROM BLOG_COLLECT BC GROUP BY BC.BLOG_ID) CO ON CO.BLOG_ID = A.BLOG_ID
+        FROM BLOG_ARTICLE A WHERE A.STATE_CD = '1'
         ORDER BY A.PRAISE DESC
     </select>
-    <!--    根据博客ID查询博客信息-->
-    <select id="findArticle" resultType="com.www.myblog.blog.data.dto.BlogArticleDTO">
+    <!-- 根据博客ID查询博客信息-->
+    <select id="findArticle" resultType="com.www.common.pojo.dto.redis.BlogArticleDTO">
         SELECT B.BLOG_ID,
                B.USER_ID,
                B.TITLE,
@@ -74,6 +73,7 @@
                B.BROWSE,
                B.PRAISE,
                B.COMMENT,
+               B.COLLECT,
                GR.GROUP_ID,
                GR.GROUP_NAME,
                B.CREATE_TIME
@@ -81,8 +81,8 @@
         LEFT JOIN (SELECT BG.BLOG_ID,G.GROUP_ID,G.GROUP_NAME FROM BLOG_GROUP BG,GROUP_INFO G WHERE G.GROUP_ID=BG.GROUP_ID) GR ON GR.BLOG_ID = B.BLOG_ID
         WHERE B.BLOG_ID = #{blogId}
     </select>
-    <!--    获取博主博客列表-->
-    <select id="findAuthorBlogList" resultType="com.www.myblog.blog.data.dto.BlogArticleDTO">
+    <!-- 获取博主博客列表-->
+    <select id="findAuthorBlogList" resultType="com.www.common.pojo.dto.redis.BlogArticleDTO">
         SELECT A.BLOG_ID,
                A.TITLE,
                A.SUMMARY,
@@ -90,11 +90,11 @@
                A.BROWSE,
                A.COMMENT,
                A.PRAISE,
-               IFNULL( CO.COLLECT, 0 ) COLLECT,
+               A.COLLECT,
                DATE_FORMAT(A.CREATE_TIME,'%Y-%m-%d') CREATE_DATE
-        FROM (SELECT B.BLOG_ID,B.TITLE,B.SUMMARY,B.COVER_IMG,B.BROWSE,B.COMMENT,B.PRAISE,B.UPDATE_TIME,B.CREATE_TIME FROM BLOG_ARTICLE B WHERE B.USER_ID = #{query.userId} AND B.STATE_CD = '1') A
-        LEFT JOIN (SELECT BC.BLOG_ID,COUNT( BC.COLLECT_ID ) COLLECT FROM BLOG_COLLECT BC GROUP BY BC.BLOG_ID) CO ON CO.BLOG_ID = A.BLOG_ID
+        FROM BLOG_ARTICLE A
         <where>
+            A.USER_ID = #{query.userId} AND A.STATE_CD = '1'
             <if test="query.tagId != null and query.tagId > 0">
                AND EXISTS ( SELECT 1 FROM BLOG_TAG C WHERE C.USER_ID = #{query.userId} AND C.TAG_ID = #{query.tagId} AND C.BLOG_ID = A.BLOG_ID )
             </if>
@@ -110,7 +110,7 @@
         </where>
     </select>
     <!-- 获取热门博客前10名单-->
-    <select id="findHotBlogRank" resultType="com.www.myblog.blog.data.dto.BlogArticleDTO">
+    <select id="findHotBlogRank" resultType="com.www.common.pojo.dto.redis.BlogArticleDTO">
         SELECT B.BLOG_ID,B.TITLE FROM BLOG_ARTICLE B WHERE B.STATE_CD = '1' ORDER BY B.BROWSE DESC,B.BLOG_ID LIMIT 10
     </select>
     <!--  根据博主ID查询博主的相关统计信息-->
@@ -119,13 +119,12 @@
                IFNULL(G.BLOG,0) BLOG,
                IFNULL(G.PRAISE,0) PRAISE,
                IFNULL(G.COMMENT,0) COMMENT,
-               IFNULL(D.COLLECTS,0) COLLECT,
+               IFNULL(G.COLLECT,0) COLLECT,
                IFNULL(A.FANS,0) FANS,
                IFNULL(B.FOLLOW,0) FOLLOW
         FROM ( SELECT #{userId} USER_ID FROM DUAL ) U
           LEFT JOIN (SELECT B.USER_ID, COUNT( B.BLOG_ID ) BLOG, SUM( B.PRAISE ) PRAISE,
-                     SUM( B.COMMENT ) COMMENT FROM BLOG_ARTICLE B  WHERE B.USER_ID = #{userId} AND B.STATE_CD = '1' GROUP BY B.USER_ID) g ON g.USER_ID = U.USER_ID
-          LEFT JOIN ( SELECT C.USER_ID, COUNT( C.COLLECT_ID ) COLLECTS FROM BLOG_COLLECT C WHERE C.USER_ID = #{userId} GROUP BY C.USER_ID ) D ON D.USER_ID = u.USER_ID
+                     SUM( B.COMMENT ) COMMENT,SUM( B.COLLECT ) COLLECT FROM BLOG_ARTICLE B  WHERE B.USER_ID = #{userId} AND B.STATE_CD = '1' GROUP BY B.USER_ID) G ON g.USER_ID = U.USER_ID
           LEFT JOIN ( SELECT L.USER_ID, COUNT( L.UF_ID ) FANS FROM USER_FANS L WHERE L.USER_ID = #{userId} GROUP BY L.USER_ID ) A ON A.USER_ID = U.USER_ID
           LEFT JOIN ( SELECT F.FANS_ID, COUNT( F.UF_ID ) FOLLOW FROM USER_FANS F WHERE F.FANS_ID = #{userId} GROUP BY F.USER_ID ) B ON B.FANS_ID = U.USER_ID
     </select>

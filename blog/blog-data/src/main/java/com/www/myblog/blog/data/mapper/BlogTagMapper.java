@@ -1,7 +1,7 @@
 package com.www.myblog.blog.data.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.www.myblog.blog.data.dto.BlogTagDTO;
+import com.www.common.pojo.dto.redis.BlogTagDTO;
 import com.www.myblog.blog.data.dto.TagInfoDTO;
 import com.www.myblog.blog.data.entity.BlogTagEntity;
 import org.apache.ibatis.annotations.Mapper;

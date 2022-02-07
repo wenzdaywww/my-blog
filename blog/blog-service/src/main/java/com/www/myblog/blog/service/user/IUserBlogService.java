@@ -2,7 +2,7 @@ package com.www.myblog.blog.service.user;
 
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.AuthorDTO;
-import com.www.myblog.blog.data.dto.BlogArticleDTO;
+import com.www.common.pojo.dto.redis.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.CollectGroupDTO;
 import com.www.myblog.blog.data.dto.CommentDTO;
 
@@ -39,7 +39,7 @@ public interface IUserBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 19:08 </p>
      * @param query 查询条件就
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>> 博客收藏列表
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.redis.BlogArticleDTO>> 博客收藏列表
      */
     ResponseDTO<List<BlogArticleDTO>> findCollectList(CollectGroupDTO query);
     /**

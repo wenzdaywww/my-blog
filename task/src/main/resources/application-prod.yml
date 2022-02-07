@@ -31,7 +31,7 @@ com:
     common:
       my-task:
         blog:
-          article: "0 0 0 * * ?" #0点整触发
+          article: "0 0 1 * * ?" #1点整触发
       multi-database:
         #blog数据库
         blog:

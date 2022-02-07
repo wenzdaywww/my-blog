@@ -1,7 +1,11 @@
 package com.www.myblog.blog.service.browse;
 
+import com.www.common.pojo.dto.redis.BlogArticleDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
-import com.www.myblog.blog.data.dto.*;
+import com.www.myblog.blog.data.dto.AuthorDTO;
+import com.www.myblog.blog.data.dto.BlogGroupDTO;
+import com.www.myblog.blog.data.dto.CommentDTO;
+import com.www.myblog.blog.data.dto.TagInfoDTO;
 
 import java.util.List;
 
@@ -17,7 +21,7 @@ public interface IBlogBrowseService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param pageNum 页码
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.redis.BlogArticleDTO>>
      */
     ResponseDTO<List<BlogArticleDTO>> findTipBlogList(int pageNum);
     /**
@@ -36,7 +40,7 @@ public interface IBlogBrowseService {
      * <p>@Date 2022/1/25 21:21 </p>
      * @param userId 当前登录用户ID
      * @param blogId 博客ID
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.redis.BlogArticleDTO>
      */
     ResponseDTO<BlogArticleDTO> findAriticle(String userId,Long blogId);
     /**
@@ -62,7 +66,7 @@ public interface IBlogBrowseService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param queryDTO 查询条件
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogArticleDTO>>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.redis.BlogArticleDTO>>
      */
     ResponseDTO<List<BlogArticleDTO>> findAuthorBlogList(BlogArticleDTO queryDTO);
     /**
@@ -79,7 +83,7 @@ public interface IBlogBrowseService {
      * <p>@Description 获取热门博客前10名单 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 19:24 </p>
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.BlogArticleDTO>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.redis.BlogArticleDTO>
      */
     ResponseDTO<List<BlogArticleDTO>> findHotBlogRank();
 }
