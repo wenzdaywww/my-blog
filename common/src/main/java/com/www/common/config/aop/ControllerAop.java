@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.www.common.pojo.constant.CharConstant;
 import com.www.common.pojo.dto.response.ResponseDTO;
+import com.www.common.utils.HttpUtils;
 import com.www.common.utils.NumberUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -20,8 +21,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
@@ -93,8 +92,8 @@ public class ControllerAop {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         //获取当前请求
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = attributes.getRequest();
+        HttpServletRequest request = HttpUtils.getRequest();
+        String traceId = HttpUtils.getTraceId();
         Logger log = LoggerFactory.getLogger(pjd.getSignature().getClass().getName());// 初始化日志打印
         //获取方法全量名
         String controllerMethod = pjd.getSignature().toString();
@@ -102,6 +101,9 @@ public class ControllerAop {
         String requestText = this.handleRequestParamToJson(pjd);
         try {
             Object result = pjd.proceed();// 执行目标方法
+            if(result != null && result instanceof ResponseDTO){
+                ((ResponseDTO)result).setTraceId(traceId);
+            }
             stopWatch.stop();
             log.info("请求:{} 调用{}方法执行耗时:{}秒。请求报文:{}，响应报文:{}",request.getRequestURI(),
                     controllerMethod, NumberUtils.format3(stopWatch.getTotalTimeSeconds()),requestText,this.handleResultToJson(result));
@@ -148,17 +150,17 @@ public class ControllerAop {
     private Map<String,Object> handleResultMap(Map<String,Object> resultMap){
         for (String key : resultMap.keySet()){
             Object value = resultMap.get(key);
-            if(value instanceof JSONArray){
+            if(value != null && value instanceof JSONArray){
                 JSONArray arr = (JSONArray)value;
                 List<Object> list = arr.subList(0,arr.size());
                 for (Object obj : list){
-                    if(obj instanceof JSONObject){
+                    if(obj != null && obj instanceof JSONObject){
                         this.handleResultMap(((JSONObject) obj).getInnerMap());
                     }
                 }
-            }else if(value instanceof JSONObject){
+            }else if(value != null && value instanceof JSONObject){
                 this.handleResultMap(((JSONObject) value).getInnerMap());
-            }else if(value instanceof String) {
+            }else if(value != null && value instanceof String) {
                 value = this.handleBigDataReplace((String) value);
                 resultMap.put(key,value);
             }
@@ -183,7 +185,7 @@ public class ControllerAop {
         String requestText = CharConstant.LEFT_BRACE;
         for (int i = 0; i < paramName.length && i < paramValue.length && i < paramType.length;  i++) {
             String value = "";
-            if(paramValue[i] instanceof  MultipartFile){
+            if(paramValue[i] != null && paramValue[i] instanceof  MultipartFile){
                 value = paramValue[i] != null ? ((MultipartFile) paramValue[i]).getOriginalFilename() : CharConstant.EMPTY;
 
             }else {

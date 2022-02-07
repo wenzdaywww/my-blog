@@ -3,6 +3,7 @@ package com.www.common.config.feign;
 import com.www.common.config.filter.TraceIdFilter;
 import com.www.common.config.oauth2.token.Oauth2TokenExtractor;
 import com.www.common.pojo.constant.CharConstant;
+import com.www.common.utils.HttpUtils;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.extern.slf4j.Slf4j;
@@ -41,14 +42,13 @@ public class FeignConfig{
             @Override
             public void apply(RequestTemplate requestTemplate) {
                 // 开启hystrix后RequestContextHolder.getRequestAttributes()=null,需要自定义hystrix策略
-                ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-                if(attributes == null){
-                    log.error("请求ServletRequestAttributes为空");
+                HttpServletRequest request = HttpUtils.getRequest();
+                if(request == null){
+                    log.error("请求HttpServletRequest为空");
                     return;
                 }
-                HttpServletRequest request = attributes.getRequest();
                 //转发日志全局跟踪号
-                requestTemplate.header(TraceIdFilter.TRACE_ID, request.getHeader(TraceIdFilter.TRACE_ID));
+                requestTemplate.header(TraceIdFilter.TRACE_ID, HttpUtils.getTraceId());
                 Cookie[] cookies = request.getCookies();
                 if(cookies != null){
                     for (int i = 0; i < cookies.length; i++){

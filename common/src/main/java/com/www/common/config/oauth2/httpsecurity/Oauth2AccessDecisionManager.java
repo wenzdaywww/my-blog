@@ -47,7 +47,7 @@ public class Oauth2AccessDecisionManager implements AccessDecisionManager {
      */
     @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
-        if(authentication instanceof OAuth2Authentication){
+        if(authentication != null && authentication instanceof OAuth2Authentication){
             OAuth2Authentication oAuth2Authentication = (OAuth2Authentication) authentication;
             Iterator<ConfigAttribute> iterator = collection.iterator();
             while (iterator.hasNext()) {
@@ -67,7 +67,7 @@ public class Oauth2AccessDecisionManager implements AccessDecisionManager {
             //用户拥有的角色统一在方法上使用@PreAuthorize注解校验
             log.info("3、当前URL访问scope范围验证-无访问范围权限");
             throw new AccessDeniedException("无访问范围权限");
-        }else if(authentication instanceof AnonymousAuthenticationToken){
+        }else if(authentication != null && authentication instanceof AnonymousAuthenticationToken){
             log.info("3、当前URL访问scope范围验证-匿名无访问范围权限");
             throw new AccessDeniedException("匿名无访问范围权限");
         }

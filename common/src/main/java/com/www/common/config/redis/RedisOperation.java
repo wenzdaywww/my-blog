@@ -404,7 +404,7 @@ public final class RedisOperation {
     private static void setObjValue(Object obj,Field field,Object resultObj){
         try {
             //由于Long数据保存后取出为Integer，所以需要强转为Long
-            if(obj instanceof Integer && (field.getGenericType().toString().equals("class java.lang.Long"))){
+            if(obj != null && obj instanceof Integer && (field.getGenericType().toString().equals("class java.lang.Long"))){
                 field.set(resultObj,((Integer)obj).longValue());
             }else {
                 field.set(resultObj,obj);

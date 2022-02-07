@@ -19,6 +19,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class ResponseDTO<T> implements Serializable {
     private static final long serialVersionUID = 1L;
+    /** 请求全局跟踪号 **/
+    private String traceId;
     /** 响应码 **/
     private Integer code;
     /** 当前页数 **/

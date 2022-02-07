@@ -47,7 +47,9 @@ public class LoginFailureHandler implements AuthenticationFailureHandler  {
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         log.info("3、security登录认证失败处理");
         String msg = "登录认证失败";
-        if (exception instanceof LockedException) {
+        if(exception == null){
+            msg = "未知错误!";
+        }else if (exception instanceof LockedException) {
             msg = "账户被锁定，请联系管理员!";
         } else if (exception instanceof CredentialsExpiredException) {
             msg = "密码过期，请联系管理员!";
