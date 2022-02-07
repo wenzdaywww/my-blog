@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.www.common.pojo.constant.CharConstant;
 import com.www.common.pojo.dto.response.ResponseDTO;
+import com.www.common.utils.NumberUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -27,8 +28,6 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.math.RoundingMode;
-import java.text.NumberFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -51,8 +50,6 @@ public class ControllerAop {
     public static final String YML_REPLCACE_LENGTH = "com.www.common.ctl-aop.length";
     /** 请求或返回数据中存在大数据字段时替换的字符串 **/
     private String replaceContent = "<longText>";
-    /** 数字格式 **/
-    private NumberFormat numberFormat = NumberFormat.getNumberInstance();
     /** 是否超长字符串由 **/
     private boolean isReplace = true;
     /** 是否超长字符串由 **/
@@ -74,10 +71,6 @@ public class ControllerAop {
         replaceContent = StringUtils.isNotBlank(contentPro) ? contentPro : replaceContent;
         isReplace = isReplacePro != null ? isReplacePro : isReplace;
         length = lengthPro != null ? lengthPro : length;
-        // 保留两位小数
-        numberFormat.setMaximumFractionDigits(3);
-        // 如果不需要四舍五入，可以使用RoundingMode.DOWN
-        numberFormat.setRoundingMode(RoundingMode.UP);
         log.info("开启controller层的AOP日志拦截");
     }
     /**
@@ -111,7 +104,7 @@ public class ControllerAop {
             Object result = pjd.proceed();// 执行目标方法
             stopWatch.stop();
             log.info("请求:{} 调用{}方法执行耗时:{}秒。请求报文:{}，响应报文:{}",request.getRequestURI(),
-                    controllerMethod,numberFormat.format(stopWatch.getTotalTimeSeconds()),requestText,this.handleResultToJson(result));
+                    controllerMethod, NumberUtils.format3(stopWatch.getTotalTimeSeconds()),requestText,this.handleResultToJson(result));
             return result;
         }catch (Exception e){
             log.error("请求:{} 调用{}方法发生异常。请求报文:{}，异常信息:",request.getRequestURI(), controllerMethod,requestText,e);

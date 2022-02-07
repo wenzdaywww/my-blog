@@ -93,7 +93,7 @@ public class RedisServiceImpl implements IRedisService {
                 }
             }
             stopWatch.stop();
-            log.info("更新博客统计量数据耗时：{}秒", NumberUtils.format2(stopWatch.getTotalTimeSeconds()));
+            log.info("更新博客统计量数据耗时：{}秒", NumberUtils.format3(stopWatch.getTotalTimeSeconds()));
         }
     }
 }
