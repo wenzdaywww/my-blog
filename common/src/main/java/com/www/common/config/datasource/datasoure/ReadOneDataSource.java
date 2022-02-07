@@ -1,7 +1,7 @@
-package com.www.common.config.druid.datasoure;
+package com.www.common.config.datasource.datasoure;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.www.common.config.druid.interfaces.IReadDataSoure;
+import com.www.common.config.datasource.interfaces.IReadDataSoure;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -17,9 +17,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @ConditionalOnClass(DruidDataSource.class)
-@ConfigurationProperties(prefix = "com.www.common.druid.read-one")
-//com.www.common.druid.enable=true才开启多数据源配置
-@ConditionalOnProperty(prefix = "com.www.common.druid.read-one",name = {"url"})
+@ConfigurationProperties(prefix = "com.www.common.datasource.read-one")
+//com.www.common.datasource.enable=true才开启多数据源配置
+@ConditionalOnProperty(prefix = "com.www.common.datasource.read-one",name = {"url"})
 public class ReadOneDataSource extends DruidDataSource implements IReadDataSoure {
     /**
      * <p>@Description 构造方法 </p>

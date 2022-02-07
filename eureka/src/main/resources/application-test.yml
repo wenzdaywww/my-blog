@@ -24,4 +24,4 @@ eureka:
     registry-fetch-interval-seconds: 10 #指示从eureka服务器获取注册表信息的频率（s）
     instance-info-replication-interval-seconds: 10 #更新实例信息的变化到Eureka服务端的间隔时间，（s）
     service-url:
-      defaultZone: http://www:www362412@192.168.0.130:8002/eureka/,http://www:www362412@192.168.0.131:8002/eureka/,http://www:www362412@192.168.0.132:8002/eureka/ #注册中心地址
+      defaultZone: http://www:www362412@192.168.1.130:8002/eureka/,http://www:www362412@192.168.1.131:8002/eureka/,http://www:www362412@192.168.1.132:8002/eureka/ #注册中心地址

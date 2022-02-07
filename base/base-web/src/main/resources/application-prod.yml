@@ -44,7 +44,7 @@ com:
       oauth2:
         enable: true #开启统一认证资源服务方配置
         signing-key: wenzday #JWT令牌签名
-      druid:
+      datasource:
         enable: true #开启数据源配置
         #写数据库
         write:

@@ -20,13 +20,13 @@ spring:
     #sentile配置
     sentinel:
       master: mymaster
-      nodes: 192.168.0.130:26379,192.168.0.131:26379,192.168.0.132:26379
+      nodes: 192.168.1.130:26379,192.168.1.131:26379,192.168.1.132:26379
 #eureka配置
 eureka:
   client:
     service-url:
       #配置eureka集群地址
-      defaultZone : http://www:www362412@192.168.0.130:8002/eureka/,http://www:www362412@192.168.0.131:8002/eureka/,http://www:www362412@192.168.0.132:8002/eureka/ #注册中心地址
+      defaultZone : http://www:www362412@192.168.1.130:8002/eureka/,http://www:www362412@192.168.1.131:8002/eureka/,http://www:www362412@192.168.1.132:8002/eureka/ #注册中心地址
   instance:
     instance-id: ${spring.application.name}:${eureka.instance.ip-address}:${server.port} #该实例注册到服务中心的唯一ID
     prefer-ip-address: true #该实例，相较于hostname是否优先使用IP
@@ -46,11 +46,11 @@ com:
       oauth2:
         enable: true #开启统一认证资源服务方配置
         signing-key: wenzday #JWT令牌签名
-      druid:
+      datasource:
         enable: true #开启数据源配置
         #写数据库
         write:
-          url: jdbc:mysql://192.168.0.130:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
+          url: jdbc:mysql://192.168.1.130:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
           driver-class-name: com.mysql.cj.jdbc.Driver
           username: admin
           password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
@@ -73,7 +73,7 @@ com:
           connect-properties: druid.stat.mergeSql=true,druid.stat.slowSqlMillis=500
         #读数据库
         read-one:
-          url: jdbc:mysql://192.168.0.131:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
+          url: jdbc:mysql://192.168.1.131:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
           driver-class-name: com.mysql.cj.jdbc.Driver
           username: select
           password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
@@ -96,7 +96,7 @@ com:
           connect-properties: druid.stat.mergeSql=true,druid.stat.slowSqlMillis=500
         #读数据库
         read-two:
-          url: jdbc:mysql://192.168.0.132:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
+          url: jdbc:mysql://192.168.1.132:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
           driver-class-name: com.mysql.cj.jdbc.Driver
           username: select
           password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)

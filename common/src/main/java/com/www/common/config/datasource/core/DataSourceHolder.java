@@ -1,4 +1,4 @@
-package com.www.common.config.druid.core;
+package com.www.common.config.datasource.core;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,7 +15,7 @@ import java.util.Random;
  * <p>@Date 2021/8/1 20:38 </p>
  */
 @Slf4j
-public class DataBaseHolder {
+public class DataSourceHolder {
     /** 随机数 **/
     private static Random random = new Random();
     /** 数据源线程局部变量 **/
@@ -26,11 +26,11 @@ public class DataBaseHolder {
      * <p>@Date 2021/8/1 20:39 </p>
      * @return void
      */
-    public static void setWriteDataBaseType(){
+    public synchronized static void setWriteDataSourceType(){
         //随机获取其中一个写权限的数据源
-        if(MultipleDataSourceConfig.getWriteNum() != 0){
-            int index = random.nextInt(MultipleDataSourceConfig.getWriteNum());
-            contextHolder.set(MultipleDataSourceConfig.WRITE_DATA_SOURCE_PREFIX + index);
+        if(MultiDataSourceConfig.getWriteNum() != 0){
+            int index = random.nextInt(MultiDataSourceConfig.getWriteNum());
+            contextHolder.set(MultiDataSourceConfig.WRITE_DATA_SOURCE_PREFIX + index);
         }
     }
     /**
@@ -39,12 +39,12 @@ public class DataBaseHolder {
      * <p>@Date 2021/8/1 20:39 </p>
      * @return void
      */
-    public static void setReadDataBaseType(){
+    public synchronized static void setReadDataSourceType(){
         //有配置读权限数据源则从中随机获取
-        if(MultipleDataSourceConfig.getReadNum() != 0){
+        if(MultiDataSourceConfig.getReadNum() != 0){
             //随机获取其中一个读权限的数据源
-            int index = random.nextInt(MultipleDataSourceConfig.getReadNum());
-            contextHolder.set(MultipleDataSourceConfig.READ_DATA_SOURCE_PREFIX + index);
+            int index = random.nextInt(MultiDataSourceConfig.getReadNum());
+            contextHolder.set(MultiDataSourceConfig.READ_DATA_SOURCE_PREFIX + index);
         }
     }
     /**
@@ -53,8 +53,8 @@ public class DataBaseHolder {
      * <p>@Date 2021/8/1 20:40 </p>
      * @return com.www.demo.druid.config.DataBaseContextHolder.DataBaseType
      */
-    public static String getDataBaseType(){
-       return contextHolder.get() == null ? MultipleDataSourceConfig.READ_DATA_SOURCE_PREFIX + 0 : contextHolder.get();
+    public synchronized static String getDataSourceType(){
+       return contextHolder.get() == null ? MultiDataSourceConfig.READ_DATA_SOURCE_PREFIX + 0 : contextHolder.get();
     }
     /**
      * <p>@Description 清除容器的数据源类型 </p>
@@ -62,7 +62,7 @@ public class DataBaseHolder {
      * <p>@Date 2021/8/1 20:40 </p>
      * @return void
      */
-    public static void clearDataBaseType(){
+    public synchronized static void clearDataSourceType(){
         contextHolder.remove();
     }
 }

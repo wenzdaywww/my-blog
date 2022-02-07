@@ -1,11 +1,11 @@
-package com.www.common.config.druid.core;
+package com.www.common.config.datasource.core;
 
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusPropertiesCustomizer;
-import com.www.common.config.druid.interfaces.IReadDataSoure;
-import com.www.common.config.druid.interfaces.IWriteDataSoure;
+import com.www.common.config.datasource.interfaces.IReadDataSoure;
+import com.www.common.config.datasource.interfaces.IWriteDataSoure;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
@@ -17,7 +17,6 @@ import org.aspectj.util.SoftHashMap;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -39,9 +38,9 @@ import java.util.Map;
 @Slf4j
 @Configuration
 @EnableTransactionManagement
-//com.www.common.druid.enable=true才开启多数据源配置
-@ConditionalOnProperty(prefix = "com.www.common.druid",name = "enable")
-public class MultipleDataSourceConfig extends MybatisPlusAutoConfiguration {
+//com.www.common.datasource.enable=true才开启多数据源配置
+@ConditionalOnProperty(prefix = "com.www.common.datasource",name = "enable")
+public class MultiDataSourceConfig extends MybatisPlusAutoConfiguration {
     /** 写权限数据源前缀 **/
     public static final String WRITE_DATA_SOURCE_PREFIX = "writeDataSource_";
     /** 读权限数据源前缀 **/
@@ -68,7 +67,7 @@ public class MultipleDataSourceConfig extends MybatisPlusAutoConfiguration {
      * @param applicationContext
      * @return
      */
-    public MultipleDataSourceConfig(MybatisPlusProperties properties, ObjectProvider<Interceptor[]> interceptorsProvider, ObjectProvider<TypeHandler[]> typeHandlersProvider, ObjectProvider<LanguageDriver[]> languageDriversProvider, ResourceLoader resourceLoader, ObjectProvider<DatabaseIdProvider> databaseIdProvider, ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider, ObjectProvider<List<MybatisPlusPropertiesCustomizer>> mybatisPlusPropertiesCustomizerProvider, ApplicationContext applicationContext) {
+    public MultiDataSourceConfig(MybatisPlusProperties properties, ObjectProvider<Interceptor[]> interceptorsProvider, ObjectProvider<TypeHandler[]> typeHandlersProvider, ObjectProvider<LanguageDriver[]> languageDriversProvider, ResourceLoader resourceLoader, ObjectProvider<DatabaseIdProvider> databaseIdProvider, ObjectProvider<List<ConfigurationCustomizer>> configurationCustomizersProvider, ObjectProvider<List<MybatisPlusPropertiesCustomizer>> mybatisPlusPropertiesCustomizerProvider, ApplicationContext applicationContext) {
         super(properties, interceptorsProvider, typeHandlersProvider, languageDriversProvider, resourceLoader, databaseIdProvider, configurationCustomizersProvider, mybatisPlusPropertiesCustomizerProvider, applicationContext);
         log.info("配置mybatis多个数据源");
     }
@@ -106,7 +105,7 @@ public class MultipleDataSourceConfig extends MybatisPlusAutoConfiguration {
         }
         //默认数据源
         proxy.setDefaultTargetDataSource(DefaultDataSource);
-        //添加2个主从数据源
+        //添加从数据源
         proxy.setTargetDataSources(targetDataSource);
         return proxy;
     }

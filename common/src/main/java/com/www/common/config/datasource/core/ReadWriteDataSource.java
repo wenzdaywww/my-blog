@@ -1,4 +1,4 @@
-package com.www.common.config.druid.core;
+package com.www.common.config.datasource.core;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
@@ -19,6 +19,6 @@ public class ReadWriteDataSource extends AbstractRoutingDataSource {
      */
     @Override
     protected Object determineCurrentLookupKey() {
-        return DataBaseHolder.getDataBaseType();
+        return DataSourceHolder.getDataSourceType();
     }
 }

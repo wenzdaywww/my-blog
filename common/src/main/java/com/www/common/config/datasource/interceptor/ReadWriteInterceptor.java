@@ -1,7 +1,7 @@
-package com.www.common.config.druid.interceptor;
+package com.www.common.config.datasource.interceptor;
 
-import com.www.common.config.druid.core.DataBaseHolder;
-import com.www.common.config.druid.core.MultipleDataSourceConfig;
+import com.www.common.config.datasource.core.DataSourceHolder;
+import com.www.common.config.datasource.core.MultiDataSourceConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -11,7 +11,7 @@ import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 
 /**
- * <p>@Description 读写分离数据源切断的拦截器-AOP注入 </p>
+ * <p>@Description 读写分离数据源切换的拦截器-AOP注入 </p>
  * <p>@Version 1.0 </p>
  * <p>@Author www </p>
  * <p>@Date 2021/8/1 20:48 </p>
@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Aspect
 @Component
-//com.www.common.druid.enable=true才开启多数据源配置
-@ConditionalOnProperty(prefix = "com.www.common.druid",name = "enable")
+//com.www.common.datasource.enable=true才开启多数据源配置
+@ConditionalOnProperty(prefix = "com.www.common.datasource",name = "enable")
 public class ReadWriteInterceptor implements Ordered {
     /**
      * <p>@Description 构造方法 </p>
@@ -53,18 +53,18 @@ public class ReadWriteInterceptor implements Ordered {
     public Object readOnly(ProceedingJoinPoint proceedingJoinPoint){
         Object result = null;
         try {
-            DataBaseHolder.setReadDataBaseType();
+            DataSourceHolder.setReadDataSourceType();
             result = proceedingJoinPoint.proceed();
         }catch (Exception e){
             log.error("连接slave数据源Exception异常：{}",e.getMessage());
             //有配置从数据库出现异常再从主数据库查询
-            if(MultipleDataSourceConfig.getReadNum() != 0){
+            if(MultiDataSourceConfig.getReadNum() != 0){
                 result = insert(proceedingJoinPoint);
             }
         } catch (Throwable throwable) {
             log.error("连接slave数据源throwable异常：{}",throwable.getMessage());
         } finally {
-            DataBaseHolder.clearDataBaseType();
+            DataSourceHolder.clearDataSourceType();
         }
         return result;
     }
@@ -79,14 +79,14 @@ public class ReadWriteInterceptor implements Ordered {
     public Object insert(ProceedingJoinPoint proceedingJoinPoint){
         Object result = null;
         try {
-            DataBaseHolder.setWriteDataBaseType();
+            DataSourceHolder.setWriteDataSourceType();
             result = proceedingJoinPoint.proceed();
         }catch (Exception e){
             log.error("连接master数据源Exception异常：{}",e.getMessage());
         } catch (Throwable throwable) {
             log.error("连接master数据源throwable异常：{}",throwable.getMessage());
         } finally {
-            DataBaseHolder.clearDataBaseType();
+            DataSourceHolder.clearDataSourceType();
         }
         return result;
     }

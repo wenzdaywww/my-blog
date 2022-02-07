@@ -1,10 +1,8 @@
-package com.www.common.config.druid.monitor;
+package com.www.common.config.datasource.monitor;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -22,8 +20,8 @@ import java.util.Map;
  */
 @Slf4j
 @Configuration
-//com.www.common.druid.monitor.enable=true才开启druid监控平台
-@ConditionalOnProperty(prefix = "com.www.common.druid.monitor",name = "enable")
+//com.www.common.datasource.monitor.enable=true才开启druid监控平台
+@ConditionalOnProperty(prefix = "com.www.common.datasource.monitor",name = "enable")
 public class DruidMonitorConfig {
     /**
      * <p>@Description 构造方法 </p>

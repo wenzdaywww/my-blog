@@ -1,4 +1,4 @@
-package com.www.common.config.druid.interfaces;
+package com.www.common.config.datasource.interfaces;
 
 /**
  * <p>@Description 读权限数据源接口 </p>
