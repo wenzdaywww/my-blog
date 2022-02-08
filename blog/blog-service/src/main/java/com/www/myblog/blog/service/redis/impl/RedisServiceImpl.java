@@ -1,12 +1,15 @@
 package com.www.myblog.blog.service.redis.impl;
 
 import com.www.common.config.redis.RedisOperation;
+import com.www.common.pojo.constant.CharConstant;
 import com.www.common.pojo.constant.RedisCommonContant;
 import com.www.common.pojo.dto.security.ScopeDTO;
+import com.www.myblog.blog.data.constants.CommenConstant;
 import com.www.myblog.blog.data.constants.RedisKeyConstant;
 import com.www.common.pojo.dto.redis.BlogArticleDTO;
 import com.www.myblog.blog.service.redis.IRedisService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +32,48 @@ public class RedisServiceImpl implements IRedisService {
     @Value("${spring.application.name}")
     private String resourceId;
 
-
+    /**
+     * <p>@Description 博客浏览量增加 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/8 20:53 </p>
+     * @param ip     请求的ip地址
+     * @param blogId 博客id
+     * @return boolean true增加成功，false增加失败
+     */
+    @Override
+    public boolean addBlogBrowse(String ip, Long blogId) {
+        if(StringUtils.isBlank(ip) || blogId == null){
+            return false;
+        }
+        String browseKey = RedisKeyConstant.BLOG_BROWSE + blogId + CharConstant.COLON + ip;//博客文章浏览量的key
+        boolean isOk = true;//是否更新成功
+        //ip浏览记录不存在，则创建
+        if(RedisOperation.setNX(browseKey,ip,1L,TimeUnit.DAYS)){
+            String key = RedisKeyConstant.BLOG_ARTICLE + blogId;//博客文章的key
+            String lockKey = RedisKeyConstant.BLOG_ARTICLE_LOCK + blogId;//分布式锁key
+            String value = UUID.randomUUID().toString();
+            boolean isWait = true; //是否等待获取分布式锁
+            while (isWait){
+                try {
+                    //添加分布式锁，实现同一时间只有一个现场操作
+                    if(RedisOperation.lock(lockKey, value,10)){
+                        isWait = false;
+                        if(RedisOperation.hasKey(key)){
+                            RedisOperation.hashIncrement(key,CommenConstant.BROWSE,1);
+                        }
+                    }
+                }catch (Exception e){
+                    isOk = false;
+                    isWait = false;
+                    log.error("博客浏览量增加异常，异常信息：{}",e.getMessage());
+                }finally {
+                    // 释放锁
+                    RedisOperation.unlock(lockKey,value);
+                }
+            }
+        }
+        return isOk;
+    }
     /**
      * <p>@Description 更新博客统计量 </p>
      * <p>@Author www </p>
@@ -86,11 +130,12 @@ public class RedisServiceImpl implements IRedisService {
      * <p>@Description 从redis中获取博客信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 23:18 </p>
+     * @param ip 请求的ip地址
      * @param blogId 博客id
      * @return com.www.common.pojo.dto.redis.BlogArticleDTO 博客信息
      */
     @Override
-    public BlogArticleDTO getArticleInfo(Long blogId) {
+    public BlogArticleDTO getArticleInfo(String ip,Long blogId) {
         if(blogId == null){
             return new BlogArticleDTO();
         }
@@ -100,17 +145,22 @@ public class RedisServiceImpl implements IRedisService {
         }
         //需要保存到redis的字段名称
         BlogArticleDTO articleDTO = RedisOperation.hashGet(key,BlogArticleDTO.class,articleFields);
+        //过期时间重新设置2天
+        RedisOperation.keyExpire(key,2L,TimeUnit.DAYS);
+        //博客浏览量增加
+        this.addBlogBrowse(ip,blogId);
         return articleDTO;
     }
     /**
      * <p>@Description 保存博客信息到redis中 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 23:18 </p>
+     * @param ip 请求的ip地址
      * @param articleDTO 博客id
      * @return true保存成功，false保存失败
      */
     @Override
-    public boolean saveArticleInfo(BlogArticleDTO articleDTO) {
+    public boolean saveArticleInfo(String ip,BlogArticleDTO articleDTO) {
         if(articleDTO == null){
             return false;
         }
@@ -131,6 +181,8 @@ public class RedisServiceImpl implements IRedisService {
             // 释放锁
             RedisOperation.unlock(lockKey,value);
         }
+        //博客浏览量增加
+        this.addBlogBrowse(ip,articleDTO.getBlogId());
         return isOk;
     }
 }

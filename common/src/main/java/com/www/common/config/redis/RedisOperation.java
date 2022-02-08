@@ -232,6 +232,19 @@ public final class RedisOperation {
         return redisTemplate.opsForValue().setIfAbsent(key,value,seconds,TimeUnit.SECONDS);
     }
     /**
+     * <p>@Description key不存在时保存String数据，并设置超时时间 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2021/8/1 21:07 </p>
+     * @param key 键值
+     * @param value 值
+     * @param timeout 超时时间
+     * @param unit 时间单位
+     * @return boolean true键不存在，保存成功，false键存在，保存失败
+     */
+    public static boolean setNX(String key,String value,long timeout,TimeUnit unit){
+        return redisTemplate.opsForValue().setIfAbsent(key,value,timeout,unit);
+    }
+    /**
      * <p>@Description 获取String数据 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/8/1 21:07 </p>

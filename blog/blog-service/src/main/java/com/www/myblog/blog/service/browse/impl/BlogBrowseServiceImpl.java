@@ -8,6 +8,7 @@ import com.www.common.pojo.dto.redis.BlogArticleDTO;
 import com.www.common.pojo.dto.redis.BlogTagDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.utils.DateUtils;
+import com.www.common.utils.HttpUtils;
 import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
 import com.www.myblog.blog.data.dto.CommentDTO;
@@ -201,12 +202,13 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     @Override
     public ResponseDTO<BlogArticleDTO> findAriticle(String userId,Long blogId) {
         ResponseDTO<BlogArticleDTO> response = new ResponseDTO<>();
+        String ipAddr = HttpUtils.getIp();//IP地址
         if(blogId == null){
             response.setResponse(ResponseDTO.RespEnum.FAIL,"根据博客ID查询博客信息，博客ID为空",null);
             return response;
         }
         //先从redis中获取数据，查询不到再查询数据库
-        BlogArticleDTO articleDTO = redisService.getArticleInfo(blogId);
+        BlogArticleDTO articleDTO = redisService.getArticleInfo(ipAddr,blogId);
         if(articleDTO != null){
             //判断用户是否收藏和点赞该博客
             this.handleLoginForArticle(userId,articleDTO);
@@ -225,7 +227,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
         articleDTO.setBlogTag(classList);
         response.setResponse(articleDTO);
         //保存数据都redis中
-        redisService.saveArticleInfo(articleDTO);
+        redisService.saveArticleInfo(ipAddr,articleDTO);
         return response;
     }
     /**

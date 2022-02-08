@@ -13,6 +13,15 @@ import java.util.List;
  */
 public interface IRedisService {
     /**
+     * <p>@Description 博客浏览量增加 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/2/8 20:53 </p>
+     * @param ip 请求的ip地址
+     * @param blogId 博客id
+     * @return boolean true增加成功，false增加失败
+     */
+    boolean addBlogBrowse(String ip,Long blogId);
+    /**
      * <p>@Description 更新博客统计量 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/2/5 11:59 </p>
@@ -33,16 +42,18 @@ public interface IRedisService {
      * <p>@Description 从redis中获取博客信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 23:18 </p>
+     * @param ip 请求的ip地址
      * @param blogId 博客id
      * @return com.www.common.pojo.dto.redis.BlogArticleDTO 博客信息
      */
-    BlogArticleDTO getArticleInfo(Long blogId);
+    BlogArticleDTO getArticleInfo(String ip,Long blogId);
     /**
      * <p>@Description 保存博客信息到redis中 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 23:18 </p>
+     * @param ip 请求的ip地址
      * @param articleDTO 博客id
      * @return true保存成功，false保存失败
      */
-    boolean saveArticleInfo(BlogArticleDTO articleDTO);
+    boolean saveArticleInfo(String ip,BlogArticleDTO articleDTO);
 }
