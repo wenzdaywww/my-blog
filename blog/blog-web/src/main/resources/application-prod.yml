@@ -16,7 +16,7 @@ spring:
       max-request-size: 10MB
   #redis配置
   redis:
-    host: 120.24.93.212
+    host: 1.2.3.4
     port: 6379
     password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
 #eureka配置
@@ -24,7 +24,7 @@ eureka:
   client:
     service-url:
       #配置eureka集群地址
-      defaultZone : http://www:www362412@120.24.93.212:8000/eureka/ #注册中心地址
+      defaultZone : http://www:www362412@1.2.3.4:8000/eureka/ #注册中心地址
   instance:
     instance-id: ${spring.application.name}:${eureka.instance.ip-address}:${server.port} #该实例注册到服务中心的唯一ID
     prefer-ip-address: true #该实例，相较于hostname是否优先使用IP
@@ -48,7 +48,7 @@ com:
         enable: true #开启数据源配置
         #写数据库
         write:
-          url: jdbc:mysql://120.24.93.212:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
+          url: jdbc:mysql://1.2.3.4:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
           driver-class-name: com.mysql.cj.jdbc.Driver
           username: admin
           password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)

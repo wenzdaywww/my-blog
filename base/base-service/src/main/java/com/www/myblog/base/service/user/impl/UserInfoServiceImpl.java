@@ -275,7 +275,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     public ResponseDTO<String> updateUserInfo(SysUserDTO user) {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
         if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName())
-                || CodeDict.isIllegalValue(CodeTypeEnum.SEX,user.getSex())){
+                || (StringUtils.isNotBlank(user.getSex()) && CodeDict.isIllegalValue(CodeTypeEnum.SEX,user.getSex()))){
             responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新用户信息失败，用户信息有误");
             return responseDTO;
         }
