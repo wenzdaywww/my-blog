@@ -62,11 +62,8 @@ export default {
     const more = ref(true);
     // 加载推荐博客列表
     const loadTipList = () =>{
-      if (more.value){
+      if (more.value == true){
         axios.$http.post(request.tipList, query).then(function (res) {
-          if(res.code === 200){
-            blogList.value = res.data;
-          }
           if(res.code === 200){
             if (res.data){
               query.pageNum++;//页码增加

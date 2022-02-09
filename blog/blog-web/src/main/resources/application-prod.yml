@@ -32,6 +32,8 @@ eureka:
 com:
   www:
     common:
+      code:
+        enable: true #开启数据字典加载
       ctl-aop:
         enable: true #开启controller的AOP日志拦截
       #配置文件路径
@@ -48,9 +50,9 @@ com:
         enable: true #开启数据源配置
         #写数据库
         write:
-          url: jdbc:mysql://1.2.3.4:3306/admin?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
+          url: jdbc:mysql://1.2.3.4:3306/blog?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
           driver-class-name: com.mysql.cj.jdbc.Driver
-          username: admin
+          username: blog
           password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
           initial-size: 5 #启动程序时，在连接池中初始化多少个连接
           min-idle: 5 #最小连接池数量
