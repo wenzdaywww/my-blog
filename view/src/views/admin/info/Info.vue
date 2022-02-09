@@ -99,7 +99,7 @@ export default {
       phoneNum : "",
       birthday : "",
       sex : "",
-      photo : "src/assets/img/img.jpg",
+      photo : "static/img/img.jpg",
       email : "",
       brief : ""
     });

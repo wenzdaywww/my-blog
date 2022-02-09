@@ -110,7 +110,7 @@ export default {
     const isUser = utils.isUser();
     // 用户信息
     let user = reactive({
-      photo : "src/assets/img/img.jpg",
+      photo : "static/img/img.jpg",
       follow : 0,
       fans : 0,
       blog : 0,

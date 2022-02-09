@@ -15,10 +15,10 @@ export default {
   setup(){
     // 幻灯片列表
     const list = ref([
-      { img:"src/assets/img/backgroup1.jpg" },
-      { img:"src/assets/img/backgroup2.jpg" },
-      { img:"src/assets/img/backgroup3.jpg" },
-      { img:"src/assets/img/backgroup4.jpg" }
+      { img:"static/img/backgroup1.jpg" },
+      { img:"static/img/backgroup2.jpg" },
+      { img:"static/img/backgroup3.jpg" },
+      { img:"static/img/backgroup4.jpg" }
     ]);
     return {list}
   }

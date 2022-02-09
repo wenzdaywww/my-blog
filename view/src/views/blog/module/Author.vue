@@ -83,7 +83,7 @@ export default {
     let author = reactive({
       userId:'',
       userName : "",
-      photo : "src/assets/img/img.jpg",
+      photo : "static/img/img.jpg",
       age : "",
       blog : 0,
       fans : 0,

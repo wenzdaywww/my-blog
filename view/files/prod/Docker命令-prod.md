@@ -1,4 +1,4 @@
-# 1、上传打包后的dist文件夹到/home/www/nginx/root
+# 1、上传打包后的dist文件夹到/home/www/nginx/root,static文件夹需要包含再dist文件夹中
 # 2、上传view.conf到/home/www/nginx/conf/conf.d
 # 3、上传nginx.conf到/home/www/nginx/conf
 # 4、创建nginx容器
