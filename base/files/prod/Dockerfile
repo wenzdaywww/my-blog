@@ -1,7 +1,7 @@
 FROM java:8
 COPY *.jar /base-web-1.0.0-exec.jar
-CMD ["--server.port=8080"]
+CMD ["--server.port=8090"]
 VOLUME "/home/www/logs/my-base/"
 VOLUME "/home/www/upload/my-base/"
-EXPOSE 8080
+EXPOSE 8090
 ENTRYPOINT ["java","-jar","/base-web-1.0.0-exec.jar"]
