@@ -1,27 +1,25 @@
 #生产环境配置
 #服务器配置
 server:
-  port: 8004
+  port: 8082
 #日志配置
 logging:
   config: classpath:logback-prod.xml
   file:
-    path: /home/ap/logs/${spring.application.name}/  #日志路径
+    path: /home/www/logs/${spring.application.name}/  #日志路径
 #spring配置
 spring:
   #redis配置
   redis:
+    host: 1.2.3.4
+    port: 6379
     password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
-    #sentile配置
-    sentinel:
-      master: mymaster
-      nodes: 192.168.1.130:26379,192.168.1.131:26379,192.168.1.132:26379
 #eureka配置
 eureka:
   client:
     service-url:
       #配置eureka集群地址
-      defaultZone : http://www:www362412@192.168.1.130:8002/eureka/,http://www:www362412@192.168.1.131:8002/eureka/,http://www:www362412@192.168.1.132:8002/eureka/ #注册中心地址
+      defaultZone : http://www:www362412@1.2.3.4:8000/eureka/ #注册中心地址
   instance:
     instance-id: ${spring.application.name}:${eureka.instance.ip-address}:${server.port} #该实例注册到服务中心的唯一ID
     prefer-ip-address: true #该实例，相较于hostname是否优先使用IP
@@ -35,7 +33,7 @@ com:
       multi-database:
         #blog数据库
         blog:
-          url: jdbc:mysql://1.2.3.4:3300/blog?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
+          url: jdbc:mysql://1.2.3.4:3306/blog?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
           driver-class-name: com.mysql.cj.jdbc.Driver
           username: blog
           password: ENC(FYI+VwCCxFQJmU7EeLCgw7CewV+hznTf)
