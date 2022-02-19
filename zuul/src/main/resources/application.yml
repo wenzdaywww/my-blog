@@ -1,6 +1,7 @@
 server:
   tomcat:
-    max-http-form-post-size: 20MB #设置post请求最大值
+    max-http-form-post-size: 50MB #设置post请求最大值
+    connection-timeout: 180000
 spring:
   application:
     name: zuul
@@ -21,7 +22,7 @@ ribbon:
   ConnectTimeout: 10000 # 请求连接的超时时间 默认1秒，单位ms
   MaxAutoRetries: 0 # 对当前实例的重试次数 默认0
   MaxAutoRetriesNextServer: 1 # 切换实例的重试次数 默认1
-#zuul路由网关配置
+#zuul路由网关配置00000000000
 zuul:
   host:
     connect-timeout-millis: 30000

@@ -1,11 +1,13 @@
 import axios from "axios";
 import qs from "qs";
 import router from '../router';
-import {ElMessage, ElMessageBox} from 'element-plus';
+import {ElMessage} from 'element-plus';
+//创建请求对象
+const http = axios.create();
 //设置超时
-axios.defaults.timeout = 10000;
-axios.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded;charset=UTF-8";
-axios.interceptors.request.use(
+http.defaults.timeout = 180000;
+http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded;charset=UTF-8";
+http.interceptors.request.use(
     config => {
         config.withCredentials = true;
         return config;
@@ -14,7 +16,7 @@ axios.interceptors.request.use(
         return Promise.reject(error);
     }
 );
-axios.interceptors.response.use(
+http.interceptors.response.use(
     response => {
         //接口返回403
         if ((response.data && (response.data.code == 401 || response.data.code == 403)) || response.status == 401 || response.status == 403) {
@@ -34,7 +36,7 @@ axios.interceptors.response.use(
 export default {
     post(url, data) {
         return new Promise((resolve, reject) => {
-            axios({
+            http({
                 method: 'post',
                 url,
                 data: qs.stringify(data)
@@ -49,7 +51,7 @@ export default {
     },
     upload(url, data,headers) {
         return new Promise((resolve, reject) => {
-            axios({
+            http({
                 method: 'post',
                 url,
                 data: data,
@@ -65,7 +67,7 @@ export default {
     },
     get(url,data) {
         return new Promise((resolve, reject) => {
-            axios({
+            http({
                 method: 'get',
                 url,
                 params: data,

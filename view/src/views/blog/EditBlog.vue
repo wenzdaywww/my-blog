@@ -90,7 +90,7 @@
 <script>
 import WangEditor from "wangEditor";
 import {ref, reactive, onMounted, onBeforeUnmount, getCurrentInstance} from "vue";
-import {ElMessage} from "element-plus";
+import {ElMessage } from "element-plus";
 import request from "../../utils/request";
 
 export default {
@@ -214,9 +214,9 @@ export default {
             fd.append("img", coverFile); //传文件
             fd.append("title",blogText.title);
             if(blogText.summary){
-              fd.append("summary",blogText.summary);
+              fd.append("summary",blogText.summary+"...");
             }else {
-              fd.append("summary",instance.txt.text().slice(0, 256));
+              fd.append("summary",instance.txt.text().slice(0, 256)+"...");
             }
             fd.append("tagIds",blogText.tagIds);
             fd.append("groupId",blogText.groupId);
