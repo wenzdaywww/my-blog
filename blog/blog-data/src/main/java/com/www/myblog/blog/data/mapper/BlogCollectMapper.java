@@ -2,8 +2,8 @@ package com.www.myblog.blog.data.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.www.common.pojo.dto.redis.BlogArticleDTO;
 import com.www.myblog.blog.data.entity.BlogCollectEntity;
+import com.www.myblog.common.dto.BlogArticleDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,7 +22,7 @@ public interface BlogCollectMapper extends BaseMapper<BlogCollectEntity> {
      * @param page 分页信息
      * @param userId 用户id
      * @param cgId 收藏分组id
-     * @return com.baomidou.mybatisplus.extension.plugins.pagination.Page<com.www.common.pojo.dto.redis.BlogArticleDTO> 博客收藏列表
+     * @return com.baomidou.mybatisplus.extension.plugins.pagination.Page<com.www.myblog.common.dto.BlogArticleDTO> 博客收藏列表
      */
-    Page<BlogArticleDTO> findCollectList(Page<BlogArticleDTO> page, @Param("userId") String userId,@Param("cgId") Long cgId);
+    Page<BlogArticleDTO> findCollectList(Page<BlogArticleDTO> page, @Param("userId") String userId, @Param("cgId") Long cgId);
 }

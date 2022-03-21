@@ -106,6 +106,11 @@
             <groupId>com.www</groupId>
             <artifactId>common-boot-starter</artifactId>
         </dependency>
+        <!-- 博客公共API包依赖-->
+        <dependency>
+            <groupId>com.www.myblog</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
     </dependencies>
     <!--配置环境的profile-->
     <profiles>

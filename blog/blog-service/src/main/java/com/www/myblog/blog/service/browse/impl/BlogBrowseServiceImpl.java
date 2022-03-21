@@ -2,10 +2,6 @@ package com.www.myblog.blog.service.browse.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.www.common.feign.base.IBaseFeignService;
-import com.www.common.pojo.dto.feign.UserInfoDTO;
-import com.www.common.pojo.dto.redis.BlogArticleDTO;
-import com.www.common.pojo.dto.redis.BlogTagDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.utils.DateUtils;
 import com.www.common.utils.HttpUtils;
@@ -25,6 +21,10 @@ import com.www.myblog.blog.service.entity.IBlogArticleService;
 import com.www.myblog.blog.service.entity.IBlogCollectService;
 import com.www.myblog.blog.service.entity.IBlogPraiseService;
 import com.www.myblog.blog.service.redis.IRedisService;
+import com.www.myblog.common.config.feign.base.IBaseFeignService;
+import com.www.myblog.common.dto.BlogArticleDTO;
+import com.www.myblog.common.dto.BlogTagDTO;
+import com.www.myblog.common.dto.UserInfoDTO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +72,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param pageNum 页码
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.redis.BlogArticleDTO>>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
      */
     @Override
     public ResponseDTO<List<BlogArticleDTO>> findTipBlogList(int pageNum) {
@@ -197,7 +197,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
      * <p>@Date 2022/1/25 21:21 </p>
      * @param userId 当前登录用户ID
      * @param blogId 博客ID
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.redis.BlogArticleDTO>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
      */
     @Override
     public ResponseDTO<BlogArticleDTO> findAriticle(String userId,Long blogId) {
@@ -307,7 +307,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param queryDTO 查询条件
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.redis.BlogArticleDTO>>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
      */
     @Override
     public ResponseDTO<List<BlogArticleDTO>> findAuthorBlogList(BlogArticleDTO queryDTO) {
@@ -332,7 +332,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
      * <p>@Description 获取热门博客前10名单 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 19:24 </p>
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.redis.BlogArticleDTO>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
      */
     @Override
     public ResponseDTO<List<BlogArticleDTO>> findHotBlogRank() {

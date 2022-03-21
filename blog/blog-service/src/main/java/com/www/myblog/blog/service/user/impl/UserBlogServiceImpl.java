@@ -2,24 +2,33 @@ package com.www.myblog.blog.service.user.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.www.common.feign.base.IBaseFeignService;
-import com.www.common.pojo.dto.feign.UserInfoDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.constants.CommenConstant;
-import com.www.myblog.blog.data.constants.RedisKeyConstant;
 import com.www.myblog.blog.data.dto.AuthorDTO;
-import com.www.common.pojo.dto.redis.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.CollectGroupDTO;
 import com.www.myblog.blog.data.dto.CommentDTO;
-import com.www.myblog.blog.data.entity.*;
+import com.www.myblog.blog.data.entity.BlogArticleEntity;
+import com.www.myblog.blog.data.entity.BlogCollectEntity;
+import com.www.myblog.blog.data.entity.BlogCommentEntity;
+import com.www.myblog.blog.data.entity.BlogPraiseEntity;
+import com.www.myblog.blog.data.entity.CollectGroupEntity;
+import com.www.myblog.blog.data.entity.UserFansEntity;
 import com.www.myblog.blog.data.mapper.BlogArticleMapper;
 import com.www.myblog.blog.data.mapper.BlogCollectMapper;
 import com.www.myblog.blog.data.mapper.CollectGroupMapper;
 import com.www.myblog.blog.data.mapper.UserFansMapper;
-import com.www.myblog.blog.service.entity.*;
+import com.www.myblog.blog.service.entity.IBlogArticleService;
+import com.www.myblog.blog.service.entity.IBlogCollectService;
+import com.www.myblog.blog.service.entity.IBlogCommentService;
+import com.www.myblog.blog.service.entity.IBlogPraiseService;
+import com.www.myblog.blog.service.entity.ICollectGroupService;
+import com.www.myblog.blog.service.entity.IUserFansService;
 import com.www.myblog.blog.service.redis.IRedisService;
 import com.www.myblog.blog.service.user.IUserBlogService;
+import com.www.myblog.common.config.feign.base.IBaseFeignService;
+import com.www.myblog.common.dto.BlogArticleDTO;
+import com.www.myblog.common.dto.UserInfoDTO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,7 +161,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 19:08 </p>
      * @param query 查询条件就
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.redis.BlogArticleDTO>> 博客收藏列表
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>> 博客收藏列表
      */
     @Override
     public ResponseDTO<List<BlogArticleDTO>> findCollectList(CollectGroupDTO query) {

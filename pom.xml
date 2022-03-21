@@ -19,6 +19,7 @@
 	<modules>
 		<module>base</module>
 		<module>blog</module>
+		<module>common</module>
 		<module>task</module>
 		<module>eureka</module>
         <module>zuul</module>
@@ -228,6 +229,12 @@
 			<dependency>
 				<groupId>com.www</groupId>
 				<artifactId>common-boot-starter</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+			<!-- 博客公共API包依赖-->
+			<dependency>
+				<groupId>com.www.myblog</groupId>
+				<artifactId>common</artifactId>
 				<version>1.0.0</version>
 			</dependency>
 		</dependencies>

@@ -6,8 +6,8 @@ import com.www.common.pojo.constant.RedisCommonContant;
 import com.www.common.pojo.dto.security.ScopeDTO;
 import com.www.myblog.blog.data.constants.CommenConstant;
 import com.www.myblog.blog.data.constants.RedisKeyConstant;
-import com.www.common.pojo.dto.redis.BlogArticleDTO;
 import com.www.myblog.blog.service.redis.IRedisService;
+import com.www.myblog.common.dto.BlogArticleDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -132,7 +132,7 @@ public class RedisServiceImpl implements IRedisService {
      * <p>@Date 2022/2/3 23:18 </p>
      * @param ip 请求的ip地址
      * @param blogId 博客id
-     * @return com.www.common.pojo.dto.redis.BlogArticleDTO 博客信息
+     * @return com.www.myblog.common.dto.BlogArticleDTO 博客信息
      */
     @Override
     public BlogArticleDTO getArticleInfo(String ip,Long blogId) {

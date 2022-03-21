@@ -1,12 +1,19 @@
 package com.www.myblog.blog.controller.browse;
 
 import com.www.common.config.oauth2.token.JwtTokenConverter;
-import com.www.common.pojo.dto.redis.BlogArticleDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
-import com.www.myblog.blog.data.dto.*;
+import com.www.myblog.blog.data.dto.AuthorDTO;
+import com.www.myblog.blog.data.dto.BlogGroupDTO;
+import com.www.myblog.blog.data.dto.CommentDTO;
+import com.www.myblog.blog.data.dto.TagInfoDTO;
 import com.www.myblog.blog.service.browse.IBlogBrowseService;
+import com.www.myblog.common.dto.BlogArticleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -29,7 +36,7 @@ public class BlogBrowseController {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param pageNum 页码
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.redis.BlogArticleDTO>>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
      */
     @PostMapping("tip-list")
     public ResponseDTO<List<BlogArticleDTO>> findTipBlogList(int pageNum){
@@ -53,7 +60,7 @@ public class BlogBrowseController {
      * <p>@Author www </p>
      * <p>@Date 2022/1/25 21:21 </p>
      * @param blogId 博客ID
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.redis.BlogArticleDTO>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
      */
     @GetMapping("article/{bid}")
     public ResponseDTO<BlogArticleDTO> findAriticle(@PathVariable("bid") Long blogId){
@@ -75,7 +82,7 @@ public class BlogBrowseController {
      * <p>@Description 获取热门博客前10名单 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 19:24 </p>
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.redis.BlogArticleDTO>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
      */
     @GetMapping("hot-rank")
     public ResponseDTO<List<BlogArticleDTO>> findHotBlogRank(){
@@ -86,7 +93,7 @@ public class BlogBrowseController {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param query 查询条件
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.redis.BlogArticleDTO>>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
      */
     @PostMapping("list")
     public ResponseDTO<List<BlogArticleDTO>> findAuthorBlogList(BlogArticleDTO query){

@@ -1,10 +1,10 @@
 package com.www.myblog.base.service.user;
 
-import com.www.common.pojo.dto.feign.UserInfoDTO;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysRoleDTO;
 import com.www.myblog.base.data.dto.SysUserDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
+import com.www.myblog.common.dto.UserInfoDTO;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 

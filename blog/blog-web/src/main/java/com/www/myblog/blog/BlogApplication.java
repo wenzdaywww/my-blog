@@ -20,9 +20,9 @@ import org.springframework.context.annotation.FilterType;
 @SpringBootApplication
 @EnableEurekaClient
 @EnableCircuitBreaker //开启hystrix熔断器
-@ComponentScan(basePackages = {"com.www.common","com.www.myblog.blog"}) //配置要扫描的包路径
+@ComponentScan(basePackages = {"com.www.common","com.www.myblog"}) //配置要扫描的包路径
 @MapperScan(basePackages = {"com.www.myblog.blog.data"})
-@EnableFeignClients(basePackages = {"com.www.common.feign"})//配置feign扫描路径
+@EnableFeignClients(basePackages = {"com.www.myblog.common.config.feign"})//配置feign扫描路径
 @RibbonClient(name = "${com.www.common.feign.base}",configuration = RestConfig.class)//配置base服务的负载均衡策略
 public class BlogApplication {
     public static void main(String[] args) {

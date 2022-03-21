@@ -1,9 +1,9 @@
 package com.www.myblog.base.controller.feign;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.www.common.pojo.dto.feign.UserInfoDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.base.service.user.IUserInfoService;
+import com.www.myblog.common.dto.UserInfoDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class BaseFeignAnonymousController {
      * @param userList 用户id集合
      * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
      */
-    public ResponseDTO<List<UserInfoDTO>> findUserInfoListFallback(List<String> userList,Throwable throwable){
+    public ResponseDTO<List<UserInfoDTO>> findUserInfoListFallback(List<String> userList, Throwable throwable){
         log.error("服务熔断处理: 查询多个用户信息,异常信息:",throwable);
         List<UserInfoDTO> list = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(userList)){

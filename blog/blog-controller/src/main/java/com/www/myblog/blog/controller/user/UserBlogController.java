@@ -4,13 +4,17 @@ import com.www.common.config.oauth2.token.JwtTokenConverter;
 import com.www.common.pojo.constant.AuthorityContant;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.AuthorDTO;
-import com.www.common.pojo.dto.redis.BlogArticleDTO;
 import com.www.myblog.blog.data.dto.CollectGroupDTO;
 import com.www.myblog.blog.data.dto.CommentDTO;
 import com.www.myblog.blog.service.user.IUserBlogService;
+import com.www.myblog.common.dto.BlogArticleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -58,7 +62,7 @@ public class UserBlogController {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param query 查询条件
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.redis.BlogArticleDTO>>
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
      */
     @GetMapping("collects")
     public ResponseDTO<List<BlogArticleDTO>> findCollectList(CollectGroupDTO query){
@@ -119,7 +123,7 @@ public class UserBlogController {
      * @return com.www.common.pojo.dto.response.ResponseDTO<BlogArticleDTO>
      */
     @PostMapping("collect")
-    public ResponseDTO<BlogArticleDTO> addCollect(Long bid,Long cgid){
+    public ResponseDTO<BlogArticleDTO> addCollect(Long bid, Long cgid){
         return userBlogService.addCollect(jwtTokenConverter.getUserId(),bid,cgid);
     }
     /**

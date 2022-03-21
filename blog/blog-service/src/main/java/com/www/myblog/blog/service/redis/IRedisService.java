@@ -1,7 +1,7 @@
 package com.www.myblog.blog.service.redis;
 
 import com.www.common.pojo.dto.security.ScopeDTO;
-import com.www.common.pojo.dto.redis.BlogArticleDTO;
+import com.www.myblog.common.dto.BlogArticleDTO;
 
 import java.util.List;
 
@@ -44,9 +44,9 @@ public interface IRedisService {
      * <p>@Date 2022/2/3 23:18 </p>
      * @param ip 请求的ip地址
      * @param blogId 博客id
-     * @return com.www.common.pojo.dto.redis.BlogArticleDTO 博客信息
+     * @return com.www.myblog.common.dto.BlogArticleDTO 博客信息
      */
-    BlogArticleDTO getArticleInfo(String ip,Long blogId);
+    BlogArticleDTO getArticleInfo(String ip, Long blogId);
     /**
      * <p>@Description 保存博客信息到redis中 </p>
      * <p>@Author www </p>
