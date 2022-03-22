@@ -7,6 +7,7 @@ import com.www.common.pojo.constant.CharConstant;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.pojo.dto.token.TokenDTO;
 import com.www.common.pojo.dto.token.TokenInfoDTO;
+import com.www.common.pojo.enums.ResponseEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -103,7 +104,7 @@ public class OauthController {
             userCookie.setPath(CharConstant.LEFT_SLASH);
             response.addCookie(userCookie);
         }
-        responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,tokenDTO);
+        responseDTO.setResponse(ResponseEnum.SUCCESS,tokenDTO);
         //保存用户登录的token到redis中
         RedisTokenHandler.setUserIdToken(tokenInfoDTO,tokenDTO.getAccessToken(),tokenDTO.getExpiresSeconds());
         return responseDTO;

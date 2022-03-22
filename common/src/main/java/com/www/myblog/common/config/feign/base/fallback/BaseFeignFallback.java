@@ -1,6 +1,7 @@
 package com.www.myblog.common.config.feign.base.fallback;
 
 import com.www.common.pojo.dto.response.ResponseDTO;
+import com.www.common.pojo.enums.ResponseEnum;
 import com.www.myblog.common.config.feign.base.IBaseFeignService;
 import com.www.myblog.common.dto.UserInfoDTO;
 import feign.hystrix.FallbackFactory;
@@ -43,7 +44,7 @@ public class BaseFeignFallback implements FallbackFactory<IBaseFeignService> {
             public ResponseDTO<List<UserInfoDTO>> findUserInfoList(List<String> userList) {
                 log.error("base服务降级：查询多个用户信息");
                 List<UserInfoDTO> list = new ArrayList<>();
-                return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,list);
+                return new ResponseDTO<>(ResponseEnum.SUCCESS,list);
             }
 
             /**
@@ -56,7 +57,7 @@ public class BaseFeignFallback implements FallbackFactory<IBaseFeignService> {
             @Override
             public ResponseDTO<Boolean> validateUserExist(List<String> userList) {
                 log.error("base服务降级：校验用户是否存在");
-                return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,false);
+                return new ResponseDTO<>(ResponseEnum.SUCCESS,false);
             }
             /**
              * <p>@Description 查询用户信息 </p>
@@ -70,7 +71,7 @@ public class BaseFeignFallback implements FallbackFactory<IBaseFeignService> {
                 log.error("base服务降级：查询用户信息");
                 UserInfoDTO userInfoDTO = new UserInfoDTO();
                 userInfoDTO.setUserId(userId);
-                return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,userInfoDTO);
+                return new ResponseDTO<>(ResponseEnum.SUCCESS,userInfoDTO);
             }
         };
     }

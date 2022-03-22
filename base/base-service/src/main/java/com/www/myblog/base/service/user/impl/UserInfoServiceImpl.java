@@ -8,6 +8,7 @@ import com.www.common.config.mvc.upload.IFileUpload;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.pojo.enums.CodeTypeEnum;
 import com.www.common.pojo.enums.DateFormatEnum;
+import com.www.common.pojo.enums.ResponseEnum;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysRoleDTO;
@@ -70,13 +71,13 @@ public class UserInfoServiceImpl implements IUserInfoService {
     public ResponseDTO<List<UserInfoDTO>> findUserInfoList(List<String> userList) {
         ResponseDTO<List<UserInfoDTO>> response = new ResponseDTO<>();
         if(CollectionUtils.isEmpty(userList)){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询多个用户信息失败，用户ID集合为空",null);
+            response.setResponse(ResponseEnum.FAIL,"查询多个用户信息失败，用户ID集合为空",null);
             return response;
         }
         //根据用户ID集合查询用户信息
         List<SysUserEntity> entityList = sysUserService.findUserEntityById(userList);
         if(CollectionUtils.isEmpty(entityList)){
-            response.setResponse(ResponseDTO.RespEnum.SUCCESS,"查询多个用户信息失败，查询不到用户信息",null);
+            response.setResponse(ResponseEnum.SUCCESS,"查询多个用户信息失败，查询不到用户信息",null);
             return response;
         }
         List<UserInfoDTO> dtoList = new ArrayList<>();
@@ -88,7 +89,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
                     .setUpdateTime(entity.getUpdateTime()).setCreateTime(entity.getCreateTime());
             dtoList.add(userInfoDTO);
         }
-        response.setResponse(ResponseDTO.RespEnum.SUCCESS,dtoList);
+        response.setResponse(ResponseEnum.SUCCESS,dtoList);
         return response;
     }
 
@@ -103,12 +104,12 @@ public class UserInfoServiceImpl implements IUserInfoService {
     public ResponseDTO<Boolean> validateUserExist(List<String> userList) {
         ResponseDTO<Boolean> response = new ResponseDTO<>();
         if(CollectionUtils.isEmpty(userList)){
-            response.setResponse(ResponseDTO.RespEnum.SUCCESS,"校验用户是否存在失败，查询用户ID为空",false);
+            response.setResponse(ResponseEnum.SUCCESS,"校验用户是否存在失败，查询用户ID为空",false);
             return response;
         }
         //根据用户ID集合查询用户信息条数
         int count = sysUserService.findUserCountById(userList);
-        response.setResponse(ResponseDTO.RespEnum.SUCCESS,count>0);
+        response.setResponse(ResponseEnum.SUCCESS,count>0);
         return response;
     }
 
@@ -123,12 +124,12 @@ public class UserInfoServiceImpl implements IUserInfoService {
     public ResponseDTO<UserInfoDTO> findUserInfo(String userId) {
         ResponseDTO<UserInfoDTO> response = new ResponseDTO<>();
         if(StringUtils.isBlank(userId)){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询失败，用户ID为空",null);
+            response.setResponse(ResponseEnum.FAIL,"查询失败，用户ID为空",null);
             return response;
         }
         SysUserEntity userEntity = sysUserService.findUserEntityById(userId);
         if(userEntity == null){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询失败，查无此用户",null);
+            response.setResponse(ResponseEnum.FAIL,"查询失败，查无此用户",null);
             return response;
         }
         UserInfoDTO userInfoDTO = new UserInfoDTO();
@@ -136,7 +137,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
                 .setPhoneNum(userEntity.getPhoneNum()).setBirthday(userEntity.getBirthday()).setSex(userEntity.getSex())
                 .setPhoto(userEntity.getPhoto()).setEmail(userEntity.getEmail()).setBrief(userEntity.getBrief())
                 .setUpdateTime(userEntity.getUpdateTime()).setCreateTime(userEntity.getCreateTime());
-        response.setResponse(ResponseDTO.RespEnum.SUCCESS,userInfoDTO);
+        response.setResponse(ResponseEnum.SUCCESS,userInfoDTO);
         return response;
     }
 
@@ -151,18 +152,18 @@ public class UserInfoServiceImpl implements IUserInfoService {
     public ResponseDTO<String> updateUserPwd(SysUserDTO user) {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
         if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getPassword(),user.getNewPassWord())){
-            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新用户密码失败，密码不能为空");
+            responseDTO.setResponse(ResponseEnum.FAIL,"更新用户密码失败，密码不能为空");
             return responseDTO;
         }
         SysUserEntity userEntity = sysUserService.findUserEntityById(user.getUserId());
         if(userEntity == null){
-            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"查询不到该用户");
+            responseDTO.setResponse(ResponseEnum.FAIL,"查询不到该用户");
             return responseDTO;
         }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         //有输入密码则校验密码
         if(!encoder.matches(user.getPassword(),userEntity.getPassword())){
-            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"密码不正确");
+            responseDTO.setResponse(ResponseEnum.FAIL,"密码不正确");
             return responseDTO;
         }
         //更新用户信息
@@ -172,9 +173,9 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userWrapper.lambda().set(SysUserEntity::getUpdateTime,DateUtils.getCurrentDateTime());
         boolean isOk = sysUserService.updateEntity(userWrapper);
         if(!isOk){
-            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新用户密码失败");
+            responseDTO.setResponse(ResponseEnum.FAIL,"更新用户密码失败");
         }
-        responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,"更新用户密码成功");
+        responseDTO.setResponse(ResponseEnum.SUCCESS,"更新用户密码成功");
         return responseDTO;
     }
 
@@ -204,7 +205,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
                 }
             }
         }
-        return new ResponseDTO(ResponseDTO.RespEnum.SUCCESS,resultList);
+        return new ResponseDTO(ResponseEnum.SUCCESS,resultList);
     }
     /**
      * <p>@Description 查询用户菜单列表 </p>
@@ -232,7 +233,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
                 }
             }
         }
-        return new ResponseDTO(ResponseDTO.RespEnum.SUCCESS,resultList);
+        return new ResponseDTO(ResponseEnum.SUCCESS,resultList);
     }
     /**
      * <p>@Description 更新用户头像 </p>
@@ -247,12 +248,12 @@ public class UserInfoServiceImpl implements IUserInfoService {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
         SysUserEntity userEntity = sysUserService.findUserEntityById(userId);
         if(userEntity == null){
-            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"查询不到该用户");
+            responseDTO.setResponse(ResponseEnum.FAIL,"查询不到该用户");
             return responseDTO;
         }
         String path = fileService.uploadFileBackURL(photo,"photo",userId);
         if(StringUtils.isBlank(path)){
-            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新用户头像失败");
+            responseDTO.setResponse(ResponseEnum.FAIL,"更新用户头像失败");
             return responseDTO;
         }
         UpdateWrapper<SysUserEntity> userWrapper = new UpdateWrapper<>();
@@ -260,9 +261,9 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userWrapper.lambda().set(SysUserEntity::getPhoto,path);
         boolean isOk = sysUserService.updateEntity(userWrapper);
         if(!isOk){
-            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新用户头像失败");
+            responseDTO.setResponse(ResponseEnum.FAIL,"更新用户头像失败");
         }
-        responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,path);
+        responseDTO.setResponse(ResponseEnum.SUCCESS,path);
         return responseDTO;
     }
     /**
@@ -277,12 +278,12 @@ public class UserInfoServiceImpl implements IUserInfoService {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
         if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName())
                 || (StringUtils.isNotBlank(user.getSex()) && CodeDict.isIllegalValue(CodeTypeEnum.SEX,user.getSex()))){
-            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新用户信息失败，用户信息有误");
+            responseDTO.setResponse(ResponseEnum.FAIL,"更新用户信息失败，用户信息有误");
             return responseDTO;
         }
         SysUserEntity userEntity = sysUserService.findUserEntityById(user.getUserId());
         if(userEntity == null){
-            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"查询不到该用户");
+            responseDTO.setResponse(ResponseEnum.FAIL,"查询不到该用户");
             return responseDTO;
         }
         //更新用户信息
@@ -297,9 +298,9 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userWrapper.lambda().set(SysUserEntity::getUpdateTime,DateUtils.getCurrentDateTime());
         boolean isOk = sysUserService.updateEntity(userWrapper);
         if(!isOk){
-            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新用户信息失败");
+            responseDTO.setResponse(ResponseEnum.FAIL,"更新用户信息失败");
         }
-        responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,"更新用户信息成功");
+        responseDTO.setResponse(ResponseEnum.SUCCESS,"更新用户信息成功");
         return responseDTO;
     }
 
@@ -315,11 +316,11 @@ public class UserInfoServiceImpl implements IUserInfoService {
         ResponseDTO<SysUserDTO> responseDTO = new ResponseDTO<>();
         SysUserDTO userDTO = sysUserMapper.findUserInfoById(userId);
         if(userDTO == null){
-            responseDTO.setCode(ResponseDTO.RespEnum.FAIL.getCode());
+            responseDTO.setCode(ResponseEnum.FAIL.getCode());
             responseDTO.setMsg("查询不到该用户信息");
             return responseDTO;
         }
-        responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,userDTO);
+        responseDTO.setResponse(ResponseEnum.SUCCESS,userDTO);
         return responseDTO;
     }
 
@@ -335,12 +336,12 @@ public class UserInfoServiceImpl implements IUserInfoService {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
         if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName(),user.getPassword())
                 || (StringUtils.isNotBlank(user.getSex()) && CodeDict.isIllegalValue(CodeTypeEnum.SEX,user.getSex()))){
-            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"信息不完整，创建用户失败");
+            responseDTO.setResponse(ResponseEnum.FAIL,"信息不完整，创建用户失败");
             return responseDTO;
         }
         SysRoleEntity roleEntity = sysRoleService.findRoleEntityByName("user");
         if(roleEntity == null){
-            responseDTO.setCode(ResponseDTO.RespEnum.FAIL.getCode()).setMsg("用户角色错误，创建用户失败");
+            responseDTO.setCode(ResponseEnum.FAIL.getCode()).setMsg("用户角色错误，创建用户失败");
             return responseDTO;
         }
         //创建用户
@@ -363,7 +364,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userRoleEntity.setCreateTime(DateUtils.getCurrentDateTime());
         userRoleEntity.setUpdateTime(DateUtils.getCurrentDateTime());
         sysUserRoleService.createEntity(userRoleEntity);
-        responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,"创建用户成功");
+        responseDTO.setResponse(ResponseEnum.SUCCESS,"创建用户成功");
         return responseDTO;
     }
     /**
@@ -375,7 +376,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     public ResponseDTO<List<SysRoleDTO>> findAllRole() {
         List<SysRoleDTO> list = sysRoleMapper.findAllRole();
-        return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,list);
+        return new ResponseDTO<>(ResponseEnum.SUCCESS,list);
     }
 
     /**
@@ -396,7 +397,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
                 || CodeDict.isIllegalValue(CodeTypeEnum.YES_NO,notExpired)
                 || CodeDict.isIllegalValue(CodeTypeEnum.YES_NO,notLocked)
                 || CodeDict.isIllegalValue(CodeTypeEnum.YES_NO,credentialsNotExpired)){
-            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新用户信息失败");
+            responseDTO.setResponse(ResponseEnum.FAIL,"更新用户信息失败");
             return responseDTO;
         }
         UpdateWrapper<SysUserEntity> userWrapper = new UpdateWrapper<>();
@@ -408,9 +409,9 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userWrapper.lambda().set(SysUserEntity::getUpdateTime,DateUtils.getCurrentDateTime());
         boolean isOk = sysUserService.updateEntity(userWrapper);
         if(isOk){
-            responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,"更新用户信息成功");
+            responseDTO.setResponse(ResponseEnum.SUCCESS,"更新用户信息成功");
         }else {
-            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"更新用户信息失败");
+            responseDTO.setResponse(ResponseEnum.FAIL,"更新用户信息失败");
         }
         return responseDTO;
     }
@@ -437,7 +438,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
         Page<SysUserDTO> page = new Page<>(pageNum,pageSize);
         page = sysUserMapper.findAllUser(page,userDTO);
         List<SysUserDTO> userList =  page.getRecords();
-        ResponseDTO<List<SysUserDTO>> responseDTO = new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,userList);
+        ResponseDTO<List<SysUserDTO>> responseDTO = new ResponseDTO<>(ResponseEnum.SUCCESS,userList);
         responseDTO.setPageNum(pageNum);
         responseDTO.setPageSize(pageSize);
         responseDTO.setTotalNum(page.getTotal());

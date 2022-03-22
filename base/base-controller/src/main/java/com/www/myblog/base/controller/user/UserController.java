@@ -4,6 +4,7 @@ import com.www.common.config.oauth2.token.JwtTokenConverter;
 import com.www.common.pojo.constant.AuthorityContant;
 import com.www.common.pojo.dto.code.CodeDTO;
 import com.www.common.pojo.dto.response.ResponseDTO;
+import com.www.common.pojo.enums.ResponseEnum;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysUserDTO;
 import com.www.myblog.base.service.redis.IRedisService;
@@ -50,7 +51,7 @@ public class UserController {
         /// TODO: 2022/2/3 list传值有问题，待处理
         ResponseDTO<Map<String,List<CodeDTO>>>response = new ResponseDTO<>();
         if(list == null || list.size() <= 0){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询数据字典数据失败，信息不全",null);
+            response.setResponse(ResponseEnum.FAIL,"查询数据字典数据失败，信息不全",null);
             return response;
         }
         Map<String, Map<String, CodeDTO>> codeMap = redisService.getCodeData();
@@ -76,7 +77,7 @@ public class UserController {
     public ResponseDTO<Map<String,List<CodeDTO>>> findCodeData(@PathVariable("type") String codeType){
         ResponseDTO<Map<String,List<CodeDTO>>>response = new ResponseDTO<>();
         if(StringUtils.isBlank(codeType)){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询单个数据字典数据失败，信息不全",null);
+            response.setResponse(ResponseEnum.FAIL,"查询单个数据字典数据失败，信息不全",null);
             return response;
         }
         List<String> list = new ArrayList<>();

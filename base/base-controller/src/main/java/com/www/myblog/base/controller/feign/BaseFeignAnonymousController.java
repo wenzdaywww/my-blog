@@ -2,6 +2,7 @@ package com.www.myblog.base.controller.feign;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.www.common.pojo.dto.response.ResponseDTO;
+import com.www.common.pojo.enums.ResponseEnum;
 import com.www.myblog.base.service.user.IUserInfoService;
 import com.www.myblog.common.dto.UserInfoDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +55,7 @@ public class BaseFeignAnonymousController {
                 list.add(userInfoDTO);
             }
         }
-        return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,list);
+        return new ResponseDTO<>(ResponseEnum.SUCCESS,list);
     }
     /**
      * <p>@Description 查询用户信息 </p>
@@ -79,6 +80,6 @@ public class BaseFeignAnonymousController {
         log.error("服务熔断处理: 查询用户信息,异常信息:",throwable);
         UserInfoDTO userInfoDTO = new UserInfoDTO();
         userInfoDTO.setUserId(userId);
-        return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,userInfoDTO);
+        return new ResponseDTO<>(ResponseEnum.SUCCESS,userInfoDTO);
     }
 }

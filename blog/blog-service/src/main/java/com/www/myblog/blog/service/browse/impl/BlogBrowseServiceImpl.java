@@ -3,6 +3,7 @@ package com.www.myblog.blog.service.browse.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.pojo.dto.response.ResponseDTO;
+import com.www.common.pojo.enums.ResponseEnum;
 import com.www.common.utils.DateUtils;
 import com.www.common.utils.HttpUtils;
 import com.www.myblog.blog.data.dto.AuthorDTO;
@@ -85,7 +86,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
         response.setPageNum(pageNum);
         response.setPageSize(pageSize);
         response.setTotalNum(page.getTotal());
-        response.setResponse(ResponseDTO.RespEnum.SUCCESS,blogList);
+        response.setResponse(ResponseEnum.SUCCESS,blogList);
         return response;
     }
 
@@ -102,7 +103,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     public ResponseDTO<List<CommentDTO>> findCommentList(int pageNum, Long blogId, Long parentComId) {
         ResponseDTO<List<CommentDTO>> response = new ResponseDTO<>();
         if((blogId == null && parentComId == null) || (blogId != null && parentComId != null)){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询评论列表失败，信息不全",null);
+            response.setResponse(ResponseEnum.FAIL,"查询评论列表失败，信息不全",null);
             return response;
         }
         long pageSize = 5;//分页查询条数
@@ -116,7 +117,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
             response.setPageNum(pageNum);
             response.setPageSize(pageSize);
             response.setTotalNum(page.getTotal());
-            response.setResponse(ResponseDTO.RespEnum.SUCCESS,"未查询评论信息",null);
+            response.setResponse(ResponseEnum.SUCCESS,"未查询评论信息",null);
             return response;
         }
         //重新组装评论信息
@@ -170,7 +171,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
         response.setPageNum(pageNum);
         response.setPageSize(pageSize);
         response.setTotalNum(page.getTotal());
-        response.setResponse(ResponseDTO.RespEnum.SUCCESS,commentList);
+        response.setResponse(ResponseEnum.SUCCESS,commentList);
         return response;
     }
     /**
@@ -204,7 +205,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
         ResponseDTO<BlogArticleDTO> response = new ResponseDTO<>();
         String ipAddr = HttpUtils.getIp();//IP地址
         if(blogId == null){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"根据博客ID查询博客信息，博客ID为空",null);
+            response.setResponse(ResponseEnum.FAIL,"根据博客ID查询博客信息，博客ID为空",null);
             return response;
         }
         //先从redis中获取数据，查询不到再查询数据库
@@ -217,7 +218,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
         }
         articleDTO = blogArticleMapper.findArticle(blogId);
         if(articleDTO == null){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"根据博客ID查询博客信息，博客不存在",null);
+            response.setResponse(ResponseEnum.FAIL,"根据博客ID查询博客信息，博客不存在",null);
             return response;
         }
         //判断用户是否收藏和点赞该博客
@@ -260,19 +261,19 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     public ResponseDTO<List<TagInfoDTO>> findAuthorBlogTag(String userId, Long blogId) {
         ResponseDTO<List<TagInfoDTO>> response = new ResponseDTO<>();
         if(StringUtils.isBlank(userId) && blogId == null){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客分类列表，博主ID或博客ID为空",null);
+            response.setResponse(ResponseEnum.FAIL,"获取博主博客分类列表，博主ID或博客ID为空",null);
             return response;
         }
         if(StringUtils.isBlank(userId)){
             BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
             if(articleEntity == null){
-                response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客分类列表，博客ID不存在",null);
+                response.setResponse(ResponseEnum.FAIL,"获取博主博客分类列表，博客ID不存在",null);
                 return response;
             }
             userId = articleEntity.getUserId();
         }
         List<TagInfoDTO> list = blogTagMapper.findAuthorBlogTag(userId);
-        response.setResponse(ResponseDTO.RespEnum.SUCCESS,list);
+        response.setResponse(ResponseEnum.SUCCESS,list);
         return response;
     }
     /**
@@ -287,19 +288,19 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     public ResponseDTO<List<BlogGroupDTO>> findAuthorBlogGroup(String userId, Long blogId) {
         ResponseDTO<List<BlogGroupDTO>> response = new ResponseDTO<>();
         if(StringUtils.isBlank(userId) && blogId == null){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客分组列表失败，博主ID或博客ID为空",null);
+            response.setResponse(ResponseEnum.FAIL,"获取博主博客分组列表失败，博主ID或博客ID为空",null);
             return response;
         }
         if(StringUtils.isBlank(userId)){
             BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
             if(articleEntity == null){
-                response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客分组列表失败，博客ID不存在",null);
+                response.setResponse(ResponseEnum.FAIL,"获取博主博客分组列表失败，博客ID不存在",null);
                 return response;
             }
             userId = articleEntity.getUserId();
         }
         List<BlogGroupDTO> list = userBlogGroupMapper.findAuthorBlogGroup(userId);
-        response.setResponse(ResponseDTO.RespEnum.SUCCESS,list);
+        response.setResponse(ResponseEnum.SUCCESS,list);
         return response;
     }
     /**
@@ -313,7 +314,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     public ResponseDTO<List<BlogArticleDTO>> findAuthorBlogList(BlogArticleDTO queryDTO) {
         ResponseDTO<List<BlogArticleDTO>> response = new ResponseDTO<>();
         if(queryDTO == null || StringUtils.isBlank(queryDTO.getUserId())){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博主博客列表失败，博主ID为空",null);
+            response.setResponse(ResponseEnum.FAIL,"获取博主博客列表失败，博主ID为空",null);
             return response;
         }
         int pageNum = queryDTO.getPageNum() <= 0 ? 1 : queryDTO.getPageNum();
@@ -324,7 +325,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
         response.setPageNum(queryDTO.getPageNum());
         response.setPageSize(queryDTO.getPageSize());
         response.setTotalNum(page.getTotal());
-        response.setResponse(ResponseDTO.RespEnum.SUCCESS,blogList);
+        response.setResponse(ResponseEnum.SUCCESS,blogList);
         return response;
     }
 
@@ -337,7 +338,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     @Override
     public ResponseDTO<List<BlogArticleDTO>> findHotBlogRank() {
         List<BlogArticleDTO> list = blogArticleMapper.findHotBlogRank();
-        return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,list);
+        return new ResponseDTO<>(ResponseEnum.SUCCESS,list);
     }
 
     /**
@@ -353,20 +354,20 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
     public ResponseDTO<AuthorDTO> findAuthorInfo(String userId, String authorId, Long blogId) {
         ResponseDTO<AuthorDTO> responseDTO = new ResponseDTO<>();
         if(StringUtils.isBlank(authorId) && blogId == null){
-            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"查询失败，博主ID或博客ID为空",null);
+            responseDTO.setResponse(ResponseEnum.FAIL,"查询失败，博主ID或博客ID为空",null);
             return responseDTO;
         }
         if(StringUtils.isBlank(authorId)){
             BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
             if(articleEntity == null){
-                responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"查询失败，博客ID不存在",null);
+                responseDTO.setResponse(ResponseEnum.FAIL,"查询失败，博客ID不存在",null);
                 return responseDTO;
             }
             authorId = articleEntity.getUserId();
         }
         UserInfoDTO userInfoDTO = ResponseDTO.getBackData(baseFeignService.findUserInfo(authorId));
         if(userInfoDTO == null){
-            responseDTO.setResponse(ResponseDTO.RespEnum.FAIL,"查询失败，博主信息不存在",null);
+            responseDTO.setResponse(ResponseEnum.FAIL,"查询失败，博主信息不存在",null);
             return responseDTO;
         }
         AuthorDTO authorDTO = blogArticleMapper.findAuthorCount(authorId);
@@ -385,7 +386,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
         fansWrapper.lambda().eq(UserFansEntity::getFansId,userId);
         int count = userFansMapper.selectCount(fansWrapper);
         authorDTO.setFan(count > 0);//判断是否已关注
-        responseDTO.setResponse(ResponseDTO.RespEnum.SUCCESS,authorDTO);
+        responseDTO.setResponse(ResponseEnum.SUCCESS,authorDTO);
         return responseDTO;
     }
 }

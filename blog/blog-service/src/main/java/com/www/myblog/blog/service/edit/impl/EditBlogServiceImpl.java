@@ -7,6 +7,7 @@ import com.www.common.config.mvc.upload.IFileUpload;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.pojo.enums.CodeKeyEnum;
 import com.www.common.pojo.enums.CodeTypeEnum;
+import com.www.common.pojo.enums.ResponseEnum;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
 import com.www.myblog.blog.data.dto.TagInfoDTO;
@@ -79,12 +80,12 @@ public class EditBlogServiceImpl implements IEditBlogService {
     public ResponseDTO<Boolean> updateBlogTagAndGroup(BlogArticleDTO blog) {
         ResponseDTO<Boolean> response = new ResponseDTO<>();
         if(blog == null || blog.getBlogId() == null){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"修改博客的分组及标签信息失败，信息不全",null);
+            response.setResponse(ResponseEnum.FAIL,"修改博客的分组及标签信息失败，信息不全",null);
             return response;
         }
         BlogArticleEntity articleEntity = blogArticleService.findById(blog.getBlogId());
         if(articleEntity == null){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询博客的分组及标签信息失败，博客不存在",null);
+            response.setResponse(ResponseEnum.FAIL,"查询博客的分组及标签信息失败，博客不存在",null);
             return response;
         }
         //修改分组信息
@@ -96,7 +97,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
         }else {
             GroupInfoEntity groupInfoEntity = groupInfoService.findById(blog.getGroupId());
             if(groupInfoEntity == null){
-                response.setResponse(ResponseDTO.RespEnum.FAIL,"查询博客的分组及标签信息失败，分组不存在",null);
+                response.setResponse(ResponseEnum.FAIL,"查询博客的分组及标签信息失败，分组不存在",null);
                 return response;
             }
             if(blogGroupEntity != null){
@@ -122,7 +123,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
         if(CollectionUtils.isNotEmpty(blog.getTagIds())){
             List<TagInfoEntity> tagInfoList = tagInfoService.findByIds(blog.getTagIds());
             if(CollectionUtils.isEmpty(tagInfoList) || tagInfoList.size() != blog.getTagIds().size()){
-                response.setResponse(ResponseDTO.RespEnum.FAIL,"查询博客的分组及标签信息失败，标签不存在",null);
+                response.setResponse(ResponseEnum.FAIL,"查询博客的分组及标签信息失败，标签不存在",null);
                 return response;
             }
             List<BlogTagEntity> addTagList = new ArrayList<>();//需要新增的博客标签
@@ -160,7 +161,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
                 blogTagService.deleteByBlogId(blog.getBlogId());
             }
         }
-        response.setResponse(ResponseDTO.RespEnum.SUCCESS,true);
+        response.setResponse(ResponseEnum.SUCCESS,true);
         return response;
     }
     /**
@@ -175,12 +176,12 @@ public class EditBlogServiceImpl implements IEditBlogService {
     public ResponseDTO<BlogArticleDTO> findBlogTagAndGroup(Long blogId) {
         ResponseDTO<BlogArticleDTO> response = new ResponseDTO<>();
         if(blogId == null){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询博客的分组及标签信息失败，信息不全",null);
+            response.setResponse(ResponseEnum.FAIL,"查询博客的分组及标签信息失败，信息不全",null);
             return response;
         }
         BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
         if(articleEntity == null){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"查询博客的分组及标签信息失败，博客不存在",null);
+            response.setResponse(ResponseEnum.FAIL,"查询博客的分组及标签信息失败，博客不存在",null);
             return response;
         }
         BlogArticleDTO articleDTO = new BlogArticleDTO();
@@ -193,7 +194,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
         List<Long> tagIds = CollectionUtils.isEmpty(tagList) ? null :
                 tagList.stream().map(BlogTagEntity::getTagId).collect(Collectors.toList());
         articleDTO.setTagIds(tagIds);
-        response.setResponse(ResponseDTO.RespEnum.SUCCESS,articleDTO);
+        response.setResponse(ResponseEnum.SUCCESS,articleDTO);
         return response;
     }
     /**
@@ -205,7 +206,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
     @Override
     public ResponseDTO<List<TagInfoDTO>> findAllBlogTag() {
         List<TagInfoDTO> list = tagInfoMapper.findAllBlogTag();
-        return new ResponseDTO<>(ResponseDTO.RespEnum.SUCCESS,list);
+        return new ResponseDTO<>(ResponseEnum.SUCCESS,list);
     }
     /**
      * <p>@Description 获取用户博客标签列表 </p>
@@ -218,11 +219,11 @@ public class EditBlogServiceImpl implements IEditBlogService {
     public ResponseDTO<List<TagInfoDTO>> findUserBlogTag(String userId) {
         ResponseDTO<List<TagInfoDTO>> response = new ResponseDTO<>();
         if(StringUtils.isBlank(userId)){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"获取用户博客标签列表失败。信息不全",null);
+            response.setResponse(ResponseEnum.FAIL,"获取用户博客标签列表失败。信息不全",null);
             return response;
         }
         List<TagInfoDTO> list = blogTagMapper.findAuthorBlogTag(userId);
-        response.setResponse(ResponseDTO.RespEnum.SUCCESS,list);
+        response.setResponse(ResponseEnum.SUCCESS,list);
         return response;
     }
     /**
@@ -236,7 +237,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
     public ResponseDTO<List<BlogArticleDTO>> findBlogList(BlogArticleDTO query) {
         ResponseDTO<List<BlogArticleDTO>> response = new ResponseDTO<>();
         if(query == null || StringUtils.isBlank(query.getUserId())){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"获取博客列表失败，信息不全",null);
+            response.setResponse(ResponseEnum.FAIL,"获取博客列表失败，信息不全",null);
             return response;
         }
         int pageNum = query.getPageNum() <= 0 ? 1 : query.getPageNum();
@@ -247,7 +248,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
         response.setPageNum(query.getPageNum());
         response.setPageSize(query.getPageSize());
         response.setTotalNum(page.getTotal());
-        response.setResponse(ResponseDTO.RespEnum.SUCCESS,blogList);
+        response.setResponse(ResponseEnum.SUCCESS,blogList);
         return response;
     }
     /**
@@ -262,13 +263,13 @@ public class EditBlogServiceImpl implements IEditBlogService {
     public ResponseDTO<Long> createBlogArticle(BlogArticleDTO blog, MultipartFile img) {
         ResponseDTO<Long> response = new ResponseDTO<>();
         if(blog == null || StringUtils.isAnyBlank(blog.getUserId(),blog.getTitle(),blog.getContent())){
-            response.setResponse(ResponseDTO.RespEnum.FAIL,"发布博客失败，信息不完整",null);
+            response.setResponse(ResponseEnum.FAIL,"发布博客失败，信息不完整",null);
             return response;
         }
         if(blog.getGroupId() != null){
             GroupInfoEntity groupEntity = groupInfoService.findById(blog.getGroupId());
             if(groupEntity == null){
-                response.setResponse(ResponseDTO.RespEnum.FAIL,"发布博客失败，分组信息不存在",null);
+                response.setResponse(ResponseEnum.FAIL,"发布博客失败，分组信息不存在",null);
                 return response;
             }
         }
@@ -276,7 +277,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
             //根据标签id集合查询标签信息
             List<TagInfoEntity> tagList = tagInfoService.findByIds(blog.getTagIds());
             if(CollectionUtils.isEmpty(tagList) || tagList.size() != blog.getTagIds().size()){
-                response.setResponse(ResponseDTO.RespEnum.FAIL,"发布博客失败，分类信息不存在",null);
+                response.setResponse(ResponseEnum.FAIL,"发布博客失败，分类信息不存在",null);
                 return response;
             }
         }
@@ -327,7 +328,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
                 blogTagService.createEntity(blogClassEntity);
             }
         }
-        response.setResponse(ResponseDTO.RespEnum.SUCCESS,"发布博客成功",blogEntity.getBlogId());
+        response.setResponse(ResponseEnum.SUCCESS,"发布博客成功",blogEntity.getBlogId());
         return response;
     }
 
@@ -343,7 +344,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
     public ResponseDTO<String> createBlogGroup(String userId, String name) {
         ResponseDTO<String> response = new ResponseDTO<>();
         if(StringUtils.isAnyBlank(userId,name)){
-            response.setCode(ResponseDTO.RespEnum.FAIL.getCode());
+            response.setCode(ResponseEnum.FAIL.getCode());
             response.setMsg("新增分组失败，用户ID或分组名称为空");
             return response;
         }
@@ -353,7 +354,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
         groupEntity.setUpdateTime(DateUtils.getCurrentDateTime());
         groupEntity.setCreateTime(DateUtils.getCurrentDateTime());
         groupInfoService.createEntity(groupEntity);
-        response.setResponse(ResponseDTO.RespEnum.SUCCESS,"新增分组成功");
+        response.setResponse(ResponseEnum.SUCCESS,"新增分组成功");
         return response;
     }
 
@@ -371,7 +372,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
             return response;
         }
         List<BlogGroupDTO> list = groupInfoMapper.findBlogGroup(userId);
-        response.setResponse(ResponseDTO.RespEnum.SUCCESS,list);
+        response.setResponse(ResponseEnum.SUCCESS,list);
         return response;
     }
 }
