@@ -3,6 +3,7 @@ package com.www.myblog.blog.service.user.impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.pojo.dto.response.ResponseDTO;
+import com.www.common.pojo.enums.DateFormatEnum;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.constants.CommenConstant;
 import com.www.myblog.blog.data.dto.AuthorDTO;
@@ -425,7 +426,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
         }
         commentDTO.setBlogId(blogId).setCommentId(commentEntity.getCommentId())
                 .setComment(text).setUserId(userId).setMore(0L).setPraise(0L).setOpen(false)
-                .setCreateDate(DateUtils.format(commentEntity.getCreateTime(), DateUtils.DateFormatEnum.YYYY_MM_DD));
+                .setCreateDate(DateUtils.format(commentEntity.getCreateTime(), DateFormatEnum.YYYY_MM_DD));
         response.setResponse(ResponseDTO.RespEnum.SUCCESS,commentDTO);
         return response;
     }

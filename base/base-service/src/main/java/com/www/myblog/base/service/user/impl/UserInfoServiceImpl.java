@@ -7,6 +7,7 @@ import com.www.common.config.code.CodeDict;
 import com.www.common.config.mvc.upload.IFileUpload;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.common.pojo.enums.CodeTypeEnum;
+import com.www.common.pojo.enums.DateFormatEnum;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysRoleDTO;
@@ -289,7 +290,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userWrapper.lambda().eq(SysUserEntity::getUserId,user.getUserId());
         userWrapper.lambda().set(SysUserEntity::getUserName,user.getUserName());
         userWrapper.lambda().set(SysUserEntity::getPhoneNum,user.getPhoneNum());
-        userWrapper.lambda().set(SysUserEntity::getBirthday,DateUtils.parse(user.getBirthday(), DateUtils.DateFormatEnum.YYYY_MM_DD));
+        userWrapper.lambda().set(SysUserEntity::getBirthday,DateUtils.parse(user.getBirthday(), DateFormatEnum.YYYY_MM_DD));
         userWrapper.lambda().set(SysUserEntity::getSex,user.getSex());
         userWrapper.lambda().set(SysUserEntity::getEmail,user.getEmail());
         userWrapper.lambda().set(SysUserEntity::getBrief,user.getBrief());
@@ -350,7 +351,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userEntity.setPassword(user.getPassword());
         userEntity.setSex(user.getSex());
         userEntity.setPhoneNum(user.getPhoneNum());
-        userEntity.setBirthday(DateUtils.parse(user.getBirthday(), DateUtils.DateFormatEnum.YYYY_MM_DD));
+        userEntity.setBirthday(DateUtils.parse(user.getBirthday(), DateFormatEnum.YYYY_MM_DD));
         userEntity.setEmail(user.getEmail());
         userEntity.setCreateTime(DateUtils.getCurrentDateTime());
         userEntity.setUpdateTime(DateUtils.getCurrentDateTime());
