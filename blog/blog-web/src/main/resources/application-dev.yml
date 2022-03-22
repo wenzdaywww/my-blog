@@ -35,7 +35,7 @@ com:
     common:
       code:
         enable: true #开启数据字典加载
-      ctl-aop:
+      request:
         enable: true #开启controller的AOP日志拦截
       #配置文件路径
       file:

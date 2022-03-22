@@ -47,7 +47,7 @@
         <!-- 公共API包依赖-->
         <dependency>
             <groupId>com.www</groupId>
-            <artifactId>common-boot-starter</artifactId>
+            <artifactId>common-spring-boot-starter</artifactId>
         </dependency>
     </dependencies>
     <!--配置环境的profile-->
