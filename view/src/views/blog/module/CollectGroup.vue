@@ -60,7 +60,6 @@ export default {
         });
       }
     }
-    findCollectGroup();
     //新建收藏夹
     const newCollect = () => {
       axios.$http.post(request.addCollectGroup,{name:newCollectName.value}).then(function (res) {
@@ -113,6 +112,7 @@ export default {
       addVisible.value = true;
       updateFlag.value = flag;
       selectCgId.value = 0;
+      findCollectGroup();
     }
     return {addVisible,selectCgId,openCollectDialog,groupArr,newCollectName,saveCollect,newCollect,selectCollect};
   }

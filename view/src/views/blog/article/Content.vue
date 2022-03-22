@@ -31,7 +31,7 @@
     <!-- 评论列表 -->
     <blog-comment/>
     <!-- 收藏夹弹出窗 -->
-    <collect-group ref="collectDialog" @blogCollectAdd="blogCollectAdd"/>
+    <collect-group v-if="isLogin" ref="collectDialog" @blogCollectAdd="blogCollectAdd"/>
   </div>
 </template>
 
@@ -51,6 +51,8 @@ export default {
     const axios = getCurrentInstance().appContext.config.globalProperties;
     //博客id
     const blogId = utils.getUrlParam("bid");
+    //是否登录
+    const isLogin = utils.isLogin()
     //博客文章信息
     const blog = reactive({});
     //收藏夹弹出窗对象
@@ -131,7 +133,7 @@ export default {
       blog.collection = true;
       blog.collect++;
     }
-    return {blog,addCollect,collectDialog,blogCollectAdd,addPraise};
+    return {blog,isLogin,addCollect,collectDialog,blogCollectAdd,addPraise};
   }
 };
 </script>
