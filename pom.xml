@@ -19,7 +19,7 @@
 	<modules>
 		<module>base</module>
 		<module>blog</module>
-		<module>common</module>
+		<module>api</module>
 		<module>task</module>
 		<module>eureka</module>
         <module>zuul</module>
@@ -234,7 +234,7 @@
 			<!-- 博客公共API包依赖-->
 			<dependency>
 				<groupId>com.www.myblog</groupId>
-				<artifactId>common</artifactId>
+				<artifactId>api</artifactId>
 				<version>1.0.0</version>
 			</dependency>
 		</dependencies>

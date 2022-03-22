@@ -11,10 +11,10 @@
     </parent>
 
     <groupId>com.www.myblog</groupId>
-    <artifactId>common</artifactId>
+    <artifactId>api</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <name>common</name>
+    <name>api</name>
     <description>我的博客公共API</description>
 
     <dependencies>

@@ -109,7 +109,7 @@
         <!-- 博客公共API包依赖-->
         <dependency>
             <groupId>com.www.myblog</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>api</artifactId>
         </dependency>
     </dependencies>
     <!--配置环境的profile-->
