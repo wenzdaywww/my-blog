@@ -52,11 +52,13 @@ export default {
     }
     //查询收藏夹
     const findCollectGroup = () => {
-      axios.$http.get(request.collectGroup,null).then(function (res) {
-        if(res.code === 200){
-          groupArr.value = res.data;
-        }
-      });
+      if(utils.isLogin()){
+        axios.$http.get(request.collectGroup,null).then(function (res) {
+          if(res.code === 200){
+            groupArr.value = res.data;
+          }
+        });
+      }
     }
     findCollectGroup();
     //新建收藏夹
