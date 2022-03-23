@@ -1,6 +1,6 @@
 package com.www.myblog.blog.service.oauth2;
 
-import com.www.common.config.oauth2.IOauth2Service;
+import com.www.common.config.oauth2.resource.inf.IOauth2Service;
 import com.www.common.pojo.dto.security.ScopeDTO;
 import com.www.myblog.blog.service.redis.IRedisService;
 import lombok.extern.slf4j.Slf4j;

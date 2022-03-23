@@ -28,6 +28,7 @@ com:
     common:
       code:
         enable: true #开启数据字典加载
+        scheduled: "0 0 * * * ?"
       oauth2:
         signing-key: wenzday #JWT令牌签名
       datasource: #数据库配置

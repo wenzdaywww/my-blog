@@ -20,8 +20,8 @@ import java.util.List;
  * <p>@Date 2022/1/20 21:29 </p>
  */
 @Component
-@FeignClient(value = "${com.www.common.feign.base}",fallbackFactory = BaseFeignFallback.class)//服务提供者名称
-@ConditionalOnProperty(prefix = "com.www.common.feign",name = {"base"})
+@FeignClient(value = "${com.www.myblog.feign.base}",fallbackFactory = BaseFeignFallback.class)//服务提供者名称
+@ConditionalOnProperty(prefix = "com.www.myblog.feign",name = "base")
 public interface IBaseFeignService {
     /**
      * <p>@Description 查询多个用户信息 </p>

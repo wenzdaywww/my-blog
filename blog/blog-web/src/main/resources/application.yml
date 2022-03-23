@@ -44,7 +44,7 @@ hystrix:
             timeoutInMilliseconds: 60000 #配置超时时间
 com:
   www:
-    common:
+    myblog:
       feign: #配置需要调用的应用服务
         base: my-base #需要的调用的应用服务
 #配置eureka注册中心服务的status信息

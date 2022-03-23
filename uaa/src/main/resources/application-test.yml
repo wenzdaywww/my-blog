@@ -31,6 +31,7 @@ com:
     common:
       code:
         enable: true #开启数据字典加载
+        scheduled: "0 0 * * * ?"
       oauth2:
         signing-key: wenzday
       datasource: #数据库配置

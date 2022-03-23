@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-@ConditionalOnProperty(prefix = "com.www.common.feign",name = {"base"})
+@ConditionalOnProperty(prefix = "com.www.myblog.feign",name = "base")
 public class BaseFeignFallback implements FallbackFactory<IBaseFeignService> {
     /**
      * <p>@Description 服务降级处理 </p>

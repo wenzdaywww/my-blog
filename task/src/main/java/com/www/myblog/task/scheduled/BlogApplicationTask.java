@@ -1,6 +1,6 @@
 package com.www.myblog.task.scheduled;
 
-import com.www.common.config.filter.TraceIdFilter;
+import com.www.common.config.filter.core.TraceIdFilter;
 import com.www.common.utils.UUIDUtils;
 import com.www.myblog.task.service.IRedisService;
 import lombok.extern.slf4j.Slf4j;
