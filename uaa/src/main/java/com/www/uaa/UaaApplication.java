@@ -1,5 +1,7 @@
 package com.www.uaa;
 
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
+import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +13,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
  * <p>@Author www </p>
  * <p>@Date 2021/12/19 12:57 </p>
  */
-@SpringBootApplication(scanBasePackages = {"com.www.common","com.www.uaa"})
+@SpringBootApplication(exclude = {DruidDataSourceAutoConfigure.class, MybatisPlusAutoConfiguration.class})
 @EnableEurekaClient
 @MapperScan(basePackages = {"com.www.uaa.data"})
 public class UaaApplication {

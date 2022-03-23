@@ -3,7 +3,7 @@ package com.www.myblog.zuul.config.filter;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
-import com.www.common.config.filter.TraceIdFilter;
+import com.www.common.config.filter.core.TraceIdFilter;
 import com.www.common.utils.UUIDUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;

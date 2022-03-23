@@ -1,7 +1,8 @@
 package com.www.uaa.config.authorize.core;
 
-import com.www.uaa.config.authorize.handler.UserServiceHandler;
+import com.www.common.config.datasource.sources.impl.WriteDataSource;
 import com.www.common.config.oauth2.token.JwtTokenConverter;
+import com.www.uaa.config.authorize.handler.UserServiceHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -23,8 +24,6 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
-import javax.annotation.Resource;
-import javax.sql.DataSource;
 import java.util.Arrays;
 
 /**
@@ -48,12 +47,12 @@ import java.util.Arrays;
  * <p>@Author www </p>
  * <p>@Date 2021/12/18 12:10 </p>
  */
+@Slf4j
 @Configuration
 @EnableAuthorizationServer
-@Slf4j
 public class AuthorizeServerConfig extends AuthorizationServerConfigurerAdapter {
-    @Resource
-    private DataSource dataSource;
+    @Autowired
+    private WriteDataSource writeDataSource;
     @Autowired
     private AuthorizationCodeServices authorizationCodeServices;
     @Autowired
@@ -132,7 +131,7 @@ public class AuthorizeServerConfig extends AuthorizationServerConfigurerAdapter 
      */
     @Bean
     public ClientDetailsService clientDetails() {
-        JdbcClientDetailsService clientService = new JdbcClientDetailsService(dataSource);
+        JdbcClientDetailsService clientService = new JdbcClientDetailsService(writeDataSource);
         clientService.setPasswordEncoder(passwordEncoder);
         return clientService;
     }
@@ -166,6 +165,6 @@ public class AuthorizeServerConfig extends AuthorizationServerConfigurerAdapter 
     @Bean
     public AuthorizationCodeServices authorizationCodeServices(){
         //数据库存储授权码
-        return new JdbcAuthorizationCodeServices(dataSource);
+        return new JdbcAuthorizationCodeServices(writeDataSource);
     }
 }
