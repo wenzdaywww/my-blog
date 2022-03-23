@@ -2,7 +2,7 @@ package com.www.myblog.blog;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
-import com.www.common.config.rest.MyRestAutoConfiguration;
+import com.www.common.config.feign.MyFeignAutoConfiguration;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,7 +22,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableCircuitBreaker //开启hystrix熔断器
 @MapperScan(basePackages = {"com.www.myblog.blog.data"})
 @EnableFeignClients(basePackages = {"com.www.myblog.common.config.feign"})//配置feign扫描路径
-@RibbonClient(name = "${com.www.myblog.feign.base}",configuration = MyRestAutoConfiguration.class)//配置base服务的负载均衡策略
+@RibbonClient(name = "${com.www.myblog.feign.base}",configuration = MyFeignAutoConfiguration.class)//配置base服务的负载均衡策略
 public class BlogApplication {
     public static void main(String[] args) {
         //配置application加密的密钥
