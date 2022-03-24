@@ -6,3 +6,5 @@ spring:
 #配置eureka注册中心服务的status信息
 info:
   name: ${eureka.instance.instance-id}
+logging:
+  config: classpath:logback-eureka.xml

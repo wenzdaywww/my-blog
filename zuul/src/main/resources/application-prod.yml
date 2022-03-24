@@ -4,7 +4,6 @@ server:
   port: 8001
 #日志配置
 logging:
-  config: classpath:logback-prod.xml
   file:
     path: /home/www/logs/${spring.application.name}/  #日志路径
 #eureka配置

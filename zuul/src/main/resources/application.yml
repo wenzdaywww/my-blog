@@ -12,6 +12,8 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+logging:
+  config: classpath:logback-zuul.xml
 #配置eureka注册中心服务的status信息
 info:
   name: 网关服务

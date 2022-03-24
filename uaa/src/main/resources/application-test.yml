@@ -3,7 +3,6 @@ server:
   port: 8003
 #日志配置
 logging:
-  config: classpath:logback-test.xml
   file:
     path: /home/ap/logs/${spring.application.name}/  #日志路径
 #spring配置
