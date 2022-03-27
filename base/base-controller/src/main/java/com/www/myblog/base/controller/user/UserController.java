@@ -13,7 +13,12 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -47,8 +52,7 @@ public class UserController {
      * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.code.CodeDTO>>
      */
     @PostMapping("codes")
-    public ResponseDTO<Map<String,List<CodeDTO>>> findCodeDataList(@RequestParam(name = "list",required = false) List<String> list){
-        /// TODO: 2022/2/3 list传值有问题，待处理
+    public ResponseDTO<Map<String,List<CodeDTO>>> findCodeDataList(@RequestParam List<String> list){
         ResponseDTO<Map<String,List<CodeDTO>>>response = new ResponseDTO<>();
         if(list == null || list.size() <= 0){
             response.setResponse(ResponseEnum.FAIL,"查询数据字典数据失败，信息不全",null);

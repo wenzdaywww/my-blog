@@ -284,6 +284,15 @@ export default {
           yesNoArr.value = res.data.yesNo;
         }
       });
+      // let codeArr = [];
+      // codeArr.push("menuType");
+      // codeArr.push("yesNo");
+      // axios.$http.post(request.codes, codeArr).then(function (res) {
+      //   if(res.code === 200){
+      //     menuArr.value = res.data.menuType;
+      //     yesNoArr.value = res.data.yesNo;
+      //   }
+      // });
     };
     getCodeDataArr();
     // 角色列表
