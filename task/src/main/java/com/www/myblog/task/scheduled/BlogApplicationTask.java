@@ -1,7 +1,7 @@
 package com.www.myblog.task.scheduled;
 
 import com.www.common.config.filter.core.TraceIdFilter;
-import com.www.common.utils.UUIDUtils;
+import com.www.common.utils.UidGeneratorUtils;
 import com.www.myblog.task.service.IRedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -63,7 +63,7 @@ public class BlogApplicationTask {
      */
     @Scheduled(cron = "${com.www.common.my-task.blog.article}")
     public void updateBlogNum() {
-        MDC.put(TraceIdFilter.TRACE_ID, UUIDUtils.getTraceId());
+        MDC.put(TraceIdFilter.TRACE_ID, UidGeneratorUtils.getTraceId());
         log.info("开始定时更新博客统计量数据");
         redisService.updateBlogNum();
         MDC.remove(TraceIdFilter.TRACE_ID);

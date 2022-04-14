@@ -4,7 +4,7 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import com.www.common.config.filter.core.TraceIdFilter;
-import com.www.common.utils.UUIDUtils;
+import com.www.common.utils.UidGeneratorUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -55,7 +55,7 @@ public class PreFilter extends ZuulFilter {
     public boolean shouldFilter() {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
-        String traceId = UUIDUtils.getTraceId();
+        String traceId = UidGeneratorUtils.getTraceId();
         //生成全局日志跟踪号
         ctx.addZuulRequestHeader(TraceIdFilter.TRACE_ID, traceId);
         MDC.put(TraceIdFilter.TRACE_ID, traceId);
