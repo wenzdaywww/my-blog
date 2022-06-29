@@ -15,15 +15,6 @@
       </div>
       <!-- 已登录 -->
       <div class="header-user-con" v-if="isLogin == true">
-        <!-- 消息中心 -->
-<!--        <div class="btn-bell">-->
-<!--          <el-tooltip effect="dark" :content="form.message?`有${form.message}条未读消息`:`消息中心`" placement="bottom">-->
-<!--            <router-link to="/news">-->
-<!--              <i class="el-icon-bell"></i>-->
-<!--            </router-link>-->
-<!--          </el-tooltip>-->
-<!--          <span class="btn-bell-badge" v-if="form.message"></span>-->
-<!--        </div>-->
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" trigger="hover" @command="handleCommand">
           <!-- 用户头像 -->
@@ -39,6 +30,15 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
+        <!-- 消息中心 -->
+        <div class="btn-bell">
+          <el-tooltip effect="dark" :content="form.message?`有${form.message}条未读消息`:`消息中心`" placement="bottom">
+            <router-link to="/news">
+              <i class="el-icon-bell"></i>
+            </router-link>
+          </el-tooltip>
+          <span class="btn-bell-badge" v-if="form.message"></span>
+        </div>
       </div>
       <!-- 修改密码弹出框 -->
       <password ref="passwordDialog" v-if="isLogin == true"/>
@@ -263,5 +263,25 @@ export default {
   text-decoration: underline;
   padding-bottom: 1px;
   cursor:default;
+}
+.btn-bell,
+.btn-fullscreen {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  border-radius: 15px;
+  cursor: pointer;
+  margin-left: 15px;
+}
+.btn-bell-badge {
+  position: absolute;
+  right: 0;
+  top: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: #f56c6c;
+  color: #fff;
 }
 </style>

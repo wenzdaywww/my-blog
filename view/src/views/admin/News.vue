@@ -130,6 +130,7 @@ export default {
 <style>
 .message-title {
     cursor: pointer;
+    color: #20a0ff;
 }
 .handle-row {
     margin-top: 30px;
