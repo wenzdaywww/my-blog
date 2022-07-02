@@ -1,15 +1,18 @@
 package com.www.myblog.base.controller.admin;
 
 import com.www.common.pojo.constant.AuthorityContant;
+import com.www.myblog.base.data.dto.MonitorInfoDTO;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysRoleDTO;
 import com.www.myblog.base.data.dto.SysUserDTO;
+import com.www.myblog.base.service.entity.IMonitorInfoService;
 import com.www.myblog.base.service.menu.IMenuInfoService;
 import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.base.service.user.IUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +33,22 @@ public class AdminController {
     private IMenuInfoService menuInfoService;
     @Autowired
     private IUserInfoService userInfoService;
+    @Autowired
+    private IMonitorInfoService monitorInfoService;
 
+    /**
+     * <p>@Description 查询监控信息 </p>
+     * <p>@Author www </p>
+     * <p>@Date 2022/7/2 14:21 </p>
+     * @param name 监控名称
+     * @param pageNum 当前页数
+     * @param pageSize 页面条数
+     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.MonitorInfoDTO>>
+     */
+    @GetMapping("monitor")
+    public ResponseDTO<List<MonitorInfoDTO>> findMonitorInfo(String name,int pageNum, long pageSize){
+        return monitorInfoService.findMonitorInfo(name,pageNum,pageSize);
+    }
     /**
      * <p>@Description 删除菜单 </p>
      * <p>@Author www </p>

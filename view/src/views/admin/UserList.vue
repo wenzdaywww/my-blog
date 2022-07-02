@@ -9,8 +9,8 @@
       </el-breadcrumb>
     </div>
     <el-card>
-      <!-- 用户信息列表-->
       <div>
+        <!-- 用户信息列表查询条件-->
         <div class="handle-box">
           <el-select v-model="query.stateCd" placeholder="用户状态" class="handle-select mr10">
             <el-option v-for="item in stateCdArr" :key="item.value" :label="item.name" :value="item.value"></el-option>
@@ -20,6 +20,7 @@
           <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
           <el-button type="primary" icon="el-icon-refresh-left" @click="handleReset">重置</el-button>
         </div>
+        <!-- 用户信息列表-->
         <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
           <el-table-column prop="suId" label="ID" width="55" align="center"></el-table-column>
           <el-table-column prop="userId" label="用户ID" align="center"></el-table-column>

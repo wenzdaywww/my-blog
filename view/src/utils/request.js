@@ -20,6 +20,8 @@ export default {
     userList: "api/base/admin/users",
     //修改用户状态
     userState: "api/base/admin/state",
+    //查询监控信息
+    monitorList: "api/base/admin/monitor",
     //查询用户信息
     userInfo: "api/base/user/info",
     //查询用户路由权限
