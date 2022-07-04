@@ -197,13 +197,12 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/25 21:21 </p>
      * @param userId 当前登录用户ID
-     * @param blogId 博客ID
+     * @param ipAddr 访问IP
      * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
      */
     @Override
-    public ResponseDTO<BlogArticleDTO> findAriticle(String userId,Long blogId) {
+    public ResponseDTO<BlogArticleDTO> findAriticle(String userId,Long blogId,String ipAddr) {
         ResponseDTO<BlogArticleDTO> response = new ResponseDTO<>();
-        String ipAddr = HttpUtils.getIp();//IP地址
         if(blogId == null){
             response.setResponse(ResponseEnum.FAIL,"根据博客ID查询博客信息，博客ID为空",null);
             return response;

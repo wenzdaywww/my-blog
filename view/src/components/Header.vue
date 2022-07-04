@@ -54,10 +54,11 @@ import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import utils from '../utils/utils';
 import request from '../utils/request';
+import {initUserRouter,clearUserRouter} from "../router";
 import {ElMessage} from "element-plus";
-import {initUserRouter} from "../router";
 import Register from "../views/admin/Register.vue";
 import Password from "../views/admin/Password.vue";
+import store from "../store";
 
 export default {
   name: "Header",
@@ -132,12 +133,7 @@ export default {
       let user = utils.getUser();
       if (utils.isLogin()){
         isLogin.value = true;
-        //加载用户拥有的路由权限
-        axios.$http.get(request.userRouter, null).then(function (res) {
-          if(res.code === 200){
-            initUserRouter(res.data);
-          }
-        });
+        initUserRouter();
         getUserData();
       }else{
         isLogin.value = false;
@@ -160,6 +156,7 @@ export default {
         axios.$http.post(request.logout,null).then(function (res) {
           if(res.code === 200){
             ElMessage.success("退出成功");
+            clearUserRouter();
             //TODO 2021/12/28 22:35 router.push路由跳转页面不刷新，待处理
             //TODO 2022/1/11 22:43 测试环境部署多个前端，退出后不能到登录页面，待处理
             router.push("/index");

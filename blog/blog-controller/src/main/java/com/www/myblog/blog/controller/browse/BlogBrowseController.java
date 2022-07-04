@@ -59,12 +59,13 @@ public class BlogBrowseController {
      * <p>@Description 根据博客ID查询博客信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/25 21:21 </p>
-     * @param blogId 博客ID
+     * @param bid 博客ID
+     * @param ip 访问IP
      * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
      */
-    @GetMapping("article/{bid}")
-    public ResponseDTO<BlogArticleDTO> findAriticle(@PathVariable("bid") Long blogId){
-        return blogBrowseService.findAriticle(jwtTokenConverter.getUserId(),blogId);
+    @GetMapping("article")
+    public ResponseDTO<BlogArticleDTO> findAriticle(Long bid,String ip){
+        return blogBrowseService.findAriticle(jwtTokenConverter.getUserId(),bid,ip);
     }
     /**
      * <p>@Description 查询博主信息 </p>

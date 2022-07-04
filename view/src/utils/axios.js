@@ -2,6 +2,7 @@ import axios from "axios";
 import qs from "qs";
 import router from '../router';
 import {ElMessage} from 'element-plus';
+import store from "../store";
 //创建请求对象
 const http = axios.create();
 //设置超时
@@ -20,8 +21,12 @@ http.interceptors.response.use(
     response => {
         //接口返回403
         if ((response.data && (response.data.code == 401 || response.data.code == 403)) || response.status == 401 || response.status == 403) {
-            localStorage.clear();
-            router.push("/index");//跳转登录页面
+            let routerTemp = store.state.routerList;//获取允许的router
+            if(routerTemp.includes(window.location.pathname)){
+                router.push("/403");//跳转权限不足页面
+            }else {
+                router.push("/404");//跳转404页面
+            }
         }else if(response.status == 200){
             return Promise.resolve(response);
         }else {

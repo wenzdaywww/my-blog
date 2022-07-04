@@ -1,5 +1,7 @@
 // 配置请求地址信息
 export default {
+    //调用搜狐的请求获取IP地址
+    getIp: "sohu/cityjson?ie=utf-8",
     /** uaa应用 **/
     //获取token信息
     getToken: "api/uaa/oauth/token",

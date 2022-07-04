@@ -86,10 +86,15 @@ export default [
             }
         ]
     }, {
+        path: "/403",
+        name: "403",
+        meta: { title: "403" },
+        component: () => import ("../views/common/403.vue")
+    },{
         path: "/404",
         name: "404",
         meta: { title: "404" },
-        component: () => import ("../views/404.vue")
+        component: () => import ("../views/common/404.vue")
     },{
         path: "/:catchAll(.*)", // 页面404跳转
         redirect: "/404"

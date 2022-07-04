@@ -3,12 +3,17 @@ import {createStore} from 'vuex'
 export default createStore({
     state: {
         tagsList: [], //标签栏信息
-        routerList : ['/index', '/blogger', '/article', '/404'], //用户拥有的router信息
+        routerList : ['/index', '/blogger', '/article', '/403', '/404'], //用户拥有的router信息
         collapse: false //侧边栏是否收缩
     },
     mutations: {
-        // 添加router
+        /**
+         * 添加router
+         * @param state state对象
+         * @param data router数据
+         */
         setRouter(state, data){
+            state.routerList = ['/index', '/blogger', '/article', '/403', '/404'];
             if (data){
                 data.forEach(item => {
                     state.routerList.push(item);
@@ -43,14 +48,30 @@ export default createStore({
                 }
             }
         },
-        // 侧边栏折叠
+        /**
+         * 侧边栏折叠
+         * @param state state对象
+         * @param data 侧边栏数据
+         */
         handleCollapse(state, data) {
             state.collapse = data;
         }
     },
     actions: {
+        /**
+         * 更新router
+         * @param context
+         * @param data router信息
+         */
         updateRouter(context,data){
             context.commit('setRouter',data);
+        },
+        /**
+         * 清楚router
+         * @param context
+         */
+        clearRouter(context){
+            context.commit('setRouter',null);
         }
     },
     modules: {}

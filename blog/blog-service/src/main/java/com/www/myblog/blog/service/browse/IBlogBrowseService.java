@@ -40,9 +40,10 @@ public interface IBlogBrowseService {
      * <p>@Date 2022/1/25 21:21 </p>
      * @param userId 当前登录用户ID
      * @param blogId 博客ID
+     * @param ipAddr 访问IP
      * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
      */
-    ResponseDTO<BlogArticleDTO> findAriticle(String userId,Long blogId);
+    ResponseDTO<BlogArticleDTO> findAriticle(String userId,Long blogId,String ipAddr);
     /**
      * <p>@Description 获取博主博客分类列表 </p>
      * <p>@Author www </p>

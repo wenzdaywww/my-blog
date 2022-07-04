@@ -36,12 +36,15 @@
 </template>
 
 <script>
-import {getCurrentInstance, provide, reactive, ref} from "vue";
+import {getCurrentInstance, reactive, ref} from "vue";
+import { useStore } from "vuex";
 import utils from "../../../utils/utils";
 import request from "../../../utils/request";
 import blogComment from "./Comment.vue";
 import collectGroup from "../module/CollectGroup.vue";
 import {ElMessage} from "element-plus";
+import axios from "../../../utils/axios";
+import store from "../../../store";
 
 export default {
   name: "article",
@@ -49,6 +52,8 @@ export default {
   setup() {
     // 接口请求
     const axios = getCurrentInstance().appContext.config.globalProperties;
+    //store存储对象
+    const store = useStore();
     //博客id
     const blogId = utils.getUrlParam("bid");
     //是否登录
@@ -107,27 +112,41 @@ export default {
     //查询博客文章信息
     const getBlogArticle = () => {
       if(blogId){
-        axios.$http.get(request.article+blogId,null).then(function (res) {
-          if(res.code === 200){
-            document.title += res.data.title;//设置浏览器标题
-            blog.blogId = res.data.blogId;
-            blog.userId = res.data.userId;
-            blog.title = res.data.title;
-            blog.groupName = res.data.groupName;
-            blog.blogTag = res.data.blogTag;
-            blog.content = res.data.content;
-            blog.browse = res.data.browse;
-            blog.praise = res.data.praise;
-            blog.praised = res.data.praised;
-            blog.collect = res.data.collect;
-            blog.collection = res.data.collection;
-            blog.comment = res.data.comment;
-            blog.createTime = res.data.createTime;
-          }
+        //调用搜狐的请求获取IP地址
+        axios.$http.post(request.getIp,null).then(function (res){
+          //res = var returnCitySN = {"cip": "1.2.3.4", "cid": "123456", "cname": "福建省xx市"};
+          let ipAddr = res ? res.slice(res.indexOf("cip")+3,res.indexOf(",")).replaceAll(" ","").replaceAll(":","").replaceAll("\"","") : "";
+          findBlogArticle(ipAddr);
+        }).catch(function (err){
+          findBlogArticle("");
         });
       }
     }
     getBlogArticle();
+    /**
+     * 查询博客信息
+     * @param ipAddr
+     */
+    const findBlogArticle = (ipAddr) => {
+      axios.$http.get(request.article, {bid:blogId,ip:ipAddr}).then(function (res) {
+        if(res.code === 200){
+          document.title += res.data.title;//设置浏览器标题
+          blog.blogId = res.data.blogId;
+          blog.userId = res.data.userId;
+          blog.title = res.data.title;
+          blog.groupName = res.data.groupName;
+          blog.blogTag = res.data.blogTag;
+          blog.content = res.data.content;
+          blog.browse = res.data.browse;
+          blog.praise = res.data.praise;
+          blog.praised = res.data.praised;
+          blog.collect = res.data.collect;
+          blog.collection = res.data.collection;
+          blog.comment = res.data.comment;
+          blog.createTime = res.data.createTime;
+        }
+      });
+    }
     //收藏数量增加，供CollectGroup.vue调用
     const blogCollectAdd = () => {
       blog.collection = true;

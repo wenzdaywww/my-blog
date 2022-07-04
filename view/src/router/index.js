@@ -1,5 +1,8 @@
 import {createRouter, createWebHistory} from "vue-router";
 import routesDate from './routes';
+import request from "../utils/request";
+import store from "../store/index"
+import axios from "../utils/axios"
 const modules = import.meta.glob("../views/**/**.vue");// 接口请求
 //路由信息
 let routes = routesDate;
@@ -12,21 +15,29 @@ const router = createRouter({
     routes
 });
 /**
- * 初始化路由
- * @param routerData 路由数据
+ * 获取用户的router信息
+ * @param callBackFunc
  */
-export const initUserRouter = function (routerData) {
-    if(routerData){
-        //TODO 2022/7/3 由于动态加载路由后，刷新页面会404，所以暂弃用
-        // hanleChilden(homeRouter.children,routerData);
-        // router.addRoute(homeRouter);
-        // localStorage.setItem("router",JSON.stringify(routerData));
-        let routerList = [];
-        routerData.forEach(item => {
-            routerList.push(item.menuUrl);
-        });
-        localStorage.setItem("router",JSON.stringify(routerList));
-    }
+export const initUserRouter = function (callBackFunc){
+    //加载用户拥有的路由权限
+    axios.get(request.userRouter, null).then(function (res) {
+        if(res.code === 200){
+            let routerTemp = [];
+            res.data.forEach(item => {
+                routerTemp.push(item.menuUrl);
+            });
+            store.dispatch("updateRouter",routerTemp);
+        }
+        if (callBackFunc && callBackFunc instanceof  Function){
+            callBackFunc();
+        }
+    });
+}
+/**
+ * 清除用户的router信息
+ */
+export const clearUserRouter = function (){
+    store.dispatch("updateRouter",null);
 }
 /**
  * 递归处理子路由
@@ -55,19 +66,23 @@ const hanleChilden = function (parent,children) {
  */
 router.beforeEach((to, from, next) => {
     document.title = to.meta.title;
-    if (from.name){
+    let routerList = store.state.routerList;
+    //跳转的路径在允许的routeer
+    if (routerList.includes(to.path)){
         next();
     }else {
-        let routerList = ['/index', '/blogger', '/article', '/404'];
-        if(routerList.includes(to.path)){
-            next();
+        //非刷新进入，则404
+        if(from.name){
+            next("/404");
         }else {
-            routerList = JSON.parse(localStorage.getItem("router"));
-            if (routerList.includes(to.path)){
-                next();
-            }else {
-                next("/404");
-            }
+            initUserRouter(function (){
+                let routerTemp = store.state.routerList;//获取允许的router
+                if(routerTemp.includes(to.path)){
+                    next();
+                }else {
+                    next("/404");
+                }
+            });
         }
     }
 });
