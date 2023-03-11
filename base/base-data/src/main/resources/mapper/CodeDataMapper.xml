@@ -10,7 +10,7 @@
     <result column="IS_VALID" property="isValid" />
   </resultMap>
   <!--  查询所有有效的code数据-->
-  <select id="findAllCodeData" resultType="com.www.common.pojo.dto.code.CodeDTO">
+  <select id="findAllCodeData" resultType="com.www.common.config.code.dto.CodeDTO">
     SELECT C.CODE_TYPE TYPE,
            C.CODE_NAME TYPE_NAME,
            C.CODE_KEY CODE_KEY,

@@ -20,7 +20,7 @@
         <result column="CREATE_TIME" property="createTime" />
     </resultMap>
     <!-- 查询资源服务器的请求路径允许的scope范围-->
-    <select id="findUrlScopes" resultType="com.www.common.pojo.dto.security.ScopeDTO">
+    <select id="findUrlScopes" resultType="com.www.common.config.oauth2.dto.ScopeDTO">
         SELECT M.MODULE RESOURCE_ID,M.MENU_URL URL,M.SCOPE SCOPE FROM SYS_MENU M
         WHERE M.IS_DELETE = '0' AND M.MENU_TYPE = '2'
         <if test="resourceId != null and resourceId != ''">

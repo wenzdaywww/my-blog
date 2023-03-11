@@ -1,7 +1,7 @@
 package com.www.myblog.base.service.entity;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.www.common.pojo.dto.response.ResponseDTO;
+import com.www.common.data.dto.response.ResponseDTO;
 import com.www.myblog.base.data.dto.MonitorInfoDTO;
 import com.www.myblog.base.data.entity.MonitorInfoEntity;
 
@@ -21,7 +21,7 @@ public interface IMonitorInfoService extends IService<MonitorInfoEntity> {
      * @param name 监控名称
      * @param pageNum 当前页数
      * @param pageSize 页面条数
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.MonitorInfoDTO>>
+     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.MonitorInfoDTO>>
      */
     ResponseDTO<List<MonitorInfoDTO>> findMonitorInfo(String name,int pageNum, long pageSize);
 }

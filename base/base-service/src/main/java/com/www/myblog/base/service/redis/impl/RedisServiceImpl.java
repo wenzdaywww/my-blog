@@ -1,12 +1,12 @@
 package com.www.myblog.base.service.redis.impl;
 
 import com.www.common.config.code.CodeDict;
+import com.www.common.config.code.dto.CodeDTO;
+import com.www.common.config.oauth2.dto.ScopeDTO;
 import com.www.common.config.redis.RedisOperation;
-import com.www.common.pojo.constant.RedisCommonContant;
-import com.www.common.pojo.dto.code.CodeDTO;
-import com.www.common.pojo.dto.security.ScopeDTO;
 import com.www.myblog.base.data.mapper.CodeDataMapper;
 import com.www.myblog.base.data.mapper.SysMenuMapper;
+import com.www.myblog.base.data.properties.BaseProperties;
 import com.www.myblog.base.service.redis.IRedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -36,6 +36,8 @@ public class RedisServiceImpl implements IRedisService {
     private CodeDataMapper codeDataMapper;
     @Autowired
     private SysMenuMapper sysMenuMapper;
+    @Autowired
+    private BaseProperties baseProperties;
 
 
     /**
@@ -49,13 +51,13 @@ public class RedisServiceImpl implements IRedisService {
     public void updateRedisUrlScope(String resourceId) {
         String value = UUID.randomUUID().toString();
         try {
-            if(RedisOperation.lock(RedisCommonContant.URL_SCOPE_LOCK, value,60)){
-                RedisOperation.deleteKey(RedisCommonContant.URL_SCOPE_PREFIX + resourceId);
+            if(RedisOperation.lock(baseProperties.getUrlScopeLock(), value,60)){
+                RedisOperation.deleteKey(baseProperties.getUrlScopePrefix() + ":" + resourceId);
                 List<ScopeDTO> scopeList = sysMenuMapper.findUrlScopes(resourceId);
                 if(CollectionUtils.isNotEmpty(scopeList)){
                     for (ScopeDTO scopeDTO : scopeList){
                         //资源服务ID的url的scope保存到redis中
-                        RedisOperation.listSet(RedisCommonContant.URL_SCOPE_PREFIX + resourceId,scopeDTO);
+                        RedisOperation.listSet(baseProperties.getUrlScopePrefix() + ":" + resourceId,scopeDTO);
                     }
                 }
             }
@@ -63,7 +65,7 @@ public class RedisServiceImpl implements IRedisService {
             log.info("查所询有请求权限，发生异常：{}",e.getMessage());
         }finally {
             // 释放锁
-            RedisOperation.unlock(RedisCommonContant.URL_SCOPE_LOCK,value);
+            RedisOperation.unlock(baseProperties.getUrlScopeLock(),value);
         }
     }
     /**
@@ -76,14 +78,14 @@ public class RedisServiceImpl implements IRedisService {
     public void initRedisUrlScope() {
         String value = UUID.randomUUID().toString();
         try {
-            if(RedisOperation.lock(RedisCommonContant.URL_SCOPE_LOCK, value,60)){
+            if(RedisOperation.lock(baseProperties.getUrlScopeLock(), value,60)){
                 //删除所有资源服务id的scope数据
-                RedisOperation.deleteFuzzyKey(RedisCommonContant.URL_SCOPE_PREFIX + "*");
+                RedisOperation.deleteFuzzyKey(baseProperties.getUrlScopePrefix() + ":" + "*");
                 List<ScopeDTO> scopeList = sysMenuMapper.findUrlScopes(null);
                 if(CollectionUtils.isNotEmpty(scopeList)){
                     for (ScopeDTO scopeDTO : scopeList){
                         //资源服务ID的url的scope保存到redis中
-                        RedisOperation.listSet(RedisCommonContant.URL_SCOPE_PREFIX + scopeDTO.getResourceId(),scopeDTO);
+                        RedisOperation.listSet(baseProperties.getUrlScopePrefix() + ":" + scopeDTO.getResourceId(),scopeDTO);
                     }
                     log.info("启动加载资源服务ID的url的scope数据{}条",scopeList.size());
                 }
@@ -92,7 +94,7 @@ public class RedisServiceImpl implements IRedisService {
             log.info("查询所有请求权限，发生异常：{}",e.getMessage());
         }finally {
             // 释放锁
-            RedisOperation.unlock(RedisCommonContant.URL_SCOPE_LOCK,value);
+            RedisOperation.unlock(baseProperties.getUrlScopeLock(),value);
         }
     }
     /**
@@ -107,7 +109,7 @@ public class RedisServiceImpl implements IRedisService {
         String value = UUID.randomUUID().toString();
         while (isWait){
             try {
-                if(RedisOperation.lock(RedisCommonContant.CODE_DATA_LOCK, value,60)){
+                if(RedisOperation.lock(baseProperties.getCodeDataLock(), value,60)){
                     isWait = false;
                     List<CodeDTO> codeList = codeDataMapper.findAllCodeData();
                     if(CollectionUtils.isNotEmpty(codeList)){
@@ -123,9 +125,9 @@ public class RedisServiceImpl implements IRedisService {
                             }
                         }
                         if (MapUtils.isNotEmpty(codeMap)){
-                            RedisOperation.deleteKey(RedisCommonContant.CODE_DATA);
+                            RedisOperation.deleteKey(baseProperties.getCodeDataKey());
                             for (String key : codeMap.keySet()){
-                                RedisOperation.hashSet(RedisCommonContant.CODE_DATA,key,codeMap.get(key));
+                                RedisOperation.hashSet(baseProperties.getCodeDataKey(),key,codeMap.get(key));
                             }
                         }
                         CodeDict.initCode(codeMap);
@@ -137,7 +139,7 @@ public class RedisServiceImpl implements IRedisService {
                 log.info("查询所有CODE_DATA，发生异常：{}",e.getMessage());
             }finally {
                 // 释放锁
-                RedisOperation.unlock(RedisCommonContant.CODE_DATA_LOCK,value);
+                RedisOperation.unlock(baseProperties.getCodeDataLock(),value);
             }
         }
     }
@@ -149,16 +151,16 @@ public class RedisServiceImpl implements IRedisService {
      */
     @Override
     public List<ScopeDTO> findUrlScope() {
-        return (List<ScopeDTO>) RedisOperation.listGet(RedisCommonContant.URL_SCOPE_PREFIX + resourceId);
+        return (List<ScopeDTO>) RedisOperation.listGet(baseProperties.getUrlScopePrefix() + ":" + resourceId);
     }
     /**
      * <p>@Description 获取redis中的数据字典数据 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/2/4 12:03 </p>
-     * @return java.util.Map<java.lang.String, java.util.Map < java.lang.String, com.www.common.pojo.dto.code.CodeDTO>>
+     * @return java.util.Map<java.lang.String, java.util.Map < java.lang.String, com.www.common.config.code.dto.CodeDTO>>
      */
     @Override
     public Map<String, Map<String, CodeDTO>> getCodeData() {
-        return (Map<String,Map<String, CodeDTO>>) RedisOperation.hashGet(RedisCommonContant.CODE_DATA);
+        return (Map<String,Map<String, CodeDTO>>) RedisOperation.hashGet(baseProperties.getCodeDataKey());
     }
 }

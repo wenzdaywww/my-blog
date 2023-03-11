@@ -1,7 +1,7 @@
 package com.www.myblog.common.config.feign.base.fallback;
 
-import com.www.common.pojo.dto.response.ResponseDTO;
-import com.www.common.pojo.enums.ResponseEnum;
+import com.www.common.data.dto.response.ResponseDTO;
+import com.www.common.data.enums.ResponseEnum;
 import com.www.myblog.common.config.feign.base.IBaseFeignService;
 import com.www.myblog.common.dto.UserInfoDTO;
 import feign.hystrix.FallbackFactory;
@@ -38,7 +38,7 @@ public class BaseFeignFallback implements FallbackFactory<IBaseFeignService> {
              * <p>@Author www </p>
              * <p>@Date 2022/1/23 15:43 </p>
              * @param userList 用户id集合
-             * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+             * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
              */
             @Override
             public ResponseDTO<List<UserInfoDTO>> findUserInfoList(List<String> userList) {
@@ -52,7 +52,7 @@ public class BaseFeignFallback implements FallbackFactory<IBaseFeignService> {
              * <p>@Author www </p>
              * <p>@Date 2022/1/23 15:43 </p>
              * @param userList 用户id集合
-             * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean>
+             * @return com.www.common.data.dto.response.ResponseDTO<Boolean>
              */
             @Override
             public ResponseDTO<Boolean> validateUserExist(List<String> userList) {
@@ -64,7 +64,7 @@ public class BaseFeignFallback implements FallbackFactory<IBaseFeignService> {
              * <p>@Author www </p>
              * <p>@Date 2022/1/23 15:43 </p>
              * @param userId 用户id
-             * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+             * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
              */
             @Override
             public ResponseDTO<UserInfoDTO> findUserInfo(String userId) {

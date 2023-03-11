@@ -1,6 +1,6 @@
 package com.www.myblog.base.controller.user;
 
-import com.www.common.pojo.dto.response.ResponseDTO;
+import com.www.common.data.dto.response.ResponseDTO;
 import com.www.myblog.base.data.dto.SysUserDTO;
 import com.www.myblog.base.service.user.IUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;

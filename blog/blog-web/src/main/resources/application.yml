@@ -46,6 +46,11 @@ hystrix:
             timeoutInMilliseconds: 60000 #配置超时时间
 com:
   www:
+    blog:
+      blog-browse: MY-BLOG:BLOG_BROWSE:BLOG_ID_
+      blog-article: MY-BLOG:BLOG_ARTICLE:BLOG_ID
+      blog-article-lock: MY-BLOG:BLOG_ARTICLE:BLOG_ID_LOCK
+      url-scope-prefix: OAUTH2:RESOURCE_ID:URL_SCOPE
     myblog:
       feign: #配置需要调用的应用服务
         base: my-base #需要的调用的应用服务

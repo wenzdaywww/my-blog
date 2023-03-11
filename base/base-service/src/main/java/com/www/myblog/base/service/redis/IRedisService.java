@@ -1,7 +1,8 @@
 package com.www.myblog.base.service.redis;
 
-import com.www.common.pojo.dto.code.CodeDTO;
-import com.www.common.pojo.dto.security.ScopeDTO;
+
+import com.www.common.config.code.dto.CodeDTO;
+import com.www.common.config.oauth2.dto.ScopeDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,7 @@ public interface IRedisService {
      * <p>@Description 获取redis中的数据字典数据 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/2/4 12:03 </p>
-     * @return java.util.Map<java.lang.String, java.util.Map < java.lang.String, com.www.common.pojo.dto.code.CodeDTO>>
+     * @return java.util.Map<java.lang.String, java.util.Map < java.lang.String, com.www.common.config.code.dto.CodeDTO>>
      */
     Map<String, Map<String, CodeDTO>> getCodeData();
 }

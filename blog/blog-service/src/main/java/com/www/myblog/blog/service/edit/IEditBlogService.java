@@ -1,6 +1,6 @@
 package com.www.myblog.blog.service.edit;
 
-import com.www.common.pojo.dto.response.ResponseDTO;
+import com.www.common.data.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
 import com.www.myblog.blog.data.dto.TagInfoDTO;
 import com.www.myblog.common.dto.BlogArticleDTO;
@@ -20,7 +20,7 @@ public interface IEditBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/2/2 14:54 </p>
      * @param blog 博客信息
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
+     * @return com.www.common.data.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
      */
     ResponseDTO<Boolean> updateBlogTagAndGroup(BlogArticleDTO blog);
     /**
@@ -28,14 +28,14 @@ public interface IEditBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/2/2 14:54 </p>
      * @param blogId 博客id
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
+     * @return com.www.common.data.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
      */
     ResponseDTO<BlogArticleDTO> findBlogTagAndGroup(Long blogId);
     /**
      * <p>@Description 查询所有博客标签 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/22 19:07 </p>
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.TagInfoDTO>>
+     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.TagInfoDTO>>
      */
     ResponseDTO<List<TagInfoDTO>> findAllBlogTag();
     /**
@@ -43,7 +43,7 @@ public interface IEditBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/22 19:07 </p>
      * @param userId 用户ID
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.TagInfoDTO>>
+     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.TagInfoDTO>>
      */
     ResponseDTO<List<TagInfoDTO>> findUserBlogTag(String userId);
     /**
@@ -51,7 +51,7 @@ public interface IEditBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param query 查询条件
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
+     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
      */
     ResponseDTO<List<BlogArticleDTO>> findBlogList(BlogArticleDTO query);
     /**
@@ -60,7 +60,7 @@ public interface IEditBlogService {
      * <p>@Date 2022/1/22 18:31 </p>
      * @param blog 博客信息
      * @param img 博客封面图片
-     * @return com.www.common.pojo.dto.response.ResponseDTO<String> 博客文章主键
+     * @return com.www.common.data.dto.response.ResponseDTO<String> 博客文章主键
      */
     ResponseDTO<Long> createBlogArticle(BlogArticleDTO blog, MultipartFile img);
     /**
@@ -69,7 +69,7 @@ public interface IEditBlogService {
      * <p>@Date 2022/1/22 18:31 </p>
      * @param userId 用户ID
      * @param name 分组名称
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
+     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
      */
     ResponseDTO<String> createBlogGroup(String userId,String name);
     /**
@@ -77,7 +77,7 @@ public interface IEditBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/22 18:31 </p>
      * @param userId 用户ID
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
+     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
      */
     ResponseDTO<List<BlogGroupDTO>> findBlogGroup(String userId);
 }

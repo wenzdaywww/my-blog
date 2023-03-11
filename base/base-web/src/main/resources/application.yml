@@ -1,3 +1,11 @@
+# 本项目自身的配置
+com:
+  www:
+    base:
+      url-scope-lock: MY-BLOG:LOCK:URL_SCOPE:SYS_MENU
+      url-scope-prefix: OAUTH2:RESOURCE_ID:URL_SCOPE
+      code-data-lock: MY-BLOG:LOCK:CODE_DICT:CODE_DATA
+      code-data-key: MY-BLOG:CODE_DICT:CODE_DATA:CODE_TYPE
 #服务器配置
 server:
   servlet:

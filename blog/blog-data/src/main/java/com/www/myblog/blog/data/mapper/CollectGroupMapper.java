@@ -21,7 +21,7 @@ public interface CollectGroupMapper extends BaseMapper<CollectGroupEntity> {
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 13:29 </p>
      * @param userId 用户id
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.lang.Boolean> true添加成功，false取消失败
+     * @return com.www.common.data.dto.response.ResponseDTO<java.lang.Boolean> true添加成功，false取消失败
      */
     List<CollectGroupDTO> findCollectGroup(@Param("userId") String userId);
 }

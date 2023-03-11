@@ -32,7 +32,8 @@ com:
   www:
     common:
       code:
-        enable: true #开启数据字典加载
+        read-enable: true #开启数据字典加载
+        read-scheduled: "0 0 * * * ?"
       request:
         enable: true #开启controller的AOP日志拦截
       #配置文件路径

@@ -1,6 +1,6 @@
 package com.www.myblog.blog.service.redis;
 
-import com.www.common.pojo.dto.security.ScopeDTO;
+import com.www.common.config.oauth2.dto.ScopeDTO;
 import com.www.myblog.common.dto.BlogArticleDTO;
 
 import java.util.List;

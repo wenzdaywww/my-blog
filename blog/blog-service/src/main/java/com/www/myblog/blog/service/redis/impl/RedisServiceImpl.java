@@ -1,15 +1,15 @@
 package com.www.myblog.blog.service.redis.impl;
 
 import com.www.common.config.redis.RedisOperation;
-import com.www.common.pojo.constant.CharConstant;
-import com.www.common.pojo.constant.RedisCommonContant;
-import com.www.common.pojo.dto.security.ScopeDTO;
+import com.www.common.data.constant.CharConstant;
+import com.www.common.config.oauth2.dto.ScopeDTO;
 import com.www.myblog.blog.data.constants.CommenConstant;
-import com.www.myblog.blog.data.constants.RedisKeyConstant;
+import com.www.myblog.blog.data.properties.BlogProperties;
 import com.www.myblog.blog.service.redis.IRedisService;
 import com.www.myblog.common.dto.BlogArticleDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +31,8 @@ public class RedisServiceImpl implements IRedisService {
     /** 资源服务id **/
     @Value("${spring.application.name}")
     private String resourceId;
+    @Autowired
+    private BlogProperties blogProperties;
 
     /**
      * <p>@Description 博客浏览量增加 </p>
@@ -45,12 +47,12 @@ public class RedisServiceImpl implements IRedisService {
         if(StringUtils.isBlank(ip) || blogId == null){
             return false;
         }
-        String browseKey = RedisKeyConstant.BLOG_BROWSE + blogId + CharConstant.COLON + ip;//博客文章浏览量的key
+        String browseKey = blogProperties.getBlogBrowse() + blogId + CharConstant.COLON + ip;//博客文章浏览量的key
         boolean isOk = true;//是否更新成功
         //ip浏览记录不存在，则创建
         if(RedisOperation.setNX(browseKey,ip,1L,TimeUnit.DAYS)){
-            String key = RedisKeyConstant.BLOG_ARTICLE + blogId;//博客文章的key
-            String lockKey = RedisKeyConstant.BLOG_ARTICLE_LOCK + blogId;//分布式锁key
+            String key = blogProperties.getBlogArticle() + CharConstant.COLON + blogId;//博客文章的key
+            String lockKey = blogProperties.getBlogArticleLock() + CharConstant.COLON + blogId;//分布式锁key
             String value = UUID.randomUUID().toString();
             boolean isWait = true; //是否等待获取分布式锁
             while (isWait){
@@ -85,8 +87,8 @@ public class RedisServiceImpl implements IRedisService {
      */
     @Override
     public boolean updateBlogNum(String name,Long blogId, boolean isAdd) {
-        String key = RedisKeyConstant.BLOG_ARTICLE + blogId;//博客文章的key
-        String lockKey = RedisKeyConstant.BLOG_ARTICLE_LOCK + blogId;//分布式锁key
+        String key = blogProperties.getBlogArticle() + CharConstant.COLON + blogId;//博客文章的key
+        String lockKey = blogProperties.getBlogArticleLock() + CharConstant.COLON + blogId;//分布式锁key
         String value = UUID.randomUUID().toString();
         long stepVal = isAdd ? 1 : -1;//判断是自增还是自减
         boolean isOk = true;//是否更新成功
@@ -124,7 +126,7 @@ public class RedisServiceImpl implements IRedisService {
      */
     @Override
     public List<ScopeDTO> findUrlScope() {
-        return (List<ScopeDTO>) RedisOperation.listGet(RedisCommonContant.URL_SCOPE_PREFIX + resourceId);
+        return (List<ScopeDTO>) RedisOperation.listGet(blogProperties.getUrlScopePrefix() + CharConstant.COLON + resourceId);
     }
     /**
      * <p>@Description 从redis中获取博客信息 </p>
@@ -139,7 +141,7 @@ public class RedisServiceImpl implements IRedisService {
         if(blogId == null){
             return new BlogArticleDTO();
         }
-        String key = RedisKeyConstant.BLOG_ARTICLE + blogId;
+        String key = blogProperties.getBlogArticle() + CharConstant.COLON + blogId;
         if(!RedisOperation.hasKey(key)){
             return null;
         }
@@ -164,8 +166,8 @@ public class RedisServiceImpl implements IRedisService {
         if(articleDTO == null){
             return false;
         }
-        String key = RedisKeyConstant.BLOG_ARTICLE + articleDTO.getBlogId();
-        String lockKey = RedisKeyConstant.BLOG_ARTICLE_LOCK + articleDTO.getBlogId();
+        String key = blogProperties.getBlogArticle() + CharConstant.COLON + articleDTO.getBlogId();
+        String lockKey = blogProperties.getBlogArticleLock() + CharConstant.COLON + articleDTO.getBlogId();
         String value = UUID.randomUUID().toString();
         boolean isOk = true;
         try {

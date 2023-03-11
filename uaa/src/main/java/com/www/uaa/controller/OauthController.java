@@ -1,13 +1,13 @@
 package com.www.uaa.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.www.common.config.oauth2.dto.TokenDTO;
+import com.www.common.config.oauth2.dto.TokenInfoDTO;
 import com.www.common.config.oauth2.token.JwtTokenConverter;
 import com.www.common.config.oauth2.util.RedisTokenHandler;
-import com.www.common.pojo.constant.CharConstant;
-import com.www.common.pojo.dto.response.ResponseDTO;
-import com.www.common.pojo.dto.token.TokenDTO;
-import com.www.common.pojo.dto.token.TokenInfoDTO;
-import com.www.common.pojo.enums.ResponseEnum;
+import com.www.common.data.constant.CharConstant;
+import com.www.common.data.dto.response.ResponseDTO;
+import com.www.common.data.enums.ResponseEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

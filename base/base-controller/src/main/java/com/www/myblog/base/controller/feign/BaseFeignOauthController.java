@@ -1,9 +1,9 @@
 package com.www.myblog.base.controller.feign;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.www.common.pojo.constant.AuthorityContant;
-import com.www.common.pojo.dto.response.ResponseDTO;
-import com.www.common.pojo.enums.ResponseEnum;
+import com.www.common.config.oauth2.constant.AuthorityContant;
+import com.www.common.data.dto.response.ResponseDTO;
+import com.www.common.data.enums.ResponseEnum;
 import com.www.myblog.base.service.user.IUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class BaseFeignOauthController {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userList 用户id集合
-     * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean>
+     * @return com.www.common.data.dto.response.ResponseDTO<Boolean>
      */
     @PostMapping("exist")
     @PreAuthorize(AuthorityContant.ALL)
@@ -46,7 +46,7 @@ public class BaseFeignOauthController {
      * <p>@Author www </p>
      * <p>@Date 2022/1/21 19:57 </p>
      * @param userList 用户id集合
-     * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean>
+     * @return com.www.common.data.dto.response.ResponseDTO<Boolean>
      */
     public ResponseDTO<Boolean> validateUserExistFallback(List<String> userList,Throwable throwable){
         log.error("服务熔断处理: 校验用户是否存在,异常信息:",throwable);

@@ -1,10 +1,10 @@
 package com.www.myblog.base.controller.user;
 
+import com.www.common.config.code.dto.CodeDTO;
+import com.www.common.config.oauth2.constant.AuthorityContant;
 import com.www.common.config.oauth2.token.JwtTokenConverter;
-import com.www.common.pojo.constant.AuthorityContant;
-import com.www.common.pojo.dto.code.CodeDTO;
-import com.www.common.pojo.dto.response.ResponseDTO;
-import com.www.common.pojo.enums.ResponseEnum;
+import com.www.common.data.dto.response.ResponseDTO;
+import com.www.common.data.enums.ResponseEnum;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysUserDTO;
 import com.www.myblog.base.service.redis.IRedisService;
@@ -49,7 +49,7 @@ public class UserController {
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 16:39 </p>
      * @param list 字典类型集合
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.code.CodeDTO>>
+     * @return ResponseDTO<List<CodeDTO>>
      */
     @PostMapping("codes")
     public ResponseDTO<Map<String,List<CodeDTO>>> findCodeDataList(@RequestParam List<String> list){
@@ -75,7 +75,7 @@ public class UserController {
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 16:39 </p>
      * @param codeType 字典类型
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.common.pojo.dto.code.CodeDTO>>
+     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.common.config.code.dto.CodeDTO>>
      */
     @GetMapping("code/{type}")
     public ResponseDTO<Map<String,List<CodeDTO>>> findCodeData(@PathVariable("type") String codeType){

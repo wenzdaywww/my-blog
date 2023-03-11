@@ -1,7 +1,7 @@
 package com.www.myblog.base.data.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.www.common.pojo.dto.code.CodeDTO;
+import com.www.common.config.code.dto.CodeDTO;
 import com.www.myblog.base.data.entity.CodeDataEntity;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -19,7 +19,7 @@ public interface CodeDataMapper extends BaseMapper<CodeDataEntity> {
      * <p>@Description 查询所有有效的code数据 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/1 16:14 </p>
-     * @return java.util.List<com.www.common.pojo.dto.code.CodeDTO>
+     * @return java.util.List<com.www.common.config.code.dto.CodeDTO>
      */
     List<CodeDTO> findAllCodeData();
 }

@@ -1,11 +1,10 @@
 package com.www.myblog.base.service.user;
 
+import com.www.common.data.dto.response.ResponseDTO;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysRoleDTO;
 import com.www.myblog.base.data.dto.SysUserDTO;
-import com.www.common.pojo.dto.response.ResponseDTO;
 import com.www.myblog.common.dto.UserInfoDTO;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public interface IUserInfoService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userList 用户id集合
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
      */
     ResponseDTO<List<UserInfoDTO>> findUserInfoList(List<String> userList);
     /**
@@ -30,7 +29,7 @@ public interface IUserInfoService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userList 用户id集合
-     * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean>
+     * @return com.www.common.data.dto.response.ResponseDTO<Boolean>
      */
     ResponseDTO<Boolean> validateUserExist(List<String> userList);
     /**
@@ -38,7 +37,7 @@ public interface IUserInfoService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userId 用户id
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
      */
     ResponseDTO<UserInfoDTO> findUserInfo(String userId);
     /**

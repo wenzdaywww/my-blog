@@ -4,10 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.config.code.CodeDict;
 import com.www.common.config.mvc.upload.IFileUpload;
-import com.www.common.pojo.dto.response.ResponseDTO;
-import com.www.common.pojo.enums.CodeKeyEnum;
-import com.www.common.pojo.enums.CodeTypeEnum;
-import com.www.common.pojo.enums.ResponseEnum;
+import com.www.common.data.dto.response.ResponseDTO;
+import com.www.common.data.enums.CodeKeyEnum;
+import com.www.common.data.enums.ResponseEnum;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
 import com.www.myblog.blog.data.dto.TagInfoDTO;
@@ -16,6 +15,7 @@ import com.www.myblog.blog.data.entity.BlogGroupEntity;
 import com.www.myblog.blog.data.entity.BlogTagEntity;
 import com.www.myblog.blog.data.entity.GroupInfoEntity;
 import com.www.myblog.blog.data.entity.TagInfoEntity;
+import com.www.myblog.blog.data.enums.CodeTypeEnum;
 import com.www.myblog.blog.data.mapper.BlogArticleMapper;
 import com.www.myblog.blog.data.mapper.BlogTagMapper;
 import com.www.myblog.blog.data.mapper.GroupInfoMapper;
@@ -74,7 +74,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/2/2 14:54 </p>
      * @param blog 博客信息
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
+     * @return com.www.common.data.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
      */
     @Override
     public ResponseDTO<Boolean> updateBlogTagAndGroup(BlogArticleDTO blog) {
@@ -170,7 +170,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * <p>@Date 2022/2/2 14:54 </p>
      *
      * @param blogId 博客id
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
+     * @return com.www.common.data.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
      */
     @Override
     public ResponseDTO<BlogArticleDTO> findBlogTagAndGroup(Long blogId) {
@@ -201,7 +201,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * <p>@Description 查询所有博客标签 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/22 19:07 </p>
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
+     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
      */
     @Override
     public ResponseDTO<List<TagInfoDTO>> findAllBlogTag() {
@@ -213,7 +213,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/22 19:07 </p>
      * @param userId 用户ID
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.TagInfoDTO>>
+     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.TagInfoDTO>>
      */
     @Override
     public ResponseDTO<List<TagInfoDTO>> findUserBlogTag(String userId) {
@@ -231,7 +231,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param query 查询条件
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
+     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
      */
     @Override
     public ResponseDTO<List<BlogArticleDTO>> findBlogList(BlogArticleDTO query) {
@@ -257,7 +257,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * <p>@Date 2022/1/22 18:31 </p>
      * @param blog 博客信息
      * @param img 博客封面图片
-     * @return com.www.common.pojo.dto.response.ResponseDTO<Long> 博客文章主键
+     * @return com.www.common.data.dto.response.ResponseDTO<Long> 博客文章主键
      */
     @Override
     public ResponseDTO<Long> createBlogArticle(BlogArticleDTO blog, MultipartFile img) {
@@ -338,7 +338,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * <p>@Date 2022/1/22 18:31 </p>
      * @param userId 用户ID
      * @param name 分组名称
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
+     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
      */
     @Override
     public ResponseDTO<String> createBlogGroup(String userId, String name) {
@@ -363,7 +363,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/22 18:31 </p>
      * @param userId 用户ID
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
+     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
      */
     @Override
     public ResponseDTO<List<BlogGroupDTO>> findBlogGroup(String userId) {

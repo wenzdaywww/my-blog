@@ -1,14 +1,12 @@
 package com.www.myblog.base.service.user.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.config.code.CodeDict;
 import com.www.common.config.mvc.upload.IFileUpload;
-import com.www.common.pojo.dto.response.ResponseDTO;
-import com.www.common.pojo.enums.CodeTypeEnum;
-import com.www.common.pojo.enums.DateFormatEnum;
-import com.www.common.pojo.enums.ResponseEnum;
+import com.www.common.data.dto.response.ResponseDTO;
+import com.www.common.data.enums.DateFormatEnum;
+import com.www.common.data.enums.ResponseEnum;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysRoleDTO;
@@ -16,10 +14,10 @@ import com.www.myblog.base.data.dto.SysUserDTO;
 import com.www.myblog.base.data.entity.SysRoleEntity;
 import com.www.myblog.base.data.entity.SysUserEntity;
 import com.www.myblog.base.data.entity.SysUserRoleEntity;
+import com.www.myblog.base.data.enums.CodeTypeEnum;
 import com.www.myblog.base.data.mapper.SysMenuMapper;
 import com.www.myblog.base.data.mapper.SysRoleMapper;
 import com.www.myblog.base.data.mapper.SysUserMapper;
-import com.www.myblog.base.data.mapper.SysUserRoleMapper;
 import com.www.myblog.base.service.entity.ISysRoleService;
 import com.www.myblog.base.service.entity.ISysUserRoleService;
 import com.www.myblog.base.service.entity.ISysUserService;
@@ -65,7 +63,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userList 用户id集合
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
      */
     @Override
     public ResponseDTO<List<UserInfoDTO>> findUserInfoList(List<String> userList) {
@@ -98,7 +96,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userList 用户id集合
-     * @return com.www.common.pojo.dto.response.ResponseDTO<Boolean>
+     * @return com.www.common.data.dto.response.ResponseDTO<Boolean>
      */
     @Override
     public ResponseDTO<Boolean> validateUserExist(List<String> userList) {
@@ -118,7 +116,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userId 用户id
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
      */
     @Override
     public ResponseDTO<UserInfoDTO> findUserInfo(String userId) {
@@ -277,7 +275,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     public ResponseDTO<String> updateUserInfo(SysUserDTO user) {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
         if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName())
-                || (StringUtils.isNotBlank(user.getSex()) && CodeDict.isIllegalValue(CodeTypeEnum.SEX,user.getSex()))){
+                || (StringUtils.isNotBlank(user.getSex()) && CodeDict.isIllegalValue(CodeTypeEnum.SEX.getCodeType(),user.getSex()))){
             responseDTO.setResponse(ResponseEnum.FAIL,"更新用户信息失败，用户信息有误");
             return responseDTO;
         }
@@ -335,7 +333,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     public ResponseDTO<String> createUser(SysUserDTO user) {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
         if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName(),user.getPassword())
-                || (StringUtils.isNotBlank(user.getSex()) && CodeDict.isIllegalValue(CodeTypeEnum.SEX,user.getSex()))){
+                || (StringUtils.isNotBlank(user.getSex()) && CodeDict.isIllegalValue(CodeTypeEnum.SEX.getCodeType(),user.getSex()))){
             responseDTO.setResponse(ResponseEnum.FAIL,"信息不完整，创建用户失败");
             return responseDTO;
         }
@@ -393,10 +391,10 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Override
     public ResponseDTO<String> updateState(String userId, String stateCd, String notExpired, String notLocked, String credentialsNotExpired) {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
-        if(CodeDict.isIllegalValue(CodeTypeEnum.USER_STATUS,stateCd)
-                || CodeDict.isIllegalValue(CodeTypeEnum.YES_NO,notExpired)
-                || CodeDict.isIllegalValue(CodeTypeEnum.YES_NO,notLocked)
-                || CodeDict.isIllegalValue(CodeTypeEnum.YES_NO,credentialsNotExpired)){
+        if(CodeDict.isIllegalValue(CodeTypeEnum.USER_STATUS.getCodeType(),stateCd)
+                || CodeDict.isIllegalValue(CodeTypeEnum.YES_NO.getCodeType(),notExpired)
+                || CodeDict.isIllegalValue(CodeTypeEnum.YES_NO.getCodeType(),notLocked)
+                || CodeDict.isIllegalValue(CodeTypeEnum.YES_NO.getCodeType(),credentialsNotExpired)){
             responseDTO.setResponse(ResponseEnum.FAIL,"更新用户信息失败");
             return responseDTO;
         }

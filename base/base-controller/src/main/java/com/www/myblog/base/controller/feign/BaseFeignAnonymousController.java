@@ -1,8 +1,8 @@
 package com.www.myblog.base.controller.feign;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.www.common.pojo.dto.response.ResponseDTO;
-import com.www.common.pojo.enums.ResponseEnum;
+import com.www.common.data.dto.response.ResponseDTO;
+import com.www.common.data.enums.ResponseEnum;
 import com.www.myblog.base.service.user.IUserInfoService;
 import com.www.myblog.common.dto.UserInfoDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class BaseFeignAnonymousController {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userList 用户id集合
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
      */
     @GetMapping("users")
     @HystrixCommand(fallbackMethod = "findUserInfoListFallback")//设置备选方案
@@ -43,7 +43,7 @@ public class BaseFeignAnonymousController {
      * <p>@Author www </p>
      * <p>@Date 2022/1/21 19:57 </p>
      * @param userList 用户id集合
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
      */
     public ResponseDTO<List<UserInfoDTO>> findUserInfoListFallback(List<String> userList, Throwable throwable){
         log.error("服务熔断处理: 查询多个用户信息,异常信息:",throwable);
@@ -62,7 +62,7 @@ public class BaseFeignAnonymousController {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userId 用户id
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
      */
     @GetMapping("user/{id}")
     @HystrixCommand(fallbackMethod = "findUserInfoFallback")//设置备选方案
@@ -74,7 +74,7 @@ public class BaseFeignAnonymousController {
      * <p>@Author www </p>
      * <p>@Date 2022/1/21 19:57 </p>
      * @param userId 用户id
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
      */
     public ResponseDTO<UserInfoDTO> findUserInfoFallback(String userId,Throwable throwable){
         log.error("服务熔断处理: 查询用户信息,异常信息:",throwable);

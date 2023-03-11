@@ -2,15 +2,15 @@ package com.www.myblog.base.service.menu.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.config.code.CodeDict;
-import com.www.common.pojo.dto.response.ResponseDTO;
-import com.www.common.pojo.enums.CodeKeyEnum;
-import com.www.common.pojo.enums.CodeTypeEnum;
-import com.www.common.pojo.enums.ResponseEnum;
+import com.www.common.data.dto.response.ResponseDTO;
+import com.www.common.data.enums.CodeKeyEnum;
+import com.www.common.data.enums.ResponseEnum;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.entity.SysMenuEntity;
 import com.www.myblog.base.data.entity.SysRoleEntity;
 import com.www.myblog.base.data.entity.SysRoleMenuEntity;
+import com.www.myblog.base.data.enums.CodeTypeEnum;
 import com.www.myblog.base.data.mapper.SysMenuMapper;
 import com.www.myblog.base.service.entity.ISysMenuService;
 import com.www.myblog.base.service.entity.ISysRoleMenuService;
@@ -66,7 +66,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         //根据菜单id删除角色菜单信息
         boolean isOk = sysRoleMenuService.deleteByMenuId(menuId);
         if(isOk){
-            if(StringUtils.equals(menuEntity.getMenuType(),CodeDict.getValue(CodeTypeEnum.MENU_TYPE, CodeKeyEnum.K2))){
+            if(StringUtils.equals(menuEntity.getMenuType(),CodeDict.getValue(CodeTypeEnum.MENU_TYPE.getCodeType(), CodeKeyEnum.K2.getKey()))){
                 redisService.updateRedisUrlScope(menuEntity.getModule());
             }
             return new ResponseDTO<>(ResponseEnum.SUCCESS,"删除菜单成功");
@@ -85,7 +85,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
     public ResponseDTO<String> updateOrSave(SysMenuDTO menu) {
         ResponseDTO<String> responseDTO = new ResponseDTO<>();
         if(menu == null || StringUtils.isAnyBlank(menu.getMenuCode(),menu.getMenuUrl(),menu.getMenuType())
-            || CodeDict.isIllegalValue(CodeTypeEnum.MENU_TYPE,menu.getMenuType())
+            || CodeDict.isIllegalValue(CodeTypeEnum.MENU_TYPE.getCodeType(),menu.getMenuType())
         ){
             responseDTO.setResponse(ResponseEnum.FAIL,"更新菜单失败，信息有误");
             return responseDTO;
@@ -130,7 +130,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         if(isUpdate){
             sysMenuService.updateEntityById(menuEntity);
         }else {
-            menuEntity.setIsDelete(CodeDict.getValue(CodeTypeEnum.YES_NO,CodeKeyEnum.K0));
+            menuEntity.setIsDelete(CodeDict.getValue(CodeTypeEnum.YES_NO.getCodeType(),CodeKeyEnum.K0.getKey()));
             menuEntity.setCreateTime(isUpdate ? menuEntity.getCreateTime() : DateUtils.getCurrentDateTime());
             sysMenuService.createEntity(menuEntity);
         }
@@ -192,7 +192,7 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
             sysRoleMenuService.deleteByIds(deleteIdList);
         }
         //编辑的菜单是权限菜单，则需要更新redis中的权限菜单信息
-        if(StringUtils.equals(menu.getMenuType(),CodeDict.getValue(CodeTypeEnum.MENU_TYPE, CodeKeyEnum.K2))){
+        if(StringUtils.equals(menu.getMenuType(),CodeDict.getValue(CodeTypeEnum.MENU_TYPE.getCodeType(), CodeKeyEnum.K2.getKey()))){
             redisService.updateRedisUrlScope(menu.getModule());
         }
         responseDTO.setResponse(ResponseEnum.SUCCESS,"更新菜单成功");

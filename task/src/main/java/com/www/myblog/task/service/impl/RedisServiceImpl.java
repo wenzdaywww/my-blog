@@ -2,7 +2,7 @@ package com.www.myblog.task.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.www.common.config.redis.RedisOperation;
-import com.www.common.pojo.constant.CharConstant;
+import com.www.common.data.constant.CharConstant;
 import com.www.common.utils.DateUtils;
 import com.www.common.utils.NumberUtils;
 import com.www.myblog.common.dto.BlogArticleDTO;

@@ -1,7 +1,7 @@
 package com.www.myblog.blog.controller.browse;
 
 import com.www.common.config.oauth2.token.JwtTokenConverter;
-import com.www.common.pojo.dto.response.ResponseDTO;
+import com.www.common.data.dto.response.ResponseDTO;
 import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
 import com.www.myblog.blog.data.dto.CommentDTO;
@@ -36,7 +36,7 @@ public class BlogBrowseController {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param pageNum 页码
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
+     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
      */
     @PostMapping("tip-list")
     public ResponseDTO<List<BlogArticleDTO>> findTipBlogList(int pageNum){
@@ -49,7 +49,7 @@ public class BlogBrowseController {
      * @param pageNum 页码
      * @param bid 博客id,不等于null，则是父评论
      * @param pid 父评论id，不等于null，则是子评论
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.CommentDTO>>
+     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.CommentDTO>>
      */
     @GetMapping("cmt-list")
     public ResponseDTO<List<CommentDTO>> findCommentList(int pageNum,Long bid,Long pid){
@@ -61,7 +61,7 @@ public class BlogBrowseController {
      * <p>@Date 2022/1/25 21:21 </p>
      * @param bid 博客ID
      * @param ip 访问IP
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
+     * @return com.www.common.data.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
      */
     @GetMapping("article")
     public ResponseDTO<BlogArticleDTO> findAriticle(Long bid,String ip){
@@ -73,7 +73,7 @@ public class BlogBrowseController {
      * <p>@Date 2022/1/23 15:14 </p>
      * @param id 博主ID
      * @param bid 博客ID
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.AuthorDTO>
+     * @return com.www.common.data.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.AuthorDTO>
      */
     @GetMapping("author")
     public ResponseDTO<AuthorDTO> findAuthorInfo(String id,Long bid){
@@ -83,7 +83,7 @@ public class BlogBrowseController {
      * <p>@Description 获取热门博客前10名单 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 19:24 </p>
-     * @return com.www.common.pojo.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
+     * @return com.www.common.data.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
      */
     @GetMapping("hot-rank")
     public ResponseDTO<List<BlogArticleDTO>> findHotBlogRank(){
@@ -94,7 +94,7 @@ public class BlogBrowseController {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param query 查询条件
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
+     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
      */
     @PostMapping("list")
     public ResponseDTO<List<BlogArticleDTO>> findAuthorBlogList(BlogArticleDTO query){
@@ -106,7 +106,7 @@ public class BlogBrowseController {
      * <p>@Date 2022/1/23 21:37 </p>
      * @param id 博主ID
      * @param bid 博客ID
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
+     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
      */
     @GetMapping("group")
     public ResponseDTO<List<BlogGroupDTO>> findAuthorBlogGroup(String id,Long bid){
@@ -118,7 +118,7 @@ public class BlogBrowseController {
      * <p>@Date 2022/1/23 21:37 </p>
      * @param id 博主ID
      * @param bid 博客ID
-     * @return com.www.common.pojo.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.TagInfoDTO>>
+     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.TagInfoDTO>>
      */
     @GetMapping("tag")
     public ResponseDTO<List<TagInfoDTO>> findAuthorBlogTag(String id, Long bid){

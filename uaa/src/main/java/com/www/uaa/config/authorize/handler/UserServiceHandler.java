@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.www.common.config.code.CodeDict;
 import com.www.common.pojo.dto.security.UserDetailDTO;
 import com.www.common.pojo.enums.CodeKeyEnum;
-import com.www.common.pojo.enums.CodeTypeEnum;
 import com.www.uaa.data.entity.SysUserEntity;
+import com.www.uaa.data.enums.CodeTypeEnum;
 import com.www.uaa.data.mapper.SysRoleMapper;
 import com.www.uaa.data.mapper.SysUserMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -59,10 +59,10 @@ public class UserServiceHandler implements UserDetailsService {
         UserDetailDTO userDTO = new UserDetailDTO();
         userDTO.setUserId(userEntity.getUserId());
         userDTO.setPassword(userEntity.getPassword());
-        userDTO.setEnabled(StringUtils.equals(userEntity.getStateCd(), CodeDict.getValue(CodeTypeEnum.USER_STATUS, CodeKeyEnum.K1)));
-        userDTO.setAccountNonExpired(StringUtils.equals(userEntity.getNotExpired(), CodeDict.getValue(CodeTypeEnum.YES_NO, CodeKeyEnum.K1)));
-        userDTO.setCredentialsNonExpired(StringUtils.equals(userEntity.getCredentialsNotExpired(), CodeDict.getValue(CodeTypeEnum.YES_NO, CodeKeyEnum.K1)));
-        userDTO.setAccountNonLocked(StringUtils.equals(userEntity.getNotLocked(), CodeDict.getValue(CodeTypeEnum.YES_NO, CodeKeyEnum.K1)));
+        userDTO.setEnabled(StringUtils.equals(userEntity.getStateCd(), CodeDict.getValue(CodeTypeEnum.USER_STATUS.getCodeType(), CodeKeyEnum.K1.getKey())));
+        userDTO.setAccountNonExpired(StringUtils.equals(userEntity.getNotExpired(), CodeDict.getValue(CodeTypeEnum.YES_NO.getCodeType(), CodeKeyEnum.K1.getKey())));
+        userDTO.setCredentialsNonExpired(StringUtils.equals(userEntity.getCredentialsNotExpired(), CodeDict.getValue(CodeTypeEnum.YES_NO.getCodeType(), CodeKeyEnum.K1.getKey())));
+        userDTO.setAccountNonLocked(StringUtils.equals(userEntity.getNotLocked(), CodeDict.getValue(CodeTypeEnum.YES_NO.getCodeType(), CodeKeyEnum.K1.getKey())));
         //查询用户的角色
         List<String> roleList = sysRoleMapper.findUserRole(userId);
         List<GrantedAuthority> authorities = new ArrayList<>();
