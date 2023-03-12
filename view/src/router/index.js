@@ -37,7 +37,7 @@ export const initUserRouter = function (callBackFunc){
  * 清除用户的router信息
  */
 export const clearUserRouter = function (){
-    store.dispatch("updateRouter",null);
+    store.dispatch("clearRouter",null);
 }
 /**
  * 递归处理子路由

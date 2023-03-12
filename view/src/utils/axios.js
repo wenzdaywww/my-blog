@@ -19,11 +19,13 @@ http.interceptors.request.use(
 );
 http.interceptors.response.use(
     response => {
+        //TODO redis的token丢失且浏览器cooke没丢失，此时无法重新登录，待处理
         //接口返回403
         if ((response.data && (response.data.code == 401 || response.data.code == 403)) || response.status == 401 || response.status == 403) {
+            store.dispatch("clearRouter",null);
             let routerTemp = store.state.routerList;//获取允许的router
             if(routerTemp.includes(window.location.pathname)){
-                router.push("/403");//跳转权限不足页面
+                router.push(window.location.pathname);//跳转权限不足页面
             }else {
                 router.push("/404");//跳转404页面
             }

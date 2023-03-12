@@ -132,7 +132,6 @@ export default {
     const getToken = () => {
       let user = utils.getUser();
       if (utils.isLogin()){
-        isLogin.value = true;
         initUserRouter();
         getUserData();
       }else{
