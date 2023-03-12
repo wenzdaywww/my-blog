@@ -3,6 +3,7 @@ import qs from "qs";
 import router from '../router';
 import {ElMessage} from 'element-plus';
 import store from "../store";
+import utils from './utils';
 //创建请求对象
 const http = axios.create();
 //设置超时
@@ -19,9 +20,9 @@ http.interceptors.request.use(
 );
 http.interceptors.response.use(
     response => {
-        //TODO redis的token丢失且浏览器cooke没丢失，此时无法重新登录，待处理
         //接口返回403
         if ((response.data && (response.data.code == 401 || response.data.code == 403)) || response.status == 401 || response.status == 403) {
+            utils.clearCookie();
             store.dispatch("clearRouter",null);
             let routerTemp = store.state.routerList;//获取允许的router
             if(routerTemp.includes(window.location.pathname)){
@@ -36,8 +37,13 @@ http.interceptors.response.use(
         }
     },
     error => {
-        ElMessage.error("请求失败");
-        return Promise.reject();
+        if (error.response.status == 403){
+            utils.clearCookie();
+            router.push("/");//首页页面
+        }else {
+            ElMessage.error("请求失败");
+            return Promise.reject();
+        }
     }
 );
 export default {

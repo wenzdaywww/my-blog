@@ -18,6 +18,16 @@ export default {
             return null;
         }
     },
+    /** 设置cookie中的值 **/
+    setCookie(c_name,value,expire) {
+        var date=new Date()
+        date.setSeconds(date.getSeconds()+expire)
+        document.cookie=c_name+ "="+escape(value)+"; expires="+date.toGMTString()
+    },
+    /** 清除cookie中的值 **/
+    clearCookie() {
+        this.setCookie("access_token","",1);
+    },
     /** 已登录 **/
     isLogin() {
         let token = this.getCookie("access_token");
