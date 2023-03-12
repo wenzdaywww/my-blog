@@ -17,7 +17,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 @SpringBootApplication(exclude = {DruidDataSourceAutoConfigure.class, MybatisPlusAutoConfiguration.class})
 @EnableEurekaClient
 @EnableCircuitBreaker //开启hystrix熔断器
-@MapperScan(basePackages = {"com.www.myblog.base.data"})
+@MapperScan(basePackages = {"com.www.myblog.base.data","com.www.common.config.code"})
 public class BaseApplication {
     /**
      * <p>@Description 启动方法 </p>

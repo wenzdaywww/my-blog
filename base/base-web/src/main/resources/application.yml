@@ -4,8 +4,14 @@ com:
     base:
       url-scope-lock: MY-BLOG:LOCK:URL_SCOPE:SYS_MENU
       url-scope-prefix: OAUTH2:RESOURCE_ID:URL_SCOPE
-      code-data-lock: MY-BLOG:LOCK:CODE_DICT:CODE_DATA
-      code-data-key: MY-BLOG:CODE_DICT:CODE_DATA:CODE_TYPE
+    common:
+      request:
+        enable: true #开启controller的AOP日志拦截
+      code:
+        write-enable: true
+        write-scheduled: "0 0 * * * ?"
+        code-redis-lock: MY-BLOG:LOCK:CODE_DICT:CODE_DATA
+        code-redis-key: MY-BLOG:CODE_DICT:CODE_DATA:CODE_TYPE
 #服务器配置
 server:
   servlet:
@@ -26,7 +32,7 @@ logging:
   config: classpath:logback-base.xml
 #mybatis配置
 mybatis-plus:
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: classpath*:mapper/**/*.xml
   #实现数据库下划线字段到POJO类驼峰形式的自动映射
   configuration:
     map-underscore-to-camel-case: true

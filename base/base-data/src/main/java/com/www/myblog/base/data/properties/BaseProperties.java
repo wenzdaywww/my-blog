@@ -23,10 +23,4 @@ public class BaseProperties {
     /** 资源服务ID的url的scope的redis的key前缀,完整格式： OAUTH2:RESOURCE_ID:URL_SCOPE:资源服务ID **/
     @Value("${com.www.base.url-scope-prefix}")
     private String urlScopePrefix;
-    /** 数据字典的分布式锁key **/
-    @Value("${com.www.base.code-data-lock}")
-    private String codeDataLock;
-    /** 数据字典的key **/
-    @Value("${com.www.base.code-data-key}")
-    private String codeDataKey;
 }

@@ -30,7 +30,7 @@ com:
       code:
         read-enable: true #开启数据字典加载
         read-scheduled: "0 0 * * * ?"
-        code-data-key: MY-BLOG:CODE_DICT:CODE_DATA:CODE_TYPE
+        code-redis-key: MY-BLOG:CODE_DICT:CODE_DATA:CODE_TYPE
       oauth2:
         signing-key: wenzday #JWT令牌签名
       datasource: #数据库配置

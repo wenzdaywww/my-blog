@@ -1,21 +1,18 @@
 package com.www.myblog.base.service.redis.impl;
 
-import com.www.common.config.code.CodeDict;
 import com.www.common.config.code.dto.CodeDTO;
+import com.www.common.config.code.write.CodeRedisWriteHandler;
 import com.www.common.config.oauth2.dto.ScopeDTO;
 import com.www.common.config.redis.RedisOperation;
-import com.www.myblog.base.data.mapper.CodeDataMapper;
 import com.www.myblog.base.data.mapper.SysMenuMapper;
 import com.www.myblog.base.data.properties.BaseProperties;
 import com.www.myblog.base.service.redis.IRedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -33,11 +30,11 @@ public class RedisServiceImpl implements IRedisService {
     @Value("${spring.application.name}")
     private String resourceId;
     @Autowired
-    private CodeDataMapper codeDataMapper;
-    @Autowired
     private SysMenuMapper sysMenuMapper;
     @Autowired
     private BaseProperties baseProperties;
+    @Autowired
+    private CodeRedisWriteHandler codeRedisWriteHandler;
 
 
     /**
@@ -98,52 +95,6 @@ public class RedisServiceImpl implements IRedisService {
         }
     }
     /**
-     * <p>@Description 初始化code数据 </p>
-     * <p>@Author www </p>
-     * <p>@Date 2022/1/1 17:19 </p>
-     * @return void
-     */
-    @Override
-    public void initCodeData() {
-        boolean isWait = true; //是否等待获取分布式锁
-        String value = UUID.randomUUID().toString();
-        while (isWait){
-            try {
-                if(RedisOperation.lock(baseProperties.getCodeDataLock(), value,60)){
-                    isWait = false;
-                    List<CodeDTO> codeList = codeDataMapper.findAllCodeData();
-                    if(CollectionUtils.isNotEmpty(codeList)){
-                        Map<String, Map<String, CodeDTO>> codeMap = new HashMap<>();
-                        for (CodeDTO dto : codeList){
-                            Map<String, CodeDTO> keyMap = new HashMap<>();
-                            if(codeMap.containsKey(dto.getType())){
-                                keyMap = codeMap.get(dto.getType());
-                                keyMap.put(dto.getCodeKey(),dto);
-                            }else {
-                                keyMap.put(dto.getCodeKey(),dto);
-                                codeMap.put(dto.getType(),keyMap);
-                            }
-                        }
-                        if (MapUtils.isNotEmpty(codeMap)){
-                            RedisOperation.deleteKey(baseProperties.getCodeDataKey());
-                            for (String key : codeMap.keySet()){
-                                RedisOperation.hashSet(baseProperties.getCodeDataKey(),key,codeMap.get(key));
-                            }
-                        }
-                        CodeDict.initCode(codeMap);
-                        log.info("启动加载code_data数据{}条",codeList.size());
-                    }
-                }
-            }catch (Exception e){
-                isWait = false;
-                log.info("查询所有CODE_DATA，发生异常：{}",e.getMessage());
-            }finally {
-                // 释放锁
-                RedisOperation.unlock(baseProperties.getCodeDataLock(),value);
-            }
-        }
-    }
-    /**
      * <p>@Description 查询当前资源服务器的请求路径允许的scope范围 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/24 22:46 </p>
@@ -161,6 +112,6 @@ public class RedisServiceImpl implements IRedisService {
      */
     @Override
     public Map<String, Map<String, CodeDTO>> getCodeData() {
-        return (Map<String,Map<String, CodeDTO>>) RedisOperation.hashGet(baseProperties.getCodeDataKey());
+        return codeRedisWriteHandler.getCodeData();
     }
 }

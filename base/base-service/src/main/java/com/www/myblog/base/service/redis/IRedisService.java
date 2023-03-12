@@ -30,13 +30,6 @@ public interface IRedisService {
      */
     void initRedisUrlScope();
     /**
-     * <p>@Description 初始化code数据 </p>
-     * <p>@Author www </p>
-     * <p>@Date 2022/1/1 17:19 </p>
-     * @return void
-     */
-    void initCodeData();
-    /**
      * <p>@Description 查询当前资源服务器的请求路径允许的scope范围 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/24 22:46 </p>
