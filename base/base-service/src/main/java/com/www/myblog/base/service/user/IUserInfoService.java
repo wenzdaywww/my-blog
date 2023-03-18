@@ -1,6 +1,6 @@
 package com.www.myblog.base.service.user;
 
-import com.www.common.data.dto.response.ResponseDTO;
+import com.www.common.data.response.Response;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysRoleDTO;
 import com.www.myblog.base.data.dto.SysUserDTO;
@@ -21,89 +21,89 @@ public interface IUserInfoService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userList 用户id集合
-     * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     * @return com.www.common.data.dto.response.Response<com.www.common.pojo.dto.feign.UserInfoDTO>
      */
-    ResponseDTO<List<UserInfoDTO>> findUserInfoList(List<String> userList);
+    Response<List<UserInfoDTO>> findUserInfoList(List<String> userList);
     /**
      * <p>@Description 校验用户是否存在 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userList 用户id集合
-     * @return com.www.common.data.dto.response.ResponseDTO<Boolean>
+     * @return com.www.common.data.dto.response.Response<Boolean>
      */
-    ResponseDTO<Boolean> validateUserExist(List<String> userList);
+    Response<Boolean> validateUserExist(List<String> userList);
     /**
      * <p>@Description 查询用户信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userId 用户id
-     * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     * @return com.www.common.data.dto.response.Response<com.www.common.pojo.dto.feign.UserInfoDTO>
      */
-    ResponseDTO<UserInfoDTO> findUserInfo(String userId);
+    Response<UserInfoDTO> findUserInfo(String userId);
     /**
      * <p>@Description 更新用户密码 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 19:58 </p>
      * @param user 用户信息
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     * @return Response<java.lang.String>
      */
-    ResponseDTO<String> updateUserPwd(SysUserDTO user);
+    Response<String> updateUserPwd(SysUserDTO user);
     /**
      * <p>@Description 查询用户vue的router权限 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 00:22 </p>
      * @param userId 用户ID
-     * @return com.www.myblog.common.pojo.ResponseDTO
+     * @return Response
      */
-    ResponseDTO<List<SysMenuDTO>> findUserRouter(String userId);
+    Response<List<SysMenuDTO>> findUserRouter(String userId);
     /**
      * <p>@Description 查询用户菜单列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 00:22 </p>
      * @param userId 用户ID
-     * @return com.www.myblog.common.pojo.ResponseDTO
+     * @return Response
      */
-    ResponseDTO<List<SysMenuDTO>> findUserMenu(String userId);
+    Response<List<SysMenuDTO>> findUserMenu(String userId);
     /**
      * <p>@Description 更新用户头像 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 20:02 </p>
      * @param photo 头像文件
      * @param userId 用户ID
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     * @return Response<java.lang.String>
      */
-    ResponseDTO<String> uploadPhoto(MultipartFile photo, String userId);
+    Response<String> uploadPhoto(MultipartFile photo, String userId);
     /**
      * <p>@Description 更新用户信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 19:58 </p>
      * @param user 用户信息
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     * @return Response<java.lang.String>
      */
-    ResponseDTO<String> updateUserInfo(SysUserDTO user);
+    Response<String> updateUserInfo(SysUserDTO user);
     /**
      * <p>@Description 查询用户信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 19:43 </p>
      * @param userId 用户ID
-     * @return com.www.myblog.common.pojo.ResponseDTO<com.www.myblog.base.data.dto.SysUserDTO>
+     * @return Response<com.www.myblog.base.data.dto.SysUserDTO>
      */
-    ResponseDTO<SysUserDTO> findUser(String userId);
+    Response<SysUserDTO> findUser(String userId);
     /**
      * <p>@Description 创建用户信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/7 21:03 </p>
      * @param user
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     * @return Response<java.lang.String>
      */
-    ResponseDTO<String> createUser(SysUserDTO user);
+    Response<String> createUser(SysUserDTO user);
     /**
      * <p>@Description 查询所有角色信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/4 12:53 </p>
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.SysUserRoleDTO>>
+     * @return Response<java.util.List < com.www.myblog.base.data.dto.SysUserRoleDTO>>
      */
-    ResponseDTO<List<SysRoleDTO>> findAllRole();
+    Response<List<SysRoleDTO>> findAllRole();
     /**
      * <p>@Description 更新用户状态 </p>
      * <p>@Author www </p>
@@ -113,9 +113,9 @@ public interface IUserInfoService {
      * @param notExpired 是否过期
      * @param notLocked 账号是否锁定
      * @param credentialsNotExpired 密码是否过期
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     * @return Response<java.lang.String>
      */
-    ResponseDTO<String> updateState(String userId,String stateCd,String notExpired,String notLocked,String credentialsNotExpired);
+    Response<String> updateState(String userId,String stateCd,String notExpired,String notLocked,String credentialsNotExpired);
     /**
      * <p>@Description 查询用户信息 </p>
      * <p>@Author www </p>
@@ -125,7 +125,7 @@ public interface IUserInfoService {
      * @param userName 用户名称
      * @param pageNum 当前页数
      * @param pageSize 页面条数
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.SysUserDTO>>
+     * @return Response<java.util.List < com.www.myblog.base.data.dto.SysUserDTO>>
      */
-    ResponseDTO<List<SysUserDTO>> findAllUser(String stateCd, String userId,String userName, int pageNum, long pageSize);
+    Response<List<SysUserDTO>> findAllUser(String stateCd, String userId,String userName, int pageNum, long pageSize);
 }

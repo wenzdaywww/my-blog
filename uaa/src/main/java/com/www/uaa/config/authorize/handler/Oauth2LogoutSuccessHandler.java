@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.www.common.config.oauth2.dto.TokenInfoDTO;
 import com.www.common.config.oauth2.token.JwtTokenConverter;
 import com.www.common.config.oauth2.util.RedisTokenHandler;
-import com.www.common.data.dto.response.ResponseDTO;
 import com.www.common.data.enums.ResponseEnum;
+import com.www.common.data.response.Response;
 import com.www.common.utils.TokenUtils;
 import com.www.uaa.controller.OauthController;
 import lombok.extern.slf4j.Slf4j;
@@ -48,10 +48,10 @@ public class Oauth2LogoutSuccessHandler implements LogoutSuccessHandler {
         TokenInfoDTO tokenInfoDTO = jwtTokenConverter.decodeToken(httpServletRequest);
         //删除用户登录的token到redis中
         RedisTokenHandler.deleteUserIdToken(tokenInfoDTO);
-        ResponseDTO<String> responseDTO = new ResponseDTO<>(ResponseEnum.SUCCESS,"退出成功");
+        Response<String> response = new Response<>(ResponseEnum.SUCCESS,"退出成功");
         //清除token
         TokenUtils.clearResponseToken(httpServletResponse, OauthController.COOKIES_ACCESS_TOKEN,OauthController.COOKIES_REFRESH_TOKEN,OauthController.COOKIES_USER);
         httpServletResponse.setContentType("application/json;charset=utf-8");
-        httpServletResponse.getWriter().write(JSON.toJSONString(responseDTO));
+        httpServletResponse.getWriter().write(JSON.toJSONString(response));
     }
 }

@@ -2,9 +2,9 @@ package com.www.myblog.blog.service.user.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.www.common.data.dto.response.ResponseDTO;
 import com.www.common.data.enums.DateFormatEnum;
 import com.www.common.data.enums.ResponseEnum;
+import com.www.common.data.response.Response;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.constants.CommenConstant;
 import com.www.myblog.blog.data.dto.AuthorDTO;
@@ -83,11 +83,11 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * <p>@Date 2022/2/3 22:24 </p>
      * @param userId 用户id
      * @param blogId 博客id
-     * @return com.www.common.data.dto.response.ResponseDTO<java.lang.Boolean> true点赞，fasle取消点赞
+     * @return com.www.common.data.dto.response.Response<java.lang.Boolean> true点赞，fasle取消点赞
      */
     @Override
-    public ResponseDTO<Boolean> savePraiseInfo(String userId, Long blogId) {
-        ResponseDTO<Boolean> response = new ResponseDTO<>();
+    public Response<Boolean> savePraiseInfo(String userId, Long blogId) {
+        Response<Boolean> response = new Response<>();
         if(StringUtils.isBlank(userId) || blogId == null){
             response.setResponse(ResponseEnum.FAIL,"点赞或取消点赞失败，信息不全",null);
             return response;
@@ -127,11 +127,11 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * @param userId 用户id
      * @param blogId 博客id
      * @param cgId   收藏夹id
-     * @return com.www.common.data.dto.response.ResponseDTO<Boolean> true修改成功，false修改失败
+     * @return com.www.common.data.dto.response.Response<Boolean> true修改成功，false修改失败
      */
     @Override
-    public ResponseDTO<Boolean> updateCollectId(String userId, Long blogId, Long cgId) {
-        ResponseDTO<Boolean> response = new ResponseDTO<>();
+    public Response<Boolean> updateCollectId(String userId, Long blogId, Long cgId) {
+        Response<Boolean> response = new Response<>();
         if(StringUtils.isBlank(userId) || blogId == null){
             response.setResponse(ResponseEnum.FAIL,"修改博客收藏夹位置失败，信息不全",null);
             return response;
@@ -163,11 +163,11 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 19:08 </p>
      * @param query 查询条件就
-     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>> 博客收藏列表
+     * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>> 博客收藏列表
      */
     @Override
-    public ResponseDTO<List<BlogArticleDTO>> findCollectList(CollectGroupDTO query) {
-        ResponseDTO<List<BlogArticleDTO>> response = new ResponseDTO<>();
+    public Response<List<BlogArticleDTO>> findCollectList(CollectGroupDTO query) {
+        Response<List<BlogArticleDTO>> response = new Response<>();
         if(query == null || StringUtils.isBlank(query.getUserId())){
             response.setResponse(ResponseEnum.FAIL,"查询用户的博客收藏列表失败，信息不全",null);
             return response;
@@ -188,11 +188,11 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 13:29 </p>
      * @param userId 用户id
-     * @return com.www.common.data.dto.response.ResponseDTO<java.lang.Boolean> true添加成功，false取消失败
+     * @return com.www.common.data.dto.response.Response<java.lang.Boolean> true添加成功，false取消失败
      */
     @Override
-    public ResponseDTO<List<CollectGroupDTO>> findCollectGroup(String userId) {
-        ResponseDTO<List<CollectGroupDTO>> response = new ResponseDTO<>();
+    public Response<List<CollectGroupDTO>> findCollectGroup(String userId) {
+        Response<List<CollectGroupDTO>> response = new Response<>();
         if(StringUtils.isBlank(userId)){
             response.setResponse(ResponseEnum.FAIL,"查询收藏夹列表失败，信息不全",null);
             return response;
@@ -207,11 +207,11 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * <p>@Date 2022/2/3 13:31 </p>
      * @param userId 用户id
      * @param collectName 收藏夹名称
-     * @return com.www.common.data.dto.response.ResponseDTO<java.lang.Boolean> true添加成功，false取消失败
+     * @return com.www.common.data.dto.response.Response<java.lang.Boolean> true添加成功，false取消失败
      */
     @Override
-    public ResponseDTO<Boolean> addCollectGroup(String userId, String collectName) {
-        ResponseDTO<Boolean> response = new ResponseDTO<>();
+    public Response<Boolean> addCollectGroup(String userId, String collectName) {
+        Response<Boolean> response = new Response<>();
         if (StringUtils.isAnyBlank(userId, collectName)){
             response.setResponse(ResponseEnum.FAIL,"新增收藏夹失败，信息不全",null);
             return response;
@@ -228,11 +228,11 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * <p>@Date 2022/2/2 22:54 </p>
      * @param pageNum 页码
      * @param userId  用户id
-     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>> 关注用户列表
+     * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>> 关注用户列表
      */
     @Override
-    public ResponseDTO<List<AuthorDTO>> findFansList(int pageNum, String userId) {
-        ResponseDTO<List<AuthorDTO>> response = new ResponseDTO<>();
+    public Response<List<AuthorDTO>> findFansList(int pageNum, String userId) {
+        Response<List<AuthorDTO>> response = new Response<>();
         if(StringUtils.isBlank(userId) || pageNum < 0){
             response.setResponse(ResponseEnum.FAIL,"获取粉丝列表失败。信息不全",null);
             return response;
@@ -244,7 +244,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
         List<AuthorDTO> followList =  page.getRecords();
         if(CollectionUtils.isNotEmpty(followList)){
             List<String> userIdList = followList.stream().map(AuthorDTO::getFansId).collect(Collectors.toList());
-            List<UserInfoDTO> userList = ResponseDTO.getBackData(baseFeignService.findUserInfoList(userIdList));
+            List<UserInfoDTO> userList = Response.getBackData(baseFeignService.findUserInfoList(userIdList));
             Map<String,UserInfoDTO> userMap = CollectionUtils.isEmpty(userList) ? new HashMap<>() :
                     userList.stream().collect(Collectors.toMap(UserInfoDTO::getUserId, Function.identity(), (key1, key2) -> key2));
             for (AuthorDTO authorDTO : followList){
@@ -267,11 +267,11 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * <p>@Date 2022/2/2 22:54 </p>
      * @param pageNum 页码
      * @param userId  用户id
-     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>> 关注用户列表
+     * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>> 关注用户列表
      */
     @Override
-    public ResponseDTO<List<AuthorDTO>> findFollowList(int pageNum, String userId) {
-        ResponseDTO<List<AuthorDTO>> response = new ResponseDTO<>();
+    public Response<List<AuthorDTO>> findFollowList(int pageNum, String userId) {
+        Response<List<AuthorDTO>> response = new Response<>();
         if(StringUtils.isBlank(userId) || pageNum < 0){
             response.setResponse(ResponseEnum.FAIL,"获取关注列表失败。信息不全",null);
             return response;
@@ -283,7 +283,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
         List<AuthorDTO> followList =  page.getRecords();
         if(CollectionUtils.isNotEmpty(followList)){
             List<String> userIdList = followList.stream().map(AuthorDTO::getUserId).collect(Collectors.toList());
-            List<UserInfoDTO> userList = ResponseDTO.getBackData(baseFeignService.findUserInfoList(userIdList));
+            List<UserInfoDTO> userList = Response.getBackData(baseFeignService.findUserInfoList(userIdList));
             Map<String,UserInfoDTO> userMap = CollectionUtils.isEmpty(userList) ? new HashMap<>() :
                     userList.stream().collect(Collectors.toMap(UserInfoDTO::getUserId, Function.identity(), (key1, key2) -> key2));
             for (AuthorDTO authorDTO : followList){
@@ -307,11 +307,11 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * @param userId 用户id
      * @param blogId 博客id
      * @param cgId 收藏夹id
-     * @return com.www.common.data.dto.response.ResponseDTO<Boolean> true添加收藏，false取消收藏
+     * @return com.www.common.data.dto.response.Response<Boolean> true添加收藏，false取消收藏
      */
     @Override
-    public ResponseDTO<BlogArticleDTO> addCollect(String userId, Long blogId,Long cgId) {
-        ResponseDTO<BlogArticleDTO> response = new ResponseDTO<>();
+    public Response<BlogArticleDTO> addCollect(String userId, Long blogId,Long cgId) {
+        Response<BlogArticleDTO> response = new Response<>();
         if(StringUtils.isBlank(userId) || blogId == null){
             response.setResponse(ResponseEnum.FAIL,"添加/取消博客收藏失败，信息不全",null);
             return response;
@@ -361,11 +361,11 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * @param blogId 博客ID，不等于null，则是新增的评论
      * @param replyComId 回复的评论ID，不等于null，则是回复评论
      * @param text   评论内容
-     * @return com.www.common.data.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.CommentDTO>
+     * @return com.www.common.data.dto.response.Response<com.www.myblog.blog.data.dto.CommentDTO>
      */
     @Override
-    public ResponseDTO<CommentDTO> addBlogComment(String userId, Long blogId, Long replyComId, String text) {
-        ResponseDTO<CommentDTO> response = new ResponseDTO<>();
+    public Response<CommentDTO> addBlogComment(String userId, Long blogId, Long replyComId, String text) {
+        Response<CommentDTO> response = new Response<>();
         if(StringUtils.isAnyBlank(userId,text) || (blogId == null && replyComId == null) || (blogId != null && replyComId != null)){
             response.setResponse(ResponseEnum.FAIL,"评论失败，信息不全",null);
             return response;
@@ -408,7 +408,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
             List<String> userIdList = new ArrayList<>();
             userIdList.add(userId);
             userIdList.add(replyUserId);
-            List<UserInfoDTO> userList = ResponseDTO.getBackData(baseFeignService.findUserInfoList(userIdList));
+            List<UserInfoDTO> userList = Response.getBackData(baseFeignService.findUserInfoList(userIdList));
             if(CollectionUtils.isNotEmpty(userList)){
                 for (UserInfoDTO userInfoDTO : userList){
                     if(StringUtils.equals(userInfoDTO.getUserId(),replyUserId)){
@@ -420,7 +420,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
                 }
             }
         }else {
-            UserInfoDTO userInfoDTO = ResponseDTO.getBackData(baseFeignService.findUserInfo(userId));
+            UserInfoDTO userInfoDTO = Response.getBackData(baseFeignService.findUserInfo(userId));
             if(userInfoDTO != null){//设置评论人名称和头像
                 commentDTO.setUserName(userInfoDTO.getUserName()).setPhoto(userInfoDTO.getPhoto());
             }
@@ -439,11 +439,11 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * @param userId 当前登录的用户ID
      * @param authorId 博主ID
      * @param blogId 博客ID
-     * @return com.www.common.data.dto.response.ResponseDTO<java.lang.Boolean>
+     * @return com.www.common.data.dto.response.Response<java.lang.Boolean>
      */
     @Override
-    public ResponseDTO<Boolean> followAuthor(String userId, String authorId,Long blogId) {
-        ResponseDTO<Boolean> response = new ResponseDTO<>();
+    public Response<Boolean> followAuthor(String userId, String authorId,Long blogId) {
+        Response<Boolean> response = new Response<>();
         if(StringUtils.isBlank(authorId) && blogId == null){
             response.setResponse(ResponseEnum.FAIL,"关注博主,博客ID或博主ID为空",null);
             return response;
@@ -451,7 +451,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
         if(StringUtils.isNotBlank(authorId)){
             List<String> reqList = new ArrayList<>();
             reqList.add(authorId);
-            Boolean isExist = ResponseDTO.getBackData(baseFeignService.validateUserExist(reqList));
+            Boolean isExist = Response.getBackData(baseFeignService.validateUserExist(reqList));
             if(!isExist){
                 response.setResponse(ResponseEnum.FAIL,"关注博主,博主ID不存在",null);
                 return response;
@@ -483,11 +483,11 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 18:23 </p>
      * @param userId 用户ID
-     * @return com.www.common.data.dto.response.ResponseDTO<com.www.myblog.blog.data.dto.AuthorDTO>
+     * @return com.www.common.data.dto.response.Response<com.www.myblog.blog.data.dto.AuthorDTO>
      */
     @Override
-    public ResponseDTO<AuthorDTO> findUserCount(String userId) {
-        ResponseDTO<AuthorDTO> response = new ResponseDTO<>();
+    public Response<AuthorDTO> findUserCount(String userId) {
+        Response<AuthorDTO> response = new Response<>();
         if(StringUtils.isBlank(userId)){
             response.setResponse(ResponseEnum.FAIL,"获取用户博客相关统计信息失败，用户ID为空",null);
             return response;

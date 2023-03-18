@@ -2,10 +2,9 @@ package com.www.myblog.base.service.entity.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.www.common.data.dto.response.ResponseDTO;
 import com.www.common.data.enums.ResponseEnum;
+import com.www.common.data.response.Response;
 import com.www.myblog.base.data.dto.MonitorInfoDTO;
-import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.entity.MonitorInfoEntity;
 import com.www.myblog.base.data.mapper.MonitorInfoMapper;
 import com.www.myblog.base.service.entity.IMonitorInfoService;
@@ -31,19 +30,19 @@ public class MonitorInfoServiceImpl extends ServiceImpl<MonitorInfoMapper, Monit
      * @param name 监控名称
      * @param pageNum 当前页数
      * @param pageSize 页面条数
-     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.MonitorInfoDTO>>
+     * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.base.data.dto.MonitorInfoDTO>>
      */
     @Override
-    public ResponseDTO<List<MonitorInfoDTO>> findMonitorInfo(String name,int pageNum, long pageSize) {
+    public Response<List<MonitorInfoDTO>> findMonitorInfo(String name, int pageNum, long pageSize) {
         pageNum = pageNum <= 0 ? 1 : pageNum;
         pageSize = pageSize <= 0 ? 10 : pageSize;
         Page<MonitorInfoDTO> page = new Page<>(pageNum,pageSize);
         page = monitorInfoMapper.findMonitorInfo(page,name);
         List<MonitorInfoDTO> monitorList =  page.getRecords();
-        ResponseDTO<List<MonitorInfoDTO>> responseDTO = new ResponseDTO<>(ResponseEnum.SUCCESS,monitorList);
-        responseDTO.setPageNum(pageNum);
-        responseDTO.setPageSize(pageSize);
-        responseDTO.setTotalNum(page.getTotal());
-        return responseDTO;
+        Response<List<MonitorInfoDTO>> response = new Response<>(ResponseEnum.SUCCESS,monitorList);
+        response.setPageNum(pageNum);
+        response.setPageSize(pageSize);
+        response.setTotalNum(page.getTotal());
+        return response;
     }
 }

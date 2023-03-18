@@ -3,8 +3,8 @@ package com.www.myblog.base.controller.user;
 import com.www.common.config.code.dto.CodeDTO;
 import com.www.common.config.oauth2.constant.AuthorityContant;
 import com.www.common.config.oauth2.token.JwtTokenConverter;
-import com.www.common.data.dto.response.ResponseDTO;
 import com.www.common.data.enums.ResponseEnum;
+import com.www.common.data.response.Response;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysUserDTO;
 import com.www.myblog.base.service.redis.IRedisService;
@@ -49,11 +49,11 @@ public class UserController {
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 16:39 </p>
      * @param list 字典类型集合
-     * @return ResponseDTO<List<CodeDTO>>
+     * @return Response<List<CodeDTO>>
      */
     @PostMapping("codes")
-    public ResponseDTO<Map<String,List<CodeDTO>>> findCodeDataList(@RequestParam List<String> list){
-        ResponseDTO<Map<String,List<CodeDTO>>>response = new ResponseDTO<>();
+    public Response<Map<String,List<CodeDTO>>> findCodeDataList(@RequestParam List<String> list){
+        Response<Map<String,List<CodeDTO>>>response = new Response<>();
         if(list == null || list.size() <= 0){
             response.setResponse(ResponseEnum.FAIL,"查询数据字典数据失败，信息不全",null);
             return response;
@@ -75,11 +75,11 @@ public class UserController {
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 16:39 </p>
      * @param codeType 字典类型
-     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.common.config.code.dto.CodeDTO>>
+     * @return Response<List<CodeDTO>>
      */
     @GetMapping("code/{type}")
-    public ResponseDTO<Map<String,List<CodeDTO>>> findCodeData(@PathVariable("type") String codeType){
-        ResponseDTO<Map<String,List<CodeDTO>>>response = new ResponseDTO<>();
+    public Response<Map<String,List<CodeDTO>>> findCodeData(@PathVariable("type") String codeType){
+        Response<Map<String,List<CodeDTO>>>response = new Response<>();
         if(StringUtils.isBlank(codeType)){
             response.setResponse(ResponseEnum.FAIL,"查询单个数据字典数据失败，信息不全",null);
             return response;
@@ -93,10 +93,10 @@ public class UserController {
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 19:58 </p>
      * @param user 用户信息
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     * @return Response<String>
      */
     @PostMapping("pwd")
-    public ResponseDTO<String> updateUserPwd(SysUserDTO user){
+    public Response<String> updateUserPwd(SysUserDTO user){
         if(user != null){
             user.setUserId(jwtTokenConverter.getUserId());
         }
@@ -106,20 +106,20 @@ public class UserController {
      * <p>@Description 查询当前登录的用户vue的router权限 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 00:22 </p>
-     * @return com.www.myblog.common.pojo.ResponseDTO
+     * @return Response<List<SysMenuDTO>>
      */
     @GetMapping("router")
-    public ResponseDTO<List<SysMenuDTO>> findUserRouter(){
+    public Response<List<SysMenuDTO>> findUserRouter(){
         return userInfoService.findUserRouter(jwtTokenConverter.getUserId());
     }
     /**
      * <p>@Description 查询当前登录的用户菜单列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 00:22 </p>
-     * @return com.www.myblog.common.pojo.ResponseDTO
+     * @return Response<List<SysMenuDTO>>
      */
     @GetMapping("menu")
-    public ResponseDTO<List<SysMenuDTO>> findUserMenu(){
+    public Response<List<SysMenuDTO>> findUserMenu(){
         return userInfoService.findUserMenu(jwtTokenConverter.getUserId());
     }
     /**
@@ -127,10 +127,10 @@ public class UserController {
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 20:02 </p>
      * @param photo 头像文件
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     * @return Response<String>
      */
     @PostMapping("photo")
-    public ResponseDTO<String> uploadPhoto(MultipartFile photo){
+    public Response<String> uploadPhoto(MultipartFile photo){
         return userInfoService.uploadPhoto(photo,jwtTokenConverter.getUserId());
     }
     /**
@@ -138,10 +138,10 @@ public class UserController {
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 19:58 </p>
      * @param user 用户信息
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     * @return Response<String>
      */
     @PostMapping("edit")
-    public ResponseDTO<String> updateUserInfo(SysUserDTO user){
+    public Response<String> updateUserInfo(SysUserDTO user){
         if(user != null){
             user.setUserId(jwtTokenConverter.getUserId());
         }
@@ -151,10 +151,10 @@ public class UserController {
      * <p>@Description 查询当前登录的用户信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 19:43 </p>
-     * @return com.www.myblog.common.pojo.ResponseDTO<com.www.myblog.base.data.dto.SysUserDTO>
+     * @return Response<SysUserDTO>
      */
     @GetMapping("info")
-    public ResponseDTO<SysUserDTO> findUser(){
+    public Response<SysUserDTO> findUser(){
         return userInfoService.findUser(jwtTokenConverter.getUserId());
     }
 }

@@ -98,7 +98,7 @@ public class RedisServiceImpl implements IRedisService {
      * <p>@Description 查询当前资源服务器的请求路径允许的scope范围 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/24 22:46 </p>
-     * @return java.util.List<com.www.myblog.common.pojo.ScopeDTO>
+     * @return java.util.List<ScopeDTO>
      */
     @Override
     public List<ScopeDTO> findUrlScope() {

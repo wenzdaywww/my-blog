@@ -24,7 +24,7 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticleEntity> {
      * <p>@Date 2022/1/23 21:37 </p>
      * @param page 分页信息
      * @param queryDTO 查询条件
-     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
+     * @return Response<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
      */
     Page<BlogArticleDTO> findUserBlogList(Page<BlogArticleDTO> page, @Param("query") BlogArticleDTO queryDTO);
     /**
@@ -32,7 +32,7 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticleEntity> {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param page 分页信息
-     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
+     * @return Response<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
      */
     Page<BlogArticleDTO> findTipBlogList(Page<BlogArticleDTO> page);
     /**
@@ -49,14 +49,14 @@ public interface BlogArticleMapper extends BaseMapper<BlogArticleEntity> {
      * <p>@Date 2022/1/23 21:37 </p>
      * @param page 分页信息
      * @param queryDTO 查询条件
-     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
+     * @return Response<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
      */
     Page<BlogArticleDTO> findAuthorBlogList(Page<BlogArticleDTO> page, @Param("query") BlogArticleDTO queryDTO);
     /**
      * <p>@Description 获取热门博客前10名单 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 19:24 </p>
-     * @return com.www.common.data.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
+     * @return Response<com.www.myblog.common.dto.BlogArticleDTO>
      */
     List<BlogArticleDTO> findHotBlogRank();
     /**

@@ -3,8 +3,8 @@ package com.www.myblog.base.service.menu.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.config.code.CodeDict;
 import com.www.common.config.code.enums.CodeKeyEnum;
-import com.www.common.data.dto.response.ResponseDTO;
 import com.www.common.data.enums.ResponseEnum;
+import com.www.common.data.response.Response;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.entity.SysMenuEntity;
@@ -53,13 +53,13 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 23:57 </p>
      * @param menuId 菜单ID
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     * @return Response<java.lang.String>
      */
     @Override
-    public ResponseDTO<String> deleteMenu(Long menuId) {
+    public Response<String> deleteMenu(Long menuId) {
         SysMenuEntity menuEntity = sysMenuService.findById(menuId);
         if(menuEntity != null){
-            return new ResponseDTO<>(ResponseEnum.FAIL,"删除菜单失败，菜单不存在");
+            return new Response<>(ResponseEnum.FAIL,"删除菜单失败，菜单不存在");
         }
         //根据菜单id删除菜单信息
         sysMenuService.deleteById(menuId);
@@ -69,9 +69,9 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
             if(StringUtils.equals(menuEntity.getMenuType(),CodeDict.getValue(CodeTypeEnum.MENU_TYPE.getCodeType(), CodeKeyEnum.K2.getKey()))){
                 redisService.updateRedisUrlScope(menuEntity.getModule());
             }
-            return new ResponseDTO<>(ResponseEnum.SUCCESS,"删除菜单成功");
+            return new Response<>(ResponseEnum.SUCCESS,"删除菜单成功");
         }else {
-            return new ResponseDTO<>(ResponseEnum.FAIL,"删除菜单失败");
+            return new Response<>(ResponseEnum.FAIL,"删除菜单失败");
         }
     }
     /**
@@ -79,16 +79,16 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 19:58 </p>
      * @param menu 菜单信息
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     * @return Response<java.lang.String>
      */
     @Override
-    public ResponseDTO<String> updateOrSave(SysMenuDTO menu) {
-        ResponseDTO<String> responseDTO = new ResponseDTO<>();
+    public Response<String> updateOrSave(SysMenuDTO menu) {
+        Response<String> response = new Response<>();
         if(menu == null || StringUtils.isAnyBlank(menu.getMenuCode(),menu.getMenuUrl(),menu.getMenuType())
             || CodeDict.isIllegalValue(CodeTypeEnum.MENU_TYPE.getCodeType(),menu.getMenuType())
         ){
-            responseDTO.setResponse(ResponseEnum.FAIL,"更新菜单失败，信息有误");
-            return responseDTO;
+            response.setResponse(ResponseEnum.FAIL,"更新菜单失败，信息有误");
+            return response;
         }
         SysMenuEntity parentEntity = null;
         SysMenuEntity menuEntity = null;
@@ -102,16 +102,16 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         if(menu.getParentId() != null){
             parentEntity = sysMenuService.findById(menu.getParentId());
             if(parentEntity == null){
-                responseDTO.setResponse(ResponseEnum.FAIL,"更新菜单失败，父级菜单不存在");
-                return responseDTO;
+                response.setResponse(ResponseEnum.FAIL,"更新菜单失败，父级菜单不存在");
+                return response;
             }
         }
         if(StringUtils.isNotBlank(menu.getRoleCode())){
             String[] roleArr = menu.getRoleCode().split(",");
             roleList = sysRoleService.findRoleEntityByName(roleArr);
             if(CollectionUtils.isEmpty(roleList)){
-                responseDTO.setResponse(ResponseEnum.FAIL,"更新菜单失败，角色不存在");
-                return responseDTO;
+                response.setResponse(ResponseEnum.FAIL,"更新菜单失败，角色不存在");
+                return response;
             }
         }
         // 更新菜单信息
@@ -195,8 +195,8 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         if(StringUtils.equals(menu.getMenuType(),CodeDict.getValue(CodeTypeEnum.MENU_TYPE.getCodeType(), CodeKeyEnum.K2.getKey()))){
             redisService.updateRedisUrlScope(menu.getModule());
         }
-        responseDTO.setResponse(ResponseEnum.SUCCESS,"更新菜单成功");
-        return responseDTO;
+        response.setResponse(ResponseEnum.SUCCESS,"更新菜单成功");
+        return response;
     }
     /**
      * <p>@Description 查询所有菜单 </p>
@@ -205,10 +205,10 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
      * @param menuDTO 查询条件da
      * @param pageNum 当前页数
      * @param pageSize 页面条数
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.SysMenuDTO>>
+     * @return Response<java.util.List < com.www.myblog.base.data.dto.SysMenuDTO>>
      */
     @Override
-    public ResponseDTO<List<SysMenuDTO>> findAllMenu(SysMenuDTO menuDTO,int pageNum, long pageSize) {
+    public Response<List<SysMenuDTO>> findAllMenu(SysMenuDTO menuDTO,int pageNum, long pageSize) {
         if (menuDTO == null){
             menuDTO = new SysMenuDTO();
         }
@@ -217,10 +217,10 @@ public class MenuInfoServiceImpl implements IMenuInfoService {
         Page<SysMenuDTO> page = new Page<>(pageNum,pageSize);
         page = sysMenuMapper.findAllMenu(page,menuDTO);
         List<SysMenuDTO> userList =  page.getRecords();
-        ResponseDTO<List<SysMenuDTO>> responseDTO = new ResponseDTO<>(ResponseEnum.SUCCESS,userList);
-        responseDTO.setPageNum(pageNum);
-        responseDTO.setPageSize(pageSize);
-        responseDTO.setTotalNum(page.getTotal());
-        return responseDTO;
+        Response<List<SysMenuDTO>> response = new Response<>(ResponseEnum.SUCCESS,userList);
+        response.setPageNum(pageNum);
+        response.setPageSize(pageSize);
+        response.setTotalNum(page.getTotal());
+        return response;
     }
 }

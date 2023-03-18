@@ -1,6 +1,6 @@
 package com.www.myblog.common.config.feign.base;
 
-import com.www.common.data.dto.response.ResponseDTO;
+import com.www.common.data.response.Response;
 import com.www.myblog.common.config.feign.base.fallback.BaseFeignFallback;
 import com.www.myblog.common.dto.UserInfoDTO;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -28,26 +28,26 @@ public interface IBaseFeignService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userList 用户id集合
-     * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     * @return com.www.common.data.dto.response.Response<com.www.common.pojo.dto.feign.UserInfoDTO>
      */
     @GetMapping("/feign/anonymous/users")
-    ResponseDTO<List<UserInfoDTO>> findUserInfoList(@RequestParam("list") List<String> userList);
+    Response<List<UserInfoDTO>> findUserInfoList(@RequestParam("list") List<String> userList);
     /**
      * <p>@Description 校验用户是否存在 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userList 用户id集合
-     * @return com.www.common.data.dto.response.ResponseDTO<Boolean>
+     * @return com.www.common.data.dto.response.Response<Boolean>
      */
     @PostMapping("/feign/oauth/exist")
-    ResponseDTO<Boolean> validateUserExist(@RequestParam("list") List<String> userList);
+    Response<Boolean> validateUserExist(@RequestParam("list") List<String> userList);
     /**
      * <p>@Description 查询用户信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userId 用户id
-     * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     * @return com.www.common.data.dto.response.Response<com.www.common.pojo.dto.feign.UserInfoDTO>
      */
     @GetMapping("/feign/anonymous/user/{id}")
-    ResponseDTO<UserInfoDTO> findUserInfo(@PathVariable("id") String userId);
+    Response<UserInfoDTO> findUserInfo(@PathVariable("id") String userId);
 }

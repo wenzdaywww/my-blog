@@ -6,8 +6,8 @@ import com.www.common.config.oauth2.dto.TokenInfoDTO;
 import com.www.common.config.oauth2.token.JwtTokenConverter;
 import com.www.common.config.oauth2.util.RedisTokenHandler;
 import com.www.common.data.constant.CharConstant;
-import com.www.common.data.dto.response.ResponseDTO;
 import com.www.common.data.enums.ResponseEnum;
+import com.www.common.data.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -55,10 +55,10 @@ public class OauthController {
      * <p>@Date 2021/12/19 23:44 </p>
      * @param principal
      * @param parameters
-     * @return com.www.authorise.data.dto.ResponseDTO<java.util.Map>
+     * @return com.www.authorise.data.dto.Response<java.util.Map>
      */
     @GetMapping("oauth/token")
-    public ResponseDTO<TokenDTO> tokenGet(HttpServletResponse response, Principal principal, @RequestParam Map<String, String> parameters) throws Exception {
+    public Response<TokenDTO> tokenGet(HttpServletResponse response, Principal principal, @RequestParam Map<String, String> parameters) throws Exception {
         return tokenPost(response,principal,parameters);
     }
     /**
@@ -67,11 +67,11 @@ public class OauthController {
      * <p>@Date 2021/12/19 23:44 </p>
      * @param principal
      * @param parameters
-     * @return com.www.authorise.data.dto.ResponseDTO<java.util.Map>
+     * @return com.www.authorise.data.dto.Response<java.util.Map>
      */
     @PostMapping("oauth/token")
-    public ResponseDTO<TokenDTO> tokenPost(HttpServletResponse response, Principal principal, @RequestParam Map<String, String> parameters) throws Exception  {
-        ResponseDTO<TokenDTO> responseDTO = new ResponseDTO<>();
+    public Response<TokenDTO> tokenPost(HttpServletResponse response, Principal principal, @RequestParam Map<String, String> parameters) throws Exception  {
+        Response<TokenDTO> responseResult = new Response<>();
         ResponseEntity<OAuth2AccessToken> accessToken = tokenEndpoint.postAccessToken(principal, parameters);
         TokenDTO tokenDTO = new TokenDTO();
         tokenDTO.setAccessToken(accessToken.getBody().getValue());
@@ -104,9 +104,9 @@ public class OauthController {
             userCookie.setPath(CharConstant.LEFT_SLASH);
             response.addCookie(userCookie);
         }
-        responseDTO.setResponse(ResponseEnum.SUCCESS,tokenDTO);
+        responseResult.setResponse(ResponseEnum.SUCCESS,tokenDTO);
         //保存用户登录的token到redis中
         RedisTokenHandler.setUserIdToken(tokenInfoDTO,tokenDTO.getAccessToken(),tokenDTO.getExpiresSeconds());
-        return responseDTO;
+        return responseResult;
     }
 }

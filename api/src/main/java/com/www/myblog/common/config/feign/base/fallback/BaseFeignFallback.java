@@ -1,7 +1,7 @@
 package com.www.myblog.common.config.feign.base.fallback;
 
-import com.www.common.data.dto.response.ResponseDTO;
 import com.www.common.data.enums.ResponseEnum;
+import com.www.common.data.response.Response;
 import com.www.myblog.common.config.feign.base.IBaseFeignService;
 import com.www.myblog.common.dto.UserInfoDTO;
 import feign.hystrix.FallbackFactory;
@@ -27,7 +27,7 @@ public class BaseFeignFallback implements FallbackFactory<IBaseFeignService> {
      * <p>@Author www </p>
      * <p>@Date 2022/1/21 19:53 </p>
      * @param throwable
-     * @return com.www.common.feign.IBlogFeignService
+     * @return IBlogFeignService
      */
     @Override
     public IBaseFeignService create(Throwable throwable) {
@@ -38,13 +38,13 @@ public class BaseFeignFallback implements FallbackFactory<IBaseFeignService> {
              * <p>@Author www </p>
              * <p>@Date 2022/1/23 15:43 </p>
              * @param userList 用户id集合
-             * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+             * @return Response<UserInfoDTO>
              */
             @Override
-            public ResponseDTO<List<UserInfoDTO>> findUserInfoList(List<String> userList) {
+            public Response<List<UserInfoDTO>> findUserInfoList(List<String> userList) {
                 log.error("base服务降级：查询多个用户信息");
                 List<UserInfoDTO> list = new ArrayList<>();
-                return new ResponseDTO<>(ResponseEnum.SUCCESS,list);
+                return new Response<>(ResponseEnum.SUCCESS,list);
             }
 
             /**
@@ -52,26 +52,26 @@ public class BaseFeignFallback implements FallbackFactory<IBaseFeignService> {
              * <p>@Author www </p>
              * <p>@Date 2022/1/23 15:43 </p>
              * @param userList 用户id集合
-             * @return com.www.common.data.dto.response.ResponseDTO<Boolean>
+             * @return Response<Boolean>
              */
             @Override
-            public ResponseDTO<Boolean> validateUserExist(List<String> userList) {
+            public Response<Boolean> validateUserExist(List<String> userList) {
                 log.error("base服务降级：校验用户是否存在");
-                return new ResponseDTO<>(ResponseEnum.SUCCESS,false);
+                return new Response<>(ResponseEnum.SUCCESS,false);
             }
             /**
              * <p>@Description 查询用户信息 </p>
              * <p>@Author www </p>
              * <p>@Date 2022/1/23 15:43 </p>
              * @param userId 用户id
-             * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+             * @return Response<UserInfoDTO>
              */
             @Override
-            public ResponseDTO<UserInfoDTO> findUserInfo(String userId) {
+            public Response<UserInfoDTO> findUserInfo(String userId) {
                 log.error("base服务降级：查询用户信息");
                 UserInfoDTO userInfoDTO = new UserInfoDTO();
                 userInfoDTO.setUserId(userId);
-                return new ResponseDTO<>(ResponseEnum.SUCCESS,userInfoDTO);
+                return new Response<>(ResponseEnum.SUCCESS,userInfoDTO);
             }
         };
     }

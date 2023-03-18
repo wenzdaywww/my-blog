@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.config.code.CodeDict;
 import com.www.common.config.mvc.upload.IFileUpload;
-import com.www.common.data.dto.response.ResponseDTO;
 import com.www.common.data.enums.DateFormatEnum;
 import com.www.common.data.enums.ResponseEnum;
+import com.www.common.data.response.Response;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysRoleDTO;
@@ -63,11 +63,11 @@ public class UserInfoServiceImpl implements IUserInfoService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userList 用户id集合
-     * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     * @return com.www.common.data.dto.response.Response<com.www.common.pojo.dto.feign.UserInfoDTO>
      */
     @Override
-    public ResponseDTO<List<UserInfoDTO>> findUserInfoList(List<String> userList) {
-        ResponseDTO<List<UserInfoDTO>> response = new ResponseDTO<>();
+    public Response<List<UserInfoDTO>> findUserInfoList(List<String> userList) {
+        Response<List<UserInfoDTO>> response = new Response<>();
         if(CollectionUtils.isEmpty(userList)){
             response.setResponse(ResponseEnum.FAIL,"查询多个用户信息失败，用户ID集合为空",null);
             return response;
@@ -96,11 +96,11 @@ public class UserInfoServiceImpl implements IUserInfoService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userList 用户id集合
-     * @return com.www.common.data.dto.response.ResponseDTO<Boolean>
+     * @return com.www.common.data.dto.response.Response<Boolean>
      */
     @Override
-    public ResponseDTO<Boolean> validateUserExist(List<String> userList) {
-        ResponseDTO<Boolean> response = new ResponseDTO<>();
+    public Response<Boolean> validateUserExist(List<String> userList) {
+        Response<Boolean> response = new Response<>();
         if(CollectionUtils.isEmpty(userList)){
             response.setResponse(ResponseEnum.SUCCESS,"校验用户是否存在失败，查询用户ID为空",false);
             return response;
@@ -116,11 +116,11 @@ public class UserInfoServiceImpl implements IUserInfoService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 15:43 </p>
      * @param userId 用户id
-     * @return com.www.common.data.dto.response.ResponseDTO<com.www.common.pojo.dto.feign.UserInfoDTO>
+     * @return com.www.common.data.dto.response.Response<com.www.common.pojo.dto.feign.UserInfoDTO>
      */
     @Override
-    public ResponseDTO<UserInfoDTO> findUserInfo(String userId) {
-        ResponseDTO<UserInfoDTO> response = new ResponseDTO<>();
+    public Response<UserInfoDTO> findUserInfo(String userId) {
+        Response<UserInfoDTO> response = new Response<>();
         if(StringUtils.isBlank(userId)){
             response.setResponse(ResponseEnum.FAIL,"查询失败，用户ID为空",null);
             return response;
@@ -144,25 +144,25 @@ public class UserInfoServiceImpl implements IUserInfoService {
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 19:58 </p>
      * @param user 用户信息
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     * @return Response<java.lang.String>
      */
     @Override
-    public ResponseDTO<String> updateUserPwd(SysUserDTO user) {
-        ResponseDTO<String> responseDTO = new ResponseDTO<>();
+    public Response<String> updateUserPwd(SysUserDTO user) {
+        Response<String> response = new Response<>();
         if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getPassword(),user.getNewPassWord())){
-            responseDTO.setResponse(ResponseEnum.FAIL,"更新用户密码失败，密码不能为空");
-            return responseDTO;
+            response.setResponse(ResponseEnum.FAIL,"更新用户密码失败，密码不能为空");
+            return response;
         }
         SysUserEntity userEntity = sysUserService.findUserEntityById(user.getUserId());
         if(userEntity == null){
-            responseDTO.setResponse(ResponseEnum.FAIL,"查询不到该用户");
-            return responseDTO;
+            response.setResponse(ResponseEnum.FAIL,"查询不到该用户");
+            return response;
         }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         //有输入密码则校验密码
         if(!encoder.matches(user.getPassword(),userEntity.getPassword())){
-            responseDTO.setResponse(ResponseEnum.FAIL,"密码不正确");
-            return responseDTO;
+            response.setResponse(ResponseEnum.FAIL,"密码不正确");
+            return response;
         }
         //更新用户信息
         UpdateWrapper<SysUserEntity> userWrapper = new UpdateWrapper<>();
@@ -171,10 +171,10 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userWrapper.lambda().set(SysUserEntity::getUpdateTime,DateUtils.getCurrentDateTime());
         boolean isOk = sysUserService.updateEntity(userWrapper);
         if(!isOk){
-            responseDTO.setResponse(ResponseEnum.FAIL,"更新用户密码失败");
+            response.setResponse(ResponseEnum.FAIL,"更新用户密码失败");
         }
-        responseDTO.setResponse(ResponseEnum.SUCCESS,"更新用户密码成功");
-        return responseDTO;
+        response.setResponse(ResponseEnum.SUCCESS,"更新用户密码成功");
+        return response;
     }
 
     /**
@@ -182,10 +182,10 @@ public class UserInfoServiceImpl implements IUserInfoService {
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 00:22 </p>
      * @param userId 用户ID
-     * @return com.www.myblog.common.pojo.ResponseDTO
+     * @return Response
      */
     @Override
-    public ResponseDTO<List<SysMenuDTO>> findUserRouter(String userId) {
+    public Response<List<SysMenuDTO>> findUserRouter(String userId) {
         List<SysMenuDTO> resultList = new ArrayList<>();
         List<SysMenuDTO> menuList = sysMenuMapper.findUserRouter(userId,"admin-router");
         if(CollectionUtils.isNotEmpty(menuList)){
@@ -203,17 +203,17 @@ public class UserInfoServiceImpl implements IUserInfoService {
                 }
             }
         }
-        return new ResponseDTO(ResponseEnum.SUCCESS,resultList);
+        return new Response(ResponseEnum.SUCCESS,resultList);
     }
     /**
      * <p>@Description 查询用户菜单列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/11 00:22 </p>
      * @param userId 用户ID
-     * @return com.www.myblog.common.pojo.ResponseDTO
+     * @return Response
      */
     @Override
-    public ResponseDTO<List<SysMenuDTO>> findUserMenu(String userId) {
+    public Response<List<SysMenuDTO>> findUserMenu(String userId) {
         List<SysMenuDTO> resultList = new ArrayList<>();
         List<SysMenuDTO> menuList = sysMenuMapper.findUserMenu(userId,"admin-menu");
         if(CollectionUtils.isNotEmpty(menuList)){
@@ -231,7 +231,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
                 }
             }
         }
-        return new ResponseDTO(ResponseEnum.SUCCESS,resultList);
+        return new Response(ResponseEnum.SUCCESS,resultList);
     }
     /**
      * <p>@Description 更新用户头像 </p>
@@ -239,50 +239,50 @@ public class UserInfoServiceImpl implements IUserInfoService {
      * <p>@Date 2021/12/8 20:02 </p>
      * @param photo  头像文件
      * @param userId 用户ID
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     * @return Response<java.lang.String>
      */
     @Override
-    public ResponseDTO<String> uploadPhoto(MultipartFile photo, String userId) {
-        ResponseDTO<String> responseDTO = new ResponseDTO<>();
+    public Response<String> uploadPhoto(MultipartFile photo, String userId) {
+        Response<String> response = new Response<>();
         SysUserEntity userEntity = sysUserService.findUserEntityById(userId);
         if(userEntity == null){
-            responseDTO.setResponse(ResponseEnum.FAIL,"查询不到该用户");
-            return responseDTO;
+            response.setResponse(ResponseEnum.FAIL,"查询不到该用户");
+            return response;
         }
         String path = fileService.uploadFileBackURL(photo,"photo",userId);
         if(StringUtils.isBlank(path)){
-            responseDTO.setResponse(ResponseEnum.FAIL,"更新用户头像失败");
-            return responseDTO;
+            response.setResponse(ResponseEnum.FAIL,"更新用户头像失败");
+            return response;
         }
         UpdateWrapper<SysUserEntity> userWrapper = new UpdateWrapper<>();
         userWrapper.lambda().eq(SysUserEntity::getUserId,userEntity.getUserId());
         userWrapper.lambda().set(SysUserEntity::getPhoto,path);
         boolean isOk = sysUserService.updateEntity(userWrapper);
         if(!isOk){
-            responseDTO.setResponse(ResponseEnum.FAIL,"更新用户头像失败");
+            response.setResponse(ResponseEnum.FAIL,"更新用户头像失败");
         }
-        responseDTO.setResponse(ResponseEnum.SUCCESS,path);
-        return responseDTO;
+        response.setResponse(ResponseEnum.SUCCESS,path);
+        return response;
     }
     /**
      * <p>@Description 更新用户信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 19:58 </p>
      * @param user 用户信息
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     * @return Response<java.lang.String>
      */
     @Override
-    public ResponseDTO<String> updateUserInfo(SysUserDTO user) {
-        ResponseDTO<String> responseDTO = new ResponseDTO<>();
+    public Response<String> updateUserInfo(SysUserDTO user) {
+        Response<String> response = new Response<>();
         if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName())
                 || (StringUtils.isNotBlank(user.getSex()) && CodeDict.isIllegalValue(CodeTypeEnum.SEX.getCodeType(),user.getSex()))){
-            responseDTO.setResponse(ResponseEnum.FAIL,"更新用户信息失败，用户信息有误");
-            return responseDTO;
+            response.setResponse(ResponseEnum.FAIL,"更新用户信息失败，用户信息有误");
+            return response;
         }
         SysUserEntity userEntity = sysUserService.findUserEntityById(user.getUserId());
         if(userEntity == null){
-            responseDTO.setResponse(ResponseEnum.FAIL,"查询不到该用户");
-            return responseDTO;
+            response.setResponse(ResponseEnum.FAIL,"查询不到该用户");
+            return response;
         }
         //更新用户信息
         UpdateWrapper<SysUserEntity> userWrapper = new UpdateWrapper<>();
@@ -296,10 +296,10 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userWrapper.lambda().set(SysUserEntity::getUpdateTime,DateUtils.getCurrentDateTime());
         boolean isOk = sysUserService.updateEntity(userWrapper);
         if(!isOk){
-            responseDTO.setResponse(ResponseEnum.FAIL,"更新用户信息失败");
+            response.setResponse(ResponseEnum.FAIL,"更新用户信息失败");
         }
-        responseDTO.setResponse(ResponseEnum.SUCCESS,"更新用户信息成功");
-        return responseDTO;
+        response.setResponse(ResponseEnum.SUCCESS,"更新用户信息成功");
+        return response;
     }
 
     /**
@@ -307,19 +307,19 @@ public class UserInfoServiceImpl implements IUserInfoService {
      * <p>@Author www </p>
      * <p>@Date 2021/12/8 19:43 </p>
      * @param userId 用户ID
-     * @return com.www.myblog.common.pojo.ResponseDTO<com.www.myblog.base.data.dto.SysUserDTO>
+     * @return Response<com.www.myblog.base.data.dto.SysUserDTO>
      */
     @Override
-    public ResponseDTO<SysUserDTO> findUser(String userId) {
-        ResponseDTO<SysUserDTO> responseDTO = new ResponseDTO<>();
+    public Response<SysUserDTO> findUser(String userId) {
+        Response<SysUserDTO> response = new Response<>();
         SysUserDTO userDTO = sysUserMapper.findUserInfoById(userId);
         if(userDTO == null){
-            responseDTO.setCode(ResponseEnum.FAIL.getCode());
-            responseDTO.setMsg("查询不到该用户信息");
-            return responseDTO;
+            response.setCode(ResponseEnum.FAIL.getCode());
+            response.setMsg("查询不到该用户信息");
+            return response;
         }
-        responseDTO.setResponse(ResponseEnum.SUCCESS,userDTO);
-        return responseDTO;
+        response.setResponse(ResponseEnum.SUCCESS,userDTO);
+        return response;
     }
 
     /**
@@ -327,20 +327,20 @@ public class UserInfoServiceImpl implements IUserInfoService {
      * <p>@Author www </p>
      * <p>@Date 2021/12/7 21:03 </p>
      * @param user
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     * @return Response<java.lang.String>
      */
     @Override
-    public ResponseDTO<String> createUser(SysUserDTO user) {
-        ResponseDTO<String> responseDTO = new ResponseDTO<>();
+    public Response<String> createUser(SysUserDTO user) {
+        Response<String> response = new Response<>();
         if(user == null || StringUtils.isAnyBlank(user.getUserId(),user.getUserName(),user.getPassword())
                 || (StringUtils.isNotBlank(user.getSex()) && CodeDict.isIllegalValue(CodeTypeEnum.SEX.getCodeType(),user.getSex()))){
-            responseDTO.setResponse(ResponseEnum.FAIL,"信息不完整，创建用户失败");
-            return responseDTO;
+            response.setResponse(ResponseEnum.FAIL,"信息不完整，创建用户失败");
+            return response;
         }
         SysRoleEntity roleEntity = sysRoleService.findRoleEntityByName("user");
         if(roleEntity == null){
-            responseDTO.setCode(ResponseEnum.FAIL.getCode()).setMsg("用户角色错误，创建用户失败");
-            return responseDTO;
+            response.setCode(ResponseEnum.FAIL.getCode()).setMsg("用户角色错误，创建用户失败");
+            return response;
         }
         //创建用户
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
@@ -362,19 +362,19 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userRoleEntity.setCreateTime(DateUtils.getCurrentDateTime());
         userRoleEntity.setUpdateTime(DateUtils.getCurrentDateTime());
         sysUserRoleService.createEntity(userRoleEntity);
-        responseDTO.setResponse(ResponseEnum.SUCCESS,"创建用户成功");
-        return responseDTO;
+        response.setResponse(ResponseEnum.SUCCESS,"创建用户成功");
+        return response;
     }
     /**
      * <p>@Description 查询所有角色信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2021/12/4 12:53 </p>
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.SysUserRoleDTO>>
+     * @return Response<java.util.List < com.www.myblog.base.data.dto.SysUserRoleDTO>>
      */
     @Override
-    public ResponseDTO<List<SysRoleDTO>> findAllRole() {
+    public Response<List<SysRoleDTO>> findAllRole() {
         List<SysRoleDTO> list = sysRoleMapper.findAllRole();
-        return new ResponseDTO<>(ResponseEnum.SUCCESS,list);
+        return new Response<>(ResponseEnum.SUCCESS,list);
     }
 
     /**
@@ -386,17 +386,17 @@ public class UserInfoServiceImpl implements IUserInfoService {
      * @param notExpired  是否过期
      * @param notLocked   账号是否锁定
      * @param credentialsNotExpired 密码是否过期
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.lang.String>
+     * @return Response<java.lang.String>
      */
     @Override
-    public ResponseDTO<String> updateState(String userId, String stateCd, String notExpired, String notLocked, String credentialsNotExpired) {
-        ResponseDTO<String> responseDTO = new ResponseDTO<>();
+    public Response<String> updateState(String userId, String stateCd, String notExpired, String notLocked, String credentialsNotExpired) {
+        Response<String> response = new Response<>();
         if(CodeDict.isIllegalValue(CodeTypeEnum.USER_STATUS.getCodeType(),stateCd)
                 || CodeDict.isIllegalValue(CodeTypeEnum.YES_NO.getCodeType(),notExpired)
                 || CodeDict.isIllegalValue(CodeTypeEnum.YES_NO.getCodeType(),notLocked)
                 || CodeDict.isIllegalValue(CodeTypeEnum.YES_NO.getCodeType(),credentialsNotExpired)){
-            responseDTO.setResponse(ResponseEnum.FAIL,"更新用户信息失败");
-            return responseDTO;
+            response.setResponse(ResponseEnum.FAIL,"更新用户信息失败");
+            return response;
         }
         UpdateWrapper<SysUserEntity> userWrapper = new UpdateWrapper<>();
         userWrapper.lambda().eq(SysUserEntity::getUserId,userId);
@@ -407,11 +407,11 @@ public class UserInfoServiceImpl implements IUserInfoService {
         userWrapper.lambda().set(SysUserEntity::getUpdateTime,DateUtils.getCurrentDateTime());
         boolean isOk = sysUserService.updateEntity(userWrapper);
         if(isOk){
-            responseDTO.setResponse(ResponseEnum.SUCCESS,"更新用户信息成功");
+            response.setResponse(ResponseEnum.SUCCESS,"更新用户信息成功");
         }else {
-            responseDTO.setResponse(ResponseEnum.FAIL,"更新用户信息失败");
+            response.setResponse(ResponseEnum.FAIL,"更新用户信息失败");
         }
-        return responseDTO;
+        return response;
     }
 
     /**
@@ -423,10 +423,10 @@ public class UserInfoServiceImpl implements IUserInfoService {
      * @param userName 用户名称
      * @param pageNum  当前页数
      * @param pageSize 页面条数
-     * @return com.www.myblog.common.pojo.ResponseDTO<java.util.List < com.www.myblog.base.data.dto.SysUserDTO>>
+     * @return Response<java.util.List < com.www.myblog.base.data.dto.SysUserDTO>>
      */
     @Override
-    public ResponseDTO<List<SysUserDTO>> findAllUser(String stateCd, String userId,String userName, int pageNum, long pageSize) {
+    public Response<List<SysUserDTO>> findAllUser(String stateCd, String userId,String userName, int pageNum, long pageSize) {
         SysUserDTO userDTO = new SysUserDTO();
         userDTO.setUserId(userId);
         userDTO.setUserName(userName);
@@ -436,10 +436,10 @@ public class UserInfoServiceImpl implements IUserInfoService {
         Page<SysUserDTO> page = new Page<>(pageNum,pageSize);
         page = sysUserMapper.findAllUser(page,userDTO);
         List<SysUserDTO> userList =  page.getRecords();
-        ResponseDTO<List<SysUserDTO>> responseDTO = new ResponseDTO<>(ResponseEnum.SUCCESS,userList);
-        responseDTO.setPageNum(pageNum);
-        responseDTO.setPageSize(pageSize);
-        responseDTO.setTotalNum(page.getTotal());
-        return responseDTO;
+        Response<List<SysUserDTO>> response = new Response<>(ResponseEnum.SUCCESS,userList);
+        response.setPageNum(pageNum);
+        response.setPageSize(pageSize);
+        response.setTotalNum(page.getTotal());
+        return response;
     }
 }

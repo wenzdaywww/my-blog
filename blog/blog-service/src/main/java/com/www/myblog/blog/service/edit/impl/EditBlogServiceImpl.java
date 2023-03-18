@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.config.code.CodeDict;
 import com.www.common.config.code.enums.CodeKeyEnum;
 import com.www.common.config.mvc.upload.IFileUpload;
-import com.www.common.data.dto.response.ResponseDTO;
 import com.www.common.data.enums.ResponseEnum;
+import com.www.common.data.response.Response;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
 import com.www.myblog.blog.data.dto.TagInfoDTO;
@@ -74,11 +74,11 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/2/2 14:54 </p>
      * @param blog 博客信息
-     * @return com.www.common.data.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
+     * @return com.www.common.data.dto.response.Response<com.www.myblog.common.dto.BlogArticleDTO>
      */
     @Override
-    public ResponseDTO<Boolean> updateBlogTagAndGroup(BlogArticleDTO blog) {
-        ResponseDTO<Boolean> response = new ResponseDTO<>();
+    public Response<Boolean> updateBlogTagAndGroup(BlogArticleDTO blog) {
+        Response<Boolean> response = new Response<>();
         if(blog == null || blog.getBlogId() == null){
             response.setResponse(ResponseEnum.FAIL,"修改博客的分组及标签信息失败，信息不全",null);
             return response;
@@ -170,11 +170,11 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * <p>@Date 2022/2/2 14:54 </p>
      *
      * @param blogId 博客id
-     * @return com.www.common.data.dto.response.ResponseDTO<com.www.myblog.common.dto.BlogArticleDTO>
+     * @return com.www.common.data.dto.response.Response<com.www.myblog.common.dto.BlogArticleDTO>
      */
     @Override
-    public ResponseDTO<BlogArticleDTO> findBlogTagAndGroup(Long blogId) {
-        ResponseDTO<BlogArticleDTO> response = new ResponseDTO<>();
+    public Response<BlogArticleDTO> findBlogTagAndGroup(Long blogId) {
+        Response<BlogArticleDTO> response = new Response<>();
         if(blogId == null){
             response.setResponse(ResponseEnum.FAIL,"查询博客的分组及标签信息失败，信息不全",null);
             return response;
@@ -201,23 +201,23 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * <p>@Description 查询所有博客标签 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/22 19:07 </p>
-     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
+     * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
      */
     @Override
-    public ResponseDTO<List<TagInfoDTO>> findAllBlogTag() {
+    public Response<List<TagInfoDTO>> findAllBlogTag() {
         List<TagInfoDTO> list = tagInfoMapper.findAllBlogTag();
-        return new ResponseDTO<>(ResponseEnum.SUCCESS,list);
+        return new Response<>(ResponseEnum.SUCCESS,list);
     }
     /**
      * <p>@Description 获取用户博客标签列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/22 19:07 </p>
      * @param userId 用户ID
-     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.TagInfoDTO>>
+     * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.TagInfoDTO>>
      */
     @Override
-    public ResponseDTO<List<TagInfoDTO>> findUserBlogTag(String userId) {
-        ResponseDTO<List<TagInfoDTO>> response = new ResponseDTO<>();
+    public Response<List<TagInfoDTO>> findUserBlogTag(String userId) {
+        Response<List<TagInfoDTO>> response = new Response<>();
         if(StringUtils.isBlank(userId)){
             response.setResponse(ResponseEnum.FAIL,"获取用户博客标签列表失败。信息不全",null);
             return response;
@@ -231,11 +231,11 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param query 查询条件
-     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
+     * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
      */
     @Override
-    public ResponseDTO<List<BlogArticleDTO>> findBlogList(BlogArticleDTO query) {
-        ResponseDTO<List<BlogArticleDTO>> response = new ResponseDTO<>();
+    public Response<List<BlogArticleDTO>> findBlogList(BlogArticleDTO query) {
+        Response<List<BlogArticleDTO>> response = new Response<>();
         if(query == null || StringUtils.isBlank(query.getUserId())){
             response.setResponse(ResponseEnum.FAIL,"获取博客列表失败，信息不全",null);
             return response;
@@ -257,11 +257,11 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * <p>@Date 2022/1/22 18:31 </p>
      * @param blog 博客信息
      * @param img 博客封面图片
-     * @return com.www.common.data.dto.response.ResponseDTO<Long> 博客文章主键
+     * @return com.www.common.data.dto.response.Response<Long> 博客文章主键
      */
     @Override
-    public ResponseDTO<Long> createBlogArticle(BlogArticleDTO blog, MultipartFile img) {
-        ResponseDTO<Long> response = new ResponseDTO<>();
+    public Response<Long> createBlogArticle(BlogArticleDTO blog, MultipartFile img) {
+        Response<Long> response = new Response<>();
         if(blog == null || StringUtils.isAnyBlank(blog.getUserId(),blog.getTitle(),blog.getContent())){
             response.setResponse(ResponseEnum.FAIL,"发布博客失败，信息不完整",null);
             return response;
@@ -338,11 +338,11 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * <p>@Date 2022/1/22 18:31 </p>
      * @param userId 用户ID
      * @param name 分组名称
-     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
+     * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
      */
     @Override
-    public ResponseDTO<String> createBlogGroup(String userId, String name) {
-        ResponseDTO<String> response = new ResponseDTO<>();
+    public Response<String> createBlogGroup(String userId, String name) {
+        Response<String> response = new Response<>();
         if(StringUtils.isAnyBlank(userId,name)){
             response.setCode(ResponseEnum.FAIL.getCode());
             response.setMsg("新增分组失败，用户ID或分组名称为空");
@@ -363,11 +363,11 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/22 18:31 </p>
      * @param userId 用户ID
-     * @return com.www.common.data.dto.response.ResponseDTO<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
+     * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
      */
     @Override
-    public ResponseDTO<List<BlogGroupDTO>> findBlogGroup(String userId) {
-        ResponseDTO<List<BlogGroupDTO>> response = new ResponseDTO<>();
+    public Response<List<BlogGroupDTO>> findBlogGroup(String userId) {
+        Response<List<BlogGroupDTO>> response = new Response<>();
         if(StringUtils.isBlank(userId)){
             return response;
         }
