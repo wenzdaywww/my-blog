@@ -427,7 +427,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
         }
         commentDTO.setBlogId(blogId).setCommentId(commentEntity.getCommentId())
                 .setComment(text).setUserId(userId).setMore(0L).setPraise(0L).setOpen(false)
-                .setCreateDate(DateUtils.format(commentEntity.getCreateTime(), DateFormatEnum.YYYY_MM_DD));
+                .setCreateDate(DateUtils.format(commentEntity.getCreateTime(), DateFormatEnum.YYYYMMDD1));
         response.setResponse(ResponseEnum.SUCCESS,commentDTO);
         return response;
     }
