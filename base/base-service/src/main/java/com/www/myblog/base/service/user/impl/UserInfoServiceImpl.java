@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.config.code.CodeDict;
 import com.www.common.config.exception.BusinessException;
-import com.www.common.config.mvc.upload.IFileUpload;
+import com.www.common.config.mvc.upload.IFileService;
 import com.www.common.data.constant.CharConstant;
 import com.www.common.data.enums.DateFormatEnum;
 import com.www.common.data.response.Result;
@@ -54,7 +54,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
     @Autowired
     private ISysUserRoleService sysUserRoleService;
     @Autowired
-    private IFileUpload fileService;
+    private IFileService fileService;
     @Autowired
     private ISysUserService sysUserService;
     @Autowired
