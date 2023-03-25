@@ -108,18 +108,16 @@ export default {
     // 获取用户数据
     const getUserData = () => {
       axios.$http.get(request.userInfo,null).then(function (res) {
-        if(res.code === 200){
-          user.userId = res.data.userId;
-          user.userName = res.data.userName;
-          user.phoneNum = res.data.phoneNum;
-          user.birthday = res.data.birthday;
-          user.sex = res.data.sex;
-          if(res.data.photo){
-            user.photo = res.data.photo;
-          }
-          user.email = res.data.email;
-          user.brief = res.data.brief;
+        user.userId = res.data.userId;
+        user.userName = res.data.userName;
+        user.phoneNum = res.data.phoneNum;
+        user.birthday = res.data.birthday;
+        user.sex = res.data.sex;
+        if(res.data.photo){
+          user.photo = res.data.photo;
         }
+        user.email = res.data.email;
+        user.brief = res.data.brief;
       });
     };
     getUserData();
@@ -128,12 +126,8 @@ export default {
       editForm.value.validate((valid) => {
         if (valid) {
           axios.$http.post(request.editInfo,user).then(function (res) {
-            if(res.code === 200){
-              ElMessage.success('修改成功');
-              getUserData();
-            }else {
-              ElMessage.error(res.data);
-            }
+            ElMessage.success('修改成功');
+            getUserData();
           });
         } else {
           return false;

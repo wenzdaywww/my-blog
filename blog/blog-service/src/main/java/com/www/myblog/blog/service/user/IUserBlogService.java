@@ -1,6 +1,6 @@
 package com.www.myblog.blog.service.user;
 
-import com.www.common.data.response.Response;
+import com.www.common.data.response.Result;
 import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.dto.CollectGroupDTO;
 import com.www.myblog.blog.data.dto.CommentDTO;
@@ -23,7 +23,7 @@ public interface IUserBlogService {
      * @param blogId 博客id
      * @return com.www.common.data.dto.response.Response<java.lang.Boolean> true点赞，fasle取消点赞
      */
-    Response<Boolean> savePraiseInfo(String userId, Long blogId);
+    Result<Boolean> savePraiseInfo(String userId, Long blogId);
     /**
      * <p>@Description 修改博客收藏夹位置 </p>
      * <p>@Author www </p>
@@ -33,7 +33,7 @@ public interface IUserBlogService {
      * @param cgId 收藏夹id
      * @return com.www.common.data.dto.response.Response<Boolean> true修改成功，false修改失败
      */
-    Response<Boolean> updateCollectId(String userId,Long blogId,Long cgId);
+    Result<Boolean> updateCollectId(String userId,Long blogId,Long cgId);
     /**
      * <p>@Description 查询用户的博客收藏列表 </p>
      * <p>@Author www </p>
@@ -41,7 +41,7 @@ public interface IUserBlogService {
      * @param query 查询条件就
      * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>> 博客收藏列表
      */
-    Response<List<BlogArticleDTO>> findCollectList(CollectGroupDTO query);
+    Result<List<BlogArticleDTO>> findCollectList(CollectGroupDTO query);
     /**
      * <p>@Description 查询收藏夹列表 </p>
      * <p>@Author www </p>
@@ -49,7 +49,7 @@ public interface IUserBlogService {
      * @param userId 用户id
      * @return com.www.common.data.dto.response.Response<java.lang.Boolean> true添加成功，false取消失败
      */
-    Response<List<CollectGroupDTO>> findCollectGroup(String userId);
+    Result<List<CollectGroupDTO>> findCollectGroup(String userId);
     /**
      * <p>@Description 新增收藏夹 </p>
      * <p>@Author www </p>
@@ -58,7 +58,7 @@ public interface IUserBlogService {
      * @param collectName 收藏夹名称
      * @return com.www.common.data.dto.response.Response<java.lang.Boolean> true添加成功，false取消失败
      */
-    Response<Boolean> addCollectGroup(String userId,String collectName);
+    Result<Boolean> addCollectGroup(String userId,String collectName);
     /**
      * <p>@Description  获取粉丝列表 </p>
      * <p>@Author www </p>
@@ -67,7 +67,7 @@ public interface IUserBlogService {
      * @param userId 用户id
      * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>> 粉丝用户列表
      */
-    Response<List<AuthorDTO>> findFansList(int pageNum,String userId);
+    Result<List<AuthorDTO>> findFansList(int pageNum,String userId);
     /**
      * <p>@Description  获取关注列表 </p>
      * <p>@Author www </p>
@@ -76,7 +76,7 @@ public interface IUserBlogService {
      * @param userId 用户id
      * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>> 关注用户列表
      */
-    Response<List<AuthorDTO>> findFollowList(int pageNum,String userId);
+    Result<List<AuthorDTO>> findFollowList(int pageNum,String userId);
     /**
      * <p>@Description 添加/取消博客收藏 </p>
      * <p>@Author www </p>
@@ -86,7 +86,7 @@ public interface IUserBlogService {
      * @param cgId 收藏夹id
      * @return com.www.common.data.dto.response.Response<BlogArticleDTO> true添加收藏，false取消收藏
      */
-    Response<BlogArticleDTO> addCollect(String userId,Long blogId,Long cgId);
+    Result<BlogArticleDTO> addCollect(String userId,Long blogId,Long cgId);
     /**
      * <p>@Description 新增评论 </p>
      * <p>@Author www </p>
@@ -97,7 +97,7 @@ public interface IUserBlogService {
      * @param text 评论内容
      * @return com.www.common.data.dto.response.Response<com.www.myblog.blog.data.dto.CommentDTO>
      */
-    Response<CommentDTO> addBlogComment(String userId,Long blogId,Long replyComId, String text);
+    Result<CommentDTO> addBlogComment(String userId,Long blogId,Long replyComId, String text);
     /**
      * <p>@Description 获取用户博客相关统计信息 </p>
      * <p>@Author www </p>
@@ -105,7 +105,7 @@ public interface IUserBlogService {
      * @param userId 用户ID
      * @return com.www.common.data.dto.response.Response<com.www.myblog.blog.data.dto.AuthorDTO>
      */
-    Response<AuthorDTO> findUserCount(String userId);
+    Result<AuthorDTO> findUserCount(String userId);
     /**
      * <p>@Description 关注或取消关注博主 </p>
      * <p>@Author www </p>
@@ -115,5 +115,5 @@ public interface IUserBlogService {
      * @param blogId 博客ID
      * @return com.www.common.data.dto.response.Response<java.lang.Boolean>
      */
-    Response<Boolean> followAuthor(String userId,String authorId,Long blogId);
+    Result<Boolean> followAuthor(String userId,String authorId,Long blogId);
 }

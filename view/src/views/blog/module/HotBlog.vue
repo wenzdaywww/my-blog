@@ -32,9 +32,7 @@ export default {
     // 获取热门博客排行
     const getHotRank = () => {
       axios.$http.get(request.hotRank,null).then(function (res) {
-        if(res.code === 200){
-          hotBlog.value = res.data;
-        }
+        hotBlog.value = res.data;
       });
     }
     getHotRank();

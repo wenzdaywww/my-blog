@@ -2,7 +2,7 @@ package com.www.myblog.blog.controller.user;
 
 import com.www.common.config.oauth2.constant.AuthorityContant;
 import com.www.common.config.oauth2.token.JwtTokenConverter;
-import com.www.common.data.response.Response;
+import com.www.common.data.response.Result;
 import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.dto.CollectGroupDTO;
 import com.www.myblog.blog.data.dto.CommentDTO;
@@ -39,10 +39,10 @@ public class UserBlogController {
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 22:23 </p>
      * @param bid 博客id
-     * @return com.www.common.data.dto.response.Response<java.lang.Boolean> true点赞，fasle取消点赞
+     * @return com.www.common.data.dto.response.Result<java.lang.Boolean> true点赞，fasle取消点赞
      */
     @PostMapping("praise/{bid}")
-    public Response<Boolean> savePraiseInfo(@PathVariable("bid") Long bid){
+    public Result<Boolean> savePraiseInfo(@PathVariable("bid") Long bid){
         return userBlogService.savePraiseInfo(jwtTokenConverter.getUserId(),bid);
     }
     /**
@@ -51,10 +51,10 @@ public class UserBlogController {
      * <p>@Date 2022/2/1 10:44 </p>
      * @param bid 博客id
      * @param cgid 收藏夹id
-     * @return com.www.common.data.dto.response.Response<Boolean> true添加收藏，false取消收藏
+     * @return com.www.common.data.dto.response.Result<Boolean> true添加收藏，false取消收藏
      */
     @PostMapping("newclt")
-    public Response<Boolean> updateCollectId(Long bid,Long cgid){
+    public Result<Boolean> updateCollectId(Long bid,Long cgid){
         return userBlogService.updateCollectId(jwtTokenConverter.getUserId(),bid,cgid);
     }
     /**
@@ -62,10 +62,10 @@ public class UserBlogController {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param query 查询条件
-     * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
+     * @return com.www.common.data.dto.response.Result<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
      */
     @GetMapping("collects")
-    public Response<List<BlogArticleDTO>> findCollectList(CollectGroupDTO query){
+    public Result<List<BlogArticleDTO>> findCollectList(CollectGroupDTO query){
         if(query != null){
             query.setUserId(jwtTokenConverter.getUserId());
         }
@@ -75,10 +75,10 @@ public class UserBlogController {
      * <p>@Description 查询收藏夹列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 13:29 </p>
-     * @return com.www.common.data.dto.response.Response<java.lang.Boolean> true添加成功，false取消失败
+     * @return com.www.common.data.dto.response.Result<java.lang.Boolean> true添加成功，false取消失败
      */
     @GetMapping("cltgp")
-    public Response<List<CollectGroupDTO>> findCollectGroup(){
+    public Result<List<CollectGroupDTO>> findCollectGroup(){
         return userBlogService.findCollectGroup(jwtTokenConverter.getUserId());
     }
     /**
@@ -86,10 +86,10 @@ public class UserBlogController {
      * <p>@Author www </p>
      * <p>@Date 2022/2/3 13:29 </p>
      * @param name 收藏夹名称
-     * @return com.www.common.data.dto.response.Response<java.lang.Boolean> true添加成功，false取消失败
+     * @return com.www.common.data.dto.response.Result<java.lang.Boolean> true添加成功，false取消失败
      */
     @PostMapping("newgp")
-    public Response<Boolean> addCollectGroup(String name){
+    public Result<Boolean> addCollectGroup(String name){
         return userBlogService.addCollectGroup(jwtTokenConverter.getUserId(),name);
     }
     /**
@@ -97,10 +97,10 @@ public class UserBlogController {
      * <p>@Author www </p>
      * <p>@Date 2022/2/2 22:53 </p>
      * @param pageNum 页码
-     * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>>
+     * @return com.www.common.data.dto.response.Result<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>>
      */
     @GetMapping("fans/{num}")
-    public Response<List<AuthorDTO>> findFansList(@PathVariable("num") int pageNum){
+    public Result<List<AuthorDTO>> findFansList(@PathVariable("num") int pageNum){
         return userBlogService.findFansList(pageNum,jwtTokenConverter.getUserId());
     }
     /**
@@ -108,10 +108,10 @@ public class UserBlogController {
      * <p>@Author www </p>
      * <p>@Date 2022/2/2 22:53 </p>
      * @param pageNum 页码
-     * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>>
+     * @return com.www.common.data.dto.response.Result<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>>
      */
     @GetMapping("follows/{num}")
-    public Response<List<AuthorDTO>> findFollowList(@PathVariable("num") int pageNum){
+    public Result<List<AuthorDTO>> findFollowList(@PathVariable("num") int pageNum){
         return userBlogService.findFollowList(pageNum,jwtTokenConverter.getUserId());
     }
     /**
@@ -120,10 +120,10 @@ public class UserBlogController {
      * <p>@Date 2022/2/1 10:44 </p>
      * @param bid 博客id
      * @param cgid 收藏夹id
-     * @return com.www.common.data.dto.response.Response<BlogArticleDTO>
+     * @return com.www.common.data.dto.response.Result<BlogArticleDTO>
      */
     @PostMapping("collect")
-    public Response<BlogArticleDTO> addCollect(Long bid, Long cgid){
+    public Result<BlogArticleDTO> addCollect(Long bid, Long cgid){
         return userBlogService.addCollect(jwtTokenConverter.getUserId(),bid,cgid);
     }
     /**
@@ -133,20 +133,20 @@ public class UserBlogController {
      * @param bid 博客ID，不等于null，则是新增的评论
      * @param rid 回复的评论ID，不等于null，则是回复评论
      * @param text 评论内容
-     * @return com.www.common.data.dto.response.Response<com.www.myblog.blog.data.dto.CommentDTO>
+     * @return com.www.common.data.dto.response.Result<com.www.myblog.blog.data.dto.CommentDTO>
      */
     @PostMapping("comment")
-    public Response<CommentDTO> addBlogComment(Long bid,Long rid,String text){
+    public Result<CommentDTO> addBlogComment(Long bid,Long rid,String text){
         return userBlogService.addBlogComment(jwtTokenConverter.getUserId(),bid,rid,text);
     }
     /**
      * <p>@Description 获取用户博客相关统计信息 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 18:18 </p>
-     * @return com.www.common.data.dto.response.Response<com.www.myblog.blog.data.dto.AuthorDTO>
+     * @return com.www.common.data.dto.response.Result<com.www.myblog.blog.data.dto.AuthorDTO>
      */
     @GetMapping("count")
-    public Response<AuthorDTO> findUserCount(){
+    public Result<AuthorDTO> findUserCount(){
         return userBlogService.findUserCount(jwtTokenConverter.getUserId());
     }
     /**
@@ -155,10 +155,10 @@ public class UserBlogController {
      * <p>@Date 2022/1/29 15:15 </p>
      * @param id 博主ID
      * @param bid 博客ID
-     * @return com.www.common.data.dto.response.Response<java.lang.Boolean>
+     * @return com.www.common.data.dto.response.Result<java.lang.Boolean>
      */
     @PostMapping("follow")
-    public Response<Boolean> followAuthor(String id,Long bid){
+    public Result<Boolean> followAuthor(String id,Long bid){
         return userBlogService.followAuthor(jwtTokenConverter.getUserId(),id,bid);
     };
 }

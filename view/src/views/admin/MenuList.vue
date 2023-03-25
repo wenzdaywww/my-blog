@@ -275,23 +275,17 @@ export default {
     // 查询数据字典
     const getCodeDataArr = () => {
       axios.$http.get(request.code + "menuType", null).then(function (res) {
-        if(res.code === 200){
-          menuArr.value = res.data.menuType;
-        }
+        menuArr.value = res.data.menuType;
       });
       axios.$http.get(request.code + "yesNo", null).then(function (res) {
-        if(res.code === 200){
-          yesNoArr.value = res.data.yesNo;
-        }
+        yesNoArr.value = res.data.yesNo;
       });
       // let codeArr = [];
       // codeArr.push("menuType");
       // codeArr.push("yesNo");
       // axios.$http.post(request.codes, codeArr).then(function (res) {
-      //   if(res.code === 200){
       //     menuArr.value = res.data.menuType;
       //     yesNoArr.value = res.data.yesNo;
-      //   }
       // });
     };
     getCodeDataArr();
@@ -306,9 +300,7 @@ export default {
     // 查询所有角色
     const getRoleList = () => {
       axios.$http.get(request.roleList,null).then(function (res) {
-        if(res.code === 200){
-          rolesArr.value = res.data;
-        }
+        rolesArr.value = res.data;
       });
     };
     getRoleList();
@@ -317,10 +309,8 @@ export default {
     // 获取表格数据
     const getData = () => {
       axios.$http.get(request.menuList,query).then(function (res) {
-        if(res.code === 200){
-          tableData.value = res.data;
-          query.pageTotal = res.totalNum;
-        }
+        tableData.value = res.data;
+        query.pageTotal = res.totalNum;
       })
     };
     getData();
@@ -392,12 +382,8 @@ export default {
       ElMessageBox.confirm("确定要删除吗？", "提示", {type: "warning"}).then(() => {
         form.menuId= row.menuId;
         axios.$http.post(request.deleteMenu, form).then(function (res) {
-          if(res.code === 200){
-            ElMessage.success('删除成功');
-            getData();
-          }else {
-            ElMessage.error(res.data);
-          }
+          ElMessage.success('删除成功');
+          getData();
         });
       }).catch(() => {});
     };
@@ -411,13 +397,9 @@ export default {
           });
           form.roleCode = form.roleCode ? form.roleCode.substring(0,form.roleCode.length-1) : "";
           axios.$http.post(request.editMenu, form).then(function (res) {
-            if(res.code === 200){
-              dialogVisible.value = false;
-              ElMessage.success('保存成功');
-              getData();
-            }else {
-              ElMessage.error(res.data);
-            }
+            dialogVisible.value = false;
+            ElMessage.success('保存成功');
+            getData();
           });
         } else {
           return false;

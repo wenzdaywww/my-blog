@@ -148,37 +148,29 @@ export default {
     // 获取博客分组
     const getBlogGroup = () => {
       axios.$http.post(request.groupList,null).then(function (res) {
-        if(res.code === 200){
-          groupArr.value = res.data;
-          groupArr.value.push({groupId:-1,groupName:"<不分组>"});
-        }
+        groupArr.value = res.data;
+        groupArr.value.push({groupId:-1,groupName:"<不分组>"});
       });
     }
     getBlogGroup();
     // 获取博客标签
     const getBlogTags = () => {
       axios.$http.get(request.userTags,null).then(function (res) {
-        if(res.code === 200){
-          userTagArr.value = res.data;
-        }
+        userTagArr.value = res.data;
       });
     }
     getBlogTags();
     // 获取所有标签
     const getAllTags = () => {
       axios.$http.post(request.tagList,null).then(function (res) {
-        if(res.code === 200){
-          allTagArr.value = res.data;
-        }
+        allTagArr.value = res.data;
       });
     }
     // 获取表格数据
     const findBlogList = () => {
       axios.$http.post(request.manageBlog,query).then(function (res) {
-        if(res.code === 200){
-          blogList.value = res.data;
-          query.pageTotal = res.totalNum;
-        }
+        blogList.value = res.data;
+        query.pageTotal = res.totalNum;
       })
     };
     findBlogList();
@@ -202,26 +194,20 @@ export default {
     const handleEdit = (row) => {
       getAllTags();
       axios.$http.get(request.blogTagGroup+row.blogId,null).then(function (res) {
-        if(res.code === 200){
-          editVisible.value = true;
-          form.blogId = res.data.blogId;
-          form.title = res.data.title;
-          form.groupId = res.data.groupId;
-          form.tagIds = res.data.tagIds;
-        }
+        editVisible.value = true;
+        form.blogId = res.data.blogId;
+        form.title = res.data.title;
+        form.groupId = res.data.groupId;
+        form.tagIds = res.data.tagIds;
       });
     };
     // 编辑页面的保存按钮
     const saveEdit = () => {
       form.groupId = form.groupId == -1 ? "" : form.groupId;
       axios.$http.post(request.updateTagGroup,form).then(function (res) {
-        if(res.code === 200){
-          editVisible.value = false;
-          findBlogList();
-          ElMessage.success('修改成功');
-        }else {
-          ElMessage.error('修改失败');
-        }
+        editVisible.value = false;
+        findBlogList();
+        ElMessage.success('修改成功');
       })
     };
     return {query,userTagArr,allTagArr,groupArr,form,editVisible,blogList,handleSearch,handleReset,handlePageChange,handleEdit,saveEdit}

@@ -1,6 +1,6 @@
 package com.www.myblog.base.service.menu;
 
-import com.www.common.data.response.Response;
+import com.www.common.data.response.Result;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public interface IMenuInfoService {
      * @param menuId 菜单ID
      * @return Response<String>
      */
-    Response<String> deleteMenu(Long menuId);
+    Result<String> deleteMenu(Long menuId);
     /**
      * <p>@Description 修改或创建菜单 </p>
      * <p>@Author www </p>
@@ -27,7 +27,7 @@ public interface IMenuInfoService {
      * @param menu 菜单信息
      * @return Response<java.lang.String>
      */
-    Response<String> updateOrSave(SysMenuDTO menu);
+    Result<String> updateOrSave(SysMenuDTO menu);
     /**
      * <p>@Description 查询所有菜单 </p>
      * <p>@Author www </p>
@@ -37,5 +37,5 @@ public interface IMenuInfoService {
      * @param pageSize 页面条数
      * @return Response<java.util.List < com.www.myblog.base.data.dto.SysMenuDTO>>
      */
-    Response<List<SysMenuDTO>> findAllMenu(SysMenuDTO menuDTO,int pageNum, long pageSize);
+    Result<List<SysMenuDTO>> findAllMenu(SysMenuDTO menuDTO,int pageNum, long pageSize);
 }

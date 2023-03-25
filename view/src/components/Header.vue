@@ -120,11 +120,9 @@ export default {
     // 获取用户数据
     const getUserData = () => {
       axios.$http.get(request.userInfo, null).then(function (res) {
-        if(res.code === 200){
-          isLogin.value = true;
-          if(res.data.photo){
-            form.photo = res.data.photo;
-          }
+        isLogin.value = true;
+        if(res.data.photo){
+          form.photo = res.data.photo;
         }
       });
     };
@@ -153,13 +151,11 @@ export default {
       // 退出
       if (command == "loginout") {
         axios.$http.post(request.logout,null).then(function (res) {
-          if(res.code === 200){
-            ElMessage.success("退出成功");
-            clearUserRouter();
-            //TODO 2021/12/28 22:35 router.push路由跳转页面不刷新，待处理
-            //TODO 2022/1/11 22:43 测试环境部署多个前端，退出后不能到登录页面，待处理
-            router.push("/index");
-          }
+          ElMessage.success("退出成功");
+          clearUserRouter();
+          //TODO 2021/12/28 22:35 router.push路由跳转页面不刷新，待处理
+          //TODO 2022/1/11 22:43 测试环境部署多个前端，退出后不能到登录页面，待处理
+          router.push("/index");
         }).catch(function (res) {
           ElMessage.error("退出失败");
         });

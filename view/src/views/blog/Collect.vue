@@ -96,29 +96,23 @@ export default {
     //查询收藏夹
     const findCollectGroup = () => {
       axios.$http.get(request.collectGroup,null).then(function (res) {
-        if(res.code === 200){
-          collectArr.value = res.data;
-        }
+        collectArr.value = res.data;
       });
     }
     findCollectGroup();
     // 获取表格数据
     const findBlogList = () => {
       axios.$http.get(request.collectList,query).then(function (res) {
-        if(res.code === 200){
-          blogList.value = res.data;
-          query.pageTotal = res.totalNum;
-        }
+        blogList.value = res.data;
+        query.pageTotal = res.totalNum;
       })
     };
     findBlogList();
     //取消收藏博客
     const addCollect = (blogId) => {
       axios.$http.post(request.addCollect, {bid:blogId}).then(function (res) {
-        if(res.code === 200){
-          findBlogList();
-          ElMessage.success('取消收藏成功');
-        }
+        findBlogList();
+        ElMessage.success('取消收藏成功');
       });
     }
     // 查询操作

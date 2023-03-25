@@ -121,10 +121,8 @@ export default {
     // 获取用户数据
     const getUserData = () => {
       axios.$http.get(request.userInfo,null).then(function (res) {
-        if(res.code === 200){
-          if(res.data.photo){
-            user.photo = res.data.photo;
-          }
+        if(res.data.photo){
+          user.photo = res.data.photo;
         }
       });
     };
@@ -132,14 +130,12 @@ export default {
     // 获取用户统计数据
     const getUserCount = () => {
       axios.$http.get(request.userCount,null).then(function (res) {
-        if(res.code === 200){
-          user.blog = res.data.blog;
-          user.follow = res.data.follow;
-          user.fans = res.data.fans;
-          user.praise = res.data.praise;
-          user.comment = res.data.comment;
-          user.collect = res.data.collect;
-        }
+        user.blog = res.data.blog;
+        user.follow = res.data.follow;
+        user.fans = res.data.fans;
+        user.praise = res.data.praise;
+        user.comment = res.data.comment;
+        user.collect = res.data.collect;
       });
     };
     getUserCount();
@@ -195,13 +191,9 @@ export default {
       let fd = new FormData();//通过form数据格式来传
       fd.append("photo", base64ToFile(cropImg.value,file.name)); //传文件
       axios.$http.upload(request.uploadPhoto,fd,{'Content-Type': 'multipart/form-data'}).then(function (res){
-        if(res.code === 200){
-          ElMessage.success('上传成功');
-          dialogVisible.value = false;
-          getUserData();
-        }else {
-          ElMessage.error("上传失败");
-        }
+        ElMessage.success('上传成功');
+        dialogVisible.value = false;
+        getUserData();
       });
     };
     // 将裁剪的图片转为文件

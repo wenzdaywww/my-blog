@@ -61,10 +61,8 @@ export default {
     // 获取表格数据
     const getData = () => {
       axios.$http.get(request.monitorList,query).then(function (res) {
-        if(res.code === 200){
-          tableData.value = res.data;
-          pageTotal.value = res.totalNum;
-        }
+        tableData.value = res.data;
+        pageTotal.value = res.totalNum;
       })
     };
     getData();

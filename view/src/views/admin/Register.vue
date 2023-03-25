@@ -121,13 +121,9 @@ export default {
       addForm.value.validate((valid) => {
         if (valid) {
           axios.$http.post(request.register, form).then(function (res) {
-            if(res.code === 200){
-              ElMessage.success('新增成功');
-              registVisible.value = false;
-              emit('toLogin',null);//调用父组件方法跳转登录页面
-            }else {
-              ElMessage.error(res.data);
-            }
+            ElMessage.success('新增成功');
+            registVisible.value = false;
+            emit('toLogin',null);//调用父组件方法跳转登录页面
           });
         } else {
           return false;

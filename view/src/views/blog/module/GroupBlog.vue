@@ -64,18 +64,14 @@ export default {
     // 获取博主博客分组列表
     const getBlogGroup = () => {
       axios.$http.get(request.browseGroup,{id:authorId,bid:blogId}).then(function (res) {
-        if(res.code === 200){
-          blogGroup.value = res.data;
-        }
+        blogGroup.value = res.data;
       });
     }
     getBlogGroup();
     // 获取博主博客分类列表
     const getBlogClass = () => {
       axios.$http.get(request.browseTag,{id:authorId,bid:blogId}).then(function (res) {
-        if(res.code === 200){
-          blogTag.value = res.data;
-        }
+        blogTag.value = res.data;
       });
     }
     getBlogClass();

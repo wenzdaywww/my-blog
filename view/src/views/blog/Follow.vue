@@ -70,18 +70,16 @@ export default {
     const loadUserList = () =>{
       if (more.value){
         axios.$http.get(request.followList+query.pageNum, null).then(function (res) {
-          if(res.code === 200){
-            if (res.data){
-              query.pageNum++;//页码增加
-              query.totalNum = res.totalNum;
-              more.value = res.data.length >= res.pageSize;//判断是否还有更多
-              res.data.forEach (temp => {
-                userList.value.push(temp);//列表添加
-              });
-            }else {//没有数据
-              more.value = false;//没有更多
-              followShow.value = query.pageNum == 1 ? false : followShow.value;//设置是否展示关注列表
-            }
+          if (res.data){
+            query.pageNum++;//页码增加
+            query.totalNum = res.totalNum;
+            more.value = res.data.length >= res.pageSize;//判断是否还有更多
+            res.data.forEach (temp => {
+              userList.value.push(temp);//列表添加
+            });
+          }else {//没有数据
+            more.value = false;//没有更多
+            followShow.value = query.pageNum == 1 ? false : followShow.value;//设置是否展示关注列表
           }
         });
       }
@@ -89,11 +87,7 @@ export default {
     // 取消关注博主
     const followAuthor = (item) => {
       axios.$http.post(request.follow, {id:item.userId}).then(function (res) {
-        if(res.code === 200){
-          item.fan = res.data;
-        }else {
-          ElMessage.error('取消或关注博主失败');
-        }
+        item.fan = res.data;
       });
     }
     return {query,followShow,userList,loadUserList,followAuthor}

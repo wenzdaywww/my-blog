@@ -94,21 +94,17 @@ export default {
     // 获取博主信息
     const getAuthorInfo = () => {
       axios.$http.get(request.author, {id:authorId,bid:blogId}).then(function (res) {
-        if(res.code === 200){
-          author.userId = res.data.userId;
-          author.userName = res.data.userName;
-          author.photo = res.data.photo;
-          author.age = res.data.age;
-          author.blog = res.data.blog;
-          author.fans = res.data.fans;
-          author.praise = res.data.praise;
-          author.comment = res.data.comment;
-          author.collect = res.data.collect;
-          author.isFan = res.data.fan;
-          author.flag = res.data.flag;
-        }else {
-          router.push("/404");
-        }
+        author.userId = res.data.userId;
+        author.userName = res.data.userName;
+        author.photo = res.data.photo;
+        author.age = res.data.age;
+        author.blog = res.data.blog;
+        author.fans = res.data.fans;
+        author.praise = res.data.praise;
+        author.comment = res.data.comment;
+        author.collect = res.data.collect;
+        author.isFan = res.data.fan;
+        author.flag = res.data.flag;
       });
     }
     getAuthorInfo();
@@ -116,11 +112,7 @@ export default {
     const followAuthor = () => {
       if(utils.isLogin()){
         axios.$http.post(request.follow, {id:authorId,bid:blogId}).then(function (res) {
-          if(res.code === 200){
-            author.isFan = res.data;
-          }else {
-            ElMessage.error('取消或关注博主失败');
-          }
+          author.isFan = res.data;
         });
       }else {
         ElMessage.info('请登录');

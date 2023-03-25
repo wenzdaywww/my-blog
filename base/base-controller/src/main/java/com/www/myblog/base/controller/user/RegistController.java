@@ -1,6 +1,6 @@
 package com.www.myblog.base.controller.user;
 
-import com.www.common.data.response.Response;
+import com.www.common.data.response.Result;
 import com.www.myblog.base.data.dto.SysUserDTO;
 import com.www.myblog.base.service.user.IUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class RegistController {
      * @return Response<String>
      */
     @PostMapping("user")
-    public Response<String> createUser(SysUserDTO user){
+    public Result<String> createUser(SysUserDTO user){
         return userInfoService.createUser(user);
     }
 }

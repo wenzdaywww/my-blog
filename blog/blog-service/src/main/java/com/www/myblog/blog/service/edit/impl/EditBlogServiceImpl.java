@@ -4,9 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.config.code.CodeDict;
 import com.www.common.config.code.enums.CodeKeyEnum;
+import com.www.common.config.exception.BusinessException;
 import com.www.common.config.mvc.upload.IFileUpload;
-import com.www.common.data.enums.ResponseEnum;
-import com.www.common.data.response.Response;
+import com.www.common.data.constant.CharConstant;
+import com.www.common.data.response.Result;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
 import com.www.myblog.blog.data.dto.TagInfoDTO;
@@ -30,6 +31,7 @@ import com.www.myblog.common.dto.BlogArticleDTO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -68,6 +70,12 @@ public class EditBlogServiceImpl implements IEditBlogService {
     private BlogTagMapper blogTagMapper;
     @Autowired
     private TagInfoMapper tagInfoMapper;
+    /** 端口 **/
+    @Value("${server.port}")
+    private String port;
+    /** ip地址 **/
+    @Value("${eureka.instance.ip-address}")
+    private String ip;
 
     /**
      * <p>@Description 修改博客的分组及标签信息 </p>
@@ -77,16 +85,13 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * @return com.www.common.data.dto.response.Response<com.www.myblog.common.dto.BlogArticleDTO>
      */
     @Override
-    public Response<Boolean> updateBlogTagAndGroup(BlogArticleDTO blog) {
-        Response<Boolean> response = new Response<>();
+    public Result<Boolean> updateBlogTagAndGroup(BlogArticleDTO blog) {
         if(blog == null || blog.getBlogId() == null){
-            response.setResponse(ResponseEnum.FAIL,"修改博客的分组及标签信息失败，信息不全",null);
-            return response;
+            throw new BusinessException("修改博客的分组及标签信息失败，信息不全");
         }
         BlogArticleEntity articleEntity = blogArticleService.findById(blog.getBlogId());
         if(articleEntity == null){
-            response.setResponse(ResponseEnum.FAIL,"查询博客的分组及标签信息失败，博客不存在",null);
-            return response;
+            throw new BusinessException("查询博客的分组及标签信息失败，博客不存在");
         }
         //修改分组信息
         BlogGroupEntity blogGroupEntity = blogGroupService.findEntityByBlogId(blog.getBlogId());
@@ -97,8 +102,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
         }else {
             GroupInfoEntity groupInfoEntity = groupInfoService.findById(blog.getGroupId());
             if(groupInfoEntity == null){
-                response.setResponse(ResponseEnum.FAIL,"查询博客的分组及标签信息失败，分组不存在",null);
-                return response;
+                throw new BusinessException("查询博客的分组及标签信息失败，分组不存在");
             }
             if(blogGroupEntity != null){
                 //存在分组，判断是否是同一分组，是则不更新，否则删除旧分组，新建新分组
@@ -123,8 +127,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
         if(CollectionUtils.isNotEmpty(blog.getTagIds())){
             List<TagInfoEntity> tagInfoList = tagInfoService.findByIds(blog.getTagIds());
             if(CollectionUtils.isEmpty(tagInfoList) || tagInfoList.size() != blog.getTagIds().size()){
-                response.setResponse(ResponseEnum.FAIL,"查询博客的分组及标签信息失败，标签不存在",null);
-                return response;
+                throw new BusinessException("查询博客的分组及标签信息失败，标签不存在");
             }
             List<BlogTagEntity> addTagList = new ArrayList<>();//需要新增的博客标签
             List<Long> deeteTagList = new ArrayList<>();//需要删除的博客标签
@@ -161,8 +164,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
                 blogTagService.deleteByBlogId(blog.getBlogId());
             }
         }
-        response.setResponse(ResponseEnum.SUCCESS,true);
-        return response;
+        return new Result<>(true);
     }
     /**
      * <p>@Description 查询博客的分组及标签信息 </p>
@@ -173,16 +175,13 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * @return com.www.common.data.dto.response.Response<com.www.myblog.common.dto.BlogArticleDTO>
      */
     @Override
-    public Response<BlogArticleDTO> findBlogTagAndGroup(Long blogId) {
-        Response<BlogArticleDTO> response = new Response<>();
+    public Result<BlogArticleDTO> findBlogTagAndGroup(Long blogId) {
         if(blogId == null){
-            response.setResponse(ResponseEnum.FAIL,"查询博客的分组及标签信息失败，信息不全",null);
-            return response;
+            throw new BusinessException("查询博客的分组及标签信息失败，信息不全");
         }
         BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
         if(articleEntity == null){
-            response.setResponse(ResponseEnum.FAIL,"查询博客的分组及标签信息失败，博客不存在",null);
-            return response;
+            throw new BusinessException("查询博客的分组及标签信息失败，博客不存在");
         }
         BlogArticleDTO articleDTO = new BlogArticleDTO();
         articleDTO.setBlogId(blogId).setTitle(articleEntity.getTitle());
@@ -194,8 +193,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
         List<Long> tagIds = CollectionUtils.isEmpty(tagList) ? null :
                 tagList.stream().map(BlogTagEntity::getTagId).collect(Collectors.toList());
         articleDTO.setTagIds(tagIds);
-        response.setResponse(ResponseEnum.SUCCESS,articleDTO);
-        return response;
+        return new Result<>(articleDTO);
     }
     /**
      * <p>@Description 查询所有博客标签 </p>
@@ -204,9 +202,9 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
      */
     @Override
-    public Response<List<TagInfoDTO>> findAllBlogTag() {
+    public Result<List<TagInfoDTO>> findAllBlogTag() {
         List<TagInfoDTO> list = tagInfoMapper.findAllBlogTag();
-        return new Response<>(ResponseEnum.SUCCESS,list);
+        return new Result<>(list);
     }
     /**
      * <p>@Description 获取用户博客标签列表 </p>
@@ -216,15 +214,12 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.TagInfoDTO>>
      */
     @Override
-    public Response<List<TagInfoDTO>> findUserBlogTag(String userId) {
-        Response<List<TagInfoDTO>> response = new Response<>();
+    public Result<List<TagInfoDTO>> findUserBlogTag(String userId) {
         if(StringUtils.isBlank(userId)){
-            response.setResponse(ResponseEnum.FAIL,"获取用户博客标签列表失败。信息不全",null);
-            return response;
+            throw new BusinessException("获取用户博客标签列表失败。信息不全");
         }
         List<TagInfoDTO> list = blogTagMapper.findAuthorBlogTag(userId);
-        response.setResponse(ResponseEnum.SUCCESS,list);
-        return response;
+        return new Result<>(list);
     }
     /**
      * <p>@Description 获取博客列表 </p>
@@ -234,22 +229,16 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
      */
     @Override
-    public Response<List<BlogArticleDTO>> findBlogList(BlogArticleDTO query) {
-        Response<List<BlogArticleDTO>> response = new Response<>();
+    public Result<List<BlogArticleDTO>> findBlogList(BlogArticleDTO query) {
         if(query == null || StringUtils.isBlank(query.getUserId())){
-            response.setResponse(ResponseEnum.FAIL,"获取博客列表失败，信息不全",null);
-            return response;
+            throw new BusinessException("获取博客列表失败，信息不全");
         }
         int pageNum = query.getPageNum() <= 0 ? 1 : query.getPageNum();
         long pageSize = query.getPageSize() <= 0 ? 5 : query.getPageSize();
         Page<BlogArticleDTO> page = new Page<>(pageNum,pageSize);
         page = blogArticleMapper.findUserBlogList(page,query);
         List<BlogArticleDTO> blogList =  page.getRecords();
-        response.setPageNum(query.getPageNum());
-        response.setPageSize(query.getPageSize());
-        response.setTotalNum(page.getTotal());
-        response.setResponse(ResponseEnum.SUCCESS,blogList);
-        return response;
+        return new Result<>(query.getPageNum(),query.getPageSize(),page.getTotal(),blogList);
     }
     /**
      * <p>@Description 当前登录的用户创建博客文章 </p>
@@ -260,25 +249,21 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * @return com.www.common.data.dto.response.Response<Long> 博客文章主键
      */
     @Override
-    public Response<Long> createBlogArticle(BlogArticleDTO blog, MultipartFile img) {
-        Response<Long> response = new Response<>();
+    public Result<Long> createBlogArticle(BlogArticleDTO blog, MultipartFile img) {
         if(blog == null || StringUtils.isAnyBlank(blog.getUserId(),blog.getTitle(),blog.getContent())){
-            response.setResponse(ResponseEnum.FAIL,"发布博客失败，信息不完整",null);
-            return response;
+            throw new BusinessException("发布博客失败，信息不完整");
         }
         if(blog.getGroupId() != null){
             GroupInfoEntity groupEntity = groupInfoService.findById(blog.getGroupId());
             if(groupEntity == null){
-                response.setResponse(ResponseEnum.FAIL,"发布博客失败，分组信息不存在",null);
-                return response;
+                throw new BusinessException("发布博客失败，分组信息不存在");
             }
         }
         if(CollectionUtils.isNotEmpty(blog.getTagIds())){
             //根据标签id集合查询标签信息
             List<TagInfoEntity> tagList = tagInfoService.findByIds(blog.getTagIds());
             if(CollectionUtils.isEmpty(tagList) || tagList.size() != blog.getTagIds().size()){
-                response.setResponse(ResponseEnum.FAIL,"发布博客失败，分类信息不存在",null);
-                return response;
+                throw new BusinessException("发布博客失败，分类信息不存在");
             }
         }
         //创建博客
@@ -297,7 +282,8 @@ public class EditBlogServiceImpl implements IEditBlogService {
         blogArticleService.createEntity(blogEntity);
         //保存封面图片
         if(img != null){
-            String path = fileService.uploadFileBackURL(img,"blogCover","coverImg_" + blogEntity.getBlogId());
+            String httpAddr = CharConstant.HTTP + ip + CharConstant.COLON + port;
+            String path = fileService.uploadFileBackURL(img,httpAddr,"blogCover","coverImg_" + blogEntity.getBlogId());
             if(StringUtils.isNotBlank(path)){
                 //更新博客封面图片
                 UpdateWrapper<BlogArticleEntity> wrapper = new UpdateWrapper<>();
@@ -328,8 +314,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
                 blogTagService.createEntity(blogClassEntity);
             }
         }
-        response.setResponse(ResponseEnum.SUCCESS,"发布博客成功",blogEntity.getBlogId());
-        return response;
+        return new Result<>(blogEntity.getBlogId());
     }
 
     /**
@@ -341,12 +326,9 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
      */
     @Override
-    public Response<String> createBlogGroup(String userId, String name) {
-        Response<String> response = new Response<>();
+    public Result<String> createBlogGroup(String userId, String name) {
         if(StringUtils.isAnyBlank(userId,name)){
-            response.setCode(ResponseEnum.FAIL.getCode());
-            response.setMsg("新增分组失败，用户ID或分组名称为空");
-            return response;
+            throw new BusinessException("新增分组失败，用户ID或分组名称为空");
         }
         GroupInfoEntity groupEntity = new GroupInfoEntity();
         groupEntity.setUserId(userId);
@@ -354,8 +336,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
         groupEntity.setUpdateTime(DateUtils.getCurrentDateTime());
         groupEntity.setCreateTime(DateUtils.getCurrentDateTime());
         groupInfoService.createEntity(groupEntity);
-        response.setResponse(ResponseEnum.SUCCESS,"新增分组成功");
-        return response;
+        return new Result<>("新增分组成功");
     }
 
     /**
@@ -366,13 +347,11 @@ public class EditBlogServiceImpl implements IEditBlogService {
      * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
      */
     @Override
-    public Response<List<BlogGroupDTO>> findBlogGroup(String userId) {
-        Response<List<BlogGroupDTO>> response = new Response<>();
+    public Result<List<BlogGroupDTO>> findBlogGroup(String userId) {
         if(StringUtils.isBlank(userId)){
-            return response;
+            return new Result<>(null);
         }
         List<BlogGroupDTO> list = groupInfoMapper.findBlogGroup(userId);
-        response.setResponse(ResponseEnum.SUCCESS,list);
-        return response;
+        return new Result<>(list);
     }
 }

@@ -151,24 +151,18 @@ export default {
     // 查询数据字典
     const getCodeDataArr = () => {
       axios.$http.get(request.code + "userStatus", null).then(function (res) {
-        if(res.code === 200){
-          stateCdArr.value = res.data.userStatus;
-        }
+        stateCdArr.value = res.data.userStatus;
       });
       axios.$http.get(request.code + "yesNo", null).then(function (res) {
-        if(res.code === 200){
-          yesNoArr.value = res.data.yesNo;
-        }
+        yesNoArr.value = res.data.yesNo;
       });
     };
     getCodeDataArr();
     // 获取表格数据
     const getData = () => {
       axios.$http.get(request.userList,query).then(function (res) {
-        if(res.code === 200){
-          tableData.value = res.data;
-          pageTotal.value = res.totalNum;
-        }
+        tableData.value = res.data;
+        pageTotal.value = res.totalNum;
       })
     };
     getData();
@@ -219,13 +213,9 @@ export default {
     // 编辑页面的保存按钮
     const saveEdit = () => {
       axios.$http.post(request.userState,form).then(function (res) {
-        if(res.code === 200){
-          editVisible.value = false;
-          ElMessage.success('修改成功');
-          getData();
-        }else {
-          ElMessage.error('修改失败');
-        }
+        editVisible.value = false;
+        ElMessage.success('修改成功');
+        getData();
       })
     };
     return { stateCdArr,yesNoArr,query,tableData,pageTotal,editVisible,form,

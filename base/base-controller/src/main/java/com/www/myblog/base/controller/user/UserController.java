@@ -1,14 +1,15 @@
 package com.www.myblog.base.controller.user;
 
 import com.www.common.config.code.dto.CodeDTO;
+import com.www.common.config.exception.BusinessException;
 import com.www.common.config.oauth2.constant.AuthorityContant;
 import com.www.common.config.oauth2.token.JwtTokenConverter;
-import com.www.common.data.enums.ResponseEnum;
-import com.www.common.data.response.Response;
+import com.www.common.data.response.Result;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysUserDTO;
 import com.www.myblog.base.service.redis.IRedisService;
 import com.www.myblog.base.service.user.IUserInfoService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,11 +53,9 @@ public class UserController {
      * @return Response<List<CodeDTO>>
      */
     @PostMapping("codes")
-    public Response<Map<String,List<CodeDTO>>> findCodeDataList(@RequestParam List<String> list){
-        Response<Map<String,List<CodeDTO>>>response = new Response<>();
-        if(list == null || list.size() <= 0){
-            response.setResponse(ResponseEnum.FAIL,"查询数据字典数据失败，信息不全",null);
-            return response;
+    public Result<Map<String,List<CodeDTO>>> findCodeDataList(@RequestParam List<String> list){
+        if(CollectionUtils.isEmpty(list)){
+            throw new BusinessException("查询数据字典数据失败，信息不全");
         }
         Map<String, Map<String, CodeDTO>> codeMap = redisService.getCodeData();
         Map<String,List<CodeDTO>> typeMap = new HashMap<>();
@@ -67,8 +66,7 @@ public class UserController {
                 typeMap.put(codeType,collect);
             }
         }
-        response.setResponse(typeMap);
-        return response;
+        return new Result<>(typeMap);
     }
     /**
      * <p>@Description 查询单个数据字典数据 </p>
@@ -78,11 +76,9 @@ public class UserController {
      * @return Response<List<CodeDTO>>
      */
     @GetMapping("code/{type}")
-    public Response<Map<String,List<CodeDTO>>> findCodeData(@PathVariable("type") String codeType){
-        Response<Map<String,List<CodeDTO>>>response = new Response<>();
+    public Result<Map<String,List<CodeDTO>>> findCodeData(@PathVariable("type") String codeType){
         if(StringUtils.isBlank(codeType)){
-            response.setResponse(ResponseEnum.FAIL,"查询单个数据字典数据失败，信息不全",null);
-            return response;
+            throw new BusinessException("查询单个数据字典数据失败，信息不全");
         }
         List<String> list = new ArrayList<>();
         list.add(codeType);
@@ -96,7 +92,7 @@ public class UserController {
      * @return Response<String>
      */
     @PostMapping("pwd")
-    public Response<String> updateUserPwd(SysUserDTO user){
+    public Result<String> updateUserPwd(SysUserDTO user){
         if(user != null){
             user.setUserId(jwtTokenConverter.getUserId());
         }
@@ -109,7 +105,7 @@ public class UserController {
      * @return Response<List<SysMenuDTO>>
      */
     @GetMapping("router")
-    public Response<List<SysMenuDTO>> findUserRouter(){
+    public Result<List<SysMenuDTO>> findUserRouter(){
         return userInfoService.findUserRouter(jwtTokenConverter.getUserId());
     }
     /**
@@ -119,7 +115,7 @@ public class UserController {
      * @return Response<List<SysMenuDTO>>
      */
     @GetMapping("menu")
-    public Response<List<SysMenuDTO>> findUserMenu(){
+    public Result<List<SysMenuDTO>> findUserMenu(){
         return userInfoService.findUserMenu(jwtTokenConverter.getUserId());
     }
     /**
@@ -130,7 +126,7 @@ public class UserController {
      * @return Response<String>
      */
     @PostMapping("photo")
-    public Response<String> uploadPhoto(MultipartFile photo){
+    public Result<String> uploadPhoto(MultipartFile photo){
         return userInfoService.uploadPhoto(photo,jwtTokenConverter.getUserId());
     }
     /**
@@ -141,7 +137,7 @@ public class UserController {
      * @return Response<String>
      */
     @PostMapping("edit")
-    public Response<String> updateUserInfo(SysUserDTO user){
+    public Result<String> updateUserInfo(SysUserDTO user){
         if(user != null){
             user.setUserId(jwtTokenConverter.getUserId());
         }
@@ -154,7 +150,7 @@ public class UserController {
      * @return Response<SysUserDTO>
      */
     @GetMapping("info")
-    public Response<SysUserDTO> findUser(){
+    public Result<SysUserDTO> findUser(){
         return userInfoService.findUser(jwtTokenConverter.getUserId());
     }
 }

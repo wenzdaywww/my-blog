@@ -2,10 +2,9 @@ package com.www.myblog.blog.service.browse.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.www.common.data.enums.ResponseEnum;
-import com.www.common.data.response.Response;
+import com.www.common.config.exception.BusinessException;
+import com.www.common.data.response.Result;
 import com.www.common.utils.DateUtils;
-import com.www.common.utils.HttpUtils;
 import com.www.myblog.blog.data.dto.AuthorDTO;
 import com.www.myblog.blog.data.dto.BlogGroupDTO;
 import com.www.myblog.blog.data.dto.CommentDTO;
@@ -73,21 +72,15 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param pageNum 页码
-     * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
+     * @return com.www.common.data.dto.response.Result<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
      */
     @Override
-    public Response<List<BlogArticleDTO>> findTipBlogList(int pageNum) {
-        Response<List<BlogArticleDTO>> response = new Response<>();
+    public Result<List<BlogArticleDTO>> findTipBlogList(int pageNum) {
         pageNum = pageNum <= 0 ? 1 : pageNum;
         long pageSize = 5;
         Page<BlogArticleDTO> page = new Page<>(pageNum,pageSize);
         page = blogArticleMapper.findTipBlogList(page);
-        List<BlogArticleDTO> blogList =  page.getRecords();
-        response.setPageNum(pageNum);
-        response.setPageSize(pageSize);
-        response.setTotalNum(page.getTotal());
-        response.setResponse(ResponseEnum.SUCCESS,blogList);
-        return response;
+        return new Result<>(pageNum,pageSize,page.getTotal(),page.getRecords());
     }
 
     /**
@@ -97,14 +90,13 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
      * @param pageNum 页码
      * @param blogId 博客id,不等于null，则是父评论
      * @param parentComId 父评论id，不等于null，则是子评论
-     * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.CommentDTO>>
+     * @return com.www.common.data.dto.response.Result<java.util.List < com.www.myblog.blog.data.dto.CommentDTO>>
      */
     @Override
-    public Response<List<CommentDTO>> findCommentList(int pageNum, Long blogId, Long parentComId) {
-        Response<List<CommentDTO>> response = new Response<>();
+    public Result<List<CommentDTO>> findCommentList(int pageNum, Long blogId, Long parentComId) {
+        Result<List<CommentDTO>> response = new Result<>();
         if((blogId == null && parentComId == null) || (blogId != null && parentComId != null)){
-            response.setResponse(ResponseEnum.FAIL,"查询评论列表失败，信息不全",null);
-            return response;
+            throw new BusinessException("查询评论列表失败，信息不全");
         }
         long pageSize = 5;//分页查询条数
         pageNum = pageNum <= 0 ? 1 : pageNum;
@@ -114,11 +106,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
         List<String> userIdList = new ArrayList<>();
         //查询不到信息返回
         if(CollectionUtils.isEmpty(commentList)){
-            response.setPageNum(pageNum);
-            response.setPageSize(pageSize);
-            response.setTotalNum(page.getTotal());
-            response.setResponse(ResponseEnum.SUCCESS,"未查询评论信息",null);
-            return response;
+            return new Result<>(pageNum,pageSize,page.getTotal(),null);
         }
         //重新组装评论信息
         for (CommentDTO commentDTO : commentList){
@@ -143,7 +131,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
         }
         //查询用户信息
         if(CollectionUtils.isNotEmpty(userIdList)){
-            List<UserInfoDTO> userList = Response.getBackData(baseFeignService.findUserInfoList(userIdList));
+            List<UserInfoDTO> userList = Result.getBackData(baseFeignService.findUserInfoList(userIdList));
             Map<String,UserInfoDTO> userMap = CollectionUtils.isEmpty(userList) ? new HashMap<>() :
                     userList.stream().collect(Collectors.toMap(UserInfoDTO::getUserId, Function.identity(), (key1, key2) -> key2));
             for (CommentDTO parentDTO : commentList){
@@ -168,11 +156,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
                 }
             }
         }
-        response.setPageNum(pageNum);
-        response.setPageSize(pageSize);
-        response.setTotalNum(page.getTotal());
-        response.setResponse(ResponseEnum.SUCCESS,commentList);
-        return response;
+        return new Result<>(pageNum,pageSize,page.getTotal(),commentList);
     }
     /**
      * <p>@Description 将需要查询用户信息的用户id添加到集合中统一查询 </p>
@@ -198,37 +182,32 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
      * <p>@Date 2022/1/25 21:21 </p>
      * @param userId 当前登录用户ID
      * @param ipAddr 访问IP
-     * @return com.www.common.data.dto.response.Response<com.www.myblog.common.dto.BlogArticleDTO>
+     * @return com.www.common.data.dto.response.Result<com.www.myblog.common.dto.BlogArticleDTO>
      */
     @Override
-    public Response<BlogArticleDTO> findAriticle(String userId,Long blogId,String ipAddr) {
-        Response<BlogArticleDTO> response = new Response<>();
+    public Result<BlogArticleDTO> findAriticle(String userId,Long blogId,String ipAddr) {
         if(blogId == null){
-            response.setResponse(ResponseEnum.FAIL,"根据博客ID查询博客信息，博客ID为空",null);
-            return response;
+            throw new BusinessException("根据博客ID查询博客信息，博客ID为空");
         }
         //先从redis中获取数据，查询不到再查询数据库
         BlogArticleDTO articleDTO = redisService.getArticleInfo(ipAddr,blogId);
         if(articleDTO != null){
             //判断用户是否收藏和点赞该博客
             this.handleLoginForArticle(userId,articleDTO);
-            response.setResponse(articleDTO);
-            return response;
+            return new Result<>(articleDTO);
         }
         articleDTO = blogArticleMapper.findArticle(blogId);
         if(articleDTO == null){
-            response.setResponse(ResponseEnum.FAIL,"根据博客ID查询博客信息，博客不存在",null);
-            return response;
+            throw new BusinessException("根据博客ID查询博客信息，博客不存在");
         }
         //判断用户是否收藏和点赞该博客
         this.handleLoginForArticle(userId,articleDTO);
         //根据博客ID查询博客分类
         List<BlogTagDTO> classList = blogTagMapper.findBlogTag(blogId);
         articleDTO.setBlogTag(classList);
-        response.setResponse(articleDTO);
         //保存数据都redis中
         redisService.saveArticleInfo(ipAddr,articleDTO);
-        return response;
+        return new Result<>(articleDTO);
     }
     /**
      * <p>@Description 查询博客信息时判断是否已登录，处理登录后判断用户是否收藏和点赞该博客 </p>
@@ -254,26 +233,22 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
      * <p>@Date 2022/1/23 21:37 </p>
      * @param userId 博主ID
      * @param blogId 博客ID
-     * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
+     * @return com.www.common.data.dto.response.Result<java.util.List < com.www.myblog.blog.data.dto.ClassificationDTO>>
      */
     @Override
-    public Response<List<TagInfoDTO>> findAuthorBlogTag(String userId, Long blogId) {
-        Response<List<TagInfoDTO>> response = new Response<>();
+    public Result<List<TagInfoDTO>> findAuthorBlogTag(String userId, Long blogId) {
         if(StringUtils.isBlank(userId) && blogId == null){
-            response.setResponse(ResponseEnum.FAIL,"获取博主博客分类列表，博主ID或博客ID为空",null);
-            return response;
+            throw new BusinessException("获取博主博客分类列表，博主ID或博客ID为空");
         }
         if(StringUtils.isBlank(userId)){
             BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
             if(articleEntity == null){
-                response.setResponse(ResponseEnum.FAIL,"获取博主博客分类列表，博客ID不存在",null);
-                return response;
+                throw new BusinessException("获取博主博客分类列表，博客ID不存在");
             }
             userId = articleEntity.getUserId();
         }
         List<TagInfoDTO> list = blogTagMapper.findAuthorBlogTag(userId);
-        response.setResponse(ResponseEnum.SUCCESS,list);
-        return response;
+        return new Result<>(list);
     }
     /**
      * <p>@Description 获取博主博客分组列表 </p>
@@ -281,63 +256,52 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
      * <p>@Date 2022/1/23 21:37 </p>
      * @param userId 博主ID
      * @param blogId 博客ID
-     * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
+     * @return com.www.common.data.dto.response.Result<java.util.List < com.www.myblog.blog.data.dto.BlogGroupDTO>>
      */
     @Override
-    public Response<List<BlogGroupDTO>> findAuthorBlogGroup(String userId, Long blogId) {
-        Response<List<BlogGroupDTO>> response = new Response<>();
+    public Result<List<BlogGroupDTO>> findAuthorBlogGroup(String userId, Long blogId) {
         if(StringUtils.isBlank(userId) && blogId == null){
-            response.setResponse(ResponseEnum.FAIL,"获取博主博客分组列表失败，博主ID或博客ID为空",null);
-            return response;
+            throw new BusinessException("获取博主博客分组列表失败，博主ID或博客ID为空");
         }
         if(StringUtils.isBlank(userId)){
             BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
             if(articleEntity == null){
-                response.setResponse(ResponseEnum.FAIL,"获取博主博客分组列表失败，博客ID不存在",null);
-                return response;
+                throw new BusinessException("获取博主博客分组列表失败，博客ID不存在");
             }
             userId = articleEntity.getUserId();
         }
         List<BlogGroupDTO> list = userBlogGroupMapper.findAuthorBlogGroup(userId);
-        response.setResponse(ResponseEnum.SUCCESS,list);
-        return response;
+        return new Result<>(list);
     }
     /**
      * <p>@Description 获取博主博客列表 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 21:37 </p>
      * @param queryDTO 查询条件
-     * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
+     * @return com.www.common.data.dto.response.Result<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>>
      */
     @Override
-    public Response<List<BlogArticleDTO>> findAuthorBlogList(BlogArticleDTO queryDTO) {
-        Response<List<BlogArticleDTO>> response = new Response<>();
+    public Result<List<BlogArticleDTO>> findAuthorBlogList(BlogArticleDTO queryDTO) {
         if(queryDTO == null || StringUtils.isBlank(queryDTO.getUserId())){
-            response.setResponse(ResponseEnum.FAIL,"获取博主博客列表失败，博主ID为空",null);
-            return response;
+            throw new BusinessException("获取博主博客列表失败，博主ID为空");
         }
         int pageNum = queryDTO.getPageNum() <= 0 ? 1 : queryDTO.getPageNum();
         long pageSize = queryDTO.getPageSize() <= 0 ? 5 : queryDTO.getPageSize();
         Page<BlogArticleDTO> page = new Page<>(pageNum,pageSize);
         page = blogArticleMapper.findAuthorBlogList(page,queryDTO);
-        List<BlogArticleDTO> blogList =  page.getRecords();
-        response.setPageNum(queryDTO.getPageNum());
-        response.setPageSize(queryDTO.getPageSize());
-        response.setTotalNum(page.getTotal());
-        response.setResponse(ResponseEnum.SUCCESS,blogList);
-        return response;
+        return new Result<>(queryDTO.getPageNum(),queryDTO.getPageSize(),page.getTotal(),page.getRecords());
     }
 
     /**
      * <p>@Description 获取热门博客前10名单 </p>
      * <p>@Author www </p>
      * <p>@Date 2022/1/23 19:24 </p>
-     * @return com.www.common.data.dto.response.Response<com.www.myblog.common.dto.BlogArticleDTO>
+     * @return com.www.common.data.dto.response.Result<com.www.myblog.common.dto.BlogArticleDTO>
      */
     @Override
-    public Response<List<BlogArticleDTO>> findHotBlogRank() {
+    public Result<List<BlogArticleDTO>> findHotBlogRank() {
         List<BlogArticleDTO> list = blogArticleMapper.findHotBlogRank();
-        return new Response<>(ResponseEnum.SUCCESS,list);
+        return new Result<>(list);
     }
 
     /**
@@ -347,27 +311,24 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
      * @param userId 当前登录用户ID
      * @param authorId 博主ID
      * @param blogId 博客ID
-     * @return com.www.common.data.dto.response.Response<com.www.myblog.blog.data.dto.AuthorDTO>
+     * @return com.www.common.data.dto.response.Result<com.www.myblog.blog.data.dto.AuthorDTO>
      */
     @Override
-    public Response<AuthorDTO> findAuthorInfo(String userId, String authorId, Long blogId) {
-        Response<AuthorDTO> response = new Response<>();
+    public Result<AuthorDTO> findAuthorInfo(String userId, String authorId, Long blogId) {
+        Result<AuthorDTO> response = new Result<>();
         if(StringUtils.isBlank(authorId) && blogId == null){
-            response.setResponse(ResponseEnum.FAIL,"查询失败，博主ID或博客ID为空",null);
-            return response;
+            throw new BusinessException("查询失败，博主ID或博客ID为空");
         }
         if(StringUtils.isBlank(authorId)){
             BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
             if(articleEntity == null){
-                response.setResponse(ResponseEnum.FAIL,"查询失败，博客ID不存在",null);
-                return response;
+                throw new BusinessException("查询失败，博客ID不存在");
             }
             authorId = articleEntity.getUserId();
         }
-        UserInfoDTO userInfoDTO = Response.getBackData(baseFeignService.findUserInfo(authorId));
+        UserInfoDTO userInfoDTO = Result.getBackData(baseFeignService.findUserInfo(authorId));
         if(userInfoDTO == null){
-            response.setResponse(ResponseEnum.FAIL,"查询失败，博主信息不存在",null);
-            return response;
+            throw new BusinessException("查询失败，博主信息不存在");
         }
         AuthorDTO authorDTO = blogArticleMapper.findAuthorCount(authorId);
         authorDTO = authorDTO != null ? authorDTO : new AuthorDTO().setUserId(userInfoDTO.getUserId());
@@ -385,7 +346,6 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
         fansWrapper.lambda().eq(UserFansEntity::getFansId,userId);
         int count = userFansMapper.selectCount(fansWrapper);
         authorDTO.setFan(count > 0);//判断是否已关注
-        response.setResponse(ResponseEnum.SUCCESS,authorDTO);
-        return response;
+        return new Result<>(authorDTO);
     }
 }

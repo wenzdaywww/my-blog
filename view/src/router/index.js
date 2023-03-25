@@ -21,13 +21,11 @@ const router = createRouter({
 export const initUserRouter = function (callBackFunc){
     //加载用户拥有的路由权限
     axios.get(request.userRouter, null).then(function (res) {
-        if(res.code === 200){
-            let routerTemp = [];
-            res.data.forEach(item => {
-                routerTemp.push(item.menuUrl);
-            });
-            store.dispatch("updateRouter",routerTemp);
-        }
+        let routerTemp = [];
+        res.data.forEach(item => {
+            routerTemp.push(item.menuUrl);
+        });
+        store.dispatch("updateRouter",routerTemp);
         if (callBackFunc && callBackFunc instanceof  Function){
             callBackFunc();
         }

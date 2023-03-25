@@ -54,22 +54,16 @@ export default {
     const findCollectGroup = () => {
       if(utils.isLogin()){
         axios.$http.get(request.collectGroup,null).then(function (res) {
-          if(res.code === 200){
-            groupArr.value = res.data;
-          }
+          groupArr.value = res.data;
         });
       }
     }
     //新建收藏夹
     const newCollect = () => {
       axios.$http.post(request.addCollectGroup,{name:newCollectName.value}).then(function (res) {
-        if(res.code === 200){
-          newCollectName.value = null;
-          findCollectGroup();
-          ElMessage.success('新建收藏夹成功');
-        }else {
-          ElMessage.error('新建收藏夹失败');
-        }
+        newCollectName.value = null;
+        findCollectGroup();
+        ElMessage.success('新建收藏夹成功');
       });
     }
     //添加收藏
@@ -78,26 +72,18 @@ export default {
       //修改博客收藏夹位置
       if (updateFlag.value){
         axios.$http.post(request.modifyCollect, {bid:blogId.value,cgid:cgId}).then(function (res) {
-          if(res.code === 200){
-            if(res.data){
-              emit('findBlogList',null);//调用父组件Collect.vue的findBlogList方法
-              addVisible.value = false;
-              ElMessage.success('修改成功');
-            }
-          }else {
-            ElMessage.error('修改失败');
+          if(res.data){
+            emit('findBlogList',null);//调用父组件Collect.vue的findBlogList方法
+            addVisible.value = false;
+            ElMessage.success('修改成功');
           }
         });
       }else {//添加到收藏夹
         axios.$http.post(request.addCollect, {bid:blogId.value,cgid:cgId}).then(function (res) {
-          if(res.code === 200){
-            if(res.data){
-              emit('blogCollectAdd',null);//调用父组件Content.vue的blogCollectAdd方法
-              addVisible.value = false;
-              ElMessage.success('收藏成功');
-            }
-          }else {
-            ElMessage.error('收藏失败');
+          if(res.data){
+            emit('blogCollectAdd',null);//调用父组件Content.vue的blogCollectAdd方法
+            addVisible.value = false;
+            ElMessage.success('收藏成功');
           }
         });
       }

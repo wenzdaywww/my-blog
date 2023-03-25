@@ -64,16 +64,14 @@ export default {
     const loadTipList = () =>{
       if (more.value == true){
         axios.$http.post(request.tipList, query).then(function (res) {
-          if(res.code === 200){
-            if (res.data){
-              query.pageNum++;//页码增加
-              more.value = res.data.length >= res.pageSize;//判断是否还有更多
-              res.data.forEach (temp => {
-                blogList.value.push(temp);//父评论列表添加
-              });
-            }else {//没有数据
-              more.value = false;//没有更多
-            }
+          if (res.data){
+            query.pageNum++;//页码增加
+            more.value = res.data.length >= res.pageSize;//判断是否还有更多
+            res.data.forEach (temp => {
+              blogList.value.push(temp);//父评论列表添加
+            });
+          }else {//没有数据
+            more.value = false;//没有更多
           }
         });
       }

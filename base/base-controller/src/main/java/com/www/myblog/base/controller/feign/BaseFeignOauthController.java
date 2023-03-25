@@ -2,8 +2,7 @@ package com.www.myblog.base.controller.feign;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.www.common.config.oauth2.constant.AuthorityContant;
-import com.www.common.data.enums.ResponseEnum;
-import com.www.common.data.response.Response;
+import com.www.common.data.response.Result;
 import com.www.myblog.base.service.user.IUserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,7 @@ public class BaseFeignOauthController {
     @PostMapping("exist")
     @PreAuthorize(AuthorityContant.ALL)
     @HystrixCommand(fallbackMethod = "validateUserExistFallback")//设置备选方案
-    public Response<Boolean> validateUserExist(@RequestParam("list") List<String> userList){
+    public Result<Boolean> validateUserExist(@RequestParam("list") List<String> userList){
         return userInfoService.validateUserExist(userList);
     }
     /**
@@ -48,8 +47,8 @@ public class BaseFeignOauthController {
      * @param userList 用户id集合
      * @return Response<Boolean>
      */
-    public Response<Boolean> validateUserExistFallback(List<String> userList,Throwable throwable){
+    public Result<Boolean> validateUserExistFallback(List<String> userList,Throwable throwable){
         log.error("服务熔断处理: 校验用户是否存在,异常信息:",throwable);
-        return new Response<>(ResponseEnum.SUCCESS,false);
+        return new Result<>(false);
     }
 }

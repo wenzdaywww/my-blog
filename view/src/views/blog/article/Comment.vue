@@ -143,17 +143,15 @@ export default {
     const loadParentData = () =>{
       if (parentMore.value){
         axios.$http.get(request.commentList, {pageNum:parentPageNum,bid:blogId}).then(function (res) {
-          if(res.code === 200){
-            if (res.data){
-              parentPageNum++;//页码增加
-              parentMore.value = res.data.length >= res.pageSize;//判断是否还有未加载的父评论
-              res.data.forEach (temp => {
-                commentList.value.push(temp);//父评论列表添加
-              });
-            }else {//没有数据
-              parentMore.value = false;//没有更多
-              commentShow.value = parentPageNum == 1 ? false : commentShow.value;//设置是否展示评论列表
-            }
+          if (res.data){
+            parentPageNum++;//页码增加
+            parentMore.value = res.data.length >= res.pageSize;//判断是否还有未加载的父评论
+            res.data.forEach (temp => {
+              commentList.value.push(temp);//父评论列表添加
+            });
+          }else {//没有数据
+            parentMore.value = false;//没有更多
+            commentShow.value = parentPageNum == 1 ? false : commentShow.value;//设置是否展示评论列表
           }
         });
       }
@@ -165,19 +163,17 @@ export default {
     const loadChildrenData = (parentItem) =>{
       if (parentItem.more > 0){
         axios.$http.get(request.commentList, {pageNum:parentItem.pageNum,pid:parentItem.commentId}).then(function (res) {
-          if(res.code === 200){
-            if (res.data){
-              parentItem.pageNum++;//页码增加
-              parentItem.more = res.totalNum >= res.pageSize ? res.totalNum - res.pageSize : 0;//判断是否还有未加载的子评论
-              res.data.forEach (temp => {
-                if(!parentItem.subList){
-                  parentItem.subList = [];
-                }
-                parentItem.subList.push(temp);//子评论列表添加
-              });
-            }else {//没有数据
-              parentItem.more = 0;//子评论没有更多
-            }
+          if (res.data){
+            parentItem.pageNum++;//页码增加
+            parentItem.more = res.totalNum >= res.pageSize ? res.totalNum - res.pageSize : 0;//判断是否还有未加载的子评论
+            res.data.forEach (temp => {
+              if(!parentItem.subList){
+                parentItem.subList = [];
+              }
+              parentItem.subList.push(temp);//子评论列表添加
+            });
+          }else {//没有数据
+            parentItem.more = 0;//子评论没有更多
           }
         });
       }
@@ -210,19 +206,15 @@ export default {
     const submitComment = (item,replyId,textItem) => {
       if(textItem.input){
         axios.$http.post(request.addComment, {text:textItem.input,rid:replyId}).then(function (res) {
-          if(res.code === 200){
-            if(res.data){
-              textItem.input = null;//清空回复框
-              textItem.open = false;//关闭回复框
-              if(!item.subList){
-                item.subList = [];
-              }
-              item.subList.unshift(res.data);//子列表添加评论
+          if(res.data){
+            textItem.input = null;//清空回复框
+            textItem.open = false;//关闭回复框
+            if(!item.subList){
+              item.subList = [];
             }
-            ElMessage.success('评论成功');
-          }else {
-            ElMessage.error('评论失败');
+            item.subList.unshift(res.data);//子列表添加评论
           }
+          ElMessage.success('评论成功');
         });
       }else {
         ElMessage.error('评论内容不能为空');
@@ -232,17 +224,13 @@ export default {
     const addComment = () => {
       if(inputContent.value){
         axios.$http.post(request.addComment, {text:inputContent.value,bid:blogId}).then(function (res) {
-          if(res.code === 200){
-            if(res.data){
-              inputContent.value = null;//清空评论框
-              openInput.value = false;//隐藏评论框
-              commentList.value.unshift(res.data);//添加到父评论列表中
-            }
-            commentShow.value = commentShow.value == false ? true : commentShow.value;//设置是否展示评论列表
-            ElMessage.success('评论成功');
-          }else {
-            ElMessage.error('评论失败');
+          if(res.data){
+            inputContent.value = null;//清空评论框
+            openInput.value = false;//隐藏评论框
+            commentList.value.unshift(res.data);//添加到父评论列表中
           }
+          commentShow.value = commentShow.value == false ? true : commentShow.value;//设置是否展示评论列表
+          ElMessage.success('评论成功');
         });
       }else {
         ElMessage.error('评论内容不能为空');

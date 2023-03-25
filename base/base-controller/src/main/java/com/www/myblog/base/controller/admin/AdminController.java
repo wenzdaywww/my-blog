@@ -1,7 +1,7 @@
 package com.www.myblog.base.controller.admin;
 
 import com.www.common.config.oauth2.constant.AuthorityContant;
-import com.www.common.data.response.Response;
+import com.www.common.data.response.Result;
 import com.www.myblog.base.data.dto.MonitorInfoDTO;
 import com.www.myblog.base.data.dto.SysMenuDTO;
 import com.www.myblog.base.data.dto.SysRoleDTO;
@@ -45,7 +45,7 @@ public class AdminController {
      * @return Response<List <MonitorInfoDTO>>
      */
     @GetMapping("monitor")
-    public Response<List<MonitorInfoDTO>> findMonitorInfo(String name, int pageNum, long pageSize){
+    public Result<List<MonitorInfoDTO>> findMonitorInfo(String name, int pageNum, long pageSize){
         return monitorInfoService.findMonitorInfo(name,pageNum,pageSize);
     }
     /**
@@ -56,7 +56,7 @@ public class AdminController {
      * @return Response<java.lang.String>
      */
     @PostMapping("down")
-    public Response<String> deleteMenu(Long menuId){
+    public Result<String> deleteMenu(Long menuId){
         return menuInfoService.deleteMenu(menuId);
     }
     /**
@@ -67,7 +67,7 @@ public class AdminController {
      * @return Response<String>
      */
     @PostMapping("edit")
-    public Response<String> updateOrSaveMenu(SysMenuDTO menu){
+    public Result<String> updateOrSaveMenu(SysMenuDTO menu){
         return menuInfoService.updateOrSave(menu);
     }
     /**
@@ -85,7 +85,7 @@ public class AdminController {
      * @return Response<List<SysMenuDTO>>
      */
     @GetMapping("menus")
-    public Response<List<SysMenuDTO>> findAllMenu(String module,String menuType, String roleCode, String menuCode, String menuUrl,String vuePath, int pageNum, long pageSize){
+    public Result<List<SysMenuDTO>> findAllMenu(String module,String menuType, String roleCode, String menuCode, String menuUrl,String vuePath, int pageNum, long pageSize){
         SysMenuDTO menuDTO = new SysMenuDTO();
         menuDTO.setModule(module);
         menuDTO.setMenuType(menuType);
@@ -107,7 +107,7 @@ public class AdminController {
      * @return Response<List<SysUserDTO>>
      */
     @GetMapping("users")
-    public Response<List<SysUserDTO>> findAllUser(String stateCd, String userId, String userName, int pageNum, long pageSize){
+    public Result<List<SysUserDTO>> findAllUser(String stateCd, String userId, String userName, int pageNum, long pageSize){
         return userInfoService.findAllUser(stateCd,userId,userName,pageNum,pageSize);
     }
     /**
@@ -122,7 +122,7 @@ public class AdminController {
      * @return Response<String>
      */
     @PostMapping("state")
-    public Response<String> updateState(String userId,String stateCd,String expired,String locked,String credentials){
+    public Result<String> updateState(String userId,String stateCd,String expired,String locked,String credentials){
         return userInfoService.updateState(userId,stateCd,expired,locked,credentials);
     }
     /**
@@ -132,7 +132,7 @@ public class AdminController {
      * @return Response<List<SysUserRoleDTO>>
      */
     @GetMapping("role")
-    public Response<List<SysRoleDTO>> findAllRole(){
+    public Result<List<SysRoleDTO>> findAllRole(){
         return userInfoService.findAllRole();
     }
 }

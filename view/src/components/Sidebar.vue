@@ -55,9 +55,7 @@ export default {
     const getData = () => {
       if(utils.isLogin()){
         axios.$http.get(request.userMenu, null).then(function (res) {
-          if(res.code === 200){
-            items.value = res.data;
-          }
+          items.value = res.data;
         });
       }else {
         items.value = [];

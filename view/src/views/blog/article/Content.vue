@@ -69,15 +69,13 @@ export default {
           //已收藏，则取消收藏
           if(blog.collection){
             axios.$http.post(request.addCollect, {bid:blogId}).then(function (res) {
-              if(res.code === 200){
-                blog.collection = res.data.collection;
-                if(blog.collection){
-                  blog.collect++;
-                  ElMessage.success('收藏成功');
-                }else {
-                  blog.collect = blog.collect == 0 ? 0 :  blog.collect - 1;
-                  ElMessage.success('取消收藏成功');
-                }
+              blog.collection = res.data.collection;
+              if(blog.collection){
+                blog.collect++;
+                ElMessage.success('收藏成功');
+              }else {
+                blog.collect = blog.collect == 0 ? 0 :  blog.collect - 1;
+                ElMessage.success('取消收藏成功');
               }
             });
           }else {//未收藏，则添加收藏
@@ -93,15 +91,13 @@ export default {
       if(utils.isLogin()){
         if(blog.userId !== utils.getUserId()){
           axios.$http.post(request.addPraise+blogId, null).then(function (res) {
-            if(res.code === 200){
-              blog.praised = res.data;
-              if(blog.praised){
-                blog.praise++;
-                ElMessage.success('点赞成功');
-              }else {
-                blog.praise = blog.praise == 0 ? 0 :  blog.praise - 1;
-                ElMessage.success('取消点赞成功');
-              }
+            blog.praised = res.data;
+            if(blog.praised){
+              blog.praise++;
+              ElMessage.success('点赞成功');
+            }else {
+              blog.praise = blog.praise == 0 ? 0 :  blog.praise - 1;
+              ElMessage.success('取消点赞成功');
             }
           });
         }
@@ -129,22 +125,20 @@ export default {
      */
     const findBlogArticle = (ipAddr) => {
       axios.$http.get(request.article, {bid:blogId,ip:ipAddr}).then(function (res) {
-        if(res.code === 200){
-          document.title += res.data.title;//设置浏览器标题
-          blog.blogId = res.data.blogId;
-          blog.userId = res.data.userId;
-          blog.title = res.data.title;
-          blog.groupName = res.data.groupName;
-          blog.blogTag = res.data.blogTag;
-          blog.content = res.data.content;
-          blog.browse = res.data.browse;
-          blog.praise = res.data.praise;
-          blog.praised = res.data.praised;
-          blog.collect = res.data.collect;
-          blog.collection = res.data.collection;
-          blog.comment = res.data.comment;
-          blog.createTime = res.data.createTime;
-        }
+        document.title += res.data.title;//设置浏览器标题
+        blog.blogId = res.data.blogId;
+        blog.userId = res.data.userId;
+        blog.title = res.data.title;
+        blog.groupName = res.data.groupName;
+        blog.blogTag = res.data.blogTag;
+        blog.content = res.data.content;
+        blog.browse = res.data.browse;
+        blog.praise = res.data.praise;
+        blog.praised = res.data.praised;
+        blog.collect = res.data.collect;
+        blog.collection = res.data.collection;
+        blog.comment = res.data.comment;
+        blog.createTime = res.data.createTime;
       });
     }
     //收藏数量增加，供CollectGroup.vue调用

@@ -79,10 +79,8 @@ export default {
     const getBlogList = () => {
       if(query.userId){
         axios.$http.post(request.bloList,query).then(function (res) {
-          if(res.code === 200){
-            blogList.value = res.data;
-            query.pageTotal = res.totalNum;
-          }
+          blogList.value = res.data;
+          query.pageTotal = res.totalNum;
         });
       }
     }

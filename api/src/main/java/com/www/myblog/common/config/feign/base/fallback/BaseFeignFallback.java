@@ -1,7 +1,6 @@
 package com.www.myblog.common.config.feign.base.fallback;
 
-import com.www.common.data.enums.ResponseEnum;
-import com.www.common.data.response.Response;
+import com.www.common.data.response.Result;
 import com.www.myblog.common.config.feign.base.IBaseFeignService;
 import com.www.myblog.common.dto.UserInfoDTO;
 import feign.hystrix.FallbackFactory;
@@ -41,12 +40,11 @@ public class BaseFeignFallback implements FallbackFactory<IBaseFeignService> {
              * @return Response<UserInfoDTO>
              */
             @Override
-            public Response<List<UserInfoDTO>> findUserInfoList(List<String> userList) {
+            public Result<List<UserInfoDTO>> findUserInfoList(List<String> userList) {
                 log.error("base服务降级：查询多个用户信息");
                 List<UserInfoDTO> list = new ArrayList<>();
-                return new Response<>(ResponseEnum.SUCCESS,list);
+                return new Result<>(list);
             }
-
             /**
              * <p>@Description 校验用户是否存在 </p>
              * <p>@Author www </p>
@@ -55,9 +53,9 @@ public class BaseFeignFallback implements FallbackFactory<IBaseFeignService> {
              * @return Response<Boolean>
              */
             @Override
-            public Response<Boolean> validateUserExist(List<String> userList) {
+            public Result<Boolean> validateUserExist(List<String> userList) {
                 log.error("base服务降级：校验用户是否存在");
-                return new Response<>(ResponseEnum.SUCCESS,false);
+                return new Result<>(false);
             }
             /**
              * <p>@Description 查询用户信息 </p>
@@ -67,11 +65,11 @@ public class BaseFeignFallback implements FallbackFactory<IBaseFeignService> {
              * @return Response<UserInfoDTO>
              */
             @Override
-            public Response<UserInfoDTO> findUserInfo(String userId) {
+            public Result<UserInfoDTO> findUserInfo(String userId) {
                 log.error("base服务降级：查询用户信息");
                 UserInfoDTO userInfoDTO = new UserInfoDTO();
                 userInfoDTO.setUserId(userId);
-                return new Response<>(ResponseEnum.SUCCESS,userInfoDTO);
+                return new Result<>(userInfoDTO);
             }
         };
     }

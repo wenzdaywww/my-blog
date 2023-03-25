@@ -189,18 +189,14 @@ export default {
     // 获取所有标签
     const getBlogTag = () => {
       axios.$http.post(request.tagList,null).then(function (res) {
-        if(res.code === 200){
-          tagArr.value = res.data;
-        }
+        tagArr.value = res.data;
       });
     }
     getBlogTag();
     // 获取博客分组
     const getBlogGroup = () => {
       axios.$http.post(request.groupList,null).then(function (res) {
-        if(res.code === 200){
-          groupArr.value = res.data;
-        }
+        groupArr.value = res.data;
       });
     }
     getBlogGroup();
@@ -223,18 +219,14 @@ export default {
             fd.append("content",blogText.content);
             submitDisabled.value = true;
             axios.$http.upload(request.publishBlog,fd,{'Content-Type': 'multipart/form-data'}).then(function (res) {
-              if(res.code === 200){
-                instance.txt.clear();
-                blogText.title = null;
-                blogText.summary = null;
-                blogText.tagIds = null;
-                blogText.groupId = null;
-                blogText.content = null;
-                coverUpload.value.clearFiles();
-                ElMessage.success('发布博客成功');
-              }else {
-                ElMessage.error('发布博客失败');
-              }
+              instance.txt.clear();
+              blogText.title = null;
+              blogText.summary = null;
+              blogText.tagIds = null;
+              blogText.groupId = null;
+              blogText.content = null;
+              coverUpload.value.clearFiles();
+              ElMessage.success('发布博客成功');
               submitDisabled.value = false;
             });
           }else {
@@ -250,13 +242,9 @@ export default {
       groupForm.value.validate((valid) => {
         if (valid) {
           axios.$http.post(request.addGroup,group).then(function (res) {
-            if(res.code === 200){
-              groupVisible.value = false;
-              ElMessage.success('新增分组成功');
-              getBlogGroup();
-            }else {
-              ElMessage.error('新增分组失败');
-            }
+            groupVisible.value = false;
+            ElMessage.success('新增分组成功');
+            getBlogGroup();
           });
         } else {
           return false;

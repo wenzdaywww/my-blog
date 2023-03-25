@@ -2,9 +2,9 @@ package com.www.myblog.blog.service.user.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.www.common.config.exception.BusinessException;
 import com.www.common.data.enums.DateFormatEnum;
-import com.www.common.data.enums.ResponseEnum;
-import com.www.common.data.response.Response;
+import com.www.common.data.response.Result;
 import com.www.common.utils.DateUtils;
 import com.www.myblog.blog.data.constants.CommenConstant;
 import com.www.myblog.blog.data.dto.AuthorDTO;
@@ -86,20 +86,16 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * @return com.www.common.data.dto.response.Response<java.lang.Boolean> true点赞，fasle取消点赞
      */
     @Override
-    public Response<Boolean> savePraiseInfo(String userId, Long blogId) {
-        Response<Boolean> response = new Response<>();
+    public Result<Boolean> savePraiseInfo(String userId, Long blogId) {
         if(StringUtils.isBlank(userId) || blogId == null){
-            response.setResponse(ResponseEnum.FAIL,"点赞或取消点赞失败，信息不全",null);
-            return response;
+            throw new BusinessException("点赞或取消点赞失败，信息不全");
         }
         BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
         if(articleEntity == null){
-            response.setResponse(ResponseEnum.FAIL,"点赞或取消点赞失败，博客不存在",null);
-            return response;
+            throw new BusinessException("点赞或取消点赞失败，博客不存在");
         }
         if(StringUtils.equals(userId,articleEntity.getUserId())){
-            response.setResponse(ResponseEnum.FAIL,"点赞或取消点赞失败，不能点赞自己的博客",null);
-            return response;
+            throw new BusinessException("点赞或取消点赞失败，不能点赞自己的博客");
         }
         BlogPraiseEntity praiseEntity = blogPraiseService.findEntity(userId,blogId);
         //点赞
@@ -108,16 +104,14 @@ public class UserBlogServiceImpl implements IUserBlogService {
             praiseEntity.setBlogId(blogId).setUserId(userId)
                     .setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
             blogPraiseService.createEntity(praiseEntity);
-            response.setResponse(true);
             //更新博客点赞量
             redisService.updateBlogNum(CommenConstant.PRAISE, blogId,true);
-            return response;
+            return new Result<>(true);
         }else {//取消点赞
             blogPraiseService.deleteEntity(praiseEntity.getBpId());
-            response.setResponse(false);
             //更新博客点赞量
             redisService.updateBlogNum(CommenConstant.PRAISE, blogId,false);
-            return response;
+            return new Result<>(false);
         }
     }
     /**
@@ -130,16 +124,13 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * @return com.www.common.data.dto.response.Response<Boolean> true修改成功，false修改失败
      */
     @Override
-    public Response<Boolean> updateCollectId(String userId, Long blogId, Long cgId) {
-        Response<Boolean> response = new Response<>();
+    public Result<Boolean> updateCollectId(String userId, Long blogId, Long cgId) {
         if(StringUtils.isBlank(userId) || blogId == null){
-            response.setResponse(ResponseEnum.FAIL,"修改博客收藏夹位置失败，信息不全",null);
-            return response;
+            throw new BusinessException("修改博客收藏夹位置失败，信息不全");
         }
         BlogCollectEntity collectEntity = blogCollectService.findBlogCollectEntity(userId,blogId);
         if(collectEntity == null){
-            response.setResponse(ResponseEnum.FAIL,"修改博客收藏夹位置失败，博客收藏不存在",null);
-            return response;
+            throw new BusinessException("修改博客收藏夹位置失败，博客收藏不存在");
         }
         UpdateWrapper<BlogCollectEntity> wrapper = new UpdateWrapper<>();
         wrapper.lambda().eq(BlogCollectEntity::getCollectId,collectEntity.getCollectId());
@@ -149,14 +140,12 @@ public class UserBlogServiceImpl implements IUserBlogService {
         }else {
             CollectGroupEntity groupEntity = collectGroupService.findById(cgId);
             if(groupEntity == null){
-                response.setResponse(ResponseEnum.FAIL,"修改博客收藏夹位置失败，收藏夹不存在",null);
-                return response;
+                throw new BusinessException("修改博客收藏夹位置失败，收藏夹不存在");
             }
             wrapper.lambda().set(BlogCollectEntity::getCgId,cgId);
         }
         boolean isOk = blogCollectService.updateEntity(wrapper);
-        response.setResponse(isOk);
-        return response;
+        return new Result<>(isOk);
     }
     /**
      * <p>@Description 查询用户的博客收藏列表 </p>
@@ -166,22 +155,15 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.common.dto.BlogArticleDTO>> 博客收藏列表
      */
     @Override
-    public Response<List<BlogArticleDTO>> findCollectList(CollectGroupDTO query) {
-        Response<List<BlogArticleDTO>> response = new Response<>();
+    public Result<List<BlogArticleDTO>> findCollectList(CollectGroupDTO query) {
         if(query == null || StringUtils.isBlank(query.getUserId())){
-            response.setResponse(ResponseEnum.FAIL,"查询用户的博客收藏列表失败，信息不全",null);
-            return response;
+            throw new BusinessException("查询用户的博客收藏列表失败，信息不全");
         }
         int pageNum = query.getPageNum() <= 0 ? 1 : query.getPageNum();
         long pageSize = query.getPageSize() <= 0 ? 5 : query.getPageSize();
         Page<BlogArticleDTO> page = new Page<>(pageNum,pageSize);
         page = blogCollectMapper.findCollectList(page,query.getUserId(),query.getCgId());
-        List<BlogArticleDTO> blogList = page.getRecords();
-        response.setPageNum(query.getPageNum());
-        response.setPageSize(query.getPageSize());
-        response.setTotalNum(page.getTotal());
-        response.setResponse(ResponseEnum.SUCCESS,blogList);
-        return response;
+        return new Result<>(query.getPageNum(),query.getPageSize(),page.getTotal(),page.getRecords());
     }
     /**
      * <p>@Description 查询收藏夹列表 </p>
@@ -191,15 +173,12 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * @return com.www.common.data.dto.response.Response<java.lang.Boolean> true添加成功，false取消失败
      */
     @Override
-    public Response<List<CollectGroupDTO>> findCollectGroup(String userId) {
-        Response<List<CollectGroupDTO>> response = new Response<>();
+    public Result<List<CollectGroupDTO>> findCollectGroup(String userId) {
         if(StringUtils.isBlank(userId)){
-            response.setResponse(ResponseEnum.FAIL,"查询收藏夹列表失败，信息不全",null);
-            return response;
+            throw new BusinessException("查询收藏夹列表失败，信息不全");
         }
         List<CollectGroupDTO> list = collectGroupMapper.findCollectGroup(userId);
-        response.setResponse(list);
-        return response;
+        return new Result<>(list);
     }
     /**
      * <p>@Description 新增收藏夹 </p>
@@ -210,17 +189,14 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * @return com.www.common.data.dto.response.Response<java.lang.Boolean> true添加成功，false取消失败
      */
     @Override
-    public Response<Boolean> addCollectGroup(String userId, String collectName) {
-        Response<Boolean> response = new Response<>();
+    public Result<Boolean> addCollectGroup(String userId, String collectName) {
         if (StringUtils.isAnyBlank(userId, collectName)){
-            response.setResponse(ResponseEnum.FAIL,"新增收藏夹失败，信息不全",null);
-            return response;
+            throw new BusinessException("新增收藏夹失败，信息不全");
         }
         CollectGroupEntity collectGroupEntity = new CollectGroupEntity();
         collectGroupEntity.setUserId(userId).setCollectName(collectName).
                 setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
-        response.setResponse(ResponseEnum.SUCCESS,collectGroupService.createEntity(collectGroupEntity));
-        return response;
+        return new Result<>(collectGroupService.createEntity(collectGroupEntity));
     }
     /**
      * <p>@Description  获取粉丝列表 </p>
@@ -231,11 +207,9 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>> 关注用户列表
      */
     @Override
-    public Response<List<AuthorDTO>> findFansList(int pageNum, String userId) {
-        Response<List<AuthorDTO>> response = new Response<>();
+    public Result<List<AuthorDTO>> findFansList(int pageNum, String userId) {
         if(StringUtils.isBlank(userId) || pageNum < 0){
-            response.setResponse(ResponseEnum.FAIL,"获取粉丝列表失败。信息不全",null);
-            return response;
+            throw new BusinessException("获取粉丝列表失败。信息不全");
         }
         long pageSize = 10;
         pageNum = pageNum <= 0 ? 1 : pageNum;
@@ -244,7 +218,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
         List<AuthorDTO> followList =  page.getRecords();
         if(CollectionUtils.isNotEmpty(followList)){
             List<String> userIdList = followList.stream().map(AuthorDTO::getFansId).collect(Collectors.toList());
-            List<UserInfoDTO> userList = Response.getBackData(baseFeignService.findUserInfoList(userIdList));
+            List<UserInfoDTO> userList = Result.getBackData(baseFeignService.findUserInfoList(userIdList));
             Map<String,UserInfoDTO> userMap = CollectionUtils.isEmpty(userList) ? new HashMap<>() :
                     userList.stream().collect(Collectors.toMap(UserInfoDTO::getUserId, Function.identity(), (key1, key2) -> key2));
             for (AuthorDTO authorDTO : followList){
@@ -255,11 +229,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
                 authorDTO.setFan(StringUtils.isNotBlank(authorDTO.getUserId()));
             }
         }
-        response.setPageNum(pageNum);
-        response.setPageSize(pageSize);
-        response.setTotalNum(page.getTotal());
-        response.setResponse(ResponseEnum.SUCCESS,followList);
-        return response;
+        return new Result<>(pageNum,pageSize,page.getTotal(),followList);
     }
     /**
      * <p>@Description  获取关注列表 </p>
@@ -270,11 +240,9 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * @return com.www.common.data.dto.response.Response<java.util.List < com.www.myblog.blog.data.dto.AuthorDTO>> 关注用户列表
      */
     @Override
-    public Response<List<AuthorDTO>> findFollowList(int pageNum, String userId) {
-        Response<List<AuthorDTO>> response = new Response<>();
+    public Result<List<AuthorDTO>> findFollowList(int pageNum, String userId) {
         if(StringUtils.isBlank(userId) || pageNum < 0){
-            response.setResponse(ResponseEnum.FAIL,"获取关注列表失败。信息不全",null);
-            return response;
+            throw new BusinessException("获取关注列表失败。信息不全");
         }
         long pageSize = 10;
         pageNum = pageNum <= 0 ? 1 : pageNum;
@@ -283,7 +251,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
         List<AuthorDTO> followList =  page.getRecords();
         if(CollectionUtils.isNotEmpty(followList)){
             List<String> userIdList = followList.stream().map(AuthorDTO::getUserId).collect(Collectors.toList());
-            List<UserInfoDTO> userList = Response.getBackData(baseFeignService.findUserInfoList(userIdList));
+            List<UserInfoDTO> userList = Result.getBackData(baseFeignService.findUserInfoList(userIdList));
             Map<String,UserInfoDTO> userMap = CollectionUtils.isEmpty(userList) ? new HashMap<>() :
                     userList.stream().collect(Collectors.toMap(UserInfoDTO::getUserId, Function.identity(), (key1, key2) -> key2));
             for (AuthorDTO authorDTO : followList){
@@ -294,11 +262,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
                 authorDTO.setFan(true);
             }
         }
-        response.setPageNum(pageNum);
-        response.setPageSize(pageSize);
-        response.setTotalNum(page.getTotal());
-        response.setResponse(ResponseEnum.SUCCESS,followList);
-        return response;
+        return new Result<>(pageNum,pageSize,page.getTotal(),followList);
     }
     /**
      * <p>@Description 添加/取消博客收藏 </p>
@@ -310,20 +274,16 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * @return com.www.common.data.dto.response.Response<Boolean> true添加收藏，false取消收藏
      */
     @Override
-    public Response<BlogArticleDTO> addCollect(String userId, Long blogId,Long cgId) {
-        Response<BlogArticleDTO> response = new Response<>();
+    public Result<BlogArticleDTO> addCollect(String userId, Long blogId,Long cgId) {
         if(StringUtils.isBlank(userId) || blogId == null){
-            response.setResponse(ResponseEnum.FAIL,"添加/取消博客收藏失败，信息不全",null);
-            return response;
+            throw new BusinessException("添加/取消博客收藏失败，信息不全");
         }
         BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
         if(articleEntity == null){
-            response.setResponse(ResponseEnum.FAIL,"添加/取消博客收藏失败，博客不存在",null);
-            return response;
+            throw new BusinessException("添加/取消博客收藏失败，博客不存在");
         }
         if(StringUtils.equals(userId,articleEntity.getUserId())){
-            response.setResponse(ResponseEnum.FAIL,"添加/取消博客收藏失败，不能收藏自己的博客",null);
-            return response;
+            throw new BusinessException("添加/取消博客收藏失败，不能收藏自己的博客");
         }
         BlogCollectEntity collectEntity = blogCollectService.findBlogCollectEntity(userId,blogId);
         BlogArticleDTO articleDTO = new BlogArticleDTO();
@@ -332,8 +292,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
             if(cgId != null){
                 CollectGroupEntity groupEntity = collectGroupService.findById(cgId);
                 if(groupEntity == null){
-                    response.setResponse(ResponseEnum.FAIL,"博客收藏失败，收藏夹不存在",null);
-                    return response;
+                    throw new BusinessException("博客收藏失败，收藏夹不存在");
                 }
             }
             collectEntity = new BlogCollectEntity();
@@ -349,8 +308,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
             redisService.updateBlogNum(CommenConstant.COLLECT,blogId,false);
             blogCollectService.deleteBlogCollectEntity(collectEntity.getCollectId());
         }
-        response.setResponse(ResponseEnum.SUCCESS,articleDTO);
-        return response;
+        return new Result<>(articleDTO);
     }
 
     /**
@@ -364,19 +322,16 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * @return com.www.common.data.dto.response.Response<com.www.myblog.blog.data.dto.CommentDTO>
      */
     @Override
-    public Response<CommentDTO> addBlogComment(String userId, Long blogId, Long replyComId, String text) {
-        Response<CommentDTO> response = new Response<>();
+    public Result<CommentDTO> addBlogComment(String userId, Long blogId, Long replyComId, String text) {
         if(StringUtils.isAnyBlank(userId,text) || (blogId == null && replyComId == null) || (blogId != null && replyComId != null)){
-            response.setResponse(ResponseEnum.FAIL,"评论失败，信息不全",null);
-            return response;
+            throw new BusinessException("评论失败，信息不全");
         }
         Long parentComId = null;//父评论id
         String replyUserId = null;//回复评论人ID
         if(blogId == null){//博客id为空，则是回复评论,博客id不为空，则是新增评论
             BlogCommentEntity parentCommentEntity = blogCommentService.findById(replyComId);
             if(parentCommentEntity == null){
-                response.setResponse(ResponseEnum.FAIL,"评论失败，评论不存在",null);
-                return response;
+                throw new BusinessException("评论失败，评论不存在");
             }
             replyUserId = parentCommentEntity.getUserId();
             //回复的评论的父评论id为空，则说明改评论是父评论
@@ -390,8 +345,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
         }
         BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
         if(articleEntity == null){
-            response.setResponse(ResponseEnum.FAIL,"评论失败，博客不存在",null);
-            return response;
+            throw new BusinessException("评论失败，博客不存在");
         }
         //新增评论
         BlogCommentEntity commentEntity = new BlogCommentEntity();
@@ -408,7 +362,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
             List<String> userIdList = new ArrayList<>();
             userIdList.add(userId);
             userIdList.add(replyUserId);
-            List<UserInfoDTO> userList = Response.getBackData(baseFeignService.findUserInfoList(userIdList));
+            List<UserInfoDTO> userList = Result.getBackData(baseFeignService.findUserInfoList(userIdList));
             if(CollectionUtils.isNotEmpty(userList)){
                 for (UserInfoDTO userInfoDTO : userList){
                     if(StringUtils.equals(userInfoDTO.getUserId(),replyUserId)){
@@ -420,7 +374,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
                 }
             }
         }else {
-            UserInfoDTO userInfoDTO = Response.getBackData(baseFeignService.findUserInfo(userId));
+            UserInfoDTO userInfoDTO = Result.getBackData(baseFeignService.findUserInfo(userId));
             if(userInfoDTO != null){//设置评论人名称和头像
                 commentDTO.setUserName(userInfoDTO.getUserName()).setPhoto(userInfoDTO.getPhoto());
             }
@@ -428,8 +382,7 @@ public class UserBlogServiceImpl implements IUserBlogService {
         commentDTO.setBlogId(blogId).setCommentId(commentEntity.getCommentId())
                 .setComment(text).setUserId(userId).setMore(0L).setPraise(0L).setOpen(false)
                 .setCreateDate(DateUtils.format(commentEntity.getCreateTime(), DateFormatEnum.YYYYMMDD1));
-        response.setResponse(ResponseEnum.SUCCESS,commentDTO);
-        return response;
+        return new Result<>(commentDTO);
     }
 
     /**
@@ -442,25 +395,21 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * @return com.www.common.data.dto.response.Response<java.lang.Boolean>
      */
     @Override
-    public Response<Boolean> followAuthor(String userId, String authorId,Long blogId) {
-        Response<Boolean> response = new Response<>();
+    public Result<Boolean> followAuthor(String userId, String authorId,Long blogId) {
         if(StringUtils.isBlank(authorId) && blogId == null){
-            response.setResponse(ResponseEnum.FAIL,"关注博主,博客ID或博主ID为空",null);
-            return response;
+            throw new BusinessException("关注博主,博客ID或博主ID为空");
         }
         if(StringUtils.isNotBlank(authorId)){
             List<String> reqList = new ArrayList<>();
             reqList.add(authorId);
-            Boolean isExist = Response.getBackData(baseFeignService.validateUserExist(reqList));
+            Boolean isExist = Result.getBackData(baseFeignService.validateUserExist(reqList));
             if(!isExist){
-                response.setResponse(ResponseEnum.FAIL,"关注博主,博主ID不存在",null);
-                return response;
+                throw new BusinessException("关注博主,博主ID不存在");
             }
         }else if(blogId != null){
             BlogArticleEntity articleEntity = blogArticleService.findById(blogId);
             if(articleEntity == null){
-                response.setResponse(ResponseEnum.FAIL,"关注博主，博客ID不存在",null);
-                return response;
+                throw new BusinessException("关注博主，博客ID不存在");
             }
             authorId = articleEntity.getUserId();
         }
@@ -470,12 +419,11 @@ public class UserBlogServiceImpl implements IUserBlogService {
             fansEntity.setUserId(authorId).setFansId(userId);
             fansEntity.setCreateTime(DateUtils.getCurrentDateTime()).setUpdateTime(DateUtils.getCurrentDateTime());
             userFansService.createEntity(fansEntity);
-            response.setResponse(ResponseEnum.SUCCESS,true);
+            return new Result<>(true);
         }else {
             userFansService.deleteEntity(fansEntity.getUfId());
-            response.setResponse(ResponseEnum.SUCCESS,false);
+            return new Result<>(false);
         }
-        return response;
     }
 
     /**
@@ -486,14 +434,11 @@ public class UserBlogServiceImpl implements IUserBlogService {
      * @return com.www.common.data.dto.response.Response<com.www.myblog.blog.data.dto.AuthorDTO>
      */
     @Override
-    public Response<AuthorDTO> findUserCount(String userId) {
-        Response<AuthorDTO> response = new Response<>();
+    public Result<AuthorDTO> findUserCount(String userId) {
         if(StringUtils.isBlank(userId)){
-            response.setResponse(ResponseEnum.FAIL,"获取用户博客相关统计信息失败，用户ID为空",null);
-            return response;
+            throw new BusinessException("获取用户博客相关统计信息失败，用户ID为空");
         }
         AuthorDTO authorDTO = blogArticleMapper.findAuthorCount(userId);
-        response.setResponse(ResponseEnum.SUCCESS,authorDTO);
-        return response;
+        return new Result<>(authorDTO);
     }
 }
