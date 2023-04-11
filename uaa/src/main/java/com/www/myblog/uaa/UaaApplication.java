@@ -1,8 +1,7 @@
-package com.www.uaa;
+package com.www.myblog.uaa;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -17,7 +16,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication(exclude = {DruidDataSourceAutoConfigure.class, MybatisPlusAutoConfiguration.class})
 @EnableEurekaClient
 @EnableScheduling //开启定时任务
-@MapperScan(basePackages = {"com.www.uaa.data"})
 public class UaaApplication {
     /**
      * <p>@Description 启动方法 </p>

@@ -107,7 +107,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <classifier>exec</classifier>
-                    <mainClass>com.www.uaa.UaaApplication</mainClass>
+                    <mainClass>com.www.myblog.uaa.UaaApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>

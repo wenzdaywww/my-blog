@@ -34,6 +34,8 @@ com:
         code-redis-key: MY-BLOG:CODE_DICT:CODE_DATA:CODE_TYPE
       oauth2:
         signing-key: wenzday
+      uaa:
+        enable: true
       datasource: #数据库配置
         enable: true #开启数据源配置
         #写数据库
