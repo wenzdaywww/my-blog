@@ -37,7 +37,7 @@ com:
       code:
         read-enable: true #开启数据字典加载
         read-scheduled: "0 0 * * * ?"
-        code-redis-key: MY-BLOG:CODE_DICT:CODE_DATA:CODE_TYPE
+        code-redis-key: my-blog:code_dict:code_data:code_type
       request:
         enable: true #开启controller的AOP日志拦截
       #配置文件路径
@@ -47,7 +47,6 @@ com:
         save-path: D:\WorkSpaces\temp\${spring.application.name}\doc\
       oauth2:
         enable: true #开启统一认证资源服务方配置
-        signing-key: wenzday #JWT令牌签名
       datasource:
         enable: true #开启druid数据源配置
         #写数据库

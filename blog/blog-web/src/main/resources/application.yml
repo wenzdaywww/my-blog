@@ -47,10 +47,10 @@ hystrix:
 com:
   www:
     blog:
-      blog-browse: MY-BLOG:BLOG_BROWSE:BLOG_ID_
-      blog-article: MY-BLOG:BLOG_ARTICLE:BLOG_ID
-      blog-article-lock: MY-BLOG:BLOG_ARTICLE:BLOG_ID_LOCK
-      url-scope-prefix: OAUTH2:RESOURCE_ID:URL_SCOPE
+      blog-browse: my-blog:blog_browse:blog_id_
+      blog-article: my-blog:blog_article:blog_id
+      blog-article-lock: my-blog:blog_article:blog_id_lock
+      url-scope-prefix: oauth2:resource_id:url_scope
     myblog:
       feign: #配置需要调用的应用服务
         base: my-base #需要的调用的应用服务

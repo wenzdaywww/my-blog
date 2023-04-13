@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.config.code.CodeDict;
 import com.www.common.config.code.enums.CodeKeyEnum;
 import com.www.common.config.exception.BusinessException;
-import com.www.common.config.mvc.upload.IFileService;
+import com.www.common.config.file.upload.IFileService;
 import com.www.common.data.constant.CharConstant;
 import com.www.common.data.response.Result;
 import com.www.common.utils.DateUtils;
@@ -283,7 +283,7 @@ public class EditBlogServiceImpl implements IEditBlogService {
         //保存封面图片
         if(img != null){
             String httpAddr = CharConstant.HTTP + ip + CharConstant.COLON + port;
-            String path = fileService.uploadFileBackURL(img,httpAddr,"blogCover","coverImg_" + blogEntity.getBlogId());
+            String path = fileService.uploadFileBackURL(img,httpAddr,"img/blogCover","coverImg_" + blogEntity.getBlogId());
             if(StringUtils.isNotBlank(path)){
                 //更新博客封面图片
                 UpdateWrapper<BlogArticleEntity> wrapper = new UpdateWrapper<>();

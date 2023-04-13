@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.www.common.config.code.CodeDict;
 import com.www.common.config.exception.BusinessException;
-import com.www.common.config.mvc.upload.IFileService;
+import com.www.common.config.file.upload.IFileService;
 import com.www.common.data.constant.CharConstant;
 import com.www.common.data.enums.DateFormatEnum;
 import com.www.common.data.response.Result;
@@ -240,7 +240,7 @@ public class UserInfoServiceImpl implements IUserInfoService {
             throw new BusinessException("查询不到该用户");
         }
         String httpAddr = CharConstant.HTTP + ip + CharConstant.COLON + port;
-        String path = fileService.uploadFileBackURL(photo,httpAddr,"photo",userId);
+        String path = fileService.uploadFileBackURL(photo,httpAddr,"img/photo",userId);
         if(StringUtils.isBlank(path)){
             throw new BusinessException("更新用户头像失败");
         }
