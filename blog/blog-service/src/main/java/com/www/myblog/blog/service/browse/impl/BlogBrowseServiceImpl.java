@@ -334,12 +334,7 @@ public class BlogBrowseServiceImpl implements IBlogBrowseService {
         authorDTO = authorDTO != null ? authorDTO : new AuthorDTO().setUserId(userInfoDTO.getUserId());
         authorDTO.setUserName(userInfoDTO.getUserName()).setPhoto(userInfoDTO.getPhoto());
         //计算码龄
-        int month = DateUtils.getMonths(userInfoDTO.getCreateTime(),DateUtils.getCurrentDateTime());
-        if(month != -1){
-            authorDTO.setAge(month/12 + "年" + month%12 + "个月");
-        }else {
-            authorDTO.setAge("1个月");
-        }
+        authorDTO.setAge(DateUtils.getYearsMonths(userInfoDTO.getCreateTime(),DateUtils.getCurrentDateTime()));
         authorDTO.setFlag(StringUtils.isNotBlank(userId) && !StringUtils.equals(userId,authorId));//判断是否展示关注
         QueryWrapper<UserFansEntity> fansWrapper = new QueryWrapper<>();
         fansWrapper.lambda().eq(UserFansEntity::getUserId,authorId);
